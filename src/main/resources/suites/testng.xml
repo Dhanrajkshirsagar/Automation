@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Playlist-Post-Suite" data-provider-thread-count="100"
+	thread-count="100" group-by-instances="true" parallel="instances">
+	<!-- <listeners> <listener class-name="com.vuclip.content.listeners.ReportListener" 
+		/> </listeners> -->
+
+	<listeners>
+		<listener class-name="com.livehealth.listener.ReportListener" />
+	</listeners>
+	<test name="Test" group-by-instances="true">
+
+
+		<classes>
+			<class name="com.livehealth.test.RegisterTest" />
+		</classes>
+
+	</test>
+</suite>
