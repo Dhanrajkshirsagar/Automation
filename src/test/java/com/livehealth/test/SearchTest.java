@@ -1,5 +1,6 @@
 package com.livehealth.test;
 
+import org.apache.log4j.Logger;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -9,6 +10,8 @@ import org.testng.annotations.Test;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class SearchTest extends AbstractTestNGSpringContextTests {
 
+	final static Logger logger = Logger.getLogger(SearchTest.class);
+
 	@Test
 	public void verifyPageTitle() {
 
@@ -17,7 +20,9 @@ public class SearchTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(true);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+
 		}
 
 	}
