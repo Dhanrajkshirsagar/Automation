@@ -13,6 +13,7 @@
     <!-- defaults to https -->
     <protocol>https</protocol>
     
+    <theme>dark</theme>
     <!-- title of the document -->
     <documentTitle>ExtentReports 2.0</documentTitle>
     
