@@ -33,12 +33,12 @@ public class HomePage {
 		super();
 	}
 
-	public Register launch() throws Exception {
+	public Registration launch() throws Exception {
 
 		DriverFactory.getDriver().get(configProperties.getLivehealthUrl());
 		commonMethods.waitForPageToLoad();
 
-		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), Register.class);
+		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), Registration.class);
 
 	}
 
