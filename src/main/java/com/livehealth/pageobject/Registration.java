@@ -5,7 +5,9 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
@@ -14,6 +16,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -164,6 +167,11 @@ public class Registration {
 
 	public User verifyRegistrationFields() throws Exception {
 
+//        Alert alert = DriverFactory.getDriver().switchTo().alert();;		
+//        alert.dismiss();
+//        if(alert.getText().length()>0) {
+//		DriverFactory.getDriver().switchTo().alert().accept();
+//        }
 		User user = new User();
 
 		user.setName(firstName.getAttribute("value"));
@@ -182,6 +190,7 @@ public class Registration {
 		user.setAlternateNumber(alternateMobile.getAttribute("value"));
 		user.setHeight(height.getAttribute("value"));
 		user.setWeight(weight.getAttribute("value"));
+		pincode.clear();
 		user.setPincode(pincode.getAttribute("value"));
 
 		return user;
@@ -375,5 +384,97 @@ public class Registration {
 		}
 
 		return null;
+	}
+	
+	public User registerUser(User inUser) throws Exception {
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+		
+		Select type = new Select(userType);
+		type.selectByValue(inUser.getUserType());
+
+		Select desig = new Select(designation);
+		desig.selectByValue(inUser.getDesignation());
+
+		email.sendKeys(inUser.getEmail());
+		firstName.sendKeys(inUser.getName());
+		ageField.sendKeys(inUser.getAge());
+		alternateMobile.sendKeys(inUser.getAlternateNumber());
+		height.sendKeys(inUser.getHeight());
+		weight.sendKeys(inUser.getWeight());
+		phoneNumber.sendKeys(inUser.getPhoneNumber());
+		pincode.sendKeys(inUser.getPincode());
+		
+		if (inUser.getDesignation().equals("Dr.")) {
+			((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;",
+					male);
+		}
+		if (inUser.getDesignation().equals("B/O")) {
+			((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;",
+					female);
+		}
+		if (inUser.getDesignation().equals("Baby")) {
+			((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;",
+					male);
+		}
+
+		saveForm.click();
+		CommonMethods.waitForElementToClickable(testList);
+		Thread.sleep(1000);
+
+		registerUrl.click();
+
+		return searchUserByName(inUser);
+	}
+
+	public boolean matchDesignationWithGender(String inputDesig) throws Exception {
+
+		int attempts = 0;
+		while (attempts<2) {
+			try {
+				boolean gender = false;
+
+				Select desig = new Select(designation);
+				desig.selectByValue(inputDesig);
+
+				if (inputDesig.equals("Mr.")) {
+
+					gender = male.isSelected();
+					DriverFactory.getDriver().navigate().refresh();
+					return gender;
+				}
+				if (inputDesig.equals("Mrs.")) {
+
+					gender = female.isSelected();
+					DriverFactory.getDriver().navigate().refresh();
+					return gender;
+				}
+
+				DriverFactory.getDriver().navigate().refresh();
+
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
+		}
+		return false;
+	}
+	
+	public boolean notNullFields(User user) throws Exception {
+		boolean isErrorMsgDisplayed = false;
+		CommonMethods.waitForElementToClickable(saveForm);
+
+		Select desig = new Select(designation);
+		desig.selectByValue(user.getDesignation());
+
+		firstName.sendKeys(user.getName());
+		ageField.sendKeys(user.getAge());
+
+		saveForm.click();
+		isErrorMsgDisplayed = errorDiv.isDisplayed();
+
+		DriverFactory.getDriver().navigate().refresh();
+
+		return isErrorMsgDisplayed;
+
 	}
 }
