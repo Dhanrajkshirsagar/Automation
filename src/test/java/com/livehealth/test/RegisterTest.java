@@ -1,5 +1,7 @@
 package com.livehealth.test;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.livehealth.base.DriverFactory;
+import com.livehealth.model.Age;
 import com.livehealth.model.User;
 import com.livehealth.pageobject.HomePage;
 import com.livehealth.pageobject.Registration;
@@ -271,6 +274,93 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
+	// TC:29
+	@Test()
+	public void isAgeCalculating() {
+		String calculatedAge;
+		Age age = new Age();
+		try {
+			age.setDay("1");
+			age.setMonth("1");
+			age.setYear("1994");
+
+			calculatedAge = registration.ageAutoCalculator(age);
+
+			Assert.assertEquals(calculateAge(age) + " years", calculatedAge);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC:30
+	@Test(groups = { "Registration" })
+	public void verifyGenderCheckBox() {
+		try {
+			User user = userForRegisterdUnder();
+
+			User searchedUser = registration.isRegisteredUnder(user);
+
+			Assert.assertEquals(user.getGender(), searchedUser.getGender());
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+
+	}
+
+	// TC:31
+	@Test(groups = { "Registration" })
+	public void isRegisteredUnderAlternateMobile() {
+		try {
+			User user = userForRegisterdUnder();
+
+			User searchedUser = registration.isRegisteredUnder(user);
+
+			Assert.assertEquals(user.getAlternateNumber(), searchedUser.getAlternateNumber());
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+
+	}
+
+	// TC:32
+	@Test(groups = { "Registration" })
+	public void verifyHeight() {
+		try {
+			User user = userForRegisterdUnder();
+
+			User searchedUser = registration.isRegisteredUnder(user);
+
+			Assert.assertEquals(user.getHeight(), searchedUser.getHeight());
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+
+	}
+
+	// TC:33,34
+	@Test(groups = { "Registration" })
+	public void verifyWeight() {
+		try {
+			User user = userForRegisterdUnder();
+
+			User searchedUser = registration.isRegisteredUnder(user);
+
+			Assert.assertEquals(user.getWeight(), searchedUser.getWeight());
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+
+	}
+
 	private User getBlankUser() {
 		User user = new User();
 		user.setName("");
@@ -297,6 +387,38 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		userSearch.setWeight("51");
 		userSearch.setPincode("411057");
 		return userSearch;
+	}
+
+	private User userForRegisterdUnder() {
+
+		User user = new User();
+		String name = commonMethods.getRandomString();
+		String phoneNum = commonMethods.getRandomNumber();
+
+		user.setName(name);
+		user.setAge("10");
+		user.setGender("Male");
+		user.setAlternateNumber(phoneNum);
+		user.setHeight("6");
+		user.setWeight("54");
+		user.setPincode("461116");
+
+		return user;
+	}
+
+	private String calculateAge(Age age) {
+
+		int year = Integer.parseInt(age.getYear());
+		int month = Integer.parseInt(age.getMonth());
+		int day = Integer.parseInt(age.getDay());
+
+		LocalDate today = LocalDate.now();
+		LocalDate birthday = LocalDate.of(year, month, day);
+
+		Period p = Period.between(birthday, today);
+		String calculatedAge = String.valueOf(p.getYears());
+
+		return calculatedAge;
 	}
 
 	@DataProvider(name = "typeOfUser")

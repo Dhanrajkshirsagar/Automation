@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.livehealth.base.DriverFactory;
+import com.livehealth.model.Age;
 import com.livehealth.model.User;
 import com.livehealth.util.CommonMethods;
 import com.livehealth.util.WebContext;
@@ -167,11 +168,6 @@ public class Registration {
 
 	public User verifyRegistrationFields() throws Exception {
 
-//        Alert alert = DriverFactory.getDriver().switchTo().alert();;		
-//        alert.dismiss();
-//        if(alert.getText().length()>0) {
-//		DriverFactory.getDriver().switchTo().alert().accept();
-//        }
 		User user = new User();
 
 		user.setName(firstName.getAttribute("value"));
@@ -477,4 +473,91 @@ public class Registration {
 		return isErrorMsgDisplayed;
 
 	}
+	
+	public String ageAutoCalculator(Age age) throws Exception {
+		Select day = new Select(dayField);
+		day.selectByValue(age.getDay());
+
+		Select month = new Select(monthField);
+		month.selectByValue(age.getMonth());
+
+		Select year = new Select(yearField);
+		year.selectByValue(age.getYear());
+
+		CommonMethods.waitForElementToClickable(ageField);
+
+		String calculatedAge = ageField.getAttribute("value");
+
+		if (calculatedAge.length() > 0) {
+
+			DriverFactory.getDriver().navigate().refresh();
+			return calculatedAge;
+		}
+		return null;
+	}
+	
+	public User isRegisteredUnder(User user) throws Exception {
+
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+
+				Actions builder = new Actions(DriverFactory.getDriver());
+				CommonMethods.waitForElementToClickable(firstName);
+
+				firstName.sendKeys(user.getName());
+				ageField.sendKeys(user.getAge());
+				alternateMobile.sendKeys(user.getAlternateNumber());
+				height.sendKeys(user.getHeight());
+				weight.sendKeys(user.getWeight());
+				pincode.sendKeys(user.getPincode());
+
+				if (user.getGender().equals("Male")) {
+					((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;",
+							male);
+
+				} else {
+					female.click();
+				}
+
+				saveForm.click();
+
+				Thread.sleep(1000);
+				CommonMethods.waitForElementToClickable(registerUrl);
+				registerUrl.click();
+
+				CommonMethods.waitForElementToClickable(searchBtn);
+				searchBtn.click();
+
+				builder.moveToElement(searchUser).click().sendKeys(user.getName().toLowerCase()).build().perform();
+
+				WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+				wait.until(ExpectedConditions.visibilityOfElementLocated(
+						By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[5]/span/span")));
+
+				List<WebElement> dropDowns = DriverFactory.getDriver()
+						.findElements(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[5]/span/span"));
+
+				dropDowns.get(0).click();
+				CommonMethods.waitForElementToClickable(firstName);
+
+				if (male.isSelected()) {
+					user.setGender("Male");
+				} else if (female.isSelected()) {
+					user.setGender("Female");
+				}
+				user.setAlternateNumber(alternateMobile.getAttribute("value"));
+				user.setHeight(height.getAttribute("value"));
+				user.setWeight(weight.getAttribute("value"));
+				user.setPincode(pincode.getAttribute("value"));
+				DriverFactory.getDriver().navigate().refresh();
+
+				return user;
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
+		}
+		return null;
+	}
+
 }
