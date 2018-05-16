@@ -21,7 +21,6 @@ import com.livehealth.pageobject.Registration;
 import com.livehealth.util.CommonMethods;
 import com.livehealth.validator.RegistrationValidator;
 
-
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class RegisterTest extends AbstractTestNGSpringContextTests {
 
@@ -34,10 +33,9 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	@Autowired
 	RegistrationValidator registerValidator;
-	
+
 	@Autowired
 	CommonMethods commonMethods;
-
 
 	@BeforeClass
 	public void launchSite() {
@@ -54,7 +52,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	// TC: 01
 	@Test(priority = 0)
 	public void verifyRegistrationPage() {
-		
+
 		User registrationFields;
 		try {
 			User user = getBlankUser();
@@ -72,7 +70,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	public void isPatientGettingSearchedByName() {
 		User searchedUser;
 		try {
-			User user =getSearchingUserDetails();
+			User user = getSearchingUserDetails();
 
 			searchedUser = registration.searchUserByName(user);
 
@@ -90,7 +88,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	public void isPatientGettingSearchedByPhoneNumber() {
 		User searchedUser;
 		try {
-			User user =getSearchingUserDetails();
+			User user = getSearchingUserDetails();
 			searchedUser = registration.searchUserByPhoneNumber(user);
 
 			registerValidator.verifyRegister(searchedUser, user);
@@ -126,9 +124,9 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	public void verifyClearButton() {
 		User searchedUser;
 		try {
-			User inputUser =getSearchingUserDetails();
+			User inputUser = getSearchingUserDetails();
 			inputUser.setName("Akbrnmxj");
-			
+
 			searchedUser = registration.clearButton(inputUser);
 
 			inputUser.setName(""); // checking with clear btn
@@ -160,118 +158,118 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:08-16,18
-		@Test(dataProvider = "typeOfUser", groups = { "Registration" })
-		public void verifyUserType(String userType) {
-			User inputUser = new User();
-			String name = commonMethods.getRandomString();
-			String phoneNo = commonMethods.getRandomNumber();
-			User createdUser;
-			try {
-				inputUser.setName(name);
-				inputUser.setDesignation("Mr.");
-				inputUser.setAge("10");
-				inputUser.setUserType(userType);
-				inputUser.setEmail(name + "@gmail.com");
-				inputUser.setAlternateNumber(phoneNo);
-				inputUser.setHeight("6");
-				inputUser.setWeight("51");
-				inputUser.setPhoneNumber(phoneNo);
-				inputUser.setPincode("461157");
-				inputUser.setGender("Male");
-				
-				createdUser = registration.registerUser(inputUser);
+	@Test(dataProvider = "typeOfUser", groups = { "Registration" })
+	public void verifyUserType(String userType) {
+		User inputUser = new User();
+		String name = commonMethods.getRandomString();
+		String phoneNo = commonMethods.getRandomNumber();
+		User createdUser;
+		try {
+			inputUser.setName(name);
+			inputUser.setDesignation("Mr.");
+			inputUser.setAge("10");
+			inputUser.setUserType(userType);
+			inputUser.setEmail(name + "@gmail.com");
+			inputUser.setAlternateNumber(phoneNo);
+			inputUser.setHeight("6");
+			inputUser.setWeight("51");
+			inputUser.setPhoneNumber(phoneNo);
+			inputUser.setPincode("461157");
+			inputUser.setGender("Male");
 
-				registerValidator.verifyRegister(inputUser, createdUser);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-				Assert.assertTrue(false, e.getMessage());
-			}
+			createdUser = registration.registerUser(inputUser);
 
+			registerValidator.verifyRegister(inputUser, createdUser);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
 		}
 
-		// TC:19-20
-		@Test(dataProvider = "mrAndMrs")
-		public void verifyDesignationWithGender(String designation) {
-			boolean selectedGender;
-			try {
-				selectedGender = registration.matchDesignationWithGender(designation);
+	}
 
-				Assert.assertTrue(selectedGender);
+	// TC:19-20
+	@Test(dataProvider = "mrAndMrs")
+	public void verifyDesignationWithGender(String designation) {
+		boolean selectedGender;
+		try {
+			selectedGender = registration.matchDesignationWithGender(designation);
 
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-				Assert.assertTrue(false, e.getMessage());
-			}
+			Assert.assertTrue(selectedGender);
 
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
 		}
 
-		// Tc:21-26
-		@Test(dataProvider = "typeOfDesignation", groups = { "Registration" })
-		public void verifyRegisteredUserDesignation(String desigType) {
-			User inputUser = new User();
-			String name = commonMethods.getRandomString();
-			String phoneNo = commonMethods.getRandomNumber();
-			User createdUser;
-			try {
-				inputUser.setName(name);
-				inputUser.setDesignation(desigType);
-				inputUser.setAge("10");
-				inputUser.setUserType("D");
-				inputUser.setEmail(name + "@gmail.com");
-				inputUser.setAlternateNumber(phoneNo);
-				inputUser.setHeight("6");
-				inputUser.setWeight("51");
-				inputUser.setPincode("461157");
-				inputUser.setPhoneNumber(phoneNo);
+	}
 
-				createdUser = registration.registerUser(inputUser);
+	// Tc:21-26
+	@Test(dataProvider = "typeOfDesignation", groups = { "Registration" })
+	public void verifyRegisteredUserDesignation(String desigType) {
+		User inputUser = new User();
+		String name = commonMethods.getRandomString();
+		String phoneNo = commonMethods.getRandomNumber();
+		User createdUser;
+		try {
+			inputUser.setName(name);
+			inputUser.setDesignation(desigType);
+			inputUser.setAge("10");
+			inputUser.setUserType("D");
+			inputUser.setEmail(name + "@gmail.com");
+			inputUser.setAlternateNumber(phoneNo);
+			inputUser.setHeight("6");
+			inputUser.setWeight("51");
+			inputUser.setPincode("461157");
+			inputUser.setPhoneNumber(phoneNo);
 
-				registerValidator.verifyRegister(inputUser, createdUser);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-				Assert.assertTrue(false, e.getMessage());
-			}
+			createdUser = registration.registerUser(inputUser);
+
+			registerValidator.verifyRegister(inputUser, createdUser);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
 		}
+	}
 
-		// TC:27 error msg should be shown in case of null name field
-		@Test(groups = { "Notnullfields" })
-		public void verifyNameFieldNotNull() {
-			boolean errorMsg;
-			User user = new User();
-			try {
-				user.setDesignation("Mr.");
-				user.setName("");
-				user.setAge("10");
+	// TC:27 error msg should be shown in case of null name field
+	@Test(groups = { "Notnullfields" })
+	public void verifyNameFieldNotNull() {
+		boolean errorMsg;
+		User user = new User();
+		try {
+			user.setDesignation("Mr.");
+			user.setName("");
+			user.setAge("10");
 
-				errorMsg = registration.notNullFields(user);
+			errorMsg = registration.notNullFields(user);
 
-				Assert.assertTrue(errorMsg);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-				Assert.assertTrue(false, e.getMessage());
-			}
+			Assert.assertTrue(errorMsg);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
 		}
+	}
 
-		// TC:28 error msg should be shown in case of null age field
-		@Test(groups = { "Notnullfields" })
-		public void verifyAgeFieldNotNull() {
-			boolean errorMsg;
-			User user = new User();
-			String name = commonMethods.getRandomString();
+	// TC:28 error msg should be shown in case of null age field
+	@Test(groups = { "Notnullfields" })
+	public void verifyAgeFieldNotNull() {
+		boolean errorMsg;
+		User user = new User();
+		String name = commonMethods.getRandomString();
 
-			try {
-				user.setDesignation("Mr.");
-				user.setName(name);
-				user.setAge("");
+		try {
+			user.setDesignation("Mr.");
+			user.setName(name);
+			user.setAge("");
 
-				errorMsg = registration.notNullFields(user);
+			errorMsg = registration.notNullFields(user);
 
-				Assert.assertTrue(errorMsg);
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-				Assert.assertTrue(false, e.getMessage());
-			}
+			Assert.assertTrue(errorMsg);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
 		}
+	}
 
 	private User getBlankUser() {
 		User user = new User();
@@ -286,7 +284,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		user.setPincode("");
 		return user;
 	}
-	
+
 	private User getSearchingUserDetails() {
 		User userSearch = new User();
 		userSearch.setName("Directtype");
@@ -300,7 +298,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		userSearch.setPincode("411057");
 		return userSearch;
 	}
-	
+
 	@DataProvider(name = "typeOfUser")
 	public Object[][] getUserTypeData() {
 
@@ -319,7 +317,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 		return new Object[][] { { "Ms." }, { "Master" }, { "Miss" }, { "Smt." }, { "Dr." }, { "B/O" }, { "Baby" } };
 	}
-	
+
 	@AfterClass
 	public void tearDown() {
 		DriverFactory.closeDriverObjects();
