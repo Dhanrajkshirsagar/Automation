@@ -146,9 +146,114 @@ public class Registration {
 
 	@FindBy(how = How.ID, using = "newDirectWeight")
 	private WebElement weight;
+	
+	@FindBy(how = How.ID, using = "newDirectOrganization")
+	private WebElement organization;
+
+	@FindBy(how = How.ID, using = "newDirectAddOrganization")
+	private WebElement addOrganizationBtn;
+
+	@FindBy(how = How.ID, using = "orgnName")
+	private WebElement orgnName;
+
+	@FindBy(how = How.ID, using = "addOrgButton")
+	private WebElement addOrgButton;
+
+	@FindBy(how = How.ID, using = "newDirectBillReferal")
+	private WebElement referrel;
+
+	@FindBy(how = How.ID, using = "newDirectAddDoctor")
+	private WebElement addReferel;
+
+	@FindBy(how = How.ID, using = "doctorName")
+	private WebElement referrelName;
+
+	@FindBy(how = How.ID, using = "addDoctorButton")
+	private WebElement addReferrelButton;
+
+	@FindBy(how = How.CLASS_NAME, using = "dropdown-menu dropdown-menu-left")
+	private WebElement referrelDesig;
+
+	@FindBy(how = How.LINK_TEXT, using = "Admin")
+	private WebElement admin;
+
+	@FindBy(how = How.LINK_TEXT, using = "Organization Management")
+	private WebElement organizationManagement;
+
+	@FindBy(how = How.LINK_TEXT, using = "Add / Edit Organization")
+	private WebElement addEditOrganization;
+
+	@FindBy(how = How.ID, using = "editOrgTab")
+	private WebElement editOrgTab;
+
+	@FindBy(how = How.ID, using = "orgEditList")
+	private WebElement orgEditList;
+
+	@FindBy(how = How.ID, using = "orgDeleteButton")
+	private WebElement orgDeleteButton;
+
+	@FindBy(how = How.ID, using = "orgDelete")
+	private WebElement orgDelete;
+
+	@FindBy(how = How.XPATH, using = "(//button[@onclick=\"$('#billSettingModal').modal()\"])[1]")
+	private WebElement settings;
+
+	@FindBy(how = How.ID, using = "orgListOrTypeFlag")
+	private WebElement orgFlag;
+
+	@FindBy(how = How.XPATH, using = "(//button[@id=\"savebillSetting\"])[1]")
+	private WebElement savebillSetting;
+
+	@FindBy(how = How.ID, using = "newDirectOrganizationTypeahead")
+	private WebElement searchOrg;
 
 	@FindBy(how = How.ID, using = "newPincode")
 	private WebElement pincode;
+
+	@FindBy(how = How.LINK_TEXT, using = "Add / Edit Referral")
+	private WebElement addEditReferel;
+
+	@FindBy(how = How.ID, using = "editReferralTab")
+	private WebElement editReferralTab;
+
+	@FindBy(how = How.ID, using = "referralEditList")
+	private WebElement referralEditList;
+
+	@FindBy(how = How.ID, using = "deleteRefButton")
+	private WebElement deleteRefButton;
+
+	@FindBy(how = How.ID, using = "deletebtn")
+	private WebElement deletebtn;
+
+	@FindBy(how = How.LINK_TEXT, using = "Upload Documents")
+	private WebElement uploadDocuments;
+
+	@FindBy(how = How.ID, using = "proofType")
+	private WebElement proofType;
+
+	@FindBy(how = How.ID, using = "proofID")
+	private WebElement proofID;
+
+	@FindBy(how = How.ID, using = "filesContent")
+	private WebElement filesContent;
+
+	@FindBy(how = How.XPATH, using = "//input[@value=\"Upload\"]")
+	private WebElement uploadProofFile;
+	
+	@FindBy(how = How.ID, using = "referralDocList")
+	private WebElement referralDocList;
+
+	@FindBy(how = How.ID, using = "newDirectReferralDocTypeahead")
+	private WebElement searchReferrel;
+	
+	@FindBy(how = How.ID, using = "selectReferalEditDesignation")
+	private WebElement selectReferalEditDesignation;
+
+	@FindBy(how = How.ID, using = "selectRefDoctorAddDesignation")
+	private WebElement selectRefDesig;
+
+	@FindBy(how = How.LINK_TEXT, using = "Dr.")
+	private WebElement refDesig;
 
 	@Autowired
 	WebContext webContext;
@@ -201,17 +306,13 @@ public class Registration {
 		actions.moveToElement(adminHover).build().perform();
 		CommonMethods.waitForElementToClickable(registration);
 		registration.click();
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions.alertIsPresent());
+		Alert alert = DriverFactory.getDriver().switchTo().alert();
+		alert.accept();
 	}
 
-	public User searchUserByName(User outUser) throws Exception {
-
-		Actions builder = new Actions(DriverFactory.getDriver());
-
-		CommonMethods.waitForElementToClickable(searchBtn);
-		searchBtn.click();
-
-		builder.moveToElement(searchUser).click().sendKeys(outUser.getName().toLowerCase()).build().perform();
-
+	public void selectSearchingUser() throws Exception {
 		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[5]/span/span")));
@@ -222,7 +323,19 @@ public class Registration {
 		dropDowns.get(0).click();
 
 		CommonMethods.waitForElementToClickable(firstName);
+	}
+	
+	public User searchUserByName(User outUser) throws Exception {
 
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(searchBtn);
+		searchBtn.click();
+
+		builder.moveToElement(searchUser).click().sendKeys(outUser.getName().toLowerCase()).build().perform();
+
+		selectSearchingUser();
+		
 		outUser.setName(firstName.getAttribute("value"));
 		outUser.setAge(ageField.getAttribute("value"));
 		outUser.setGender(male.getAttribute("value"));
@@ -248,16 +361,7 @@ public class Registration {
 
 		builder.moveToElement(searchUser).click().sendKeys(outUser.getPhoneNumber()).build().perform();
 
-		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[5]/span/span")));
-
-		List<WebElement> dropDowns = DriverFactory.getDriver()
-				.findElements(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[5]/span/span"));
-
-		dropDowns.get(0).click();
-
-		CommonMethods.waitForElementToClickable(firstName);
+		selectSearchingUser();
 
 		outUser.setName(firstName.getAttribute("value"));
 		outUser.setAge(ageField.getAttribute("value"));
@@ -531,16 +635,8 @@ public class Registration {
 
 				builder.moveToElement(searchUser).click().sendKeys(user.getName().toLowerCase()).build().perform();
 
-				WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-				wait.until(ExpectedConditions.visibilityOfElementLocated(
-						By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[5]/span/span")));
-
-				List<WebElement> dropDowns = DriverFactory.getDriver()
-						.findElements(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[5]/span/span"));
-
-				dropDowns.get(0).click();
-				CommonMethods.waitForElementToClickable(firstName);
-
+				selectSearchingUser();
+				
 				if (male.isSelected()) {
 					user.setGender("Male");
 				} else if (female.isSelected()) {
@@ -559,5 +655,246 @@ public class Registration {
 		}
 		return null;
 	}
+	
+	public void selectUnselectOrgList() throws Exception {
 
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(orgFlag);
+
+		if (orgFlag.isSelected()) {
+			orgFlag.click();
+		} else {
+			orgFlag.click();
+		}
+
+		CommonMethods.waitForElementToClickable(referralDocList);
+
+		if (referralDocList.isSelected()) {
+			referralDocList.click();
+		} else {
+			referralDocList.click();
+		}
+		CommonMethods.waitForElementToClickable(savebillSetting);
+
+		savebillSetting.click();
+
+	}
+
+	public String searchOrganizationName(String organizationName) throws Exception {
+
+		String searchedOrg;
+
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+
+				selectUnselectOrgList();
+
+				CommonMethods.waitForElementToClickable(searchOrg);
+
+				searchOrg.sendKeys(organizationName);
+
+				List<WebElement> dropDowns = DriverFactory.getDriver().findElements(
+						By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[6]/div[17]/div[3]/span/span"));
+
+				if (dropDowns.size() > 0) {
+					dropDowns.get(0).click();
+					searchedOrg = searchOrg.getAttribute("value");
+
+					DriverFactory.getDriver().navigate().refresh();
+					CommonMethods.waitForElementToClickable(settings);
+
+					selectUnselectOrgList();
+					return searchedOrg;
+				}
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
+		}
+		return null;
+	}
+
+	public String addOrganization(String orgName) throws Exception {
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(addOrganizationBtn);
+		addOrganizationBtn.click();
+
+		CommonMethods.waitForElementToClickable(orgnName);
+		orgnName.sendKeys(orgName);
+
+		addOrgButton.click();
+
+		CommonMethods.waitForElementToClickable(organization);
+
+		List<WebElement> listElements = organization
+				.findElements(By.xpath("//select[@id=\"newDirectOrganization\"]//*"));
+
+		for (WebElement element : listElements) {
+
+			String searchedOrg = element.getText().trim();
+
+			if (searchedOrg.equalsIgnoreCase(orgName)) {
+
+				CommonMethods.waitForElementToClickable(adminHover);
+
+				builder.moveToElement(adminHover).build().perform();
+
+				CommonMethods.waitForElementToClickable(admin);
+				admin.click();
+
+				CommonMethods.waitForElementToClickable(organizationManagement);
+				organizationManagement.click();
+
+				CommonMethods.waitForElementToClickable(addEditOrganization);
+				addEditOrganization.click();
+
+				CommonMethods.waitForElementToClickable(editOrgTab);
+				editOrgTab.click();
+
+				CommonMethods.waitForElementToClickable(orgEditList);
+				builder.moveToElement(orgEditList).click().sendKeys(orgName).build().perform();
+
+				WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+				wait.until(ExpectedConditions.visibilityOfElementLocated(
+						By.xpath("/html/body/section/div[2]/div[1]/div[4]/div/div/span/span")));
+
+				builder.moveToElement(
+						orgEditList.findElement(By.xpath("/html/body/section/div[2]/div[1]/div[4]/div/div/span/span")))
+						.click().build().perform();
+
+				builder.sendKeys(Keys.DOWN);
+
+				CommonMethods.waitForElementToClickable(orgDeleteButton);
+				orgDeleteButton.click();
+
+				CommonMethods.waitForElementToClickable(orgDelete);
+				orgDelete.click();
+
+				CommonMethods.waitForElementToClickable(adminHover);
+				builder.moveToElement(adminHover).build().perform();
+
+				CommonMethods.waitForElementToClickable(registration);
+				registration.click();
+				CommonMethods.waitForElementToClickable(firstName);
+
+				return searchedOrg;
+			}
+		}
+		return null;
+	}
+	
+	public String searchReferrelName(String referrelName) throws Exception {
+
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+
+				String searchedRef;
+				// Thread.sleep(1000);
+				selectUnselectOrgList();
+
+				CommonMethods.waitForElementToClickable(searchReferrel);
+
+				searchReferrel.sendKeys(referrelName);
+				List<WebElement> dropDowns = DriverFactory.getDriver()
+						.findElements(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[6]/div[20]/span/span"));
+				// //div[@class=\"tt-dataset-23\"]
+
+				if (dropDowns.size() > 0) {
+					dropDowns.get(0).click();
+					searchedRef = searchReferrel.getAttribute("value");
+
+					DriverFactory.getDriver().navigate().refresh();
+					CommonMethods.waitForElementToClickable(settings);
+
+					selectUnselectOrgList();
+					return searchedRef;
+				}
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
+		}
+		return null;
+
+	}
+	
+	public List<String> addReferel(String refName) throws Exception {
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(addReferel);
+		addReferel.click();
+
+		CommonMethods.waitForElementToClickable(selectRefDesig);
+		selectRefDesig.click();
+		refDesig.click();
+
+		CommonMethods.waitForElementToClickable(referrelName);
+		referrelName.sendKeys(refName);
+
+		addReferrelButton.click();
+		Thread.sleep(1000);
+		CommonMethods.waitForElementToClickable(referrel);
+		List<WebElement> listElements = referrel.findElements(By.xpath("//select[@id=\"newDirectBillReferal\"]//*"));
+
+		for (WebElement element : listElements) {
+
+			String searchedReferel = element.getText().trim();
+
+			if (searchedReferel.equalsIgnoreCase(refName)) {
+
+				CommonMethods.waitForElementToClickable(adminHover);
+
+				builder.moveToElement(adminHover).build().perform();
+
+				CommonMethods.waitForElementToClickable(admin);
+				admin.click();
+
+				CommonMethods.waitForElementToClickable(addEditReferel);
+				addEditReferel.click();
+
+				CommonMethods.waitForElementToClickable(editReferralTab);
+				editReferralTab.click();
+
+				CommonMethods.waitForElementToClickable(referralEditList);
+				builder.moveToElement(referralEditList).click().sendKeys(refName).build().perform();
+
+				WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+				wait.until(ExpectedConditions.visibilityOfElementLocated(
+						By.xpath("//div[@class=\"tt-dataset-4\"]")));
+
+				builder.moveToElement(referralEditList
+						.findElement(By.xpath("//div[@class=\"tt-dataset-4\"]"))).click()
+						.build().perform();
+
+				builder.sendKeys(Keys.DOWN);
+
+				String refDesig = selectReferalEditDesignation.getText();
+
+				List<String> referrel = new ArrayList<>();
+				referrel.add(searchedReferel);
+				referrel.add(refDesig);
+
+				CommonMethods.waitForElementToClickable(deleteRefButton);
+				deleteRefButton.click();
+
+				CommonMethods.waitForElementToClickable(deletebtn);
+				deletebtn.click();
+
+				CommonMethods.waitForElementToClickable(adminHover);
+				builder.moveToElement(adminHover).build().perform();
+
+				CommonMethods.waitForElementToClickable(registration);
+				registration.click();
+
+				return referrel;
+			}
+		}
+
+		return null;
+	}
 }
