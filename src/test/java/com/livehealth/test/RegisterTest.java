@@ -41,7 +41,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	CommonMethods commonMethods;
 
-	@BeforeClass
+	@BeforeClass(groups = { "Notnullfields" })
 	public void launchSite() {
 		try {
 			registration = pageLaunch.launch();
