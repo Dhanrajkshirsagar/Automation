@@ -506,20 +506,6 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 		}
 	}
-
-	// TC:49
-	@Test()
-	public void isProfilePicGettingAdded() {
-			boolean isAdded;
-		try {
-			 isAdded = registration.addingProfilePic();
-			Assert.assertTrue(isAdded);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-
-		}
-	}
 	
 	private User getBlankUser() {
 		User user = new User();
