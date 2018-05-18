@@ -9,6 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>ui-automation</name>
+	<url>http://maven.apache.org</url>
 	<description>SpringBoot project for  ui automation</description>
 
 	<parent>
@@ -23,11 +24,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<selenium.version>3.5.3</selenium.version>
 		<threads>1</threads>
-		<browser>firefox</browser>
-		<browserName>firefox</browserName>
-		<browserVersion>61.0</browserVersion>
-		<buildName>UIRegression</buildName>
-		<productName>testng</productName>
+		<testngfile>testng.xml</testngfile>
+		<environment>beta</environment>
 		<overwrite.binaries>false</overwrite.binaries>
 		<dependency.locations.enabled>false</dependency.locations.enabled>
 		<java.version>1.8</java.version>
@@ -54,16 +52,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.relevantcodes</groupId>
-			<artifactId>extentreports</artifactId>
-			<version>2.41.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>1.9.1</version>
-		</dependency>
-		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>6.13.1</version>
@@ -71,7 +59,79 @@
 		</dependency>
 		<!-- <dependency> <groupId>com.browserstack</groupId> <artifactId>automate-testassist</artifactId> 
 			<version>0.7.2-SNAPSHOT</version> </dependency> -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>1.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.relevantcodes</groupId>
+			<artifactId>extentreports</artifactId>
+			<version>2.41.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
 	</dependencies>
+
+<!-- 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<suiteXmlFiles>
+						<file>src/main/resources/suites/${productName}.xml</file>
+					</suiteXmlFiles>
+					<testFailureIgnore>true</testFailureIgnore>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build> -->
+	
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.19.1</version>
+					<configuration>
+						<systemPropertyVariables>
+							<envName>${environment}</envName>
+						</systemPropertyVariables>
+						<includes>
+							<include>**/**.java</include>
+						</includes>
+						<suiteXmlFiles>
+							<!-- TestNG suite XML files -->
+							<suiteXmlFile>src/main/resources/suites/${testngfile}</suiteXmlFile>
+						</suiteXmlFiles>
+						<testErrorIgnore>true</testErrorIgnore>
+						<testFailureIgnore>true</testFailureIgnore>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
 	<reporting>
 		<plugins>
@@ -80,36 +140,9 @@
 				<artifactId>maven-surefire-report-plugin</artifactId>
 				<version>2.19.1</version>
 
-
 			</plugin>
-
 
 		</plugins>
 	</reporting>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<suiteXmlFiles>
-						<file>src/main/resources/${productName}.xml</file>
-					</suiteXmlFiles>
-					<systemPropertyVariables>
-						<browser>${browser}</browser>
-						<browserName>${browserName}</browserName>
-						<browserVersion>${browserVersion}</browserVersion>
-						<buildName>${buildName}</buildName>
-						<productName>${productName}</productName>
-						<webdriver.chrome.driver>${project.basedir}/src/main/resources/chromedriver.exe</webdriver.chrome.driver>
-						<webdriver.gecko.driver>${project.basedir}/src/main/resources/geckodriver.exe</webdriver.gecko.driver>
-					</systemPropertyVariables>
-					<testFailureIgnore>true</testFailureIgnore>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
 
 </project>

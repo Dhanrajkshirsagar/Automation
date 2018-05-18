@@ -1,5 +1,6 @@
 package com.livehealth.pageobject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,7 +196,7 @@ public class Registration {
 	@FindBy(how = How.ID, using = "orgDelete")
 	private WebElement orgDelete;
 
-	@FindBy(how = How.XPATH, using = "(//button[@onclick=\"$('#billSettingModal').modal()\"])[1]")
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div[1]/div[2]/div[1]/div[2]/button")
 	private WebElement settings;
 
 	@FindBy(how = How.ID, using = "orgListOrTypeFlag")
@@ -255,6 +256,12 @@ public class Registration {
 	@FindBy(how = How.LINK_TEXT, using = "Dr.")
 	private WebElement refDesig;
 
+	@FindBy(how = How.ID, using = "newFileInputprofile")
+	private WebElement newFileInputprofile;
+
+	@FindBy(how = How.XPATH, using = "(//div[@class=\"jcrop-tracker\"])[1]")
+	private WebElement uploadProfilePic;
+	// 
 	@Autowired
 	WebContext webContext;
 
@@ -305,11 +312,7 @@ public class Registration {
 		Actions actions = new Actions(DriverFactory.getDriver());
 		actions.moveToElement(adminHover).build().perform();
 		CommonMethods.waitForElementToClickable(registration);
-		registration.click();
-		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-		wait.until(ExpectedConditions.alertIsPresent());
-		Alert alert = DriverFactory.getDriver().switchTo().alert();
-		alert.accept();
+		registration.click();		
 	}
 
 	public void selectSearchingUser() throws Exception {
@@ -488,43 +491,53 @@ public class Registration {
 	
 	public User registerUser(User inUser) throws Exception {
 
-		Actions builder = new Actions(DriverFactory.getDriver());
-		
-		Select type = new Select(userType);
-		type.selectByValue(inUser.getUserType());
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
 
-		Select desig = new Select(designation);
-		desig.selectByValue(inUser.getDesignation());
+				Actions builder = new Actions(DriverFactory.getDriver());
 
-		email.sendKeys(inUser.getEmail());
-		firstName.sendKeys(inUser.getName());
-		ageField.sendKeys(inUser.getAge());
-		alternateMobile.sendKeys(inUser.getAlternateNumber());
-		height.sendKeys(inUser.getHeight());
-		weight.sendKeys(inUser.getWeight());
-		phoneNumber.sendKeys(inUser.getPhoneNumber());
-		pincode.sendKeys(inUser.getPincode());
-		
-		if (inUser.getDesignation().equals("Dr.")) {
-			((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;",
-					male);
+				Select type = new Select(userType);
+				type.selectByValue(inUser.getUserType());
+
+				Select desig = new Select(designation);
+				desig.selectByValue(inUser.getDesignation());
+
+				email.sendKeys(inUser.getEmail());
+				firstName.sendKeys(inUser.getName());
+				ageField.sendKeys(inUser.getAge());
+				alternateMobile.sendKeys(inUser.getAlternateNumber());
+				height.sendKeys(inUser.getHeight());
+				weight.sendKeys(inUser.getWeight());
+				phoneNumber.sendKeys(inUser.getPhoneNumber());
+				pincode.sendKeys(inUser.getPincode());
+
+				if (inUser.getDesignation().equals("Dr.")) {
+					((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;",
+							male);
+				}
+				if (inUser.getDesignation().equals("B/O")) {
+					((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;",
+							female);
+				}
+				if (inUser.getDesignation().equals("Baby")) {
+					((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;",
+							male);
+				}
+
+				saveForm.click();
+				CommonMethods.waitForElementToClickable(registerUrl);
+				Thread.sleep(1000);
+
+				registerUrl.click();
+
+				return searchUserByName(inUser);
+
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
 		}
-		if (inUser.getDesignation().equals("B/O")) {
-			((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;",
-					female);
-		}
-		if (inUser.getDesignation().equals("Baby")) {
-			((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;",
-					male);
-		}
-
-		saveForm.click();
-		CommonMethods.waitForElementToClickable(testList);
-		Thread.sleep(1000);
-
-		registerUrl.click();
-
-		return searchUserByName(inUser);
+		return null;
 	}
 
 	public boolean matchDesignationWithGender(String inputDesig) throws Exception {
@@ -657,7 +670,7 @@ public class Registration {
 	}
 	
 	public void selectUnselectOrgList() throws Exception {
-
+		DriverFactory.getDriver().navigate().refresh();
 		CommonMethods.waitForElementToClickable(settings);
 		settings.click();
 
@@ -686,33 +699,26 @@ public class Registration {
 
 		String searchedOrg;
 
-		int attempts = 0;
-		while (attempts < 2) {
-			try {
+		selectUnselectOrgList();
 
-				selectUnselectOrgList();
+		CommonMethods.waitForElementToClickable(searchOrg);
 
-				CommonMethods.waitForElementToClickable(searchOrg);
+		searchOrg.sendKeys(organizationName);
 
-				searchOrg.sendKeys(organizationName);
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[6]/div[17]/div[3]/span/span"));
 
-				List<WebElement> dropDowns = DriverFactory.getDriver().findElements(
-						By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[6]/div[17]/div[3]/span/span"));
+		if (dropDowns.size() > 0) {
+			dropDowns.get(0).click();
+			searchedOrg = searchOrg.getAttribute("value");
 
-				if (dropDowns.size() > 0) {
-					dropDowns.get(0).click();
-					searchedOrg = searchOrg.getAttribute("value");
+			DriverFactory.getDriver().navigate().refresh();
+			CommonMethods.waitForElementToClickable(settings);
 
-					DriverFactory.getDriver().navigate().refresh();
-					CommonMethods.waitForElementToClickable(settings);
-
-					selectUnselectOrgList();
-					return searchedOrg;
-				}
-			} catch (StaleElementReferenceException e) {
-				attempts++;
-			}
+			selectUnselectOrgList();
+			return searchedOrg;
 		}
+
 		return null;
 	}
 
@@ -789,35 +795,28 @@ public class Registration {
 	
 	public String searchReferrelName(String referrelName) throws Exception {
 
-		int attempts = 0;
-		while (attempts < 2) {
-			try {
+		String searchedRef;
+//		Thread.sleep(1000);
+		selectUnselectOrgList();
 
-				String searchedRef;
-				// Thread.sleep(1000);
-				selectUnselectOrgList();
+		CommonMethods.waitForElementToClickable(searchReferrel);
 
-				CommonMethods.waitForElementToClickable(searchReferrel);
+		searchReferrel.sendKeys(referrelName);
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[6]/div[20]/span/span"));
+		// //div[@class=\"tt-dataset-23\"]
 
-				searchReferrel.sendKeys(referrelName);
-				List<WebElement> dropDowns = DriverFactory.getDriver()
-						.findElements(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[6]/div[20]/span/span"));
-				// //div[@class=\"tt-dataset-23\"]
+		if (dropDowns.size() > 0) {
+			dropDowns.get(0).click();
+			searchedRef = searchReferrel.getAttribute("value");
 
-				if (dropDowns.size() > 0) {
-					dropDowns.get(0).click();
-					searchedRef = searchReferrel.getAttribute("value");
+			DriverFactory.getDriver().navigate().refresh();
+			CommonMethods.waitForElementToClickable(settings);
 
-					DriverFactory.getDriver().navigate().refresh();
-					CommonMethods.waitForElementToClickable(settings);
-
-					selectUnselectOrgList();
-					return searchedRef;
-				}
-			} catch (StaleElementReferenceException e) {
-				attempts++;
-			}
+			selectUnselectOrgList();
+			return searchedRef;
 		}
+
 		return null;
 
 	}
@@ -896,5 +895,23 @@ public class Registration {
 		}
 
 		return null;
+	}
+	
+	public Boolean addingProfilePic() {
+		
+		boolean notDisplayed=uploadProfilePic.isDisplayed();
+		File tempfile = new File("src/main/resources/livehealth.png");
+
+		System.out.println("notDisplayed=="+notDisplayed);
+		newFileInputprofile.sendKeys(tempfile.getAbsolutePath());
+		boolean displayed=uploadProfilePic.isDisplayed();
+
+		System.out.println("displayed=="+displayed);
+
+		if(notDisplayed==displayed) {
+			return false;
+		}
+		return true;
+		
 	}
 }

@@ -33,9 +33,15 @@ public class WebDriverThread {
 				if (isMac()) {
 					System.setProperty("webdriver.chrome.driver", "src/main/resources/drivers/mac/chromedriver");
 					System.setProperty("webdriver.gecko.driver", "src/main/resources/drivers/mac/geckodriver");
-				} else {
+				} else if (isWindows()) {
 
-					System.setProperty("webdriver.chrome.driver", "src/main/resources/drivers/linux/chromedriver.exe");
+					System.setProperty("webdriver.chrome.driver", "src/main/resources/drivers/windows/chromedriver");
+
+				}
+
+				else {
+
+					System.setProperty("webdriver.chrome.driver", "src/main/resources/drivers/linux/chromedriver");
 					System.setProperty("webdriver.gecko.driver", "src/main/resources/drivers/linux/geckodriver");
 				}
 
@@ -92,6 +98,12 @@ public class WebDriverThread {
 	public static boolean isMac() {
 
 		return (OS.indexOf("mac") >= 0);
+
+	}
+
+	public static boolean isWindows() {
+
+		return (OS.indexOf("windows") >= 0);
 
 	}
 }

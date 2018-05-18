@@ -17,6 +17,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.livehealth.base.DriverFactory;
+import com.livehealth.config.Constants;
 import com.livehealth.model.Age;
 import com.livehealth.model.User;
 import com.livehealth.pageobject.HomePage;
@@ -51,7 +52,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 
 	}
-
+		
 	// TC: 01
 	@Test(priority = 0)
 	public void verifyRegistrationPage() {
@@ -172,7 +173,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			inputUser.setDesignation("Mr.");
 			inputUser.setAge("10");
 			inputUser.setUserType(userType);
-			inputUser.setEmail(name + "@gmail.com");
+			inputUser.setEmail(Constants.EMAIL);  
 			inputUser.setAlternateNumber(phoneNo);
 			inputUser.setHeight("6");
 			inputUser.setWeight("51");
@@ -218,7 +219,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			inputUser.setDesignation(desigType);
 			inputUser.setAge("10");
 			inputUser.setUserType("D");
-			inputUser.setEmail(name + "@gmail.com");
+			inputUser.setEmail(Constants.EMAIL);
 			inputUser.setAlternateNumber(phoneNo);
 			inputUser.setHeight("6");
 			inputUser.setWeight("51");
@@ -304,7 +305,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			user.setName(name);
 			user.setAlternateNumber(phoneNum);
 			user.setPhoneNumber(phoneNum);
-			user.setEmail(name + "@gmail.com");
+			user.setEmail(Constants.EMAIL);
 
 			User searchedUser = registration.isRegisteredUnder(user);
 
@@ -328,7 +329,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			user.setName(name);
 			user.setAlternateNumber(phoneNum);
 			user.setPhoneNumber(phoneNum);
-			user.setEmail(name + "@gmail.com");
+			user.setEmail(Constants.EMAIL);
 
 			User searchedUser = registration.isRegisteredUnder(user);
 
@@ -352,7 +353,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			user.setName(name);
 			user.setAlternateNumber(phoneNum);
 			user.setPhoneNumber(phoneNum);
-			user.setEmail(name + "@gmail.com");
+			user.setEmail(Constants.EMAIL);
 
 			User searchedUser = registration.isRegisteredUnder(user);
 
@@ -376,7 +377,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			user.setName(name);
 			user.setAlternateNumber(phoneNum);
 			user.setPhoneNumber(phoneNum);
-			user.setEmail(name + "@gmail.com");
+			user.setEmail(Constants.EMAIL);
 
 			User searchedUser = registration.isRegisteredUnder(user);
 
@@ -387,10 +388,10 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 
-	}
+	} 
 
 	// TC:36
-	@Test(groups = { "SearchingOrgAndReferel" }, priority =40)
+	@Test(groups = { "SearchingOrgAndReferel" })
 	public void verifySearchOrganization() {
 		String searchedOrg;
 
@@ -422,7 +423,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:39
-	@Test(groups = { "SearchingOrgAndReferel" }, priority =41)
+	@Test(groups = { "SearchingOrgAndReferel" })
 	public void verifySearchReferrel() {
 		String searchedRef;
 
