@@ -35,7 +35,7 @@ public class WebDriverThread {
 					System.setProperty("webdriver.gecko.driver", "src/main/resources/drivers/mac/geckodriver");
 				} else if (isWindows()) {
 
-					System.setProperty("webdriver.chrome.driver", "src/main/resources/drivers/windows/chromedriver");
+					System.setProperty("webdriver.chrome.driver", "src/main/resources/drivers/windows/chromedriver.exe");
 				}
 				else {
 					System.setProperty("webdriver.chrome.driver", "src/main/resources/drivers/linux/chromedriver");
