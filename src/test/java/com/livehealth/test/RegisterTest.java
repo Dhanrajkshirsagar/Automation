@@ -41,7 +41,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	CommonMethods commonMethods;
 
-	@BeforeClass(groups = { "Notnullfields" })
+	@BeforeClass(groups = { "Notnullfields", "Searching", "Registration", "SearchingOrgAndReferel" })
 	public void launchSite() {
 		try {
 			registration = pageLaunch.launch();
@@ -52,7 +52,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 
 	}
-		
+
 	// TC: 01
 	@Test(priority = 0)
 	public void verifyRegistrationPage() {
@@ -173,7 +173,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			inputUser.setDesignation("Mr.");
 			inputUser.setAge("10");
 			inputUser.setUserType(userType);
-			inputUser.setEmail(Constants.EMAIL);  
+			inputUser.setEmail(Constants.EMAIL);
 			inputUser.setAlternateNumber(phoneNo);
 			inputUser.setHeight("6");
 			inputUser.setWeight("51");
@@ -276,7 +276,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:29
-	@Test()
+	@Test(groups = { "Registration" })
 	public void isAgeCalculating() {
 		String calculatedAge;
 		Age age = new Age();
@@ -299,7 +299,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	public void verifyGenderCheckBox() {
 		String name = commonMethods.getRandomString();
 		String phoneNum = commonMethods.getRandomNumber();
-		
+
 		try {
 			User user = getSearchingUserDetails();
 			user.setName(name);
@@ -323,7 +323,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	public void isRegisteredUnderAlternateMobile() {
 		String name = commonMethods.getRandomString();
 		String phoneNum = commonMethods.getRandomNumber();
-		
+
 		try {
 			User user = getSearchingUserDetails();
 			user.setName(name);
@@ -347,7 +347,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	public void verifyHeight() {
 		String name = commonMethods.getRandomString();
 		String phoneNum = commonMethods.getRandomNumber();
-		
+
 		try {
 			User user = getSearchingUserDetails();
 			user.setName(name);
@@ -371,7 +371,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	public void verifyWeight() {
 		String name = commonMethods.getRandomString();
 		String phoneNum = commonMethods.getRandomNumber();
-		
+
 		try {
 			User user = getSearchingUserDetails();
 			user.setName(name);
@@ -388,7 +388,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 
-	} 
+	}
 
 	// TC:36
 	@Test(groups = { "SearchingOrgAndReferel" })
@@ -408,7 +408,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:37
-	@Test(groups = { "AddButton" }) 
+	@Test(groups = { "Registration" })
 	public void verifyAddOrganization() {
 		String addedOrganizationName;
 
@@ -423,7 +423,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:39
-	@Test(groups = { "SearchingOrgAndReferel" })
+	@Test(groups = { "Registration" })
 	public void verifySearchReferrel() {
 		String searchedRef;
 
@@ -440,7 +440,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:40
-	@Test(groups = { "Add Button" })
+	@Test(groups = { "Registration" })
 	public void verifyAddReferrel() {
 		List<String> searchedRef;
 
@@ -452,6 +452,72 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC:42
+	@Test(groups = { "Registration" })
+	public void verifyReferrelAddedWithDesignation() {
+		List<String> searchedRef;
+
+		try {
+			searchedRef = registration.addReferel("testreferel");
+
+			Assert.assertEquals(searchedRef.get(1), "Dr.");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC:45
+	@Test(groups = { "Registration" })
+	public void verifyPincode() {
+		try {
+			User user = userForRegisterdUnder();
+
+			User searchedUser = registration.isRegisteredUnder(user);
+
+			Assert.assertEquals(user.getPincode(), searchedUser.getPincode());
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+
+	}
+
+	// TC:47
+	@Test()
+	public void verifyUploadFile() {
+		String name = commonMethods.getRandomString();
+
+		User user = new User();
+		user.setName(name);
+		user.setAge("10");
+		user.setGender("Male");
+
+		try {
+			String file = registration.uploadFile(user);
+			Assert.assertEquals(file, "View");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+
+		}
+	}
+
+	// TC:49
+	@Test()
+	public void isProfilePicGettingAdded() {
+			boolean isAdded;
+		try {
+			 isAdded = registration.addingProfilePic();
+			Assert.assertTrue(isAdded);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+
 		}
 	}
 	
@@ -496,6 +562,23 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		String calculatedAge = String.valueOf(p.getYears());
 
 		return calculatedAge;
+	}
+
+	private User userForRegisterdUnder() {
+
+		User user = new User();
+		String name = commonMethods.getRandomString();
+		String phoneNum = commonMethods.getRandomNumber();
+
+		user.setName(name);
+		user.setAge("10");
+		user.setGender("Male");
+		user.setAlternateNumber(phoneNum);
+		user.setHeight("6");
+		user.setWeight("54");
+		user.setPincode("461116");
+
+		return user;
 	}
 
 	@DataProvider(name = "typeOfUser")

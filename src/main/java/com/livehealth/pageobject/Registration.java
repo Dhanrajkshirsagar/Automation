@@ -261,6 +261,16 @@ public class Registration {
 
 	@FindBy(how = How.XPATH, using = "(//div[@class=\"jcrop-tracker\"])[1]")
 	private WebElement uploadProfilePic;
+	
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div[1]/div[2]/div[6]/div[31]/div[3]/a")
+	private WebElement viewDocuments;
+
+	@FindBy(how = How.XPATH, using = "/html/body/div[17]/div/div/div[3]/button[2]")
+	private WebElement clickDone;
+
+	@FindBy(how = How.LINK_TEXT, using = "View")
+	private WebElement view;
+
 	// 
 	@Autowired
 	WebContext webContext;
@@ -897,6 +907,58 @@ public class Registration {
 		return null;
 	}
 	
+	public String uploadFile(User user) throws Exception {
+		
+		CommonMethods.waitForElementToClickable(uploadDocuments);
+		uploadDocuments.click();
+
+		CommonMethods.waitForElementToClickable(proofType);
+		Select getProofType = new Select(proofType);
+		getProofType.selectByValue("Aadhar Card");
+
+		proofID.sendKeys("1234");
+
+		File tempfile = new File("src/main/resources/livehealth.png");
+
+		filesContent.sendKeys(tempfile.getAbsolutePath());
+		uploadProofFile.click();
+		clickDone.click();
+		
+		CommonMethods.waitForElementToClickable(firstName);
+		firstName.sendKeys(user.getName());
+		ageField.sendKeys(user.getAge());
+		((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;", male);
+
+		saveForm.click();
+
+		Thread.sleep(1000);
+		CommonMethods.waitForElementToClickable(registerUrl);
+		registerUrl.click();
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(searchBtn);
+		searchBtn.click();
+
+		builder.moveToElement(searchUser).click().sendKeys(user.getName().toLowerCase()).build().perform();
+
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[5]/span/span")));
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[5]/span/span"));
+
+		dropDowns.get(0).click();
+
+		CommonMethods.waitForElementToClickable(viewDocuments);
+		viewDocuments.click();
+		
+		System.out.println("view         =="+view.getText());
+
+		return view.getText();
+	}
+	
 	public Boolean addingProfilePic() {
 		
 		boolean notDisplayed=uploadProfilePic.isDisplayed();
@@ -908,10 +970,10 @@ public class Registration {
 
 		System.out.println("displayed=="+displayed);
 
-		if(notDisplayed==displayed) {
-			return false;
+		if(displayed) {
+			return true;
 		}
-		return true;
+		return false;
 		
 	}
 }
