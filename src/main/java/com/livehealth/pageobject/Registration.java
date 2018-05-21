@@ -147,7 +147,7 @@ public class Registration {
 
 	@FindBy(how = How.ID, using = "newDirectWeight")
 	private WebElement weight;
-	
+
 	@FindBy(how = How.ID, using = "newDirectOrganization")
 	private WebElement organization;
 
@@ -240,13 +240,13 @@ public class Registration {
 
 	@FindBy(how = How.XPATH, using = "//input[@value=\"Upload\"]")
 	private WebElement uploadProofFile;
-	
+
 	@FindBy(how = How.ID, using = "referralDocList")
 	private WebElement referralDocList;
 
 	@FindBy(how = How.ID, using = "newDirectReferralDocTypeahead")
 	private WebElement searchReferrel;
-	
+
 	@FindBy(how = How.ID, using = "selectReferalEditDesignation")
 	private WebElement selectReferalEditDesignation;
 
@@ -261,8 +261,12 @@ public class Registration {
 
 	@FindBy(how = How.XPATH, using = "(//div[@class=\"jcrop-tracker\"])[1]")
 	private WebElement uploadProfilePic;
-	
-	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div[1]/div[2]/div[6]/div[31]/div[3]/a")
+
+	// @FindBy(how = How.XPATH, using =
+	// "/html/body/section/div[2]/div[1]/div[2]/div[6]/div[32]/div[3]/div/div[2]")
+	// private WebElement uploadProfilePic;
+
+	@FindBy(how = How.LINK_TEXT, using = "View Documents")
 	private WebElement viewDocuments;
 
 	@FindBy(how = How.XPATH, using = "/html/body/div[17]/div/div/div[3]/button[2]")
@@ -271,7 +275,16 @@ public class Registration {
 	@FindBy(how = How.LINK_TEXT, using = "View")
 	private WebElement view;
 
-	// 
+	@FindBy(how = How.ID, using = "patientTypeBillSetting")
+	private WebElement patientTypeBillSetting;
+
+	@FindBy(how = How.ID, using = "defaultDocReferral")
+	private WebElement defaultDocReferral;
+
+	@FindBy(how = How.ID, using = "defaultOrganization")
+	private WebElement defaultOrganization;
+
+	//
 	@Autowired
 	WebContext webContext;
 
@@ -322,7 +335,7 @@ public class Registration {
 		Actions actions = new Actions(DriverFactory.getDriver());
 		actions.moveToElement(adminHover).build().perform();
 		CommonMethods.waitForElementToClickable(registration);
-		registration.click();		
+		registration.click();
 	}
 
 	public void selectSearchingUser() throws Exception {
@@ -337,7 +350,7 @@ public class Registration {
 
 		CommonMethods.waitForElementToClickable(firstName);
 	}
-	
+
 	public User searchUserByName(User outUser) throws Exception {
 
 		Actions builder = new Actions(DriverFactory.getDriver());
@@ -348,7 +361,7 @@ public class Registration {
 		builder.moveToElement(searchUser).click().sendKeys(outUser.getName().toLowerCase()).build().perform();
 
 		selectSearchingUser();
-		
+
 		outUser.setName(firstName.getAttribute("value"));
 		outUser.setAge(ageField.getAttribute("value"));
 		outUser.setGender(male.getAttribute("value"));
@@ -358,7 +371,7 @@ public class Registration {
 		outUser.setHeight(height.getAttribute("value"));
 		outUser.setWeight(weight.getAttribute("value"));
 		outUser.setPincode(pincode.getAttribute("value"));
-		
+
 		DriverFactory.getDriver().navigate().refresh();
 
 		return outUser;
@@ -498,7 +511,7 @@ public class Registration {
 
 		return null;
 	}
-	
+
 	public User registerUser(User inUser) throws Exception {
 
 		int attempts = 0;
@@ -553,7 +566,7 @@ public class Registration {
 	public boolean matchDesignationWithGender(String inputDesig) throws Exception {
 
 		int attempts = 0;
-		while (attempts<2) {
+		while (attempts < 2) {
 			try {
 				boolean gender = false;
 
@@ -581,7 +594,7 @@ public class Registration {
 		}
 		return false;
 	}
-	
+
 	public boolean notNullFields(User user) throws Exception {
 		boolean isErrorMsgDisplayed = false;
 		CommonMethods.waitForElementToClickable(saveForm);
@@ -600,7 +613,7 @@ public class Registration {
 		return isErrorMsgDisplayed;
 
 	}
-	
+
 	public String ageAutoCalculator(Age age) throws Exception {
 		Select day = new Select(dayField);
 		day.selectByValue(age.getDay());
@@ -622,7 +635,7 @@ public class Registration {
 		}
 		return null;
 	}
-	
+
 	public User isRegisteredUnder(User user) throws Exception {
 
 		int attempts = 0;
@@ -659,7 +672,7 @@ public class Registration {
 				builder.moveToElement(searchUser).click().sendKeys(user.getName().toLowerCase()).build().perform();
 
 				selectSearchingUser();
-				
+
 				if (male.isSelected()) {
 					user.setGender("Male");
 				} else if (female.isSelected()) {
@@ -678,7 +691,7 @@ public class Registration {
 		}
 		return null;
 	}
-	
+
 	public void selectUnselectOrgList() throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		CommonMethods.waitForElementToClickable(settings);
@@ -802,11 +815,11 @@ public class Registration {
 		}
 		return null;
 	}
-	
+
 	public String searchReferrelName(String referrelName) throws Exception {
 
 		String searchedRef;
-//		Thread.sleep(1000);
+		// Thread.sleep(1000);
 		selectUnselectOrgList();
 
 		CommonMethods.waitForElementToClickable(searchReferrel);
@@ -830,7 +843,7 @@ public class Registration {
 		return null;
 
 	}
-	
+
 	public List<String> addReferel(String refName) throws Exception {
 
 		Actions builder = new Actions(DriverFactory.getDriver());
@@ -873,11 +886,9 @@ public class Registration {
 				builder.moveToElement(referralEditList).click().sendKeys(refName).build().perform();
 
 				WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-				wait.until(ExpectedConditions.visibilityOfElementLocated(
-						By.xpath("//div[@class=\"tt-dataset-4\"]")));
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class=\"tt-dataset-4\"]")));
 
-				builder.moveToElement(referralEditList
-						.findElement(By.xpath("//div[@class=\"tt-dataset-4\"]"))).click()
+				builder.moveToElement(referralEditList.findElement(By.xpath("//div[@class=\"tt-dataset-4\"]"))).click()
 						.build().perform();
 
 				builder.sendKeys(Keys.DOWN);
@@ -906,9 +917,9 @@ public class Registration {
 
 		return null;
 	}
-	
+
 	public String uploadFile(User user) throws Exception {
-		
+
 		CommonMethods.waitForElementToClickable(uploadDocuments);
 		uploadDocuments.click();
 
@@ -916,14 +927,15 @@ public class Registration {
 		Select getProofType = new Select(proofType);
 		getProofType.selectByValue("Aadhar Card");
 
-		proofID.sendKeys("1234");
+		proofID.sendKeys("123");
 
 		File tempfile = new File("src/main/resources/livehealth.png");
 
 		filesContent.sendKeys(tempfile.getAbsolutePath());
 		uploadProofFile.click();
+
 		clickDone.click();
-		
+
 		CommonMethods.waitForElementToClickable(firstName);
 		firstName.sendKeys(user.getName());
 		ageField.sendKeys(user.getAge());
@@ -942,38 +954,128 @@ public class Registration {
 
 		builder.moveToElement(searchUser).click().sendKeys(user.getName().toLowerCase()).build().perform();
 
-		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[5]/span/span")));
-
-		List<WebElement> dropDowns = DriverFactory.getDriver()
-				.findElements(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[5]/span/span"));
-
-		dropDowns.get(0).click();
+		selectSearchingUser();
 
 		CommonMethods.waitForElementToClickable(viewDocuments);
-		viewDocuments.click();
-		
-		System.out.println("view         =="+view.getText());
+		((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].click();", viewDocuments);
+		CommonMethods.waitForElementToClickable(view);
 
-		return view.getText();
+		return view.getText().trim();
+
 	}
-	
-	public Boolean addingProfilePic() {
-		
-		boolean notDisplayed=uploadProfilePic.isDisplayed();
+
+	public void addingProfilePic() throws Exception {
+
+		// boolean notDisplayed=uploadProfilePic.isDisplayed();
 		File tempfile = new File("src/main/resources/livehealth.png");
 
-		System.out.println("notDisplayed=="+notDisplayed);
+		// System.out.println("notDisplayed=="+notDisplayed);
+		// Actions builder = new Actions(DriverFactory.getDriver());
+		// builder.moveToElement(newFileInputprofile).sendKeys(tempfile.getAbsolutePath());
+
 		newFileInputprofile.sendKeys(tempfile.getAbsolutePath());
-		boolean displayed=uploadProfilePic.isDisplayed();
+		boolean displayed = uploadProfilePic.isDisplayed();
 
-		System.out.println("displayed=="+displayed);
+		System.out.println("displayed==" + displayed);
+		//
+		// if(displayed) {
+		// return true;
+		// }
+		// return false;
 
-		if(displayed) {
-			return true;
+	}
+
+	public String defaultUserTypeSettings(String defaultUserType) throws Exception {
+
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+				CommonMethods.waitForElementToClickable(settings);
+				settings.click();
+
+				CommonMethods.waitForElementToClickable(patientTypeBillSetting);
+
+				patientTypeBillSetting.click();
+				Select userTypeSetting = new Select(patientTypeBillSetting);
+				userTypeSetting.selectByVisibleText(defaultUserType);
+
+				savebillSetting.click();
+
+				CommonMethods.waitForElementToClickable(userType);
+
+				Select select = new Select(userType);
+				WebElement tmp = select.getFirstSelectedOption();
+
+				return tmp.getText().trim();
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
 		}
-		return false;
-		
+		return null;
+
+	}
+
+	public String defaultReferrelSettings(String defaultReferrel) throws Exception {
+
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+				CommonMethods.waitForElementToClickable(settings);
+				settings.click();
+
+				CommonMethods.waitForElementToClickable(defaultDocReferral);
+
+				defaultDocReferral.click();
+				Select userTypeSetting = new Select(defaultDocReferral);
+				userTypeSetting.selectByVisibleText(defaultReferrel);
+
+				savebillSetting.click();
+
+				CommonMethods.waitForElementToClickable(referrel);
+
+				Select select = new Select(referrel);
+				WebElement tmp = select.getFirstSelectedOption();
+				CommonMethods.waitForElementToClickable(firstName);
+
+				return tmp.getText().trim();
+
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
+		}
+		return null;
+
+	}
+
+	public String defaultOrganizationSettings(String defaultOrg) throws Exception {
+
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+				CommonMethods.waitForElementToClickable(settings);
+				settings.click();
+
+				CommonMethods.waitForElementToClickable(defaultOrganization);
+
+				defaultOrganization.click();
+				Select userTypeSetting = new Select(defaultOrganization);
+				userTypeSetting.selectByVisibleText(defaultOrg);
+
+				savebillSetting.click();
+
+				CommonMethods.waitForElementToClickable(organization);
+
+				Select select = new Select(organization);
+				WebElement tmp = select.getFirstSelectedOption();
+				CommonMethods.waitForElementToClickable(firstName);
+
+				return tmp.getText().trim();
+
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
+		}
+		return null;
+
 	}
 }
