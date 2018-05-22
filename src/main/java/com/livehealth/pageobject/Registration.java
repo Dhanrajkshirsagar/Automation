@@ -371,6 +371,7 @@ public class Registration {
 		outUser.setHeight(height.getAttribute("value"));
 		outUser.setWeight(weight.getAttribute("value"));
 		outUser.setPincode(pincode.getAttribute("value"));
+		outUser.setUserType(userType.getAttribute("value"));
 
 		DriverFactory.getDriver().navigate().refresh();
 
@@ -1078,4 +1079,46 @@ public class Registration {
 		return null;
 
 	}
+	
+	public User userTypeWithOrWithoutMobileNumber(User user) throws Exception {
+
+		boolean staleElement = true;
+		while (staleElement) {
+			try {
+				CommonMethods.waitForElementToClickable(firstName);
+
+				Select desig = new Select(designation);
+				desig.selectByValue(user.getDesignation());
+
+				firstName.sendKeys(user.getName());
+				ageField.sendKeys(user.getAge());
+
+				if (user.getPhoneNumber() != null) {
+
+					phoneNumber.sendKeys(user.getPhoneNumber());
+				}
+
+				CommonMethods.waitForElementToClickable(female);
+
+				if (user.getAlternateNumber() != null) {
+
+					alternateMobile.sendKeys(user.getAlternateNumber());
+				}
+				saveForm.click();
+
+				Thread.sleep(1000);
+				CommonMethods.waitForElementToClickable(registerUrl);
+				registerUrl.click();
+				staleElement = false;
+
+				return searchUserByName(user);
+
+			} catch (StaleElementReferenceException e) {
+				staleElement = true;
+			}
+		}
+		return null;
+
+	}
+
 }

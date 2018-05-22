@@ -123,7 +123,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	//
 	// }
 
-	// TC: 06
+	// TC:06
 	@Test(groups = { "Registration" })
 	public void verifyClearButton() {
 		User searchedUser;
@@ -464,36 +464,33 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	/**
 	 * TC:44 city searching field (bug)
-	 */
-
-	// TC:45
-	@Test(groups = { "Registration" })
-	public void verifyPincode() {
-		String name = commonMethods.getRandomString();
-		String phoneNum = commonMethods.getRandomNumber();
-
-		try {
-			User user = getSearchingUserDetails();
-			user.setName(name);
-			user.setAlternateNumber(phoneNum);
-
-			User searchedUser = registration.isRegisteredUnder(user);
-
-			Assert.assertEquals(user.getPincode(), searchedUser.getPincode());
-
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-
-	}
+	 *//*
+		 * 
+		 * // TC:45
+		 * 
+		 * @Test(groups = { "Registration" }) public void verifyPincode() { String name
+		 * = commonMethods.getRandomString(); String phoneNum =
+		 * commonMethods.getRandomNumber();
+		 * 
+		 * try { User user = getSearchingUserDetails(); user.setName(name);
+		 * user.setAlternateNumber(phoneNum);
+		 * 
+		 * User searchedUser = registration.isRegisteredUnder(user);
+		 * 
+		 * Assert.assertEquals(user.getPincode(), searchedUser.getPincode());
+		 * 
+		 * } catch (Exception e) { logger.error(e.getMessage());
+		 * Assert.assertTrue(false, e.getMessage()); }
+		 * 
+		 * }
+		 */
 
 	/**
 	 * TC:46 login api required
 	 */
 
 	// TC:47,48
-	@Test(groups = { "Registration" })
+	@Test(groups = { "Registration" }, priority = 55)
 	public void verifyUploadFile() {
 		String name = commonMethods.getRandomString();
 
@@ -559,6 +556,79 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
+	}
+
+	// TC: 55
+	@Test(groups = { "Registration" })
+	public void verifyUserTypeHavingMobileNumber() {
+		User user = new User();
+		String name = commonMethods.getRandomString();
+		String phoneNo = commonMethods.getRandomNumber();
+
+		User registeredUser;
+		try {
+			user.setName(name);
+			user.setAge("10");
+			user.setDesignation("Mr.");
+			user.setPhoneNumber(phoneNo);
+
+			registeredUser = registration.userTypeWithOrWithoutMobileNumber(user);
+
+			Assert.assertEquals(registeredUser.getUserType(), "D");
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+
+	}
+
+	// TC: 56
+	@Test(groups = { "Registration" })
+	public void verifyUserTypeNotHavingMobileNumber() {
+		User user = new User();
+		String name = commonMethods.getRandomString();
+
+		User registeredUser;
+		try {
+			user.setName(name);
+			user.setAge("10");
+			user.setDesignation("Mr.");
+
+			registeredUser = registration.userTypeWithOrWithoutMobileNumber(user);
+
+			Assert.assertEquals(registeredUser.getUserType(), "I");
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+
+	}
+
+	// TC: 57
+	@Test(groups = { "Registration" })
+	public void verifyUserTypeWithAlternateNumber() {
+		User user = new User();
+		String name = commonMethods.getRandomString();
+		String phoneNo = commonMethods.getRandomNumber();
+
+		User registeredUser;
+		try {
+			user.setName(name);
+			user.setAge("10");
+			user.setDesignation("Mr.");
+			user.setAlternateNumber(phoneNo);
+
+			registeredUser = registration.userTypeWithOrWithoutMobileNumber(user);
+
+			Assert.assertEquals(registeredUser.getUserType(), "I");
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+
 	}
 
 	private User getBlankUser() {
