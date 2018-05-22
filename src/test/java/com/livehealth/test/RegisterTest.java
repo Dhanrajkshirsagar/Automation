@@ -464,26 +464,29 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	/**
 	 * TC:44 city searching field (bug)
-	 *//*
-		 * 
-		 * // TC:45
-		 * 
-		 * @Test(groups = { "Registration" }) public void verifyPincode() { String name
-		 * = commonMethods.getRandomString(); String phoneNum =
-		 * commonMethods.getRandomNumber();
-		 * 
-		 * try { User user = getSearchingUserDetails(); user.setName(name);
-		 * user.setAlternateNumber(phoneNum);
-		 * 
-		 * User searchedUser = registration.isRegisteredUnder(user);
-		 * 
-		 * Assert.assertEquals(user.getPincode(), searchedUser.getPincode());
-		 * 
-		 * } catch (Exception e) { logger.error(e.getMessage());
-		 * Assert.assertTrue(false, e.getMessage()); }
-		 * 
-		 * }
-		 */
+	 */
+
+	// TC:45
+	@Test(groups = { "Registration" })
+	public void verifyPincode() {
+		String name = commonMethods.getRandomString();
+		String phoneNum = commonMethods.getRandomNumber();
+
+		try {
+			User user = getSearchingUserDetails();
+			user.setName(name);
+			user.setAlternateNumber(phoneNum);
+
+			User searchedUser = registration.isRegisteredUnder(user);
+
+			Assert.assertEquals(user.getPincode(), searchedUser.getPincode());
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+
+	}
 
 	/**
 	 * TC:46 login api required
