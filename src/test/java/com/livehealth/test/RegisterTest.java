@@ -492,7 +492,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	 * TC:46 login api required
 	 */
 
-	// TC:47,48
+	// // TC:47,48
 	@Test(groups = { "Registration" }, priority = 55)
 	public void verifyUploadFile() {
 		String name = commonMethods.getRandomString();
@@ -632,6 +632,78 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 
+	}
+
+	// TC:58
+	@Test(groups = { "Update user" })
+	public void verifyUserUpdationFlow() {
+		String name = commonMethods.getRandomString();
+		String phoneNo = commonMethods.getRandomNumber();
+
+		User searchedUser;
+		try {
+			User user = getSearchingUserDetails();
+			user.setName("Swapnil");
+			user.setAlternateNumber(phoneNo);
+
+			searchedUser = registration.updateExistingUser(user);
+
+			Assert.assertEquals(user.getAlternateNumber(), searchedUser.getAlternateNumber());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 59
+	@Test(groups = { "Update user" })
+	public void verifyUserUpdateAndProceedToBilling() {
+		String name = commonMethods.getRandomString();
+		String phoneNo = commonMethods.getRandomNumber();
+
+		String billingPageTitle;
+		try {
+			User user = getSearchingUserDetails();
+			user.setName("Swapnil");
+			user.setAlternateNumber(phoneNo);
+
+			billingPageTitle = registration.updateAndProceedToBilling(user);
+
+			Assert.assertEquals(billingPageTitle, user.getName());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 61
+	@Test(groups = { "Availability check" })
+	public void verifyCardNumberListBoxAvailability() {
+		boolean availabilityCheck = false;
+
+		try {
+			availabilityCheck = registration.cardNumberListBox();
+
+			Assert.assertTrue(availabilityCheck);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 62
+	@Test(priority = 10)
+	public void verifyCardList() {
+		List<String> cardList;
+		try {
+			cardList = registration.showCardList("dhanraj");
+			Assert.assertEquals(cardList.get(0), "1800682");
+			Assert.assertEquals(cardList.get(1), "1800275");
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
 	}
 
 	private User getBlankUser() {

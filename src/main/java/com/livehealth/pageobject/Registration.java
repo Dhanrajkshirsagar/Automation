@@ -284,7 +284,31 @@ public class Registration {
 	@FindBy(how = How.ID, using = "defaultOrganization")
 	private WebElement defaultOrganization;
 
-	//
+	@FindBy(how = How.ID, using = "newDirectProceedBilling")
+	private WebElement proceedToBilling;
+
+	@FindBy(how = How.ID, using = "showCardnumber")
+	private WebElement showCardnumber;
+
+	@FindBy(how = How.ID, using = "newDirectCardNumber")
+	private WebElement newDirectCardNumber;
+
+	@FindBy(how = How.XPATH, using = "//a[@onclick=\"setCardNumber(0)\"]")
+	private WebElement firstCard;
+
+	@FindBy(how = How.XPATH, using = "//a[@onclick=\"setCardNumber(1)\"]")
+	private WebElement secondCard;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div[1]/div[2]/div[6]/div[8]/div/div/button")
+	private WebElement cardListDropDown;
+
+	@FindBy(how = How.XPATH, using = "/html/body/div[17]/div/div/div[1]/button")
+	private WebElement closeView;
+
+	@FindBy(how = How.XPATH, using = "/html/body/div[18]/div/div/div[1]/button")
+	private WebElement closeCal;
+
+	//   
 	@Autowired
 	WebContext webContext;
 
@@ -501,8 +525,9 @@ public class Registration {
 				String addition = String.valueOf(t1 + t2 + t3);
 
 				if (addition.equals(totalAmt.getText())) {
-
-					return totalAmt.getText();
+					String total=totalAmt.getText();
+					closeCal.click();
+					return total;
 				}
 
 			} catch (StaleElementReferenceException e) {
@@ -694,6 +719,7 @@ public class Registration {
 	}
 
 	public void selectUnselectOrgList() throws Exception {
+
 		DriverFactory.getDriver().navigate().refresh();
 		CommonMethods.waitForElementToClickable(settings);
 		settings.click();
@@ -716,206 +742,228 @@ public class Registration {
 		CommonMethods.waitForElementToClickable(savebillSetting);
 
 		savebillSetting.click();
-
 	}
 
 	public String searchOrganizationName(String organizationName) throws Exception {
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+				String searchedOrg;
 
-		String searchedOrg;
+				selectUnselectOrgList();
 
-		selectUnselectOrgList();
+				CommonMethods.waitForElementToClickable(searchOrg);
 
-		CommonMethods.waitForElementToClickable(searchOrg);
+				searchOrg.sendKeys(organizationName);
 
-		searchOrg.sendKeys(organizationName);
+				List<WebElement> dropDowns = DriverFactory.getDriver().findElements(
+						By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[6]/div[17]/div[3]/span/span"));
 
-		List<WebElement> dropDowns = DriverFactory.getDriver()
-				.findElements(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[6]/div[17]/div[3]/span/span"));
+				if (dropDowns.size() > 0) {
+					dropDowns.get(0).click();
+					searchedOrg = searchOrg.getAttribute("value");
 
-		if (dropDowns.size() > 0) {
-			dropDowns.get(0).click();
-			searchedOrg = searchOrg.getAttribute("value");
+					DriverFactory.getDriver().navigate().refresh();
+					CommonMethods.waitForElementToClickable(settings);
 
-			DriverFactory.getDriver().navigate().refresh();
-			CommonMethods.waitForElementToClickable(settings);
-
-			selectUnselectOrgList();
-			return searchedOrg;
+					selectUnselectOrgList();
+					return searchedOrg;
+				}
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
 		}
-
 		return null;
 	}
 
 	public String addOrganization(String orgName) throws Exception {
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+				Actions builder = new Actions(DriverFactory.getDriver());
 
-		Actions builder = new Actions(DriverFactory.getDriver());
+				CommonMethods.waitForElementToClickable(addOrganizationBtn);
+				addOrganizationBtn.click();
 
-		CommonMethods.waitForElementToClickable(addOrganizationBtn);
-		addOrganizationBtn.click();
+				CommonMethods.waitForElementToClickable(orgnName);
+				orgnName.sendKeys(orgName);
 
-		CommonMethods.waitForElementToClickable(orgnName);
-		orgnName.sendKeys(orgName);
+				addOrgButton.click();
 
-		addOrgButton.click();
+				CommonMethods.waitForElementToClickable(organization);
 
-		CommonMethods.waitForElementToClickable(organization);
+				List<WebElement> listElements = organization
+						.findElements(By.xpath("//select[@id=\"newDirectOrganization\"]//*"));
 
-		List<WebElement> listElements = organization
-				.findElements(By.xpath("//select[@id=\"newDirectOrganization\"]//*"));
+				for (WebElement element : listElements) {
 
-		for (WebElement element : listElements) {
+					String searchedOrg = element.getText().trim();
 
-			String searchedOrg = element.getText().trim();
+					if (searchedOrg.equalsIgnoreCase(orgName)) {
 
-			if (searchedOrg.equalsIgnoreCase(orgName)) {
+						CommonMethods.waitForElementToClickable(adminHover);
 
-				CommonMethods.waitForElementToClickable(adminHover);
+						builder.moveToElement(adminHover).build().perform();
 
-				builder.moveToElement(adminHover).build().perform();
+						CommonMethods.waitForElementToClickable(admin);
+						admin.click();
 
-				CommonMethods.waitForElementToClickable(admin);
-				admin.click();
+						CommonMethods.waitForElementToClickable(organizationManagement);
+						organizationManagement.click();
 
-				CommonMethods.waitForElementToClickable(organizationManagement);
-				organizationManagement.click();
+						CommonMethods.waitForElementToClickable(addEditOrganization);
+						addEditOrganization.click();
 
-				CommonMethods.waitForElementToClickable(addEditOrganization);
-				addEditOrganization.click();
+						CommonMethods.waitForElementToClickable(editOrgTab);
+						editOrgTab.click();
 
-				CommonMethods.waitForElementToClickable(editOrgTab);
-				editOrgTab.click();
+						CommonMethods.waitForElementToClickable(orgEditList);
+						builder.moveToElement(orgEditList).click().sendKeys(orgName).build().perform();
 
-				CommonMethods.waitForElementToClickable(orgEditList);
-				builder.moveToElement(orgEditList).click().sendKeys(orgName).build().perform();
+						WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+						wait.until(ExpectedConditions.visibilityOfElementLocated(
+								By.xpath("/html/body/section/div[2]/div[1]/div[4]/div/div/span/span")));
 
-				WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-				wait.until(ExpectedConditions.visibilityOfElementLocated(
-						By.xpath("/html/body/section/div[2]/div[1]/div[4]/div/div/span/span")));
+						builder.moveToElement(orgEditList
+								.findElement(By.xpath("/html/body/section/div[2]/div[1]/div[4]/div/div/span/span")))
+								.click().build().perform();
 
-				builder.moveToElement(
-						orgEditList.findElement(By.xpath("/html/body/section/div[2]/div[1]/div[4]/div/div/span/span")))
-						.click().build().perform();
+						builder.sendKeys(Keys.DOWN);
 
-				builder.sendKeys(Keys.DOWN);
+						CommonMethods.waitForElementToClickable(orgDeleteButton);
+						orgDeleteButton.click();
 
-				CommonMethods.waitForElementToClickable(orgDeleteButton);
-				orgDeleteButton.click();
+						CommonMethods.waitForElementToClickable(orgDelete);
+						orgDelete.click();
 
-				CommonMethods.waitForElementToClickable(orgDelete);
-				orgDelete.click();
+						CommonMethods.waitForElementToClickable(adminHover);
+						builder.moveToElement(adminHover).build().perform();
 
-				CommonMethods.waitForElementToClickable(adminHover);
-				builder.moveToElement(adminHover).build().perform();
+						CommonMethods.waitForElementToClickable(registration);
+						registration.click();
+						CommonMethods.waitForElementToClickable(firstName);
 
-				CommonMethods.waitForElementToClickable(registration);
-				registration.click();
-				CommonMethods.waitForElementToClickable(firstName);
-
-				return searchedOrg;
+						return searchedOrg;
+					}
+				}
+			} catch (StaleElementReferenceException e) {
+				attempts++;
 			}
 		}
 		return null;
 	}
 
 	public String searchReferrelName(String referrelName) throws Exception {
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+				String searchedRef;
+				// Thread.sleep(1000);
+				selectUnselectOrgList();
 
-		String searchedRef;
-		// Thread.sleep(1000);
-		selectUnselectOrgList();
+				CommonMethods.waitForElementToClickable(searchReferrel);
 
-		CommonMethods.waitForElementToClickable(searchReferrel);
+				searchReferrel.sendKeys(referrelName);
+				List<WebElement> dropDowns = DriverFactory.getDriver()
+						.findElements(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[6]/div[20]/span/span"));
+				// //div[@class=\"tt-dataset-23\"]
 
-		searchReferrel.sendKeys(referrelName);
-		List<WebElement> dropDowns = DriverFactory.getDriver()
-				.findElements(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[6]/div[20]/span/span"));
-		// //div[@class=\"tt-dataset-23\"]
+				if (dropDowns.size() > 0) {
+					dropDowns.get(0).click();
+					searchedRef = searchReferrel.getAttribute("value");
 
-		if (dropDowns.size() > 0) {
-			dropDowns.get(0).click();
-			searchedRef = searchReferrel.getAttribute("value");
+					DriverFactory.getDriver().navigate().refresh();
+					CommonMethods.waitForElementToClickable(settings);
 
-			DriverFactory.getDriver().navigate().refresh();
-			CommonMethods.waitForElementToClickable(settings);
-
-			selectUnselectOrgList();
-			return searchedRef;
+					selectUnselectOrgList();
+					return searchedRef;
+				}
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
 		}
-
 		return null;
 
 	}
 
 	public List<String> addReferel(String refName) throws Exception {
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+				Actions builder = new Actions(DriverFactory.getDriver());
 
-		Actions builder = new Actions(DriverFactory.getDriver());
+				CommonMethods.waitForElementToClickable(addReferel);
+				addReferel.click();
 
-		CommonMethods.waitForElementToClickable(addReferel);
-		addReferel.click();
+				CommonMethods.waitForElementToClickable(selectRefDesig);
+				selectRefDesig.click();
+				refDesig.click();
 
-		CommonMethods.waitForElementToClickable(selectRefDesig);
-		selectRefDesig.click();
-		refDesig.click();
+				CommonMethods.waitForElementToClickable(referrelName);
+				referrelName.sendKeys(refName);
 
-		CommonMethods.waitForElementToClickable(referrelName);
-		referrelName.sendKeys(refName);
+				addReferrelButton.click();
+				Thread.sleep(1000);
+				CommonMethods.waitForElementToClickable(referrel);
+				List<WebElement> listElements = referrel
+						.findElements(By.xpath("//select[@id=\"newDirectBillReferal\"]//*"));
 
-		addReferrelButton.click();
-		Thread.sleep(1000);
-		CommonMethods.waitForElementToClickable(referrel);
-		List<WebElement> listElements = referrel.findElements(By.xpath("//select[@id=\"newDirectBillReferal\"]//*"));
+				for (WebElement element : listElements) {
 
-		for (WebElement element : listElements) {
+					String searchedReferel = element.getText().trim();
 
-			String searchedReferel = element.getText().trim();
+					if (searchedReferel.equalsIgnoreCase(refName)) {
 
-			if (searchedReferel.equalsIgnoreCase(refName)) {
+						CommonMethods.waitForElementToClickable(adminHover);
 
-				CommonMethods.waitForElementToClickable(adminHover);
+						builder.moveToElement(adminHover).build().perform();
 
-				builder.moveToElement(adminHover).build().perform();
+						CommonMethods.waitForElementToClickable(admin);
+						admin.click();
 
-				CommonMethods.waitForElementToClickable(admin);
-				admin.click();
+						CommonMethods.waitForElementToClickable(addEditReferel);
+						addEditReferel.click();
 
-				CommonMethods.waitForElementToClickable(addEditReferel);
-				addEditReferel.click();
+						CommonMethods.waitForElementToClickable(editReferralTab);
+						editReferralTab.click();
 
-				CommonMethods.waitForElementToClickable(editReferralTab);
-				editReferralTab.click();
+						CommonMethods.waitForElementToClickable(referralEditList);
+						builder.moveToElement(referralEditList).click().sendKeys(refName).build().perform();
 
-				CommonMethods.waitForElementToClickable(referralEditList);
-				builder.moveToElement(referralEditList).click().sendKeys(refName).build().perform();
+						WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+						wait.until(ExpectedConditions
+								.visibilityOfElementLocated(By.xpath("//div[@class=\"tt-dataset-4\"]")));
 
-				WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class=\"tt-dataset-4\"]")));
+						builder.moveToElement(referralEditList.findElement(By.xpath("//div[@class=\"tt-dataset-4\"]")))
+								.click().build().perform();
 
-				builder.moveToElement(referralEditList.findElement(By.xpath("//div[@class=\"tt-dataset-4\"]"))).click()
-						.build().perform();
+						builder.sendKeys(Keys.DOWN);
 
-				builder.sendKeys(Keys.DOWN);
+						String refDesig = selectReferalEditDesignation.getText();
 
-				String refDesig = selectReferalEditDesignation.getText();
+						List<String> referrel = new ArrayList<>();
+						referrel.add(searchedReferel);
+						referrel.add(refDesig);
 
-				List<String> referrel = new ArrayList<>();
-				referrel.add(searchedReferel);
-				referrel.add(refDesig);
+						CommonMethods.waitForElementToClickable(deleteRefButton);
+						deleteRefButton.click();
 
-				CommonMethods.waitForElementToClickable(deleteRefButton);
-				deleteRefButton.click();
+						CommonMethods.waitForElementToClickable(deletebtn);
+						deletebtn.click();
 
-				CommonMethods.waitForElementToClickable(deletebtn);
-				deletebtn.click();
+						CommonMethods.waitForElementToClickable(adminHover);
+						builder.moveToElement(adminHover).build().perform();
 
-				CommonMethods.waitForElementToClickable(adminHover);
-				builder.moveToElement(adminHover).build().perform();
+						CommonMethods.waitForElementToClickable(registration);
+						registration.click();
 
-				CommonMethods.waitForElementToClickable(registration);
-				registration.click();
-
-				return referrel;
+						return referrel;
+					}
+				}
+			} catch (StaleElementReferenceException e) {
+				attempts++;
 			}
 		}
-
 		return null;
 	}
 
@@ -960,9 +1008,10 @@ public class Registration {
 		CommonMethods.waitForElementToClickable(viewDocuments);
 		((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].click();", viewDocuments);
 		CommonMethods.waitForElementToClickable(view);
+		String text = view.getText().trim();
+		closeView.click();
 
-		return view.getText().trim();
-
+		return text;
 	}
 
 	public void addingProfilePic() throws Exception {
@@ -1079,11 +1128,11 @@ public class Registration {
 		return null;
 
 	}
-	
+
 	public User userTypeWithOrWithoutMobileNumber(User user) throws Exception {
 
-		boolean staleElement = true;
-		while (staleElement) {
+		int attempts = 0;
+		while (attempts < 2) {
 			try {
 				CommonMethods.waitForElementToClickable(firstName);
 
@@ -1109,16 +1158,117 @@ public class Registration {
 				Thread.sleep(1000);
 				CommonMethods.waitForElementToClickable(registerUrl);
 				registerUrl.click();
-				staleElement = false;
 
 				return searchUserByName(user);
 
 			} catch (StaleElementReferenceException e) {
-				staleElement = true;
+				attempts++;
 			}
 		}
 		return null;
 
 	}
 
+	public User updateExistingUser(User updateUser) throws Exception {
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(searchBtn);
+		searchBtn.click();
+
+		builder.moveToElement(searchUser).click().sendKeys(updateUser.getName().toLowerCase()).build().perform();
+
+		selectSearchingUser();
+
+		CommonMethods.waitForElementToClickable(alternateMobile);
+
+		alternateMobile.clear();
+		alternateMobile.sendKeys(updateUser.getAlternateNumber());
+		CommonMethods.waitForElementToClickable(saveForm);
+		saveForm.click();
+
+		DriverFactory.getDriver().navigate().refresh();
+
+		return searchUserByName(updateUser);
+
+	}
+
+	public String updateAndProceedToBilling(User updateUser) throws Exception {
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(searchBtn);
+		searchBtn.click();
+
+		builder.moveToElement(searchUser).click().sendKeys(updateUser.getName().toLowerCase()).build().perform();
+
+		selectSearchingUser();
+
+		CommonMethods.waitForElementToClickable(alternateMobile);
+
+		alternateMobile.clear();
+		alternateMobile.sendKeys(updateUser.getAlternateNumber());
+
+		proceedToBilling.click();
+		CommonMethods.waitForElementToClickable(testList);
+
+		String pageTitle = DriverFactory.getDriver().getTitle();
+		Thread.sleep(1000);
+		CommonMethods.waitForElementToClickable(registerUrl);
+		registerUrl.click();
+		CommonMethods.waitForElementToClickable(firstName);
+
+		return pageTitle.trim();
+
+	}
+
+	public void checkCardNumberListFlag() throws Exception {
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(showCardnumber);
+
+		if (!showCardnumber.isSelected()) {
+			showCardnumber.click();
+		}
+		CommonMethods.waitForElementToClickable(savebillSetting);
+		savebillSetting.click();
+	}
+
+	public Boolean cardNumberListBox() throws Exception {
+
+		checkCardNumberListFlag();
+
+		return newDirectCardNumber.isDisplayed();
+
+	}
+
+	public List<String> showCardList(String username) throws Exception {
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+				Actions builder = new Actions(DriverFactory.getDriver());
+
+				CommonMethods.waitForElementToClickable(searchBtn);
+				searchBtn.click();
+				builder.moveToElement(searchUser).click().sendKeys(username.toLowerCase()).build().perform();
+
+				selectSearchingUser();
+
+				cardListDropDown.click();
+
+				String cardFirst = firstCard.getText().substring(0, 7).trim();
+				String cardSecond = secondCard.getText().substring(0, 7).trim();
+
+				List<String> cardList = new ArrayList<>();
+				cardList.add(cardFirst);
+				cardList.add(cardSecond);
+
+				return cardList;
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
+		}
+		return null;
+	}
 }
