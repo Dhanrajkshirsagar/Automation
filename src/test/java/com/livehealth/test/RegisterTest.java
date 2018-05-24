@@ -19,10 +19,12 @@ import org.testng.annotations.Test;
 import com.livehealth.base.DriverFactory;
 import com.livehealth.config.Constants;
 import com.livehealth.model.Age;
+import com.livehealth.model.TestList;
 import com.livehealth.model.User;
 import com.livehealth.pageobject.HomePage;
 import com.livehealth.pageobject.Registration;
 import com.livehealth.util.CommonMethods;
+import com.livehealth.validator.BillingDetailsValidator;
 import com.livehealth.validator.RegistrationValidator;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -37,6 +39,9 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	@Autowired
 	RegistrationValidator registerValidator;
+
+	@Autowired
+	BillingDetailsValidator billingValidation;
 
 	@Autowired
 	CommonMethods commonMethods;
@@ -144,7 +149,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 07
-	@Test(groups = { "Registration" }, priority = 7)
+	@Test(groups = { "Registration" }, dependsOnMethods = { "verifyCardList" }, priority = 7)
 	public void verifyCalculator() {
 		List<String> testList = new ArrayList<>();
 		testList.add("CPK, Total");
@@ -493,24 +498,24 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	 */
 
 	// // TC:47,48
-	@Test(groups = { "Registration" }, priority = 55)
-	public void verifyUploadFile() {
-		String name = commonMethods.getRandomString();
-
-		User user = new User();
-		user.setName(name);
-		user.setAge("10");
-		user.setGender("Male");
-
-		try {
-			String file = registration.uploadFile(user);
-			Assert.assertEquals(file, "View");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-
-		}
-	}
+//	@Test(groups = { "Registration" }, priority = 60)
+//	public void verifyUploadFile() {
+//		String name = commonMethods.getRandomString();
+//
+//		User user = new User();
+//		user.setName(name);
+//		user.setAge("10");
+//		user.setGender("Male");
+//
+//		try {
+//			String file = registration.uploadFile(user);
+//			Assert.assertEquals(file, "View");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//
+//		}
+//	}
 
 	// TC: 50
 	@Test(groups = { "Default Settings" })
@@ -700,6 +705,68 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			Assert.assertEquals(cardList.get(0), "1800682");
 			Assert.assertEquals(cardList.get(1), "1800275");
 
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 63
+	@Test(groups = { "Availability check" })
+	public void verifyStrictCheckBoxAvailability() {
+		boolean isStrictCheckBoxAvailable = false;
+
+		try {
+			isStrictCheckBoxAvailable = registration.strictCheckCheckBoxAvailibility();
+
+			Assert.assertTrue(isStrictCheckBoxAvailable);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 64,65
+	@Test()
+	public void verifyUpdateConfirmationModal() {
+		User user = new User();
+		String registrationDate;
+		try {
+			user.setName("Dhanraj");
+
+			registrationDate = registration.confirmationModel(user);
+
+			Assert.assertEquals(registrationDate, "Registration Date : 20th May, 2018");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 66,67
+	@Test(priority = 10)
+	public void verifyBillingDetails() {
+		User user = new User();
+		List<TestList> tList;
+		try {
+			user.setName("david");
+
+			tList = registration.billingDetails(user);
+			billingValidation.verifyBillingDetails(tList.get(0), tList.get(1));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC :68
+	@Test()
+	public void verifyUpdateWithStrictCheck() {
+		User user = new User();
+		user.setName("dhanraj");
+		try {
+			String msg = registration.updateWithStrictCheck(user);
+			Assert.assertEquals(msg, "Patient details has been updated successfully..");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());

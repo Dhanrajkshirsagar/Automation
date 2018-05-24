@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import com.livehealth.base.DriverFactory;
 import com.livehealth.model.Age;
+import com.livehealth.model.TestList;
 import com.livehealth.model.User;
 import com.livehealth.util.CommonMethods;
 import com.livehealth.util.WebContext;
@@ -308,7 +309,132 @@ public class Registration {
 	@FindBy(how = How.XPATH, using = "/html/body/div[18]/div/div/div[1]/button")
 	private WebElement closeCal;
 
-	//   
+	@FindBy(how = How.ID, using = "strictCheck")
+	private WebElement strictCheck;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"changeDetailsTxt\"]/label[2]")
+	private WebElement registrationDate;
+
+	@FindBy(how = How.ID, using = "showReportsCheckbox")
+	private WebElement showReportsCheckbox;
+
+	@FindBy(how = How.XPATH, using = "(//span[@id=\"billTotalAmount\"])[1]")
+	private WebElement billAmt;
+
+	@FindBy(how = How.XPATH, using = "(//span[@id=\"billTotalAmount\"])[2]")
+	private WebElement bill_Two;
+
+	@FindBy(how = How.XPATH, using = "(//span[@id=\"billTotalAmount\"])[3]")
+	private WebElement bill_Three;
+
+	@FindBy(how = How.XPATH, using = "(//span[@id=\"billTotalAmount\"])[4]")
+	private WebElement bill_Four;
+
+	@FindBy(how = How.XPATH, using = "/html/body/div[13]/div/div/div[4]/button[1]")
+	private WebElement cancelUpdate;
+
+	@FindBy(how = How.LINK_TEXT, using = "Advanced Search")
+	private WebElement advancedSearch;
+
+	@FindBy(how = How.ID, using = "searchBillInfo")
+	private WebElement searchBillInfo;
+
+	@FindBy(how = How.ID, using = "searchByName")
+	private WebElement searchByName;
+
+	@FindBy(how = How.ID, using = "btnAdvSearchBill")
+	private WebElement btnAdvSearchBill;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[3]/div[2]/div[9]/div[2]/ul/li/p[5]")
+	private WebElement billOne;
+
+	// @FindBy(how = How.XPATH, using =
+	// "/html/body/section/div[3]/div[2]/div[9]/div[2]/ul/li[2]/p[5]")
+	// private WebElement billTwo;
+	//
+	// @FindBy(how = How.XPATH, using =
+	// "/html/body/section/div[3]/div[2]/div[9]/div[2]/ul/li[1]/p[5]")
+	// private WebElement billThree;
+
+	@FindBy(how = How.XPATH, using = "/html/body/div[13]/div/div/div[2]/div[3]/div[1]/div[2]/div/div/div/div/label")
+	private WebElement testName;
+
+	@FindBy(how = How.XPATH, using = "/html/body/div[13]/div/div/div[2]/div[3]/div[1]/div[2]/div/div/div/div/p/span")
+	private WebElement testStatus;
+
+	@FindBy(how = How.ID, using = "searchUserInfo")
+	private WebElement searchUserInfo;
+
+	@FindBy(how = How.ID, using = "searchByuserName")
+	private WebElement searchByuserName;
+
+	@FindBy(how = How.ID, using = "btnSearchUser")
+	private WebElement btnSearchUser;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[3]/div[3]/div[9]/div[1]/ul/li/div[1]/p[6]")
+	private WebElement clickToOpen;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[3]/div[3]/div[9]/div[1]/ul/li/div[2]/ul[2]/li/p[1]")
+	private WebElement tName;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[3]/div[3]/div[9]/div[1]/ul/li/div[2]/ul[2]/li/p[2]/span")
+	private WebElement tStatus;
+
+	@FindBy(how = How.LINK_TEXT, using = "Privilege Card Management")
+	private WebElement cardManagement;
+
+	@FindBy(how = How.LINK_TEXT, using = "Assign Cards")
+	private WebElement assignCards;
+
+	@FindBy(how = How.ID, using = "searchPatient")
+	private WebElement searchPatient;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div/div[4]/div[2]/div[2]/li[2]/div[1]/div[2]")
+	private WebElement cardOne;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div/div[4]/div[2]/div[2]/li[3]/div[1]/div[2]")
+	private WebElement cardTwo;
+
+	@FindBy(how = How.ID, using = "adminPasswordForDeauthTxt")
+	private WebElement adminPasswordForDeauthTxt;
+
+	@FindBy(how = How.ID, using = "adminPasswordForDeauth")
+	private WebElement adminPasswordForDeauth;
+
+	@FindBy(how = How.ID, using = "btnUpdateConfirm")
+	private WebElement btnUpdateConfirm;
+	//
+	@FindBy(how = How.XPATH, using = "//*[@id=\"newDirectErrorDiv\"]/div/strong")
+	private WebElement newDirectErrorDiv;
+
+	@FindBy(how = How.LINK_TEXT, using = "Operation")
+	private WebElement operation;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"hoverDropdown\"]/a")
+	private WebElement departmentsDropDown;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"hoverDropdown\"]/ul/li[13]/a")
+	private WebElement allDepartments;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"userWaiting1932\"]/div/div[1]/span[2]/b")
+	private WebElement userWaiting;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"labels4431\"]/span[2]/b")
+	private WebElement clickOnTest;
+
+	@FindBy(how = How.XPATH, using = "//label[@class=\"label reportViewStatusLabel\"]")
+	private WebElement pendingApproval;
+
+	@FindBy(how = How.ID, using = "quickDefaultDocPass")
+	private WebElement quickDefaultDocPass;
+
+	@FindBy(how = How.ID, using = "quickSubmitBtn")
+	private WebElement quickSubmitBtn;
+
+	@FindBy(how = How.ID, using = "btnCreateNewReg")
+	private WebElement btnCreateNewReg;
+
+	//
 	@Autowired
 	WebContext webContext;
 
@@ -434,6 +560,8 @@ public class Registration {
 
 		Actions builder = new Actions(DriverFactory.getDriver());
 
+		DriverFactory.getDriver().navigate().refresh();
+
 		CommonMethods.waitForElementToClickable(searchBtn);
 		searchBtn.click();
 
@@ -525,7 +653,7 @@ public class Registration {
 				String addition = String.valueOf(t1 + t2 + t3);
 
 				if (addition.equals(totalAmt.getText())) {
-					String total=totalAmt.getText();
+					String total = totalAmt.getText();
 					closeCal.click();
 					return total;
 				}
@@ -575,6 +703,8 @@ public class Registration {
 				}
 
 				saveForm.click();
+				DriverFactory.getDriver().navigate().refresh();
+
 				CommonMethods.waitForElementToClickable(registerUrl);
 				Thread.sleep(1000);
 
@@ -641,23 +771,31 @@ public class Registration {
 	}
 
 	public String ageAutoCalculator(Age age) throws Exception {
-		Select day = new Select(dayField);
-		day.selectByValue(age.getDay());
 
-		Select month = new Select(monthField);
-		month.selectByValue(age.getMonth());
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+				Select day = new Select(dayField);
+				day.selectByValue(age.getDay());
 
-		Select year = new Select(yearField);
-		year.selectByValue(age.getYear());
+				Select month = new Select(monthField);
+				month.selectByValue(age.getMonth());
 
-		CommonMethods.waitForElementToClickable(ageField);
+				Select year = new Select(yearField);
+				year.selectByValue(age.getYear());
 
-		String calculatedAge = ageField.getAttribute("value");
+				CommonMethods.waitForElementToClickable(ageField);
 
-		if (calculatedAge.length() > 0) {
+				String calculatedAge = ageField.getAttribute("value");
 
-			DriverFactory.getDriver().navigate().refresh();
-			return calculatedAge;
+				if (calculatedAge.length() > 0) {
+
+					DriverFactory.getDriver().navigate().refresh();
+					return calculatedAge;
+				}
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
 		}
 		return null;
 	}
@@ -992,6 +1130,7 @@ public class Registration {
 
 		saveForm.click();
 
+		DriverFactory.getDriver().navigate().refresh();
 		Thread.sleep(1000);
 		CommonMethods.waitForElementToClickable(registerUrl);
 		registerUrl.click();
@@ -1010,6 +1149,7 @@ public class Registration {
 		CommonMethods.waitForElementToClickable(view);
 		String text = view.getText().trim();
 		closeView.click();
+		DriverFactory.getDriver().navigate().refresh();
 
 		return text;
 	}
@@ -1112,6 +1252,8 @@ public class Registration {
 				userTypeSetting.selectByVisibleText(defaultOrg);
 
 				savebillSetting.click();
+
+				DriverFactory.getDriver().navigate().refresh();
 
 				CommonMethods.waitForElementToClickable(organization);
 
@@ -1248,6 +1390,8 @@ public class Registration {
 		while (attempts < 2) {
 			try {
 				Actions builder = new Actions(DriverFactory.getDriver());
+				
+				DriverFactory.getDriver().navigate().refresh();
 
 				CommonMethods.waitForElementToClickable(searchBtn);
 				searchBtn.click();
@@ -1265,6 +1409,191 @@ public class Registration {
 				cardList.add(cardSecond);
 
 				return cardList;
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
+		}
+		return null;
+	}
+
+	public Boolean strictCheckCheckBoxAvailibility() throws Exception {
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+				CommonMethods.waitForElementToClickable(settings);
+				settings.click();
+
+				CommonMethods.waitForElementToClickable(strictCheck);
+				boolean isShown = strictCheck.isDisplayed();
+				CommonMethods.waitForElementToClickable(savebillSetting);
+				savebillSetting.click();
+				CommonMethods.waitForElementToClickable(firstName);
+
+				return isShown;
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
+		}
+		return null;
+	}
+
+	public String confirmationModel(User updateUser) throws Exception {
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(searchBtn);
+		searchBtn.click();
+
+		builder.moveToElement(searchUser).click().sendKeys(updateUser.getName().toLowerCase()).build().perform();
+
+		selectSearchingUser();
+		
+		CommonMethods.waitForElementToClickable(male);
+
+		if (male.isSelected()) {
+			female.click();
+		} else {
+			male.click();
+		}
+
+		saveForm.click();
+		CommonMethods.waitForElementToClickable(registrationDate);
+
+		return registrationDate.getText();
+
+	}
+
+	private TestList determiningBillingDetails(User updateUser) throws Exception {
+
+		TestList test = new TestList();
+
+		confirmationModel(updateUser);
+
+		CommonMethods.waitForElementToClickable(showReportsCheckbox);
+		showReportsCheckbox.click();
+
+		CommonMethods.waitForElementToClickable(billAmt);
+		test.setTestAmount(billAmt.getText().trim());
+
+		test.setTestName(testName.getText().trim());
+
+		test.setTestStatus(testStatus.getText().trim());
+
+		cancelUpdate.click();
+
+		DriverFactory.getDriver().navigate().refresh();
+		CommonMethods.waitForElementToClickable(advancedSearch);
+
+		advancedSearch.click();
+
+		return test;
+	}
+
+	public List<TestList> billingDetails(User updateUser) throws Exception {
+
+		TestList updateDetails = determiningBillingDetails(updateUser);
+
+		searchByName.sendKeys(updateUser.getName());
+
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("/html/body/section/div[3]/div[2]/div[1]/span/span")));
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("/html/body/section/div[3]/div[2]/div[1]/span/span"));
+
+		dropDowns.get(0).click();
+
+		btnAdvSearchBill.click();
+
+		TestList storedDetails = new TestList();
+
+		storedDetails.setTestAmount(billOne.getText().trim());
+
+		searchUserInfo.click();
+
+		searchByuserName.sendKeys(updateUser.getName());
+
+		WebDriverWait w = new WebDriverWait(DriverFactory.getDriver(), 10);
+		w.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("/html/body/section/div[3]/div[3]/div[1]/span/span")));
+
+		List<WebElement> dDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("/html/body/section/div[3]/div[3]/div[1]/span/span"));
+
+		dDowns.get(0).click();
+
+		btnSearchUser.click();
+
+		new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("/html/body/section/div[3]/div[3]/div[9]/div[1]/ul/li/div[1]/p[6]")));
+
+		clickToOpen.click();
+		new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("/html/body/section/div[3]/div[3]/div[9]/div[1]/ul/li/div[2]/ul[2]/li/p[1]")));
+
+		storedDetails.setTestName(tName.getText().trim());
+
+		storedDetails.setTestStatus(tStatus.getText().trim());
+
+		List<TestList> list = new ArrayList<>();
+		list.add(updateDetails);
+		list.add(storedDetails);
+
+		return list;
+	}
+
+	public String updateWithStrictCheck(User updateUser) throws Exception {
+
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+				Actions builder = new Actions(DriverFactory.getDriver());
+
+				DriverFactory.getDriver().navigate().refresh();
+
+				CommonMethods.waitForElementToClickable(settings);
+				settings.click();
+
+				CommonMethods.waitForElementToClickable(strictCheck);
+
+				if (!strictCheck.isSelected()) {
+					strictCheck.click();
+				}
+
+				CommonMethods.waitForElementToClickable(savebillSetting);
+				savebillSetting.click();
+
+				DriverFactory.getDriver().navigate().refresh();
+
+				CommonMethods.waitForElementToClickable(searchBtn);
+				searchBtn.click();
+
+				builder.moveToElement(searchUser).click().sendKeys(updateUser.getName().toLowerCase()).build()
+						.perform();
+
+				selectSearchingUser();
+
+				CommonMethods.waitForElementToClickable(male);
+
+				if (male.isSelected()) {
+					female.click();
+				} else {
+					male.click();
+				}
+
+				saveForm.click();
+				CommonMethods.waitForElementToClickable(adminPasswordForDeauthTxt);
+
+				adminPasswordForDeauthTxt.sendKeys("livehealth20");
+				adminPasswordForDeauth.click();
+
+				CommonMethods.waitForElementToClickable(btnUpdateConfirm);
+
+				btnUpdateConfirm.click();
+				CommonMethods.waitForElementToClickable(newDirectErrorDiv);
+
+				return newDirectErrorDiv.getText();
 			} catch (StaleElementReferenceException e) {
 				attempts++;
 			}
