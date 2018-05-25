@@ -1390,7 +1390,7 @@ public class Registration {
 		while (attempts < 2) {
 			try {
 				Actions builder = new Actions(DriverFactory.getDriver());
-				
+
 				DriverFactory.getDriver().navigate().refresh();
 
 				CommonMethods.waitForElementToClickable(searchBtn);
@@ -1447,7 +1447,7 @@ public class Registration {
 		builder.moveToElement(searchUser).click().sendKeys(updateUser.getName().toLowerCase()).build().perform();
 
 		selectSearchingUser();
-		
+
 		CommonMethods.waitForElementToClickable(male);
 
 		if (male.isSelected()) {
@@ -1587,6 +1587,148 @@ public class Registration {
 
 				adminPasswordForDeauthTxt.sendKeys("livehealth20");
 				adminPasswordForDeauth.click();
+
+				CommonMethods.waitForElementToClickable(btnUpdateConfirm);
+
+				btnUpdateConfirm.click();
+				CommonMethods.waitForElementToClickable(newDirectErrorDiv);
+
+				return newDirectErrorDiv.getText();
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
+		}
+		return null;
+	}
+
+	public String updateWithoutStrictCheck(User updateUser) throws Exception {
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		DriverFactory.getDriver().navigate().refresh();
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(strictCheck);
+
+		if (strictCheck.isSelected()) {
+			strictCheck.click();
+		}
+
+		CommonMethods.waitForElementToClickable(savebillSetting);
+		savebillSetting.click();
+
+		DriverFactory.getDriver().navigate().refresh();
+
+		CommonMethods.waitForElementToClickable(searchBtn);
+		searchBtn.click();
+
+		builder.moveToElement(searchUser).click().sendKeys(updateUser.getName().toLowerCase()).build().perform();
+
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("//*[@id=\"searchNewDirectPatientDiv\"]/span/span/div[2]")));
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("//*[@id=\"searchNewDirectPatientDiv\"]/span/span/div[2]"));
+		//
+		dropDowns.get(0).click();
+
+		CommonMethods.waitForElementToClickable(male);
+
+		if (male.isSelected()) {
+			female.click();
+		} else {
+			male.click();
+		}
+
+		saveForm.click();
+
+		CommonMethods.waitForElementToClickable(btnUpdateConfirm);
+
+		btnUpdateConfirm.click();
+
+		CommonMethods.waitForElementToClickable(adminHover);
+
+		builder.moveToElement(adminHover).build().perform();
+
+		CommonMethods.waitForElementToClickable(operation);
+		operation.click();
+
+		CommonMethods.waitForElementToClickable(departmentsDropDown);
+
+		builder.moveToElement(departmentsDropDown).build().perform();
+		allDepartments.click();
+
+		CommonMethods.waitForElementToClickable(userWaiting);
+
+		userWaiting.click();
+		clickOnTest.click();
+		CommonMethods.waitForElementToClickable(pendingApproval);
+
+		String approvalMsg = pendingApproval.getText();
+
+		quickDefaultDocPass.sendKeys("livehealth20");
+		CommonMethods.waitForElementToClickable(quickSubmitBtn);
+		quickSubmitBtn.click();
+
+		CommonMethods.waitForElementToClickable(adminHover);
+		builder.moveToElement(adminHover).build().perform();
+
+		CommonMethods.waitForElementToClickable(registration);
+		registration.click();
+
+		return approvalMsg.trim();
+	}
+
+	public String updateUserDetailsForDirectIndirect(User updateUser) throws Exception {
+
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+				Actions builder = new Actions(DriverFactory.getDriver());
+
+				DriverFactory.getDriver().navigate().refresh();
+
+				CommonMethods.waitForElementToClickable(settings);
+				settings.click();
+
+				CommonMethods.waitForElementToClickable(strictCheck);
+
+				if (strictCheck.isSelected()) {
+					strictCheck.click();
+				}
+
+				CommonMethods.waitForElementToClickable(savebillSetting);
+				savebillSetting.click();
+
+				DriverFactory.getDriver().navigate().refresh();
+
+				CommonMethods.waitForElementToClickable(searchBtn);
+				searchBtn.click();
+
+				builder.moveToElement(searchUser).click().sendKeys(updateUser.getName().toLowerCase()).build()
+						.perform();
+
+				WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+				wait.until(ExpectedConditions.visibilityOfElementLocated(
+						By.xpath("//*[@id=\"searchNewDirectPatientDiv\"]/span/span/div[2]")));
+
+				builder.moveToElement(
+						searchUser.findElement(By.xpath("//*[@id=\"searchNewDirectPatientDiv\"]/span/span/div[2]")))
+						.click().build().perform();
+
+				builder.sendKeys(Keys.ARROW_DOWN);
+
+				CommonMethods.waitForElementToClickable(male);
+
+				if (male.isSelected()) {
+					female.click();
+				} else {
+					male.click();
+				}
+
+				saveForm.click();
 
 				CommonMethods.waitForElementToClickable(btnUpdateConfirm);
 
