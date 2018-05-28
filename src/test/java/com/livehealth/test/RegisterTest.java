@@ -24,6 +24,8 @@ import com.livehealth.model.User;
 import com.livehealth.pageobject.HomePage;
 import com.livehealth.pageobject.Registration;
 import com.livehealth.util.CommonMethods;
+import com.livehealth.util.OrganizationAPI;
+import com.livehealth.util.ReferrelAPI;
 import com.livehealth.validator.BillingDetailsValidator;
 import com.livehealth.validator.RegistrationValidator;
 
@@ -744,34 +746,34 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 66,67
-	@Test(priority = 10)
-	public void verifyBillingDetails() {
-		User user = new User();
-		List<TestList> tList;
-		try {
-			user.setName("david");
-
-			tList = registration.billingDetails(user);
-			billingValidation.verifyBillingDetails(tList.get(0), tList.get(1));
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
+//	@Test(priority = 10)
+//	public void verifyBillingDetails() {
+//		User user = new User();
+//		List<TestList> tList;
+//		try {
+//			user.setName("david");
+//
+//			tList = registration.billingDetails(user);
+//			billingValidation.verifyBillingDetails(tList.get(0), tList.get(1));
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
 
 	// TC :68
-	@Test()
-	public void verifyUpdateWithoutStrictCheck() {
-		User user = new User();
-		user.setName("dhanraj");
-		try {
-			String msg = registration.updateWithoutStrictCheck(user);
-			Assert.assertEquals(msg, "Pending Approval");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
+//	@Test()
+//	public void verifyUpdateWithoutStrictCheck() {
+//		User user = new User();
+//		user.setName("dhanraj");
+//		try {
+//			String msg = registration.updateWithoutStrictCheck(user);
+//			Assert.assertEquals(msg, "Pending Approval");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
 
 	// TC :69
 	@Test()
@@ -815,6 +817,55 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
+	// TC :35
+	@Test(groups = { "Registration" })
+	public void verifyShowingAllAddedOrganization() {
+		try {
+			ArrayList<String> orgObject = OrganizationAPI.getOrganizationList();
+			ArrayList<String> OrgNames = registration.showAllAddedOrganizationNames();
+
+			if (orgObject.size() == OrgNames.size()) {
+
+				for (int index = 0; index < orgObject.size(); index++) {
+
+					if (orgObject.get(index).equals(OrgNames.get(index))) {
+						Assert.assertEquals(orgObject.get(index), OrgNames.get(index));
+					} else {
+						Assert.assertTrue(false);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC :38
+	@Test(groups = { "Registration" })
+	public void verifyShowingAllAddedReferrel() {
+		try {
+			ArrayList<String> refObject = ReferrelAPI.getReferrelList();
+			ArrayList<String> refNames = registration.showAllAddedReferrelNames();
+			if (refObject.size() == refNames.size()) {
+				
+				for (int index = 0; index < refObject.size(); index++) {
+				
+					if (refObject.get(index).equals(refNames.get(index))) {
+					
+						Assert.assertEquals(refObject.get(index), refNames.get(index));
+					} else {
+						Assert.assertTrue(false);
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
 	private User getBlankUser() {
 		User user = new User();
 		user.setName("");

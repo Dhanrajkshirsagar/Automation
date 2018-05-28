@@ -1180,6 +1180,7 @@ public class Registration {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
+				DriverFactory.getDriver().navigate().refresh();
 				CommonMethods.waitForElementToClickable(settings);
 				settings.click();
 
@@ -1631,7 +1632,7 @@ public class Registration {
 
 		List<WebElement> dropDowns = DriverFactory.getDriver()
 				.findElements(By.xpath("//*[@id=\"searchNewDirectPatientDiv\"]/span/span/div[2]"));
-		//
+		
 		dropDowns.get(0).click();
 
 		CommonMethods.waitForElementToClickable(male);
@@ -1741,5 +1742,51 @@ public class Registration {
 			}
 		}
 		return null;
+	}
+	
+	public ArrayList<String> showAllAddedOrganizationNames() throws Exception {
+
+		// if (!organization.isDisplayed()) {
+		// DriverFactory.getDriver().navigate().refresh();
+		//
+		// CommonMethods.waitForElementToClickable(settings);
+		// settings.click();
+		//
+		// CommonMethods.waitForElementToClickable(orgFlag);
+		//
+		// if (!orgFlag.isSelected()) {
+		// orgFlag.click();
+		// }
+		// CommonMethods.waitForElementToClickable(savebillSetting);
+		// savebillSetting.click();
+		// DriverFactory.getDriver().navigate().refresh();
+		// }
+
+		Select selectOrg = new Select(organization);
+		List<WebElement> options = selectOrg.getOptions();
+
+		ArrayList<String> orgNames = new ArrayList<String>();
+
+		for (WebElement element : options) {
+			String org = element.getText().toLowerCase().trim();
+			orgNames.add(org);
+		}
+
+		return orgNames;
+	}
+
+	public ArrayList<String> showAllAddedReferrelNames() throws Exception {
+
+		Select selectOrg = new Select(referrel);
+		List<WebElement> options = selectOrg.getOptions();
+
+		ArrayList<String> orgNames = new ArrayList<String>();
+
+		for (WebElement element : options) {
+			String org = element.getText().toLowerCase().trim();
+			orgNames.add(org);
+		}
+
+		return orgNames;
 	}
 }
