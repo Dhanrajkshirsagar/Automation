@@ -131,7 +131,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	// }
 
 	// TC:06
-	@Test(groups = { "Registration" })
+	@Test(groups = { "Searching" })
 	public void verifyClearButton() {
 		User searchedUser;
 		try {
@@ -243,7 +243,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:27 error msg should be shown in case of null name field
-	@Test(groups = { "Notnullfields" })
+	@Test(groups = { "Registration" })
 	public void verifyNameFieldNotNull() {
 		boolean errorMsg;
 		User user = new User();
@@ -262,7 +262,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:28 error msg should be shown in case of null age field
-	@Test(groups = { "Notnullfields" })
+	@Test(groups = { "Registration" })
 	public void verifyAgeFieldNotNull() {
 		boolean errorMsg;
 		User user = new User();
@@ -427,9 +427,9 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		String searchedRef;
 
 		try {
-			searchedRef = registration.searchReferrelName("log");
+			searchedRef = registration.searchReferrelName("self");
 
-			Assert.assertEquals("login", searchedRef);
+			Assert.assertEquals("SELF", searchedRef);
 
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -501,7 +501,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// // TC:47,48
 	// @Test(groups = { "Registration" }, priority = 60)
-	// public void verifyUploadFile() {
+	// public void verifyUploadDocuments() {
 	// String name = commonMethods.getRandomString();
 	//
 	// User user = new User();
@@ -544,9 +544,9 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		String defaultReferrel;
 
 		try {
-			defaultReferrel = registration.defaultReferrelSettings("login");
+			defaultReferrel = registration.defaultReferrelSettings("SELF");
 
-			Assert.assertEquals(defaultReferrel, "login");
+			Assert.assertEquals(defaultReferrel, "SELF");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -642,7 +642,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:58
-	@Test(groups = { "Update user" })
+	@Test(groups = { "Registration" })
 	public void verifyUserUpdationFlow() {
 		String name = commonMethods.getRandomString();
 		String phoneNo = commonMethods.getRandomNumber();
@@ -663,7 +663,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 59
-	@Test(groups = { "Update user" })
+	@Test(groups = { "Registration" })
 	public void verifyUserUpdateAndProceedToBilling() {
 		String name = commonMethods.getRandomString();
 		String phoneNo = commonMethods.getRandomNumber();
@@ -684,7 +684,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 61
-	@Test(groups = { "Availability check" })
+	@Test(groups = { "Registration" })
 	public void verifyCardNumberListBoxAvailability() {
 		boolean availabilityCheck = false;
 
@@ -699,7 +699,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 62
-	@Test(priority = 10)
+	@Test(priority = 10, groups = { "Registration" })
 	public void verifyCardList() {
 		List<String> cardList;
 		try {
@@ -714,7 +714,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 63
-	@Test(groups = { "Availability check" })
+	@Test(groups = { "Registration" })
 	public void verifyStrictCheckBoxAvailability() {
 		boolean isStrictCheckBoxAvailable = false;
 
@@ -729,7 +729,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 64,65
-	@Test()
+	@Test(groups = { "Registration" })
 	public void verifyUpdateConfirmationModal() {
 		User user = new User();
 		String registrationDate;
@@ -746,37 +746,37 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 66,67
-//	@Test(priority = 10)
-//	public void verifyBillingDetails() {
-//		User user = new User();
-//		List<TestList> tList;
-//		try {
-//			user.setName("david");
-//
-//			tList = registration.billingDetails(user);
-//			billingValidation.verifyBillingDetails(tList.get(0), tList.get(1));
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
+	// @Test(priority = 10)
+	// public void verifyBillingDetails() {
+	// User user = new User();
+	// List<TestList> tList;
+	// try {
+	// user.setName("david");
+	//
+	// tList = registration.billingDetails(user);
+	// billingValidation.verifyBillingDetails(tList.get(0), tList.get(1));
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
 
 	// TC :68
-//	@Test()
-//	public void verifyUpdateWithoutStrictCheck() {
-//		User user = new User();
-//		user.setName("dhanraj");
-//		try {
-//			String msg = registration.updateWithoutStrictCheck(user);
-//			Assert.assertEquals(msg, "Pending Approval");
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
+	// @Test()
+	// public void verifyUpdateWithoutStrictCheck() {
+	// User user = new User();
+	// user.setName("dhanraj");
+	// try {
+	// String msg = registration.updateWithoutStrictCheck(user);
+	// Assert.assertEquals(msg, "Pending Approval");
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
 
 	// TC :69
-	@Test()
+	@Test(groups = { "Registration" })
 	public void verifyUpdateWithStrictCheck() {
 		User user = new User();
 		user.setName("dhanraj");
@@ -790,7 +790,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC :72
-	@Test()
+	@Test(groups = { "Registration" })
 	public void verifyUpdateDirectUser() {
 		User user = new User();
 		user.setName("Dtype");
@@ -804,7 +804,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC :73
-	@Test()
+	@Test(groups = { "Registration" })
 	public void verifyUpdateIndirectUser() {
 		User user = new User();
 		user.setName("Itype");
@@ -849,11 +849,11 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			ArrayList<String> refObject = ReferrelAPI.getReferrelList();
 			ArrayList<String> refNames = registration.showAllAddedReferrelNames();
 			if (refObject.size() == refNames.size()) {
-				
+
 				for (int index = 0; index < refObject.size(); index++) {
-				
+
 					if (refObject.get(index).equals(refNames.get(index))) {
-					
+
 						Assert.assertEquals(refObject.get(index), refNames.get(index));
 					} else {
 						Assert.assertTrue(false);
@@ -865,7 +865,22 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
+	// TC :74
+	@Test(groups = { "Registration" })
+	public void verifyFilterReferrelByOrg() {
+		try {
+			ArrayList<String> refNames = registration.filterReferrelByOrg();
+
+			Assert.assertEquals(refNames.get(0), "Referrel  with sumit");
+			Assert.assertEquals(refNames.get(1), "Referrel with livehealth");
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
 	private User getBlankUser() {
 		User user = new User();
 		user.setName("");

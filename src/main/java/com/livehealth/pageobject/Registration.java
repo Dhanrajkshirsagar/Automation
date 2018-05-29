@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -434,7 +433,9 @@ public class Registration {
 	@FindBy(how = How.ID, using = "btnCreateNewReg")
 	private WebElement btnCreateNewReg;
 
-	//
+	@FindBy(how = How.ID, using = "filterReferralByOrgFlag")
+	private WebElement filterReferral;
+
 	@Autowired
 	WebContext webContext;
 
@@ -1144,9 +1145,11 @@ public class Registration {
 
 		selectSearchingUser();
 
+		firstName.clear();
 		CommonMethods.waitForElementToClickable(viewDocuments);
 		((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].click();", viewDocuments);
 		CommonMethods.waitForElementToClickable(view);
+
 		String text = view.getText().trim();
 		closeView.click();
 		DriverFactory.getDriver().navigate().refresh();
@@ -1222,6 +1225,8 @@ public class Registration {
 
 				savebillSetting.click();
 
+				DriverFactory.getDriver().navigate().refresh();
+				
 				CommonMethods.waitForElementToClickable(referrel);
 
 				Select select = new Select(referrel);
@@ -1632,7 +1637,7 @@ public class Registration {
 
 		List<WebElement> dropDowns = DriverFactory.getDriver()
 				.findElements(By.xpath("//*[@id=\"searchNewDirectPatientDiv\"]/span/span/div[2]"));
-		
+
 		dropDowns.get(0).click();
 
 		CommonMethods.waitForElementToClickable(male);
@@ -1743,7 +1748,7 @@ public class Registration {
 		}
 		return null;
 	}
-	
+
 	public ArrayList<String> showAllAddedOrganizationNames() throws Exception {
 
 		// if (!organization.isDisplayed()) {
@@ -1788,5 +1793,37 @@ public class Registration {
 		}
 
 		return orgNames;
+	}
+
+	public ArrayList<String> filterReferrelByOrg() throws Exception {
+
+//		DriverFactory.getDriver().navigate().refresh();
+//
+//		CommonMethods.waitForElementToClickable(settings);
+//		settings.click();
+//
+//		if (!filterReferral.isSelected()) {
+//			filterReferral.click();
+//		}
+//
+//		CommonMethods.waitForElementToClickable(savebillSetting);
+//		savebillSetting.click();
+
+		DriverFactory.getDriver().navigate().refresh();
+
+		Select selectOrg = new Select(organization);
+		selectOrg.selectByVisibleText("postpaid Organization ");
+
+		Select selectRef = new Select(referrel);
+		List<WebElement> options = selectRef.getOptions();
+
+		ArrayList<String> refNames = new ArrayList<String>();
+
+		for (WebElement element : options) {
+			String org = element.getText().trim();
+			refNames.add(org);
+		}
+
+		return refNames;
 	}
 }

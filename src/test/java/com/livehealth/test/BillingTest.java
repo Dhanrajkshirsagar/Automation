@@ -1,5 +1,7 @@
 package com.livehealth.test;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -129,6 +131,65 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 
+	}
+
+	// TC: 07
+	@Test(groups = { "billing" })
+	public void verifysearchLoader() {
+		boolean loader;
+		try {
+			User userInfo = getUserInfo();
+			loader = billing.searchLoader(userInfo.getName());
+			Assert.assertTrue(loader);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 09
+	@Test(groups = { "billing" })
+	public void verifyRemainingDueAmt() {
+		List<String> billAmt;
+		try {
+			User userInfo = getUserInfo();
+			billAmt = billing.dueAmountVerification(userInfo.getName());
+			Assert.assertEquals(billAmt.get(0), billAmt.get(0));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 10
+	@Test(groups = { "billing" })
+	public void verifyAdvanceAmount() {
+		User userInfo = getUserInfo();
+		String advanceAmt;
+		try {
+			advanceAmt = billing.advanceAmountShownCorrectlyOrNot(userInfo.getName());
+			Assert.assertEquals(advanceAmt, "₹ 1000");
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 11
+	@Test(groups = { "billing" })
+	public void verifyReferrelPriceList() {
+		User userInfo = getUserInfo();
+		List<String> referrel;
+		try {
+			referrel = billing.referrelPriceList(userInfo.getName());
+			Assert.assertEquals(referrel.get(1), "Referrel  with sumit");
+			Assert.assertEquals(referrel.get(2), "Referrel with livehealth");
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
 	}
 
 	private User getUserInfo() {

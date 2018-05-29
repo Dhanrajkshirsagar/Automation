@@ -1,5 +1,7 @@
 package com.livehealth.pageobject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -12,6 +14,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -134,6 +137,12 @@ public class Billing {
 	@FindBy(how = How.XPATH, using = "//*[@id=\"errorDiv\"]/div")
 	private WebElement errorDiv;
 
+	@FindBy(how = How.XPATH, using = "circleLoader3")
+	private WebElement circleLoader;
+
+	@FindBy(how = How.ID, using = "referralList")
+	private WebElement referralList;
+
 	//
 	@Autowired
 	WebContext webContext;
@@ -207,4 +216,45 @@ public class Billing {
 		concession.sendKeys(Keys.ENTER);
 	}
 
+	public boolean searchLoader(String userInfo) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		CommonMethods.waitForElementToClickable(billUrl);
+		billUrl.click();
+		searchUserForBilling.sendKeys(userInfo);
+
+		return circleLoader.isDisplayed();
+	}
+
+	public List<String> dueAmountVerification(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Albumin Serum");
+
+		if (balanceAmount.getText().length() > 0) {
+			return Arrays.asList(balanceAmount.getText().trim(), firstTestAmt.getText().trim());
+		}
+		return null;
+
+	}
+
+	public String advanceAmountShownCorrectlyOrNot(String userInfo) throws Exception {
+		searchToBilling(userInfo);
+		selectTestName("Albumin Serum");
+
+		return userAmntDivId.getText();
+	}
+
+	public List<String> referrelPriceList(String userInfo) throws Exception {
+		searchToBilling(userInfo);
+
+		Select select = new Select(referralList);
+		List<WebElement> options = select.getOptions();
+		List<String> refList = new ArrayList<>();
+
+		for (WebElement element : options) {
+			refList.add(element.getText().trim());
+		}
+
+		return refList;
+	}
 }
