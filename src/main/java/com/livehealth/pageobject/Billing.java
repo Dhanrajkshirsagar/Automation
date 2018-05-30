@@ -143,6 +143,51 @@ public class Billing {
 	@FindBy(how = How.ID, using = "referralList")
 	private WebElement referralList;
 
+	@FindBy(how = How.XPATH, using = "//*[@id=\"inputT\"]/span/span/div[1]")
+	private WebElement testDropDown;
+
+	@FindBy(how = How.LINK_TEXT, using = "Admin")
+	private WebElement admin;
+
+	@FindBy(how = How.LINK_TEXT, using = "List & Group Management")
+	private WebElement listManagement;
+
+	@FindBy(how = How.ID, using = "listName")
+	private WebElement listName;
+
+	@FindBy(how = How.ID, using = "textInput12012")
+	private WebElement test1;
+
+	@FindBy(how = How.ID, using = "textInput11937")
+	private WebElement test2;
+
+	@FindBy(how = How.ID, using = "textInput12493")
+	private WebElement test3;
+
+	@FindBy(how = How.ID, using = "textInput12530")
+	private WebElement orgTest1;
+
+	@FindBy(how = How.ID, using = "textInput11953")
+	private WebElement orgTest2;
+
+	@FindBy(how = How.ID, using = "textInput12493")
+	private WebElement orgTest3;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[3]/div[4]/div[1]/div[8]/div/div[1]/p")
+	private WebElement tName;
+
+	@FindBy(how = How.LINK_TEXT, using = "Profile & Report Management")
+	private WebElement profileManagement;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"editTest12097\"]/div[3]")
+	private WebElement tPrice1;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"editTest12107\"]/div[3]")
+	private WebElement tPrice2;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"editTest12151\"]/div[3]")
+	private WebElement tPrice3;
+
 	//
 	@Autowired
 	WebContext webContext;
@@ -256,5 +301,305 @@ public class Billing {
 		}
 
 		return refList;
+	}
+
+	public List<String> priceListAsPerSelectedReferrel(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+
+		Select select = new Select(referralList);
+		select.selectByVisibleText("Referrel  with sumit ");
+
+		List<String> list = new ArrayList<>();
+		list.add("Cholesterol - Total");
+		list.add("Chloride");
+		list.add("Cholesterol LDL");
+
+		for (String test : list) {
+			testList.sendKeys(test);
+			WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"inputT\"]/span/span/div[1]")));
+
+			List<WebElement> dropDowns = DriverFactory.getDriver()
+					.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[1]"));
+
+			dropDowns.get(0).click();
+
+			concession.sendKeys(Keys.ENTER);
+		}
+
+		list.clear();
+
+		list.add(firstTestprice.getText());
+		list.add(seconfTestprice.getText());
+		list.add(thirdTestprice.getText());
+
+		return list;
+	}
+
+	public List<String> confirmPriceListAsPerSelectedReferrel() throws Exception {
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(adminHover);
+
+		builder.moveToElement(adminHover).build().perform();
+
+		CommonMethods.waitForElementToClickable(admin);
+		admin.click();
+
+		listManagement.click();
+
+		listName.sendKeys("Ref Dhanraj");
+
+		new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div")));
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div"));
+
+		dropDowns.get(0).click();
+
+		List<String> list = new ArrayList<>();
+
+		new WebDriverWait(DriverFactory.getDriver(), 10)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.id("textInput12012")));
+
+		list.add(test1.getAttribute("value"));
+		list.add(test2.getAttribute("value"));
+		list.add(test3.getAttribute("value"));
+
+		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+
+		return list;
+	}
+
+	public List<String> companyPriceList(String userInfo) throws Exception {
+		searchToBilling(userInfo);
+
+		Select select = new Select(companyList);
+		List<WebElement> options = select.getOptions();
+		List<String> orgList = new ArrayList<>();
+
+		for (WebElement element : options) {
+			orgList.add(element.getText().trim());
+		}
+
+		return orgList;
+	}
+
+	public List<String> priceListAsPerSelectedCompany(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+
+		Select select = new Select(companyList);
+		select.selectByVisibleText("link org ");
+
+		List<String> list = new ArrayList<>();
+		list.add("Cholesterol - Total");
+		list.add("Chloride");
+		list.add("Cholesterol LDL");
+
+		for (String test : list) {
+			testList.sendKeys(test);
+			WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"inputT\"]/span/span/div[1]")));
+
+			List<WebElement> dropDowns = DriverFactory.getDriver()
+					.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[1]"));
+
+			dropDowns.get(0).click();
+
+			concession.sendKeys(Keys.ENTER);
+		}
+
+		list.clear();
+
+		list.add(firstTestprice.getText());
+		list.add(seconfTestprice.getText());
+		list.add(thirdTestprice.getText());
+
+		return list;
+	}
+
+	public List<String> confirmPriceListAsPerSelectedCompany() throws Exception {
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(adminHover);
+
+		builder.moveToElement(adminHover).build().perform();
+
+		CommonMethods.waitForElementToClickable(admin);
+		admin.click();
+
+		listManagement.click();
+
+		listName.sendKeys("Postpaid Organization");
+
+		new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div")));
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div"));
+
+		dropDowns.get(0).click();
+
+		List<String> list = new ArrayList<>();
+
+		new WebDriverWait(DriverFactory.getDriver(), 10)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.id("textInput12530")));
+
+		list.add(orgTest1.getAttribute("value"));
+		list.add(orgTest2.getAttribute("value"));
+		list.add(orgTest3.getAttribute("value"));
+
+		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+
+		return list;
+	}
+
+	public String typeTestNameField(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Albumin Ser");
+
+		return tName.getText().trim();
+	}
+
+	public String testCalculator(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		calculatorBtn.click();
+		List<String> testList = new ArrayList<>();
+		testList.add("Cholesterol - Total");
+		testList.add("Cold Agglutinin *");
+		testList.add("Platelet Count Thrombocyte Count *");
+
+		for (String test : testList) {
+
+			searchInputforOnlyTests.sendKeys(test);
+			WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+			wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.xpath("/html/body/div[18]/div/div/div[2]/div[6]/span/span")));
+
+			List<WebElement> dropDowns = DriverFactory.getDriver()
+					.findElements(By.xpath("/html/body/div[18]/div/div/div[2]/div[6]/span/span"));
+
+			dropDowns.get(0).click();
+
+		}
+
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("calculateTotalAmount")));
+
+		int t1 = Integer.parseInt(test_1.getText());
+		int t2 = Integer.parseInt(test_2.getText());
+		int t3 = Integer.parseInt(test_3.getText());
+
+		String addition = String.valueOf(t1 + t2 + t3);
+		if (addition.equals(totalAmt.getText())) {
+
+			String calculatedAmt = totalAmt.getText();
+
+			return calculatedAmt;
+		}
+
+		return null;
+
+	}
+
+	public String multipleTestAddedSuccessfully(String userInfo) throws Exception {
+		searchToBilling(userInfo);
+
+		List<String> t_List = new ArrayList<>();
+		t_List.add("Cholesterol - Total");
+		t_List.add("Cold Agglutinin *");
+		t_List.add(" Ionised Calcium");
+
+		for (String test : t_List) {
+			selectTestName(test);
+		}
+
+		int t1 = Integer.parseInt(firstTestprice.getText());
+		int t2 = Integer.parseInt(seconfTestprice.getText());
+		int t3 = Integer.parseInt(thirdTestprice.getText());
+
+		String addition = String.valueOf(t1 + t2 + t3);
+		if (addition.equals(payableAmount.getText())) {
+
+			String calculatedAmt = payableAmount.getText();
+
+			return calculatedAmt;
+		}
+
+		return null;
+
+	}
+
+	public String singleTestAddedSuccessfully(String userInfo) throws Exception {
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		String testPrice = firstTestprice.getText();
+
+		if (testPrice.equals(payableAmount.getText())) {
+
+			String calculatedAmt = payableAmount.getText();
+
+			return calculatedAmt;
+		}
+		return null;
+
+	}
+
+	public List<String> testPriceAsPerSelectedTest(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+
+		List<String> list = new ArrayList<>();
+		list.add(" Ionised Calcium");
+		list.add("24 Hrs Urine Creatinine");
+		list.add("24 Hrs. Urinary  Protein/Creatinine Ratio  *");
+
+		for (String test : list) {
+			selectTestName(test);
+		}
+
+		list.clear();
+
+		list.add(firstTestprice.getText());
+		list.add(seconfTestprice.getText());
+		list.add(thirdTestprice.getText());
+
+		return list;
+	}
+
+	public List<String> confirmTestPrice() throws Exception {
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(adminHover);
+
+		builder.moveToElement(adminHover).build().perform();
+
+		CommonMethods.waitForElementToClickable(admin);
+		admin.click();
+
+		profileManagement.click();
+
+		new WebDriverWait(DriverFactory.getDriver(), 10)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"editTest12151\"]/div[3]")));
+
+		List<String> list = new ArrayList<>();
+
+		list.add(tPrice1.getText().trim());
+		list.add(tPrice2.getText().trim());
+		list.add(tPrice3.getText().trim());
+
+		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+
+		return list;
+
 	}
 }

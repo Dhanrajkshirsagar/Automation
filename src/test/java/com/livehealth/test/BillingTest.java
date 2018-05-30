@@ -11,12 +11,14 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import com.livehealth.base.DriverFactory;
 import com.livehealth.model.User;
 import com.livehealth.pageobject.Billing;
 import com.livehealth.pageobject.HomePage;
 import com.livehealth.util.CommonMethods;
+import com.livehealth.validator.TestValidation;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class BillingTest extends AbstractTestNGSpringContextTests {
@@ -30,6 +32,9 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	@Autowired
 	CommonMethods commonMethods;
+
+	@Autowired
+	TestValidation testValidation;
 
 	@BeforeClass
 	public void launchSite() {
@@ -134,18 +139,18 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 07
-	@Test(groups = { "billing" })
-	public void verifysearchLoader() {
-		boolean loader;
-		try {
-			User userInfo = getUserInfo();
-			loader = billing.searchLoader(userInfo.getName());
-			Assert.assertTrue(loader);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
+	// @Test(groups = { "billing" })
+	// public void verifysearchLoader() {
+	// boolean loader;
+	// try {
+	// User userInfo = getUserInfo();
+	// loader = billing.searchLoader(userInfo.getName());
+	// Assert.assertTrue(loader);
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
 
 	// TC: 09
 	@Test(groups = { "billing" })
@@ -154,7 +159,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		try {
 			User userInfo = getUserInfo();
 			billAmt = billing.dueAmountVerification(userInfo.getName());
-			Assert.assertEquals(billAmt.get(0), billAmt.get(0));
+			Assert.assertEquals(billAmt.get(0), billAmt.get(1));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -180,12 +185,143 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	@Test(groups = { "billing" })
 	public void verifyReferrelPriceList() {
 		User userInfo = getUserInfo();
+		SoftAssert softAssert = new SoftAssert();
 		List<String> referrel;
 		try {
 			referrel = billing.referrelPriceList(userInfo.getName());
-			Assert.assertEquals(referrel.get(1), "Referrel  with sumit");
-			Assert.assertEquals(referrel.get(2), "Referrel with livehealth");
 
+			softAssert.assertEquals(referrel.get(1), "Referrel  with sumit");
+			softAssert.assertEquals(referrel.get(2), "Referrel with livehealth");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+		softAssert.assertAll();
+	}
+
+	// TC: 12
+	@Test(groups = { "billing" })
+	public void verifyPriceListAsPerSelectedReferrel() {
+		User userInfo = getUserInfo();
+		List<String> testListOne;
+		List<String> testListTwo;
+		try {
+			testListOne = billing.priceListAsPerSelectedReferrel(userInfo.getName());
+			testListTwo = billing.confirmPriceListAsPerSelectedReferrel();
+
+			testValidation.verifyTestPrice(testListOne, testListTwo);
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 13
+	@Test(groups = { "billing" })
+	public void verifyCalculator() {
+		String calculatedPrice;
+		try {
+			User userInfo = getUserInfo();
+			calculatedPrice = billing.testCalculator(userInfo.getPhoneNumber());
+			Assert.assertEquals(calculatedPrice, "1050");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 14
+	@Test(groups = { "billing" })
+	public void verifyCompanyPriceList() {
+		User userInfo = getUserInfo();
+		SoftAssert softAssert = new SoftAssert();
+		List<String> orgList;
+		try {
+			orgList = billing.companyPriceList(userInfo.getName());
+
+			softAssert.assertEquals(orgList.get(1), "link org");
+			softAssert.assertEquals(orgList.get(2), "DIRECT");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+		softAssert.assertAll();
+	}
+
+	// TC: 15
+	@Test(groups = { "billing" })
+	public void verifyPriceListAsPerSelectedCompany() {
+		User userInfo = getUserInfo();
+		List<String> testListOne;
+		List<String> testListTwo;
+		try {
+			testListOne = billing.priceListAsPerSelectedCompany(userInfo.getName());
+			testListTwo = billing.confirmPriceListAsPerSelectedCompany();
+
+			testValidation.verifyTestPrice(testListOne, testListTwo);
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 18
+	@Test(groups = { "billing" })
+	public void verifyTypeTestNameField() {
+		User userInfo = getUserInfo();
+		String searchTest;
+		try {
+			searchTest = billing.typeTestNameField(userInfo.getName());
+			Assert.assertEquals(searchTest, "Albumin Serum");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+
+	}
+
+	// TC: 19
+	@Test(groups = { "billing" })
+	public void verifyTestPriceAsPerSelectedTest() {
+		User userInfo = getUserInfo();
+		List<String> testListOne;
+		List<String> testListTwo;
+		try {
+			testListOne = billing.testPriceAsPerSelectedTest(userInfo.getName());
+			testListTwo = billing.confirmTestPrice();
+
+			testValidation.verifyTestPrice(testListOne, testListTwo);
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 20
+	@Test(groups = { "billing" })
+	public void verifyMultipleTestAddingSuccessfully() {
+		String calculatedPrice;
+		try {
+			User userInfo = getUserInfo();
+			calculatedPrice = billing.multipleTestAddedSuccessfully(userInfo.getName());
+			Assert.assertEquals(calculatedPrice, "1300");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 21
+	@Test()
+	public void verifySingleTestAddingSuccessfully() {
+		String calculatedPrice;
+		try {
+			User userInfo = getUserInfo();
+			calculatedPrice = billing.singleTestAddedSuccessfully(userInfo.getName());
+			Assert.assertEquals(calculatedPrice, "500");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());

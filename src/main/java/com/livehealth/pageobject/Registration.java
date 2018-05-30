@@ -570,10 +570,10 @@ public class Registration {
 
 		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
 		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[5]/span/span")));
+				.visibilityOfElementLocated(By.xpath("//*[@id=\"searchNewDirectPatientDiv\"]/span/span/div[2]")));
 
 		builder.moveToElement(
-				searchUser.findElement(By.xpath("/html/body/section/div[2]/div[1]/div[2]/div[5]/span/span"))).click()
+				searchUser.findElement(By.xpath("//*[@id=\"searchNewDirectPatientDiv\"]/span/span/div[2]"))).click()
 				.build().perform();
 
 		builder.sendKeys(Keys.DOWN);
