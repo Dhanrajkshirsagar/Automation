@@ -892,7 +892,7 @@ public class Registration {
 				selectUnselectOrgList();
 
 				CommonMethods.waitForElementToClickable(searchOrg);
-
+				searchOrg.clear();
 				searchOrg.sendKeys(organizationName);
 
 				List<WebElement> dropDowns = DriverFactory.getDriver().findElements(
@@ -1444,29 +1444,36 @@ public class Registration {
 	}
 
 	public String confirmationModel(User updateUser) throws Exception {
+		int attempts = 0;
+		while (attempts < 2) {
+			try {
+				Actions builder = new Actions(DriverFactory.getDriver());
 
-		Actions builder = new Actions(DriverFactory.getDriver());
+				CommonMethods.waitForElementToClickable(searchBtn);
+				searchBtn.click();
 
-		CommonMethods.waitForElementToClickable(searchBtn);
-		searchBtn.click();
+				builder.moveToElement(searchUser).click().sendKeys(updateUser.getName().toLowerCase()).build()
+						.perform();
 
-		builder.moveToElement(searchUser).click().sendKeys(updateUser.getName().toLowerCase()).build().perform();
+				selectSearchingUser();
 
-		selectSearchingUser();
+				CommonMethods.waitForElementToClickable(male);
 
-		CommonMethods.waitForElementToClickable(male);
+				if (male.isSelected()) {
+					female.click();
+				} else {
+					male.click();
+				}
 
-		if (male.isSelected()) {
-			female.click();
-		} else {
-			male.click();
+				saveForm.click();
+				CommonMethods.waitForElementToClickable(registrationDate);
+
+				return registrationDate.getText();
+			} catch (StaleElementReferenceException e) {
+				attempts++;
+			}
 		}
-
-		saveForm.click();
-		CommonMethods.waitForElementToClickable(registrationDate);
-
-		return registrationDate.getText();
-
+		return null;
 	}
 
 	private TestList determiningBillingDetails(User updateUser) throws Exception {
