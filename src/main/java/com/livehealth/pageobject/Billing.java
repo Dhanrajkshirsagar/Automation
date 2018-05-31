@@ -188,6 +188,51 @@ public class Billing {
 	@FindBy(how = How.XPATH, using = "//*[@id=\"editTest12151\"]/div[3]")
 	private WebElement tPrice3;
 
+	@FindBy(how = How.ID, using = "registerUrl")
+	private WebElement registerUrl;
+
+	@FindBy(how = How.ID, using = "newDirectPatientSelectBtn")
+	private WebElement searchBtn;
+
+	@FindBy(how = How.ID, using = "searchNewDirectPatient")
+	private WebElement searchUser;
+
+	@FindBy(how = How.ID, using = "newDirectOrganization")
+	private WebElement newDirectOrganization;
+
+	@FindBy(how = How.LINK_TEXT, using = "Billing")
+	private WebElement billing;
+
+	@FindBy(how = How.ID, using = "currentOrganization")
+	private WebElement currentOrganization;
+
+	@FindBy(how = How.ID, using = "orgnEmail")
+	private WebElement orgnEmail;
+
+	@FindBy(how = How.ID, using = "billOrg")
+	private WebElement billOrg;
+
+	@FindBy(how = How.LINK_TEXT, using = "Organization Management")
+	private WebElement organizationManagement;
+
+	@FindBy(how = How.LINK_TEXT, using = "Add / Edit Organization")
+	private WebElement addEditOrganization;
+
+	@FindBy(how = How.ID, using = "editOrgTab")
+	private WebElement editOrgTab;
+
+	@FindBy(how = How.ID, using = "orgEditList")
+	private WebElement orgEditList;
+
+	@FindBy(how = How.ID, using = "orgDeleteButton")
+	private WebElement orgDeleteButton;
+
+	@FindBy(how = How.ID, using = "orgDelete")
+	private WebElement orgDelete;
+
+	@FindBy(how = How.ID, using = "billCompany")
+	private WebElement billCompany;
+
 	//
 	@Autowired
 	WebContext webContext;
@@ -601,5 +646,180 @@ public class Billing {
 
 		return list;
 
+	}
+
+	public String isPercentageConcessionGettingSuccessfully(String userInfo) throws Exception {
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		Select select = new Select(concessionType);
+		select.selectByValue("Percentage");
+
+		String totalAmt = payableAmount.getText();
+
+		String discount = totalAmt.substring(0, totalAmt.length() - 1);
+
+		int totalAmtInt = Integer.parseInt(totalAmt);
+
+		int discountInt = Integer.parseInt(discount);
+
+		String discountedAmt = String.valueOf(totalAmtInt - discountInt);
+
+		totalConcessionAmt.clear();
+		totalConcessionAmt.sendKeys("10");
+		testList.clear();
+
+		String amt = payableAmount.getText();
+
+		if (amt.equals(discountedAmt)) {
+
+			return amt;
+		}
+		return null;
+	}
+
+	public boolean removeTest(String userInfo) throws Exception {
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		closeTestBtn.click();
+
+		if (closeTestBtn.isDisplayed()) {
+			return false;
+		}
+		return true;
+
+	}
+
+	public List<String> alreadySelectedOrganization(String userInfo) throws Exception {
+
+		registerUrl.click();
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(searchBtn);
+		searchBtn.click();
+
+		builder.moveToElement(searchUser).click().sendKeys(userInfo.toLowerCase()).build().perform();
+
+		new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("//*[@id=\"searchNewDirectPatientDiv\"]/span/span/div[2]")));
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("//*[@id=\"searchNewDirectPatientDiv\"]/span/span/div[2]"));
+
+		dropDowns.get(0).click();
+
+		CommonMethods.waitForElementToClickable(newDirectOrganization);
+
+		Select select = new Select(newDirectOrganization);
+		String selectedOrg = select.getFirstSelectedOption().getText().trim();
+
+		billing.click();
+
+		searchToBilling(userInfo);
+		String currentOrg = currentOrganization.getText().trim();
+
+		return Arrays.asList(selectedOrg, currentOrg);
+
+	}
+
+	public String selectOrganization(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		Select select = new Select(companyList);
+		select.selectByVisibleText("link org ");
+
+		String selectedOrg = select.getFirstSelectedOption().getText().trim();
+
+		return selectedOrg;
+	}
+
+	public String addOrgLinkAbleToAddOrg(String userInfo, String orgName) throws Exception {
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		otherInfo.click();
+		otherInfo.click();
+
+		CommonMethods.waitForElementToClickable(addOrganization);
+		addOrganization.click();
+
+		orgnName.sendKeys(orgName);
+
+		orgnEmail.clear();
+
+		CommonMethods.waitForElementToClickable(addOrgButton);
+		addOrgButton.click();
+
+		CommonMethods.waitForElementToClickable(billOrg);
+
+		Select select = new Select(billOrg);
+		List<WebElement> options = select.getOptions();
+
+		for (WebElement element : options) {
+
+			if (element.getText().trim().equals(orgName)) {
+				return orgName;
+			}
+		}
+		return null;
+
+	}
+
+	public void deleteAddedOrgByAddOrgLink(String orgName) throws Exception {
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(adminHover);
+
+		builder.moveToElement(adminHover).build().perform();
+
+		CommonMethods.waitForElementToClickable(admin);
+		admin.click();
+
+		CommonMethods.waitForElementToClickable(organizationManagement);
+		organizationManagement.click();
+
+		CommonMethods.waitForElementToClickable(addEditOrganization);
+		addEditOrganization.click();
+
+		CommonMethods.waitForElementToClickable(editOrgTab);
+		editOrgTab.click();
+
+		CommonMethods.waitForElementToClickable(orgEditList);
+		builder.moveToElement(orgEditList).click().sendKeys(orgName).build().perform();
+
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("/html/body/section/div[2]/div[1]/div[4]/div/div/span/span")));
+
+		builder.moveToElement(
+				orgEditList.findElement(By.xpath("/html/body/section/div[2]/div[1]/div[4]/div/div/span/span"))).click()
+				.build().perform();
+
+		builder.sendKeys(Keys.DOWN);
+
+		CommonMethods.waitForElementToClickable(orgDeleteButton);
+		orgDeleteButton.click();
+
+		CommonMethods.waitForElementToClickable(orgDelete);
+		orgDelete.click();
+
+		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+
+	}
+
+	public boolean otherReferrelField(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		otherInfo.click();
+		otherInfo.click();
+
+		CommonMethods.waitForElementToClickable(billCompany);
+		return billCompany.isDisplayed();
 	}
 }

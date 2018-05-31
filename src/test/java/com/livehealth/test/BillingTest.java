@@ -300,7 +300,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	// TC: 20
+	// TC: 20,24
 	@Test(groups = { "billing" })
 	public void verifyMultipleTestAddingSuccessfully() {
 		String calculatedPrice;
@@ -322,6 +322,93 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 			User userInfo = getUserInfo();
 			calculatedPrice = billing.singleTestAddedSuccessfully(userInfo.getName());
 			Assert.assertEquals(calculatedPrice, "500");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 22
+	@Test(groups = { "billing" })
+	public void verifyPercentageConcession() {
+		String concession;
+		try {
+			User userInfo = getUserInfo();
+			concession = billing.isPercentageConcessionGettingSuccessfully(userInfo.getName());
+			Assert.assertEquals(concession, "450");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 23
+	@Test(groups = { "billing" })
+	public void verifyCloseTestBtn() {
+		boolean isClosed;
+		try {
+			User userInfo = getUserInfo();
+			isClosed = billing.removeTest(userInfo.getName());
+			Assert.assertTrue(isClosed);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 25
+	@Test(groups = { "billing" })
+	public void verifyAlreadySelectedOrganization() {
+		List<String> orgNames;
+		try {
+			User userInfo = getUserInfo();
+			orgNames = billing.alreadySelectedOrganization(userInfo.getName());
+
+			Assert.assertEquals(orgNames.get(0), orgNames.get(1));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC:26
+	@Test()
+	public void verifySelectOrganization() {
+		String selectedOrg;
+		try {
+			User userInfo = getUserInfo();
+			selectedOrg = billing.selectOrganization(userInfo.getName());
+			Assert.assertEquals(selectedOrg, "link org");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC:27
+	@Test()
+	public void verifyAddOrgLink() {
+		User userInfo = getUserInfo();
+		String orgName;
+		try {
+			orgName = billing.addOrgLinkAbleToAddOrg(userInfo.getName(), "live");
+			billing.deleteAddedOrgByAddOrgLink(orgName);
+
+			Assert.assertEquals(orgName, "live");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC:29
+	@Test()
+	public void verifyOtherReferrelField() {
+		boolean referelField;
+		try {
+			User userInfo = getUserInfo();
+			referelField = billing.otherReferrelField(userInfo.getName());
+			Assert.assertTrue(referelField);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());

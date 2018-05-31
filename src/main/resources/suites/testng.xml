@@ -10,8 +10,8 @@
 
 
 	<classes>
-		<class name="com.livehealth.test.RegisterTest" />
-		<!-- <class name="com.livehealth.test.BillingTest" /> -->
+		<!-- <class name="com.livehealth.test.RegisterTest" /> -->
+		<class name="com.livehealth.test.BillingTest" />
 
 	</classes>
 
