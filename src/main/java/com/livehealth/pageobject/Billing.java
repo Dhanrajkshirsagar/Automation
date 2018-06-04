@@ -233,6 +233,30 @@ public class Billing {
 	@FindBy(how = How.ID, using = "billCompany")
 	private WebElement billCompany;
 
+	@FindBy(how = How.ID, using = "service")
+	private WebElement service;
+
+	@FindBy(how = How.ID, using = "addPayment")
+	private WebElement addPayment;
+
+	@FindBy(how = How.ID, using = "paymentType_1")
+	private WebElement paymentType_1;
+
+	@FindBy(how = How.ID, using = "paymentAmount_1")
+	private WebElement paymentAmount_1;
+
+	@FindBy(how = How.XPATH, using = "(//button[@id=\"savebillSetting\"])[2]")
+	private WebElement savebillSetting;
+
+	@FindBy(how = How.ID, using = "AdvanceAmount")
+	private WebElement advanceAmount;
+
+	@FindBy(how = How.ID, using = "chequeNo_1")
+	private WebElement chequeNo_1;
+
+	@FindBy(how = How.ID, using = "issueBankName_1")
+	private WebElement issueBankName_1;
+
 	//
 	@Autowired
 	WebContext webContext;
@@ -353,7 +377,7 @@ public class Billing {
 		searchToBilling(userInfo);
 
 		Select select = new Select(referralList);
-		select.selectByVisibleText("Referrel  with sumit ");
+		select.selectByVisibleText("Referrel with livehealth ");
 
 		List<String> list = new ArrayList<>();
 		list.add("Cholesterol - Total");
@@ -438,7 +462,7 @@ public class Billing {
 		searchToBilling(userInfo);
 
 		Select select = new Select(companyList);
-		select.selectByVisibleText("link org ");
+		select.selectByVisibleText("DIRECT ");
 
 		List<String> list = new ArrayList<>();
 		list.add("Cholesterol - Total");
@@ -821,5 +845,84 @@ public class Billing {
 
 		CommonMethods.waitForElementToClickable(billCompany);
 		return billCompany.isDisplayed();
+	}
+
+	public String selectHomeDelivery(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		otherInfo.click();
+		otherInfo.click();
+
+		Select select = new Select(service);
+		select.selectByVisibleText("Home Delivery");
+
+		return select.getFirstSelectedOption().getText().trim();
+
+	}
+
+	public String selectCourierCollection(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		otherInfo.click();
+		otherInfo.click();
+
+		Select select = new Select(service);
+		select.selectByVisibleText("Courier");
+
+		return select.getFirstSelectedOption().getText().trim();
+
+	}
+
+	public String defaultPaymentMode(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		Select select = new Select(paymentMode);
+
+		return select.getFirstSelectedOption().getText().trim();
+
+	}
+
+	public String setDefaultPaymentMode(String userInfo, String defaultMode) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		Select select = new Select(paymentMode);
+		select.selectByValue(defaultMode);
+
+		testList.clear();
+
+		return select.getFirstSelectedOption().getAttribute("value");
+
+	}
+
+	public String addPaymentMode(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		addPayment.click();
+
+		new WebDriverWait(DriverFactory.getDriver(), 10)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.id("paymentType_1")));
+
+		Select select = new Select(paymentType_1);
+		select.selectByVisibleText("Credit");
+
+		chequeNo_1.sendKeys("1234");
+
+		issueBankName_1.sendKeys("BOM");
+
+		paymentAmount_1.sendKeys("500");
+
+		savebillSetting.click();
+
+		return advanceAmount.getText();
 	}
 }

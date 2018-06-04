@@ -10,6 +10,7 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -203,6 +204,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	@Test(groups = { "billing" })
 	public void verifyPriceListAsPerSelectedReferrel() {
 		User userInfo = getUserInfo();
+		userInfo.setName("dtype");
 		List<String> testListOne;
 		List<String> testListTwo;
 		try {
@@ -415,12 +417,96 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
+	// TC:30
+	@Test()
+	public void verifySelectHomeDelivery() {
+		String selectedOption;
+		try {
+			User userInfo = getUserInfo();
+			selectedOption = billing.selectHomeDelivery(userInfo.getName());
+
+			Assert.assertEquals(selectedOption, "Home Delivery");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC:32,33
+	@Test()
+	public void verifySelectCourierCollection() {
+		String selectedOption;
+		try {
+			User userInfo = getUserInfo();
+			selectedOption = billing.selectCourierCollection(userInfo.getName());
+
+			Assert.assertEquals(selectedOption, "Courier");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 34
+	@Test(groups = { "billing" })
+	public void verifyDefaultPaymentMode() {
+		User userInfo = getUserInfo();
+		userInfo.setName("dtype");
+		String paymentMode;
+		try {
+			paymentMode = billing.defaultPaymentMode(userInfo.getName());
+			Assert.assertEquals(paymentMode, "Payment Mode (Default: Cash)");
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 35-42
+	@Test(groups = { "billing" }, dataProvider = "paymentMode")
+	public void verifySetDefaultPaymentMode(String setPaymentMode) {
+		User userInfo = getUserInfo();
+		userInfo.setName("dtype");
+		String paymentMode;
+		try {
+			paymentMode = billing.setDefaultPaymentMode(userInfo.getName(), setPaymentMode);
+
+			Assert.assertEquals(paymentMode, setPaymentMode);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 43,44
+	@Test(groups = { "billing" })
+	public void verifyaddPaymentMode() {
+		String amount;
+		try {
+			User userInfo = getUserInfo();
+			amount = billing.addPaymentMode(userInfo.getName());
+
+			Assert.assertEquals(amount, "500");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
 	private User getUserInfo() {
 		User user = new User();
 		user.setName("Dhanraj");
 		user.setPhoneNumber("8275369428");
 
 		return user;
+	}
+
+	@DataProvider(name = "paymentMode")
+	public Object[][] getUserTypeData() {
+
+		return new Object[][] { { "CHEQUE" }, { "CREDIT" }, { "CREDIT CARD" }, { "DEBIT CARD" }, { "FREE" },
+				{ "ONLINE" } };
 	}
 
 	@AfterClass
