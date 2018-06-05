@@ -480,14 +480,61 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 43,44
-	@Test(groups = { "billing" })
-	public void verifyaddPaymentMode() {
-		String amount;
-		try {
-			User userInfo = getUserInfo();
-			amount = billing.addPaymentMode(userInfo.getName());
+//	@Test(groups = { "billing" })
+//	public void verifyAddPaymentMode() {
+//		String amount;
+//		try {
+//			User userInfo = getUserInfo();
+//			amount = billing.addPaymentMode(userInfo.getName());
+//
+//			Assert.assertEquals(amount, "500");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
 
-			Assert.assertEquals(amount, "500");
+	// TC: 45
+	@Test(groups = { "billing" })
+	public void verifyUniqueTestNameList() {
+		User userInfo = getUserInfo();
+		userInfo.setName("dtype");
+		String warningMsg;
+		try {
+			warningMsg = billing.uniqueTestNames(userInfo.getName());
+
+			Assert.assertEquals(warningMsg, "Warning! This test is already added.");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 46
+	@Test(groups = { "billing" })
+	public void verifyUniqueTestNameForProfileTest() {
+		User userInfo = getUserInfo();
+		String warningMsg;
+		try {
+			warningMsg = billing.uniqueTestNamesForProfile(userInfo.getName());
+
+			Assert.assertEquals(warningMsg, "Warning! Some tests of this profile is already selected for bill");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 47
+	@Test(groups = { "billing" })
+	public void verifyOrganizationAdvance() {
+		User userInfo = getUserInfo();
+		userInfo.setName("dtype");
+		String prepaidOrgAdv;
+		try {
+			prepaidOrgAdv = billing.organizationAdvance(userInfo.getName());
+
+			Assert.assertEquals(prepaidOrgAdv, "₹ 1000");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());

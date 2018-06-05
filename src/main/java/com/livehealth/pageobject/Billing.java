@@ -236,7 +236,7 @@ public class Billing {
 	@FindBy(how = How.ID, using = "service")
 	private WebElement service;
 
-	@FindBy(how = How.ID, using = "addPayment")
+	@FindBy(how = How.ID, using = "//a[@id=\"addPayment\"]")
 	private WebElement addPayment;
 
 	@FindBy(how = How.ID, using = "paymentType_1")
@@ -256,6 +256,9 @@ public class Billing {
 
 	@FindBy(how = How.ID, using = "issueBankName_1")
 	private WebElement issueBankName_1;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"organizationAmntDivId\"]/div[2]/b")
+	private WebElement orgAdvance;
 
 	//
 	@Autowired
@@ -924,5 +927,67 @@ public class Billing {
 		savebillSetting.click();
 
 		return advanceAmount.getText();
+	}
+
+	public String uniqueTestNames(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		testList.sendKeys("Ionised Calcium");
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]")));
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]"));
+
+		dropDowns.get(0).click();
+
+		testList.clear();
+
+		String errorMsg = errorDiv.getText();
+		String strOrgAdv = errorMsg.substring(1, errorMsg.length());
+
+		return strOrgAdv.trim();
+
+	}
+
+	public String uniqueTestNamesForProfile(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Cholesterol - Total");
+
+		testList.sendKeys("Profile livef");
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]")));
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]"));
+
+		dropDowns.get(0).click();
+
+		testList.clear();
+
+		String errorMsg = errorDiv.getText();
+		String strOrgAdv = errorMsg.substring(1, errorMsg.length());
+
+		return strOrgAdv.trim();
+
+	}
+
+	public String organizationAdvance(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Cholesterol - Total");
+
+		otherInfo.click();
+		otherInfo.click();
+
+		Select select = new Select(billOrg);
+		select.selectByVisibleText("prepaid Organization");
+		CommonMethods.waitForElementToClickable(orgAdvance);
+
+		return orgAdvance.getText().trim();
+
 	}
 }
