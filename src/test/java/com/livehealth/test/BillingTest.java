@@ -171,6 +171,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	@Test(groups = { "billing" })
 	public void verifyAdvanceAmount() {
 		User userInfo = getUserInfo();
+		userInfo.setName("smith");
 		String advanceAmt;
 		try {
 			advanceAmt = billing.advanceAmountShownCorrectlyOrNot(userInfo.getName());
@@ -480,19 +481,19 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 43,44
-//	@Test(groups = { "billing" })
-//	public void verifyAddPaymentMode() {
-//		String amount;
-//		try {
-//			User userInfo = getUserInfo();
-//			amount = billing.addPaymentMode(userInfo.getName());
-//
-//			Assert.assertEquals(amount, "500");
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
+	// @Test(groups = { "billing" })
+	// public void verifyAddPaymentMode() {
+	// String amount;
+	// try {
+	// User userInfo = getUserInfo();
+	// amount = billing.addPaymentMode(userInfo.getName());
+	//
+	// Assert.assertEquals(amount, "500");
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
 
 	// TC: 45
 	@Test(groups = { "billing" })
@@ -539,6 +540,74 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
+	}
+
+	// TC: 48
+	@Test(groups = { "billing" })
+	public void verifyDueCutFromOrganizationAdvance() {
+		User userInfo = getUserInfo();
+		userInfo.setName("roger");
+		List<String> dueList;
+		try {
+			dueList = billing.dueCutFromOrganizationAdvance(userInfo.getName());
+
+			Assert.assertEquals(dueList.get(0), dueList.get(1));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 49
+	@Test(groups = { "billing" })
+	public void ifOrgAdvanceLessThanBillAmount() {
+		User userInfo = getUserInfo();
+		userInfo.setName("roger");
+		String saveBillErrorMsg;
+		try {
+			saveBillErrorMsg = billing.ifOrganizationAdvanceLessThanBillAmount(userInfo.getName());
+
+			Assert.assertEquals(saveBillErrorMsg,
+					"×\n" + "Sorry! This organization have a insufficient advance amount");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 50
+	@Test(groups = { "billing" })
+	public void verifyOrgCreditLimitLessThanBillAmount() {
+		User userInfo = getUserInfo();
+		userInfo.setName("roger");
+		String saveBillErrorMsg;
+		try {
+			saveBillErrorMsg = billing.organisationCreditLimitLessThanBillAmount(userInfo.getName());
+
+			Assert.assertEquals(saveBillErrorMsg, "Sorry! This organization have a insufficient credit amount");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 51
+	@Test(groups = { "billing" })
+	public void verifyUserAdvanceAndPayableAmount() {
+		User userInfo = getUserInfo();
+		userInfo.setName("Smith");
+		SoftAssert softAssert = new SoftAssert();
+		List<String> amtAndAdvance;
+		try {
+			amtAndAdvance = billing.userAdvanceAndPayableAmount(userInfo.getName());
+
+			softAssert.assertEquals(amtAndAdvance.get(0), "₹ 1000");
+			softAssert.assertEquals(amtAndAdvance.get(1), "950");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+		softAssert.assertAll();
 	}
 
 	private User getUserInfo() {

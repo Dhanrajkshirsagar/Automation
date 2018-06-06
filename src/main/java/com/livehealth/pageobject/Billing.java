@@ -260,6 +260,21 @@ public class Billing {
 	@FindBy(how = How.XPATH, using = "//*[@id=\"organizationAmntDivId\"]/div[2]/b")
 	private WebElement orgAdvance;
 
+	@FindBy(how = How.ID, using = "editChkBoxManageLedger")
+	private WebElement manageLedger;
+
+	@FindBy(how = How.ID, using = "editOpeningBal")
+	private WebElement editOpeningBal;
+
+	@FindBy(how = How.ID, using = "orgUploadButton")
+	private WebElement orgUploadButton;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"saveBillError\"]/div")
+	private WebElement saveBillErrorMsg;
+
+	@FindBy(how = How.ID, using = "saveBill")
+	private WebElement saveBill;
+
 	//
 	@Autowired
 	WebContext webContext;
@@ -977,6 +992,8 @@ public class Billing {
 
 	public String organizationAdvance(String userInfo) throws Exception {
 
+		setOrganizationAdvance("1000");
+		
 		searchToBilling(userInfo);
 		selectTestName("Cholesterol - Total");
 
@@ -989,5 +1006,155 @@ public class Billing {
 
 		return orgAdvance.getText().trim();
 
+	}
+
+	public List<String> dueCutFromOrganizationAdvance(String userInfo) throws Exception {
+
+		setOrganizationAdvance("1000");
+
+		searchToBilling(userInfo);
+		selectTestName("Cholesterol - Total");
+
+		otherInfo.click();
+		otherInfo.click();
+
+		Select select = new Select(billOrg);
+		select.selectByVisibleText("prepaid Organization");
+
+		String orgAdv = orgAdvance.getText().trim();
+
+		String strOrgAdv = orgAdv.substring(2, orgAdv.length());
+
+		int intOrgadv = Integer.parseInt(strOrgAdv);
+		int tAmt = Integer.parseInt(payableAmount.getText().trim());
+
+		String calRemainedAmt = String.valueOf(intOrgadv - tAmt);
+
+		saveBill.click();
+
+		String remainedAmt = organizationAdvance(userInfo);
+		String strRemainedAmt = remainedAmt.substring(2, remainedAmt.length());
+
+		return Arrays.asList(strRemainedAmt, calRemainedAmt);
+
+	}
+
+	public void setOrganizationAdvance(String advanceAmt) throws Exception {
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(adminHover);
+
+		builder.moveToElement(adminHover).build().perform();
+
+		CommonMethods.waitForElementToClickable(admin);
+		admin.click();
+
+		CommonMethods.waitForElementToClickable(organizationManagement);
+		organizationManagement.click();
+
+		CommonMethods.waitForElementToClickable(addEditOrganization);
+		addEditOrganization.click();
+
+		CommonMethods.waitForElementToClickable(editOrgTab);
+		editOrgTab.click();
+
+		CommonMethods.waitForElementToClickable(orgEditList);
+		builder.moveToElement(orgEditList).click().sendKeys("prepaid Organization").build().perform();
+
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("//*[@id=\"editOrgDiv\"]/div[4]/div/div/span/span/div")));
+
+		builder.moveToElement(orgEditList.findElement(By.xpath("//*[@id=\"editOrgDiv\"]/div[4]/div/div/span/span/div")))
+				.click().build().perform();
+
+		builder.sendKeys(Keys.DOWN);
+
+		manageLedger.click();
+		manageLedger.click();
+
+		editOpeningBal.clear();
+		editOpeningBal.sendKeys(advanceAmt);
+
+		orgUploadButton.click();
+
+		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+
+	}
+
+	public String ifOrganizationAdvanceLessThanBillAmount(String userInfo) throws Exception {
+
+		setOrganizationAdvance("100");
+
+		searchToBilling(userInfo);
+		selectTestName("Cholesterol - Total");
+
+		otherInfo.click();
+		otherInfo.click();
+
+		Select select = new Select(billOrg);
+		select.selectByVisibleText("prepaid Organization");
+
+		String orgAdv = orgAdvance.getText().trim();
+
+		String strOrgAdv = orgAdv.substring(2, orgAdv.length());
+
+		int intOrgAdv = Integer.parseInt(strOrgAdv);
+		int tAmt = Integer.parseInt(payableAmount.getText().trim());
+
+		if (intOrgAdv < tAmt) {
+
+			saveBill.click();
+			String erorMsg = saveBillErrorMsg.getText().trim();
+
+			return erorMsg;
+		}
+		return null;
+	}
+
+	public String organisationCreditLimitLessThanBillAmount(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Cholesterol - Total");
+		selectTestName("Ionised Calcium");
+
+		otherInfo.click();
+		otherInfo.click();
+
+		Select select = new Select(billOrg);
+		select.selectByVisibleText("postpaid Organization");
+
+		String errorMsg = saveBillErrorMsg.getText();
+
+		String msg = errorMsg.substring(1, errorMsg.length());
+
+		return msg.trim();
+
+	}
+
+	public List<String> userAdvanceAndPayableAmount(String userInfo) throws Exception {
+		String payableAmt;
+
+		searchToBilling(userInfo);
+		selectTestName("Cholesterol - Total");
+		selectTestName("Ionised Calcium");
+		selectTestName("Cholesterol LDL");
+
+		String userAdvance = userAmntDivId.getText();
+
+		int t1 = Integer.parseInt(firstTestprice.getText());
+		int t2 = Integer.parseInt(seconfTestprice.getText());
+		int t3 = Integer.parseInt(thirdTestprice.getText());
+
+		String addition = String.valueOf(t1 + t2 + t3);
+		if (addition.equals(payableAmount.getText())) {
+
+			payableAmt = payableAmount.getText();
+
+			return Arrays.asList(userAdvance, payableAmt);
+		}
+
+		return null;
 	}
 }
