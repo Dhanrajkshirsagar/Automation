@@ -48,7 +48,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	CommonMethods commonMethods;
 
-	@BeforeClass(groups = { "Notnullfields", "Searching", "Registration" })
+	@BeforeClass(groups = { "Searching", "Registration" })
 	public void launchSite() {
 		try {
 			registration = pageLaunch.launch();
@@ -58,12 +58,6 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			logger.error(e.getMessage());
 		}
 
-	}
-
-	@Test()
-	public void verify() {
-		System.out.println("ToDo");
-		Assert.assertTrue(true);
 	}
 	
 	// TC: 01
@@ -81,7 +75,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 
 	}
-	/*
+	
 	// TC: 02
 	@Test(groups = { "Searching" })
 	public void isPatientGettingSearchedByName() {
@@ -155,24 +149,24 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 		}
 	}
-
+	
 	// TC: 07
-	@Test(groups = { "Registration" }, dependsOnMethods = { "verifyCardList" }, priority = 7)
-	public void verifyCalculator() {
-		List<String> testList = new ArrayList<>();
-		testList.add("CPK, Total");
-		testList.add("Cholesterol - Total");
-		testList.add("Alkaline Phosphatase");
-		String calcuulatedAmt;
-		try {
-			calcuulatedAmt = registration.testCalculator(testList);
-
-			Assert.assertEquals(calcuulatedAmt, "750");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
+//	@Test(groups = { "Registration" }, dependsOnMethods = { "verifyCardList" }, priority = 7)
+//	public void verifyCalculator() {
+//		List<String> testList = new ArrayList<>();
+//		testList.add("CPK, Total");
+//		testList.add("Cholesterol - Total");
+//		testList.add("Alkaline Phosphatase");
+//		String calcuulatedAmt;
+//		try {
+//			calcuulatedAmt = registration.testCalculator(testList);
+//
+//			Assert.assertEquals(calcuulatedAmt, "750");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
 
 	// TC:08-16,18
 	@Test(dataProvider = "typeOfUser", groups = { "Registration" })
@@ -219,7 +213,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 
 	}
-
+	/*
 	// Tc:21-26
 	@Test(dataProvider = "typeOfDesignation", groups = { "Registration" })
 	public void verifyRegisteredUserDesignation(String desigType) {
