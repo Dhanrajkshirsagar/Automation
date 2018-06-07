@@ -479,12 +479,9 @@ public class Registration {
 		Actions actions = new Actions(DriverFactory.getDriver());
 		actions.moveToElement(adminHover).build().perform();
 		System.out.println("login done");
-		Dimension d = new Dimension(1382,744);
-		DriverFactory.getDriver().manage().window().setSize(d);
-		CommonMethods.waitForElementToClickable(registration);
-		registration.click();
+		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#directRegistration");
 		System.out.println("login done 2");
-
+		
 	}
 
 	public void selectSearchingUser() throws Exception {
