@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -478,7 +479,9 @@ public class Registration {
 		Actions actions = new Actions(DriverFactory.getDriver());
 		actions.moveToElement(adminHover).build().perform();
 		System.out.println("login done");
-	//	CommonMethods.waitForElementToClickable(registration);
+		Dimension d = new Dimension(1382,744);
+		DriverFactory.getDriver().manage().window().setSize(d);
+		CommonMethods.waitForElementToClickable(registration);
 		registration.click();
 		System.out.println("login done 2");
 
