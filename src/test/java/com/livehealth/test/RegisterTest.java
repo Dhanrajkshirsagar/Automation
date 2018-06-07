@@ -59,7 +59,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 
 	}
-	
+
 	// TC: 01
 	@Test(groups = { "Registration" }, priority = 0)
 	public void verifyRegistrationPage() {
@@ -75,7 +75,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 
 	}
-	
+
 	// TC: 02
 	@Test(groups = { "Searching" })
 	public void isPatientGettingSearchedByName() {
@@ -149,24 +149,24 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 		}
 	}
-	
+
 	// TC: 07
-//	@Test(groups = { "Registration" }, dependsOnMethods = { "verifyCardList" }, priority = 7)
-//	public void verifyCalculator() {
-//		List<String> testList = new ArrayList<>();
-//		testList.add("CPK, Total");
-//		testList.add("Cholesterol - Total");
-//		testList.add("Alkaline Phosphatase");
-//		String calcuulatedAmt;
-//		try {
-//			calcuulatedAmt = registration.testCalculator(testList);
-//
-//			Assert.assertEquals(calcuulatedAmt, "750");
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
+	@Test(groups = { "Registration" },dependsOnMethods = { "verifyCardList" }, priority = 7) 
+	public void verifyCalculator() {
+		List<String> testList = new ArrayList<>();
+		testList.add("CPK, Total");
+		testList.add("Cholesterol - Total");
+		testList.add("Alkaline Phosphatase");
+		String calcuulatedAmt;
+		try {
+			calcuulatedAmt = registration.testCalculator(testList);
+
+			Assert.assertEquals(calcuulatedAmt, "750");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
 
 	// TC:08-16,18
 	@Test(dataProvider = "typeOfUser", groups = { "Registration" })
@@ -213,7 +213,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 
 	}
-	/*
+
 	// Tc:21-26
 	@Test(dataProvider = "typeOfDesignation", groups = { "Registration" })
 	public void verifyRegisteredUserDesignation(String desigType) {
@@ -469,8 +469,6 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-
-
 	// TC:45
 	@Test(groups = { "Registration" })
 	public void verifyPincode() {
@@ -492,8 +490,6 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 
 	}
-
-
 
 	// // TC:47,48
 	// @Test(groups = { "Registration" }, priority = 60)
@@ -529,7 +525,6 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-
 
 	// TC: 52
 	@Test(groups = { "Default Settings" })
@@ -872,7 +867,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
-	}*/
+	}
 
 	private User getBlankUser() {
 		User user = new User();
