@@ -485,8 +485,8 @@ public class Registration {
 		CommonMethods.waitForElementToClickable(adminHover);
 		Actions actions = new Actions(DriverFactory.getDriver());
 		actions.moveToElement(adminHover).build().perform();
-		CommonMethods.waitForElementToClickable(registration);
-		registration.click();
+//		CommonMethods.waitForElementToClickable(registration);
+//		registration.click();
 	}
 
 	public void selectSearchingUser() throws Exception {
