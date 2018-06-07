@@ -478,7 +478,7 @@ public class Registration {
 		Actions actions = new Actions(DriverFactory.getDriver());
 		actions.moveToElement(adminHover).build().perform();
 		System.out.println("login done");
-		CommonMethods.waitForElementToClickable(registration);
+	//	CommonMethods.waitForElementToClickable(registration);
 		registration.click();
 		System.out.println("login done 2");
 
