@@ -75,7 +75,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 
 	}
-
+	/*
 	// TC: 02
 	@Test(groups = { "Searching" })
 	public void isPatientGettingSearchedByName() {
@@ -469,9 +469,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	/**
-	 * TC:44 city searching field (bug)
-	 */
+
 
 	// TC:45
 	@Test(groups = { "Registration" })
@@ -495,9 +493,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	}
 
-	/**
-	 * TC:46 login api required
-	 */
+
 
 	// // TC:47,48
 	// @Test(groups = { "Registration" }, priority = 60)
@@ -534,9 +530,6 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	/**
-	 * TC:51 not working manually
-	 */
 
 	// TC: 52
 	@Test(groups = { "Default Settings" })
@@ -879,7 +872,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
-	}
+	}*/
 
 	private User getBlankUser() {
 		User user = new User();
