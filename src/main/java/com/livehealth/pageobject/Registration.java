@@ -347,14 +347,6 @@ public class Registration {
 	@FindBy(how = How.XPATH, using = "/html/body/section/div[3]/div[2]/div[9]/div[2]/ul/li/p[5]")
 	private WebElement billOne;
 
-	// @FindBy(how = How.XPATH, using =
-	// "/html/body/section/div[3]/div[2]/div[9]/div[2]/ul/li[2]/p[5]")
-	// private WebElement billTwo;
-	//
-	// @FindBy(how = How.XPATH, using =
-	// "/html/body/section/div[3]/div[2]/div[9]/div[2]/ul/li[1]/p[5]")
-	// private WebElement billThree;
-
 	@FindBy(how = How.XPATH, using = "/html/body/div[13]/div/div/div[2]/div[3]/div[1]/div[2]/div/div/div/div/label")
 	private WebElement testName;
 
@@ -486,8 +478,10 @@ public class Registration {
 		Actions actions = new Actions(DriverFactory.getDriver());
 		actions.moveToElement(adminHover).build().perform();
 		System.out.println("login done");
-//		CommonMethods.waitForElementToClickable(registration);
-//		registration.click();
+		CommonMethods.waitForElementToClickable(registration);
+		registration.click();
+		System.out.println("login done 2");
+
 	}
 
 	public void selectSearchingUser() throws Exception {
