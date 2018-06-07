@@ -610,6 +610,69 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		softAssert.assertAll();
 	}
 
+	// TC: 52
+	@Test(groups = { "billing" })
+	public void verifyAdditionalPriceField() {
+		User userInfo = getUserInfo();
+		String additionalPrice;
+		try {
+			additionalPrice = billing.additionalPriceField(userInfo.getName());
+
+			Assert.assertEquals(additionalPrice, "1000");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 53
+	@Test(groups = { "billing" })
+	public void verifyConcessionInRupees() {
+		User userInfo = getUserInfo();
+		userInfo.setName("dtype");
+		String amount;
+		try {
+			amount = billing.verifyConcessionInRupees(userInfo.getName());
+
+			Assert.assertEquals(amount, "1000");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 54
+	@Test(groups = { "billing" })
+	public void verifyConcessionInPercentage() {
+		User userInfo = getUserInfo();
+		userInfo.setName("dtype");
+		String amount;
+		try {
+			amount = billing.concessionInPercentage(userInfo.getName());
+
+			Assert.assertEquals(amount, "945");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 55
+	@Test(groups = { "billing" })
+	public void verifyDiscountCommentsFieldCompulsory() {
+		User userInfo = getUserInfo();
+		userInfo.setName("dtype");
+		boolean highlighted;
+		try {
+			highlighted = billing.discountCommentsField(userInfo.getName());
+
+			Assert.assertTrue(highlighted);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
 	private User getUserInfo() {
 		User user = new User();
 		user.setName("Dhanraj");

@@ -275,6 +275,21 @@ public class Billing {
 	@FindBy(how = How.ID, using = "saveBill")
 	private WebElement saveBill;
 
+	@FindBy(how = How.ID, using = "additionalCost")
+	private WebElement additionalCost;
+
+	@FindBy(how = How.ID, using = "comments")
+	private WebElement comments;
+
+	@FindBy(how = How.XPATH, using = "//button[@style=\"width:150px;\"]")
+	private WebElement settings;
+
+	@FindBy(how = How.ID, using = "discountConfCommentFlag")
+	private WebElement discountConfCommentFlag;
+
+	@FindBy(how = How.XPATH, using = "(//button[@id=\"savebillSetting\"])[1]")
+	private WebElement saveSetting;
+
 	//
 	@Autowired
 	WebContext webContext;
@@ -874,7 +889,7 @@ public class Billing {
 		otherInfo.click();
 
 		Select select = new Select(service);
-		select.selectByVisibleText("Home Delivery");
+		select.selectByValue("DELIVERY");
 
 		return select.getFirstSelectedOption().getText().trim();
 
@@ -889,7 +904,7 @@ public class Billing {
 		otherInfo.click();
 
 		Select select = new Select(service);
-		select.selectByVisibleText("Courier");
+		select.selectByValue("COURIER");
 
 		return select.getFirstSelectedOption().getText().trim();
 
@@ -993,7 +1008,7 @@ public class Billing {
 	public String organizationAdvance(String userInfo) throws Exception {
 
 		setOrganizationAdvance("1000");
-		
+
 		searchToBilling(userInfo);
 		selectTestName("Cholesterol - Total");
 
@@ -1156,5 +1171,142 @@ public class Billing {
 		}
 
 		return null;
+	}
+
+	public String additionalPriceField(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Cholesterol - Total");
+		selectTestName("Ionised Calcium");
+		selectTestName("Cholesterol LDL");
+
+		String payableAmtBefore = payableAmount.getText();
+
+		additionalCost.clear();
+		additionalCost.sendKeys("50");
+		testList.clear();
+
+		String payableAmtAfter = payableAmount.getText();
+
+		int before = Integer.parseInt(payableAmtBefore);
+		int after = Integer.parseInt(payableAmtAfter);
+
+		int addedPrice = after - before;
+
+		if (addedPrice == 50) {
+			return payableAmtAfter;
+		}
+		return null;
+	}
+
+	public String verifyConcessionInRupees(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+		selectTestName("CPK, Total");
+		selectTestName("Cholesterol - Total");
+
+		int t1 = Integer.parseInt(firstTestprice.getText());
+		int t2 = Integer.parseInt(seconfTestprice.getText());
+		int t3 = Integer.parseInt(thirdTestprice.getText());
+
+		String addition = String.valueOf((t1 + t2 + t3) - 50);
+
+		Select select = new Select(concessionType);
+		select.selectByValue("Rupees");
+
+		totalConcessionAmt.clear();
+		totalConcessionAmt.sendKeys("50");
+		comments.sendKeys("concession");
+
+		String amt = payableAmount.getText();
+
+		if (addition.equals(amt)) {
+
+			return amt;
+		}
+
+		return null;
+	}
+
+	public String concessionInPercentage(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+		selectTestName("CPK, Total");
+		selectTestName("Cholesterol - Total");
+
+		int t1 = Integer.parseInt(firstTestprice.getText());
+		int t2 = Integer.parseInt(seconfTestprice.getText());
+		int t3 = Integer.parseInt(thirdTestprice.getText());
+
+		String totalAmt = String.valueOf(t1 + t2 + t3);
+
+		String discount = totalAmt.substring(0, totalAmt.length() - 1);
+
+		int totalAmtInt = Integer.parseInt(totalAmt);
+
+		int discountInt = Integer.parseInt(discount);
+
+		String discountedAmt = String.valueOf(totalAmtInt - discountInt);
+
+		Select select = new Select(concessionType);
+		select.selectByValue("Percentage");
+
+		totalConcessionAmt.clear();
+		totalConcessionAmt.sendKeys("10");
+		comments.sendKeys("concession");
+
+		String amt = payableAmount.getText();
+
+		if (discountedAmt.equals(amt)) {
+
+			return amt;
+		}
+		return null;
+
+	}
+
+	public boolean discountCommentsField(String userInfo) throws Exception {
+
+		registerUrl.click();
+
+		DriverFactory.getDriver().navigate().refresh();
+
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(discountConfCommentFlag);
+
+		if (!discountConfCommentFlag.isSelected()) {
+			discountConfCommentFlag.click();
+		}
+
+		saveSetting.click();
+		DriverFactory.getDriver().navigate().refresh();
+
+		billing.click();
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		Select select = new Select(concessionType);
+		select.selectByValue("Rupees");
+
+		totalConcessionAmt.clear();
+		totalConcessionAmt.sendKeys("50");
+
+		String borderColorBefore = comments.getCssValue("border-color");
+
+		saveBill.click();
+
+		String borderColorAfter = comments.getCssValue("border-color");
+
+		if (borderColorBefore.equals(borderColorAfter)) {
+
+			return false;
+		} else {
+			return true;
+		}
+
 	}
 }
