@@ -47,7 +47,7 @@ public class Registration {
 	@FindBy(how = How.XPATH, using = "/html/body/section/div[1]/div[3]/ul/ul/li/a")
 	private WebElement adminHover;
 
-	@FindBy(how = How.LINK_TEXT, using = "Registration")
+	@FindBy(how = How.LINK_TEXT, using = "Operation")  //  Registration
 	private WebElement registration;
 
 	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div[1]/div[2]/div[4]/button[1]")
