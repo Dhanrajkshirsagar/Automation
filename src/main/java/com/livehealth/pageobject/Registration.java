@@ -1140,6 +1140,10 @@ public class Registration {
 		firstName.clear();
 		CommonMethods.waitForElementToClickable(viewDocuments);
 		((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].click();", viewDocuments);
+		
+		new WebDriverWait(DriverFactory.getDriver(), 20).until(ExpectedConditions.visibilityOfElementLocated(
+				By.linkText("View")));
+		
 		CommonMethods.waitForElementToClickable(view);
 
 		String text = view.getText().trim();
@@ -1734,6 +1738,9 @@ public class Registration {
 				}
 
 				saveForm.click();
+
+				new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions
+						.visibilityOfElementLocated(By.id("btnUpdateConfirm")));
 
 				CommonMethods.waitForElementToClickable(btnUpdateConfirm);
 

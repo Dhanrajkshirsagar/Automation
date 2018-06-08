@@ -63,7 +63,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	// TC: 01
 	@Test(groups = { "Registration" }, priority = 0)
 	public void verifyRegistrationPage() {
-
+		CommonMethods.setTestDescription("TC 01:");
 		User registrationFields;
 		try {
 			User user = getBlankUser();
@@ -491,28 +491,28 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	}
 
-	// // TC:47,48
-	// @Test(groups = { "Registration" }, priority = 60)
-	// public void verifyUploadDocuments() {
-	// String name = commonMethods.getRandomString();
-	//
-	// User user = new User();
-	// user.setName(name);
-	// user.setAge("10");
-	// user.setGender("Male");
-	//
-	// try {
-	// String file = registration.uploadFile(user);
-	// Assert.assertEquals(file, "View");
-	// } catch (Exception e) {
-	// logger.error(e.getMessage());
-	// Assert.assertTrue(false, e.getMessage());
-	//
-	// }
-	// }
+	// TC:47,48
+//	@Test(groups = { "Registration" }, priority = 60)
+//	public void verifyUploadDocuments() {
+//		String name = commonMethods.getRandomString();
+//
+//		User user = new User();
+//		user.setName(name);
+//		user.setAge("10");
+//		user.setGender("Male");
+//
+//		try {
+//			String file = registration.uploadFile(user);
+//			Assert.assertEquals(file, "View");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//
+//		}
+//	}
 
 	// TC: 50
-	@Test(groups = { "Default Settings" })
+	@Test(groups = { "Registration" })
 	public void verifyDefaultUserTypeSettings() {
 		String defaultUserType;
 
@@ -527,7 +527,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 52
-	@Test(groups = { "Default Settings" })
+	@Test(groups = { "Registration" })
 	public void verifyDefaultReferrelSettings() {
 		String defaultReferrel;
 
@@ -542,7 +542,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 53
-	@Test(groups = { "Default Settings" })
+	@Test(groups = { "Registration" })
 	public void verifyDefaultOrganizationSettings() {
 		String defaultOrganization;
 

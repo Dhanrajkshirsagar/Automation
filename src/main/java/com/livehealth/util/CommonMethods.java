@@ -8,6 +8,8 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.springframework.stereotype.Component;
+import org.testng.ITestResult;
+import org.testng.Reporter;
 
 import com.livehealth.base.DriverFactory;
 import com.livehealth.config.Constants;
@@ -62,6 +64,11 @@ public class CommonMethods {
 			e.printStackTrace();
 		}
 		return content;
+	}
+
+	public static void setTestDescription(String message) {
+		ITestResult result = Reporter.getCurrentTestResult();
+		result.setAttribute("INFO", message);
 	}
 
 	public String getRandomString() {
