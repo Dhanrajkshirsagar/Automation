@@ -12,6 +12,9 @@ public class Referrel {
 	private String docAuthKey;
 
 	@JsonIgnore
+	private String isConfirm;
+
+	@JsonIgnore
 	private String docSignature;
 
 	@JsonIgnore
@@ -415,6 +418,15 @@ public class Referrel {
 	@JsonIgnore
 	public void setIsdismissUpdatable(String isdismissUpdatable) {
 		this.isdismissUpdatable = isdismissUpdatable;
+	}
+
+	public String getIsConfirm() {
+		return isConfirm;
+	}
+
+	@JsonIgnore
+	public void setIsConfirm(String isConfirm) {
+		this.isConfirm = isConfirm;
 	}
 
 	public String getParentLabId() {

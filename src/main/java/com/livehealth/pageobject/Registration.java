@@ -429,6 +429,12 @@ public class Registration {
 	@FindBy(how = How.ID, using = "filterReferralByOrgFlag")
 	private WebElement filterReferral;
 
+	@FindBy(how = How.XPATH, using = "//*[@id=\"newDirectRegistrationDataDiv\"]/div[3]/span/div/div")
+	private WebElement countryList;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"newDirectRegistrationDataDiv\"]/div[3]/span/div/div/ul/li[37]/span[1]")
+	private WebElement contry;
+
 	@Autowired
 	WebContext webContext;
 
@@ -712,6 +718,14 @@ public class Registration {
 		return null;
 	}
 
+	public User internationalNumber(User inUser) throws Exception {
+		
+		countryList.click();
+		contry.click();
+		User searchedUser=registerUser(inUser);
+		return searchedUser;		
+	}
+	
 	public boolean matchDesignationWithGender(String inputDesig) throws Exception {
 
 		int attempts = 0;

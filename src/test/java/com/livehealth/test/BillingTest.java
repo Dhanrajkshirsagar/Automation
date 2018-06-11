@@ -673,12 +673,66 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
+	// TC: 66
+	@Test(groups = { "billing" })
+	public void verifyBackToRegistrationPage() {
+		User userInfo = getUserInfo();
+		userInfo.setName("dtype");
+		String title;
+		try {
+			title = billing.backToRegistrationPage(userInfo.getName());
+
+			Assert.assertEquals(title, "Registration");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 67
+	@Test(groups = { "billing" })
+	public void verifyAdditionalServicesFlag() {
+		User userInfo = getUserInfo();
+		userInfo.setName("dtype");
+		String firstOption;
+		try {
+			firstOption = billing.additionalServicesFlag(userInfo.getName());
+
+			Assert.assertEquals(firstOption, "Additional Services (Default: None)");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 70
+	@Test(groups = { "billing" }, dataProvider = "sampleType")
+	public void verifycollectedSampleType(String sample) {
+		User userInfo = getUserInfo();
+		userInfo.setName("dtype");
+		String selectedSampleType;
+		try {
+			selectedSampleType = billing.collectedSampleType(userInfo.getName(), sample);
+
+			Assert.assertEquals(selectedSampleType, sample);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
 	private User getUserInfo() {
 		User user = new User();
 		user.setName("Dhanraj");
 		user.setPhoneNumber("8275369428");
 
 		return user;
+	}
+
+	@DataProvider(name = "sampleType")
+	public Object[][] collectedSampleTypes() {
+
+		return new Object[][] { { "Self" }, { "Main" }, { "Outside" } };
 	}
 
 	@DataProvider(name = "paymentMode")

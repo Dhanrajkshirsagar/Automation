@@ -290,6 +290,21 @@ public class Billing {
 	@FindBy(how = How.XPATH, using = "(//button[@id=\"savebillSetting\"])[1]")
 	private WebElement saveSetting;
 
+	@FindBy(how = How.ID, using = "backToRegistration")
+	private WebElement backToRegistration;
+
+	@FindBy(how = How.ID, using = "additionalServiceFlag")
+	private WebElement additionalServiceFlag;
+
+	@FindBy(how = How.ID, using = "additionalCharges")
+	private WebElement additionalCharges;
+
+	@FindBy(how = How.ID, using = "colledtedSampleFlag")
+	private WebElement colledtedSampleFlag;
+
+	@FindBy(how = How.ID, using = "collectedSample")
+	private WebElement collectedSample;
+
 	//
 	@Autowired
 	WebContext webContext;
@@ -1307,6 +1322,83 @@ public class Billing {
 		} else {
 			return true;
 		}
+
+	}
+
+	public String backToRegistrationPage(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		advanceAmount.clear();
+		advanceAmount.sendKeys(payableAmount.getText());
+
+		saveBill.click();
+
+		Thread.sleep(500);
+
+		backToRegistration.click();
+
+		return DriverFactory.getDriver().getTitle();
+
+	}
+
+	public String additionalServicesFlag(String userInfo) throws Exception {
+
+		registerUrl.click();
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(additionalServiceFlag);
+
+		if (!additionalServiceFlag.isSelected()) {
+			additionalServiceFlag.click();
+		}
+
+		saveSetting.click();
+		DriverFactory.getDriver().navigate().refresh();
+
+		billing.click();
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		otherInfo.click();
+		otherInfo.click();
+
+		Select select = new Select(additionalCharges);
+
+		select.selectByValue("NONE");
+
+		return select.getFirstSelectedOption().getText();
+
+	}
+
+	public String collectedSampleType(String userInfo, String sampleType) throws Exception {
+
+		registerUrl.click();
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(colledtedSampleFlag);
+
+		if (!colledtedSampleFlag.isSelected()) {
+			colledtedSampleFlag.click();
+		}
+
+		saveSetting.click();
+		DriverFactory.getDriver().navigate().refresh();
+
+		billing.click();
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		otherInfo.click();
+		otherInfo.click();
+
+		Select select = new Select(collectedSample);
+		select.selectByValue(sampleType);
+
+		return select.getFirstSelectedOption().getAttribute("value");
 
 	}
 }

@@ -151,7 +151,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 07
-	@Test(groups = { "Registration" },dependsOnMethods = { "verifyCardList" }, priority = 7) 
+	@Test(groups = { "Registration" }, dependsOnMethods = { "verifyCardList" }, priority = 7)
 	public void verifyCalculator() {
 		List<String> testList = new ArrayList<>();
 		testList.add("CPK, Total");
@@ -192,6 +192,37 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 			createdUser = registration.registerUser(inputUser);
 
 			registerValidator.verifyRegister(inputUser, createdUser);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+
+	}
+
+	// TC:17
+	@Test(groups = { "Registration" })
+	public void verifyInternationalNumber() {
+		User inputUser = new User();
+		String name = commonMethods.getRandomString();
+		String phoneNo = commonMethods.getRandomNumber();
+		User createdUser;
+		try {
+			inputUser.setName(name);
+			inputUser.setDesignation("Mr.");
+			inputUser.setAge("10");
+			inputUser.setUserType("D");
+			inputUser.setEmail(Constants.EMAIL);
+			inputUser.setAlternateNumber(phoneNo);
+			inputUser.setHeight("6");
+			inputUser.setWeight("51");
+			inputUser.setPhoneNumber("6004000000");
+			inputUser.setPincode("461157");
+			inputUser.setGender("Male");
+
+			createdUser = registration.internationalNumber(inputUser);
+
+			Assert.assertEquals(inputUser.getPhoneNumber(), createdUser.getPhoneNumber());
+
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -243,7 +274,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	// TC:27 
+	// TC:27
 	@Test(groups = { "Registration" })
 	public void verifyNameFieldNotNull() {
 		CommonMethods.setTestDescription("Expected:error msg should be shown in case of null name field");
@@ -263,7 +294,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	// TC:28 
+	// TC:28
 	@Test(groups = { "Registration" })
 	public void verifyAgeFieldNotNull() {
 		CommonMethods.setTestDescription("Expected:error msg should be shown in case of null age field");
@@ -500,24 +531,24 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:47,48
-//	@Test(groups = { "Registration" }, priority = 60)
-//	public void verifyUploadDocuments() {
-//		String name = commonMethods.getRandomString();
-//
-//		User user = new User();
-//		user.setName(name);
-//		user.setAge("10");
-//		user.setGender("Male");
-//
-//		try {
-//			String file = registration.uploadFile(user);
-//			Assert.assertEquals(file, "View");
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//
-//		}
-//	}
+	// @Test(groups = { "Registration" }, priority = 60)
+	// public void verifyUploadDocuments() {
+	// String name = commonMethods.getRandomString();
+	//
+	// User user = new User();
+	// user.setName(name);
+	// user.setAge("10");
+	// user.setGender("Male");
+	//
+	// try {
+	// String file = registration.uploadFile(user);
+	// Assert.assertEquals(file, "View");
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	//
+	// }
+	// }
 
 	// TC: 50
 	@Test(groups = { "Registration" })
@@ -941,7 +972,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 		return new Object[][] { { "Ms." }, { "Master" }, { "Miss" }, { "Smt." }, { "Dr." }, { "B/O" }, { "Baby" } };
 	}
 
-	@AfterClass(alwaysRun=true)
+	@AfterClass(alwaysRun = true)
 	public void tearDown() {
 		DriverFactory.closeDriverObjects();
 
