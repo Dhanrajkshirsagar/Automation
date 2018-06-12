@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.livehealth.base.DriverFactory;
+import com.livehealth.model.HomeCollection;
 import com.livehealth.util.CommonMethods;
 import com.livehealth.util.WebContext;
 
@@ -304,6 +306,81 @@ public class Billing {
 
 	@FindBy(how = How.ID, using = "collectedSample")
 	private WebElement collectedSample;
+
+	@FindBy(how = How.ID, using = "testQuantityOptionFlag")
+	private WebElement testQuantityFlag;
+
+	@FindBy(how = How.ID, using = "testQuantity0")
+	private WebElement testQuantity;
+
+	@FindBy(how = How.ID, using = "searchByAccessionNoFlag")
+	private WebElement searchByAccessionNo;
+
+	@FindBy(how = How.ID, using = "searchByAccessionNo")
+	private WebElement searchByAccession;
+
+	@FindBy(how = How.ID, using = "searchAccBtn")
+	private WebElement searchAccBtn;
+
+	@FindBy(how = How.ID, using = "isHomeCollectionBill")
+	private WebElement isHomeCollectionBill;
+
+	@FindBy(how = How.ID, using = "patientAddressBilling")
+	private WebElement patientAddressBilling;
+
+	@FindBy(how = How.ID, using = "locality")
+	private WebElement locality;
+
+	@FindBy(how = How.ID, using = "postal_code")
+	private WebElement postal_code;
+
+	@FindBy(how = How.ID, using = "takeNewBtn")
+	private WebElement takeNewBtn;
+
+	@FindBy(how = How.ID, using = "availableFromTime")
+	private WebElement availableFromTime;
+
+	@FindBy(how = How.XPATH, using = "/html/body/div[21]/ul/li[2]/a/span")
+	private WebElement availableFrom;
+
+	@FindBy(how = How.ID, using = "availableTillTime")
+	private WebElement availableTillTime;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"settingHCDiv\"]/div[1]")
+	private WebElement availableTill;
+
+	@FindBy(how = How.XPATH, using = "/html/body/div[25]/ul/li[3]/div/div[1]/table/tbody/tr[1]/td[1]/a/span")
+	private WebElement glyphicon;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"currentDate\"]/span/span")
+	private WebElement calender;
+
+	@FindBy(how = How.XPATH, using = "/html/body/div[19]/ul/li[1]/div/div[1]/table/thead/tr[1]/th[2]")
+	private WebElement month;
+
+	@FindBy(how = How.XPATH, using = "/html/body/div[19]/ul/li[1]/div/div[1]/table/thead/tr[1]/th[1]")
+	private WebElement leftArrow;
+
+	@FindBy(how = How.XPATH, using = "/html/body/div[19]/ul/li[1]/div/div[1]/table/tbody/tr[2]/td[2]")
+	private WebElement selectDay;
+
+	@FindBy(how = How.ID, using = "confirmBillDate")
+	private WebElement confirmBillDate;
+
+	@FindBy(how = How.ID, using = "discountOutsourceFlag")
+	private WebElement discountOutsourceFlag;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[3]/div[4]/div[1]/div[8]/div/div[3]/p")
+	private WebElement concessionAmount;
+
+	@FindBy(how = How.ID, using = "confirmBillId")
+	private WebElement confirmBillId;
+
+	@FindBy(how = How.ID, using = "billTotalAmountLabel")
+	private WebElement billTotalAmountLabel;
+
+	@FindBy(how = How.ID, using = "//*[@id=\"concessionErrorDiv\"]/div")
+	private WebElement warningMsg;
 
 	//
 	@Autowired
@@ -1399,6 +1476,252 @@ public class Billing {
 		select.selectByValue(sampleType);
 
 		return select.getFirstSelectedOption().getAttribute("value");
+
+	}
+
+	public int testQuantityOptionFlag(String userInfo) throws Exception {
+
+		int cnt = 0;
+		registerUrl.click();
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(testQuantityFlag);
+
+		if (!testQuantityFlag.isSelected()) {
+			testQuantityFlag.click();
+		}
+
+		saveSetting.click();
+		DriverFactory.getDriver().navigate().refresh();
+
+		billing.click();
+		searchToBilling(userInfo);
+
+		for (int i = 0; i < 3; i++) {
+
+			selectTestName("Ionised Calcium");
+
+			cnt++;
+		}
+
+		int quantity = Integer.parseInt(testQuantity.getAttribute("value"));
+
+		registerUrl.click();
+		DriverFactory.getDriver().navigate().refresh();
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(testQuantityFlag);
+
+		if (testQuantityFlag.isSelected()) {
+			testQuantityFlag.click();
+		}
+
+		saveSetting.click();
+		DriverFactory.getDriver().navigate().refresh();
+
+		billing.click();
+
+		if (cnt == quantity) {
+			return quantity;
+		}
+
+		return 0;
+	}
+
+	public String searchAccessionNo(String accessionNum) throws Exception {
+
+		DriverFactory.getDriver().navigate().refresh();
+		registerUrl.click();
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(searchByAccessionNo);
+
+		if (!searchByAccessionNo.isSelected()) {
+			searchByAccessionNo.click();
+		}
+
+		saveSetting.click();
+		DriverFactory.getDriver().navigate().refresh();
+
+		billing.click();
+
+		searchByAccession.sendKeys(accessionNum);
+		searchAccBtn.click();
+
+		CommonMethods.waitForElementToClickable(testList);
+
+		return DriverFactory.getDriver().getTitle();
+
+	}
+
+	public HomeCollection homeCollectionBill(String userInfo, HomeCollection collection) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		System.out.println("==1==");
+		otherInfo.click();
+		otherInfo.click();
+		System.out.println("==2==");
+
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		js.executeScript("arguments[0].click();", isHomeCollectionBill);
+
+		patientAddressBilling.sendKeys(collection.getAddress());
+		locality.sendKeys(collection.getCity());
+		postal_code.sendKeys(collection.getPinCode());
+
+		takeNewBtn.click();
+
+		new WebDriverWait(DriverFactory.getDriver(), 10)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.id("availableTillTime")));
+
+		// availableFromTime.click();
+		// availableFrom.click();
+
+		js.executeScript("arguments[0].click();", availableTillTime);
+		System.out.println("==3==");
+
+		js.executeScript("arguments[0].click();", availableTill);
+
+		System.out.println("==4==");
+
+		new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("/html/body/div[25]/ul/li[3]/div/div[1]/table/tbody/tr[1]/td[1]/a/span")));
+
+		js.executeScript("arguments[0].click();", glyphicon);
+		js.executeScript("arguments[0].click();", glyphicon);
+		js.executeScript("arguments[0].click();", glyphicon);
+
+		System.out.println("==5==");
+
+		return null;
+
+	}
+
+	public String backDatedBillGettingSaved(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		calender.click();
+		String may = month.getText().trim();
+
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+
+		do {
+			js.executeScript("arguments[0].click();", leftArrow);
+		} while (may.equalsIgnoreCase("May 2018"));
+
+		js.executeScript("arguments[0].click();", selectDay);
+
+		advanceAmount.clear();
+		advanceAmount.sendKeys(payableAmount.getText());
+
+		saveBill.click();
+
+		String confirmDate = confirmBillDate.getText();
+		String[] values = confirmDate.split(",");
+
+		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+		DriverFactory.getDriver().navigate().refresh();
+		return values[0];
+	}
+
+	public String discountToDiscountDiscardedTestFlag(String userInfo) throws Exception {
+
+		registerUrl.click();
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(discountOutsourceFlag);
+
+		if (!discountOutsourceFlag.isSelected()) {
+			discountOutsourceFlag.click();
+		}
+
+		saveSetting.click();
+		DriverFactory.getDriver().navigate().refresh();
+
+		billing.click();
+
+		searchToBilling(userInfo);
+
+		testList.sendKeys("Vitamin D Total - 25 Hydroxy");
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span")));
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span"));
+
+		dropDowns.get(0).click();
+
+		concession.clear();
+		concession.sendKeys("50");
+		concession.sendKeys(Keys.ENTER);
+
+		String con = concessionAmount.getText();
+
+		String discount = con.substring(0, 2).trim();
+		String testPrice = firstTestprice.getText().trim();
+		int priceInt = Integer.parseInt(testPrice);
+		int discountInt = Integer.parseInt(discount);
+
+		String pay = String.valueOf(priceInt - discountInt);
+
+		if (pay.equals(payableAmount.getText().trim())) {
+
+			advanceAmount.clear();
+			advanceAmount.sendKeys(payableAmount.getText());
+			saveBill.click();
+
+			// String billId = confirmBillId.getText();
+			//
+			// DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billUpdate/"+billId);
+			//
+			// Thread.sleep(20000);
+			// DriverFactory.getDriver().navigate().refresh();
+			// String tAmt = billTotalAmountLabel.getText().trim();
+
+			DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+
+			return pay;
+		}
+
+		return null;
+	}
+
+	public String discountGettingDiscardedShowingWarningMsg(String userInfo) throws Exception {
+
+		DriverFactory.getDriver().navigate().refresh();
+		registerUrl.click();
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(discountOutsourceFlag);
+
+		if (discountOutsourceFlag.isSelected()) {
+			discountOutsourceFlag.click();
+		}
+
+		saveSetting.click();
+		DriverFactory.getDriver().navigate().refresh();
+
+		billing.click();
+
+		searchToBilling(userInfo);
+		selectTestName("Vitamin D Total - 25 Hydroxy");
+
+		totalConcessionAmt.sendKeys("10");
+		concession.click();
+
+		String message = warningMsg.getText();
+		System.out.println("==" + message);
+		return message;
 
 	}
 }

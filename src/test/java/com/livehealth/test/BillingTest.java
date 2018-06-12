@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.livehealth.base.DriverFactory;
+import com.livehealth.model.HomeCollection;
 import com.livehealth.model.User;
 import com.livehealth.pageobject.Billing;
 import com.livehealth.pageobject.HomePage;
@@ -720,6 +721,106 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
+
+	// TC: 74
+	@Test(groups = { "billing" })
+	public void verify​TestQuantityOption() {
+		User userInfo = getUserInfo();
+		userInfo.setName("dtype");
+		int actual;
+		try {
+			actual = billing.testQuantityOptionFlag(userInfo.getName());
+
+			Assert.assertEquals(actual, 3);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 76
+	@Test(groups = { "billing" })
+	public void verify​BackDatedBillGettingSaved() {
+		User userInfo = getUserInfo();
+		userInfo.setName("Benedict");
+		String backdate;
+		try {
+			backdate = billing.backDatedBillGettingSaved(userInfo.getName());
+
+			Assert.assertEquals(backdate, "7th May 2018");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 78
+	@Test(groups = { "billing" })
+	public void verify​SearchAccessionNoBoxSearching() {
+		String useName;
+		try {
+			useName = billing.searchAccessionNo("123");
+
+			Assert.assertEquals(useName, "Benedict");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 79
+	// @Test(groups = { "billing" })
+	// public void verify​HomeCollectionBill() {
+	// User userInfo = getUserInfo();
+	// userInfo.setName("dtype");
+	// HomeCollection collection = new HomeCollection();
+	// try {
+	// collection.setAddress("wakad");
+	// collection.setCity("pune");
+	// collection.setPinCode("461116");
+	// HomeCollection address;
+	//
+	// address = billing.homeCollectionBill(userInfo.getName(), collection);
+	//
+	// Assert.assertEquals(address.toString(), collection.toString());
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
+
+	// TC: 81
+	@Test(groups = { "billing" })
+	public void verify​DiscountToDiscountDiscardedTestFlag() {
+		User userInfo = getUserInfo();
+		userInfo.setName("Benedict");
+		String discountedAmt;
+		try {
+			discountedAmt = billing.discountToDiscountDiscardedTestFlag(userInfo.getName());
+
+			Assert.assertEquals(discountedAmt, "1400");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 82
+	// @Test(groups = { "billing" })
+	// public void verify​DiscountGettingDiscardedShowingWarningMsg() {
+	// User userInfo = getUserInfo();
+	// userInfo.setName("Benedict");
+	// String message;
+	// try {
+	// message =
+	// billing.discountGettingDiscardedShowingWarningMsg(userInfo.getName());
+	//
+	// Assert.assertEquals(message, "1400");
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
 
 	private User getUserInfo() {
 		User user = new User();
