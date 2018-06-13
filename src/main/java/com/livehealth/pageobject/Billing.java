@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import com.livehealth.base.DriverFactory;
 import com.livehealth.model.HomeCollection;
+import com.livehealth.model.User;
 import com.livehealth.util.CommonMethods;
 import com.livehealth.util.WebContext;
 
@@ -238,7 +239,7 @@ public class Billing {
 	@FindBy(how = How.ID, using = "service")
 	private WebElement service;
 
-	@FindBy(how = How.ID, using = "//a[@id=\"addPayment\"]")
+	@FindBy(how = How.XPATH, using = "//a[@id=\"addPayment\"]")
 	private WebElement addPayment;
 
 	@FindBy(how = How.ID, using = "paymentType_1")
@@ -346,7 +347,7 @@ public class Billing {
 	@FindBy(how = How.ID, using = "availableTillTime")
 	private WebElement availableTillTime;
 
-	@FindBy(how = How.XPATH, using = "//*[@id=\"settingHCDiv\"]/div[1]")
+	@FindBy(how = How.XPATH, using = "/html/body/div[25]/ul/li[2]/a/span")
 	private WebElement availableTill;
 
 	@FindBy(how = How.XPATH, using = "/html/body/div[25]/ul/li[3]/div/div[1]/table/tbody/tr[1]/td[1]/a/span")
@@ -381,6 +382,90 @@ public class Billing {
 
 	@FindBy(how = How.ID, using = "//*[@id=\"concessionErrorDiv\"]/div")
 	private WebElement warningMsg;
+
+	@FindBy(how = How.ID, using = "discountList")
+	private WebElement discountList;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[3]/div[4]/div[1]/div[8]/div[1]/div[3]/p")
+	private WebElement discount_1;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[3]/div[4]/div[1]/div[8]/div[2]/div[3]/p")
+	private WebElement discount_2;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[3]/div[4]/div[1]/div[8]/div[3]/div[3]/p")
+	private WebElement discount_3;
+
+	@FindBy(how = How.ID, using = "textInput12775")
+	private WebElement hangingDrop;
+
+	@FindBy(how = How.ID, using = "textInput12772")
+	private WebElement eosinophils;
+
+	@FindBy(how = How.ID, using = "textInput12771")
+	private WebElement monocyte;
+
+	@FindBy(how = How.ID, using = "reportModeFlag")
+	private WebElement reportModeFlag;
+
+	@FindBy(how = How.LINK_TEXT, using = "Operation")
+	private WebElement operation;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"hoverDropdown\"]/ul/li[13]/a")
+	private WebElement allDepartments;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"hoverDropdown\"]/a")
+	private WebElement selectDepartment;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"userWaiting1318\"]/div/div[1]/span[2]/b")
+	private WebElement selectRoger;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div/div[8]/div/div[5]/label")
+	private WebElement emergencyFlag;
+
+	@FindBy(how = How.NAME, using = "singleSampleRecBtn")
+	private WebElement rcvSamplePrintBtn;
+
+	@FindBy(how = How.ID, using = "navbar-content-title")
+	private WebElement savePdf;
+
+	@FindBy(how = How.ID, using = "billConsentForm")
+	private WebElement billConsentForm;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"printConsentForm\"]/button[2]")
+	private WebElement consentDropDown;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"uploadedForms\"]/li[1]/a")
+	private WebElement ctConsent;
+
+	@FindBy(how = How.ID, using = "age")
+	private WebElement age;
+
+	@FindBy(how = How.ID, using = "radiobutton")
+	private WebElement male;
+
+	@FindBy(how = How.ID, using = "indirectUserSearch")
+	private WebElement indirectUserSearch;
+
+	@FindBy(how = How.ID, using = "mobile")
+	private WebElement mobile;
+
+	@FindBy(how = How.ID, using = "concessionErrorDiv")
+	private WebElement concessionErrorDiv;
+
+	@FindBy(how = How.ID, using = "oldVersionBillingPage")
+	private WebElement oldVersionBillingPage;
+
+	@FindBy(how = How.ID, using = "nextDiv")
+	private WebElement nextDiv;
+
+	@FindBy(how = How.ID, using = "savePrintBill")
+	private WebElement savePrintBill;
+
+	@FindBy(how = How.ID, using = "newVersionBillingPage")
+	private WebElement newVersionBillingPage;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"confirmBillMsgDiv\"]/div")
+	private WebElement confirmBillMsg;
 
 	//
 	@Autowired
@@ -831,7 +916,10 @@ public class Billing {
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
 
-		closeTestBtn.click();
+		// new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions
+		// .visibilityOfElementLocated(By.xpath("(//button[@class=\"close\"])[1]")));
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		js.executeScript("arguments[0].click();", closeTestBtn);
 
 		if (closeTestBtn.isDisplayed()) {
 			return false;
@@ -1032,7 +1120,8 @@ public class Billing {
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
 
-		addPayment.click();
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		js.executeScript("arguments[0].click();", addPayment);
 
 		new WebDriverWait(DriverFactory.getDriver(), 10)
 				.until(ExpectedConditions.visibilityOfElementLocated(By.id("paymentType_1")));
@@ -1402,6 +1491,127 @@ public class Billing {
 
 	}
 
+	public String criticalAndEmergencyCheckBoxAbleToSet(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		advanceAmount.clear();
+		advanceAmount.sendKeys(payableAmount.getText());
+
+		reportModeFlag.click();
+
+		saveBill.click();
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(adminHover);
+
+		builder.moveToElement(adminHover).build().perform();
+		operation.click();
+
+		CommonMethods.waitForElementToClickable(selectDepartment);
+		selectDepartment.click();
+		CommonMethods.waitForElementToClickable(allDepartments);
+		allDepartments.click();
+
+		new WebDriverWait(DriverFactory.getDriver(), 10)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.id("loadMoreUserList")));
+
+		emergencyFlag.click();
+		selectRoger.click();
+
+		return null;
+	}
+
+	public List<String> receiveSampleAndPrint(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		advanceAmount.clear();
+		advanceAmount.sendKeys(payableAmount.getText());
+
+		saveBill.click();
+
+		new WebDriverWait(DriverFactory.getDriver(), 10)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.name("singleSampleRecBtn")));
+
+		Actions actions = new Actions(DriverFactory.getDriver());
+
+		actions.moveToElement(rcvSamplePrintBtn).click().perform();
+
+		new WebDriverWait(DriverFactory.getDriver(), 10)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.id("navbar-content-title")));
+
+		String pdf = savePdf.getText();
+
+		System.out.println("==" + pdf);
+
+		DriverFactory.getDriver().close();
+
+		String rcvdStatus = rcvSamplePrintBtn.getText();
+
+		return Arrays.asList(rcvdStatus, "Print");
+	}
+
+	public User ctConsentForm(User user) throws Exception {
+
+		registerUrl.click();
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(billConsentForm);
+
+		if (!billConsentForm.isSelected()) {
+			billConsentForm.click();
+		}
+
+		saveSetting.click();
+		DriverFactory.getDriver().navigate().refresh();
+
+		billing.click();
+		searchToBilling("benedict");
+		selectTestName("Ionised Calcium");
+
+		advanceAmount.clear();
+		advanceAmount.sendKeys(payableAmount.getText());
+
+		saveBill.click();
+
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		js.executeScript("arguments[0].click();", consentDropDown);
+
+		new WebDriverWait(DriverFactory.getDriver(), 10)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"uploadedForms\"]/li[1]/a")));
+
+		js.executeScript("arguments[0].click();", ctConsent);
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		DriverFactory.getDriver().navigate().refresh();
+
+		// CommonMethods.waitForElementToClickable(mobile);
+		// mobile.clear();
+		builder.moveToElement(mobile).sendKeys(user.getPhoneNumber());
+
+		// indirectUserSearch.sendKeys(user.getName());
+
+		// age.clear();
+		age.sendKeys(user.getAge());
+		builder.moveToElement(age).sendKeys(user.getAge());
+
+		user.setName(indirectUserSearch.getAttribute("value"));
+		user.setPhoneNumber(mobile.getAttribute("value"));
+		user.setAge(age.getAttribute("value"));
+
+		System.out.println(user.getName());
+		System.out.println(user.getPhoneNumber());
+		System.out.println(user.getAge());
+
+		return user;
+	}
+
 	public String backToRegistrationPage(String userInfo) throws Exception {
 
 		searchToBilling(userInfo);
@@ -1423,6 +1633,7 @@ public class Billing {
 	public String additionalServicesFlag(String userInfo) throws Exception {
 
 		registerUrl.click();
+		DriverFactory.getDriver().navigate().refresh();
 		CommonMethods.waitForElementToClickable(settings);
 		settings.click();
 
@@ -1450,7 +1661,7 @@ public class Billing {
 
 	}
 
-	public String collectedSampleType(String userInfo, String sampleType) throws Exception {
+	public String collectedSampleType(String userInfo) throws Exception {
 
 		registerUrl.click();
 		CommonMethods.waitForElementToClickable(settings);
@@ -1473,10 +1684,81 @@ public class Billing {
 		otherInfo.click();
 
 		Select select = new Select(collectedSample);
-		select.selectByValue(sampleType);
+		select.selectByValue("Self");
 
-		return select.getFirstSelectedOption().getAttribute("value");
+		String firstSelected = select.getFirstSelectedOption().getAttribute("value");
 
+		// DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+
+		return firstSelected;
+
+	}
+
+	public List<String> discountPriceList(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+
+		Select select = new Select(discountList);
+		select.selectByVisibleText("Discount list ");
+
+		List<String> list = new ArrayList<>();
+		list.add("Hanging Drop Preparation *");
+		list.add("Absolute Eosinophils Count *"); //
+		list.add("Absolute Monocyte Count *");
+
+		for (String test : list) {
+			testList.sendKeys(test);
+			WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+			wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]/span")));
+
+			List<WebElement> dropDowns = DriverFactory.getDriver()
+					.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]/span"));
+
+			dropDowns.get(0).click();
+
+			concession.sendKeys(Keys.ENTER);
+		}
+
+		list.clear();
+
+		String d1 = discount_1.getText().substring(0, discount_1.getText().length() - 2);
+		String d2 = discount_2.getText().substring(0, discount_2.getText().length() - 2);
+		String d3 = discount_3.getText().substring(0, discount_3.getText().length() - 2);
+
+		list.add(d3);
+		list.add(d2);
+		list.add(d1);
+
+		return list;
+	}
+
+	public List<String> confirmDiscountPriceList() throws Exception {
+
+		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/newListManagement/");
+		listName.sendKeys("Discount list");
+
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div")));
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div"));
+
+		dropDowns.get(0).click(); //
+
+		new WebDriverWait(DriverFactory.getDriver(), 10)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.id("textInput12775")));
+
+		List<String> list = new ArrayList<>();
+
+		list.add(hangingDrop.getAttribute("value"));
+		list.add(eosinophils.getAttribute("value"));
+		list.add(monocyte.getAttribute("value"));
+
+		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+
+		return list;
 	}
 
 	public int testQuantityOptionFlag(String userInfo) throws Exception {
@@ -1562,10 +1844,8 @@ public class Billing {
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
 
-		System.out.println("==1==");
 		otherInfo.click();
 		otherInfo.click();
-		System.out.println("==2==");
 
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 		js.executeScript("arguments[0].click();", isHomeCollectionBill);
@@ -1575,19 +1855,12 @@ public class Billing {
 		postal_code.sendKeys(collection.getPinCode());
 
 		takeNewBtn.click();
-
 		new WebDriverWait(DriverFactory.getDriver(), 10)
 				.until(ExpectedConditions.visibilityOfElementLocated(By.id("availableTillTime")));
 
-		// availableFromTime.click();
-		// availableFrom.click();
-
 		js.executeScript("arguments[0].click();", availableTillTime);
-		System.out.println("==3==");
 
 		js.executeScript("arguments[0].click();", availableTill);
-
-		System.out.println("==4==");
 
 		new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions.visibilityOfElementLocated(
 				By.xpath("/html/body/div[25]/ul/li[3]/div/div[1]/table/tbody/tr[1]/td[1]/a/span")));
@@ -1596,8 +1869,12 @@ public class Billing {
 		js.executeScript("arguments[0].click();", glyphicon);
 		js.executeScript("arguments[0].click();", glyphicon);
 
-		System.out.println("==5==");
+		js.executeScript("arguments[0].click();", advanceAmount);
+		advanceAmount.clear();
+		advanceAmount.sendKeys(payableAmount.getText());
 
+		saveBill.click();
+		Thread.sleep(2000);
 		return null;
 
 	}
@@ -1634,6 +1911,7 @@ public class Billing {
 	public String discountToDiscountDiscardedTestFlag(String userInfo) throws Exception {
 
 		registerUrl.click();
+		DriverFactory.getDriver().navigate().refresh();
 		CommonMethods.waitForElementToClickable(settings);
 		settings.click();
 
@@ -1722,6 +2000,104 @@ public class Billing {
 		String message = warningMsg.getText();
 		System.out.println("==" + message);
 		return message;
+
+	}
+
+	public String allowedDiscountOnBill(String userInfo) throws Exception {
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		Select select = new Select(concessionType);
+		select.selectByValue("Percentage");
+
+		totalConcessionAmt.clear();
+		totalConcessionAmt.sendKeys("90");
+		comments.sendKeys("concession");
+
+		String totalAmt = firstTestprice.getText();
+		String concessionAmt = concessionAmount.getText();
+
+		String discount = concessionAmt.substring(0, concessionAmt.length() - 2);
+
+		int totalAmtInt = Integer.parseInt(totalAmt);
+
+		int discountInt = Integer.parseInt(discount);
+
+		String discountedAmt = String.valueOf(totalAmtInt - discountInt);
+
+		String amt = payableAmount.getText();
+
+		if (discountedAmt.equals(amt)) {
+
+			return amt;
+		}
+		return null;
+
+	}
+
+	public String moreThanAllowedDiscountOnBill(String userInfo) throws Exception {
+
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		Select select = new Select(concessionType);
+		select.selectByValue("Percentage");
+
+		totalConcessionAmt.clear();
+		totalConcessionAmt.sendKeys("91");
+
+		js.executeScript("arguments[0].click();", totalConcessionAmt);
+
+		String concessionErrMsg = concessionErrorDiv.getText().trim();
+
+		String msg = concessionErrMsg.substring(1, concessionErrMsg.length());
+
+		return msg.trim();
+	}
+
+	public String saveAndPrintBill(String userInfo) throws Exception {
+
+		registerUrl.click();
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(oldVersionBillingPage);
+		oldVersionBillingPage.click();
+
+		saveSetting.click();
+		DriverFactory.getDriver().navigate().refresh();
+
+		billing.click();
+
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		nextDiv.click();
+
+		advanceAmount.clear();
+		advanceAmount.sendKeys(payableAmount.getText());
+		savePrintBill.click();
+
+		String confirmMsg = confirmBillMsg.getText();
+		String msg = confirmMsg.substring(1, confirmMsg.length());
+
+		Thread.sleep(3000);
+		DriverFactory.getDriver().close();
+		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#directRegistration");
+
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(newVersionBillingPage);
+		newVersionBillingPage.click();
+
+		saveSetting.click();
+		DriverFactory.getDriver().navigate().refresh();
+
+		return msg.trim();
 
 	}
 }
