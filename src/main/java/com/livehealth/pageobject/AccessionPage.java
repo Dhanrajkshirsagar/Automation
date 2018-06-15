@@ -5,7 +5,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -22,7 +21,7 @@ import com.livehealth.util.CommonMethods;
 import com.livehealth.util.WebContext;
 
 @Component
-public class Accession {
+public class AccessionPage {
 
 	@FindBy(how = How.ID, using = "username")
 	private WebElement userNameField;
@@ -69,10 +68,13 @@ public class Accession {
 	@FindBy(how = How.ID, using = "pendingSampleList")
 	private WebElement pendingSampleList;
 
-	//   
+	@FindBy(how = How.ID, using = "confirmBillId")
+	private WebElement confirmBillId;
+
+	//
 	@Autowired
-	Billing billing ;
-	
+	BillingPage billing;
+
 	@Autowired
 	WebContext webContext;
 
@@ -96,6 +98,38 @@ public class Accession {
 		accession.click();
 	}
 
+	public void searchToBilling(String userInfo) throws Exception {
+
+		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+		DriverFactory.getDriver().navigate().refresh();
+
+		searchUserForBilling.sendKeys(userInfo);
+
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("/html/body/section/div[3]/div[2]/div/div[1]/span/span")));
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("/html/body/section/div[3]/div[2]/div/div[1]/span/span"));
+
+		dropDowns.get(0).click();
+
+	}
+
+	public void selectTestName(String testName) throws Exception {
+		testList.sendKeys(testName);
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span")));
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span"));
+
+		dropDowns.get(0).click();
+
+		concession.sendKeys(Keys.ENTER);
+	}
+
 	public boolean pendingAccessionList() throws Exception {
 
 		boolean flag = false;
@@ -113,57 +147,61 @@ public class Accession {
 		return flag;
 
 	}
-	
-	public boolean dismissSample() throws Exception {
 
-		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
-		
-		searchUserForBilling.sendKeys("benedict");
+	public String receiveButton(String userInfo) throws Exception {
 
-		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-		wait.until(ExpectedConditions
-				.visibilityOfElementLocated(By.xpath("/html/body/section/div[3]/div[2]/div/div[1]/span/span")));
+		billing.searchToBilling(userInfo);
+		billing.selectTestName("Chloride");
 
-		List<WebElement> dropDowns = DriverFactory.getDriver()
-				.findElements(By.xpath("/html/body/section/div[3]/div[2]/div/div[1]/span/span"));
-
-		dropDowns.get(0).click();
-
-		testList.sendKeys("Ionised Calcium");
-		new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span")));
-
-		List<WebElement> dDowns = DriverFactory.getDriver()
-				.findElements(By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span"));
-
-		dDowns.get(0).click();
-
-		concession.sendKeys(Keys.ENTER);
-		
 		advanceAmount.clear();
 		advanceAmount.sendKeys(payableAmount.getText());
 
 		saveBill.click();
-
+		String billId = confirmBillId.getText();
 		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/sampleAccession/");
-		Thread.sleep(1000);
-		CommonMethods.waitForElementToClickable(firstRow);
 
-		String accessionId = firstRow.getText();
-		
-		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
-		
-		DriverFactory.getDriver().findElement(By.id("options" + accessionId)).click();
-		Thread.sleep(1000);
-	//	element.click();
-	//	js.executeScript("arguments[0].click();", element);
-		
-		dismissSample.click();
+		new WebDriverWait(DriverFactory.getDriver(), 10)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.id("pendingSampleList")));
 
-//		if (element.isDisplayed()) {
-//			return false;
-//		}
-		return true;
+		DriverFactory.getDriver().findElement(By.xpath("//button[contains(text(),'Receive')]")).click();
+
+		Thread.sleep(4000);
+		return userInfo;
 
 	}
+
+	// public boolean dismissSample(String userInfo) throws Exception {
+	//
+	// DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+	//
+	// searchToBilling(userInfo);
+	// selectTestName("Chloride");
+	//
+	// advanceAmount.clear();
+	// advanceAmount.sendKeys(payableAmount.getText());
+	//
+	// saveBill.click();
+	//
+	// DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/sampleAccession/");
+	// Thread.sleep(1000);
+	// CommonMethods.waitForElementToClickable(firstRow);
+	//
+	// String accessionId = firstRow.getText();
+	//
+	// JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+	//
+	// DriverFactory.getDriver().findElement(By.id("options" +
+	// accessionId)).click();
+	// Thread.sleep(1000);
+	// // element.click();
+	// // js.executeScript("arguments[0].click();", element);
+	//
+	// dismissSample.click();
+	//
+	//// if (element.isDisplayed()) {
+	//// return false;
+	//// }
+	// return true;
+	//
+	// }
 }

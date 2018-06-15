@@ -17,12 +17,13 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.livehealth.base.DriverFactory;
+import com.livehealth.config.ConfigProperties;
 import com.livehealth.config.Constants;
 import com.livehealth.model.Age;
 import com.livehealth.model.TestList;
 import com.livehealth.model.User;
 import com.livehealth.pageobject.HomePage;
-import com.livehealth.pageobject.Registration;
+import com.livehealth.pageobject.RegistrationPage;
 import com.livehealth.util.CommonMethods;
 import com.livehealth.util.OrganizationAPI;
 import com.livehealth.util.ReferrelAPI;
@@ -34,7 +35,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	final static Logger logger = Logger.getLogger(RegisterTest.class);
 
-	Registration registration;
+	RegistrationPage registration;
 
 	@Autowired
 	HomePage pageLaunch;
@@ -47,12 +48,15 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	@Autowired
 	CommonMethods commonMethods;
+	
+	@Autowired
+	ConfigProperties configProperties;
 
 	@BeforeClass(groups = { "Searching", "Registration" })
 	public void launchSite() {
 		try {
 			registration = pageLaunch.launch();
-			registration.signIn("auto-livehealth", "livehealth20");
+			registration.signIn(configProperties.getUsername(), configProperties.getPassword());
 
 		} catch (Exception e) {
 			logger.error(e.getMessage());

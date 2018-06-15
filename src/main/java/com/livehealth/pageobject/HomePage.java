@@ -33,30 +33,30 @@ public class HomePage {
 		super();
 	}
 
-	public Registration launch() throws Exception {
+	public RegistrationPage launch() throws Exception {
 
 		DriverFactory.getDriver().get(configProperties.getLivehealthUrl());
 		commonMethods.waitForPageToLoad();
 
-		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), Registration.class);
+		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), RegistrationPage.class);
 
 	}
 
-	public Billing navigateToBillingPage() throws Exception {
+	public BillingPage navigateToBillingPage() throws Exception {
 
 		DriverFactory.getDriver().get(configProperties.getLivehealthUrl());
 		commonMethods.waitForPageToLoad();
 
-		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), Billing.class);
+		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), BillingPage.class);
 
 	}
 	
-	public Accession navigateToAccessionPage() throws Exception {
+	public AccessionPage navigateToAccessionPage() throws Exception {
 
 		DriverFactory.getDriver().get(configProperties.getLivehealthUrl());
 		commonMethods.waitForPageToLoad();
 
-		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), Accession.class);
+		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), AccessionPage.class);
 
 	}
 	

@@ -21,13 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.livehealth.base.DriverFactory;
+import com.livehealth.config.ConfigProperties;
 import com.livehealth.model.HomeCollection;
 import com.livehealth.model.User;
 import com.livehealth.util.CommonMethods;
 import com.livehealth.util.WebContext;
 
 @Component
-public class Billing {
+public class BillingPage {
 
 	@FindBy(how = How.ID, using = "username")
 	private WebElement userNameField;
@@ -423,7 +424,7 @@ public class Billing {
 	private WebElement emergencyFlag;
 
 	@FindBy(how = How.NAME, using = "singleSampleRecBtn")
-	private WebElement rcvSamplePrintBtn;
+	private WebElement singleSampleRecBtn;
 
 	@FindBy(how = How.ID, using = "navbar-content-title")
 	private WebElement savePdf;
@@ -466,6 +467,18 @@ public class Billing {
 
 	@FindBy(how = How.XPATH, using = "//*[@id=\"confirmBillMsgDiv\"]/div")
 	private WebElement confirmBillMsg;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"uploadedForms\"]/li[5]/a")
+	private WebElement formF;
+
+	@FindBy(how = How.ID, using = "pndtPatientName")
+	private WebElement pndtPatientName;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"formFDetailsModal\"]/div[1]/div/div[1]/button")
+	private WebElement closeFormF;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"ctForm\"]/input[2]")
+	private WebElement getPdf;
 
 	//
 	@Autowired
@@ -916,8 +929,6 @@ public class Billing {
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
 
-		// new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions
-		// .visibilityOfElementLocated(By.xpath("(//button[@class=\"close\"])[1]")));
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 		js.executeScript("arguments[0].click();", closeTestBtn);
 
@@ -1524,7 +1535,7 @@ public class Billing {
 		return null;
 	}
 
-	public List<String> receiveSampleAndPrint(String userInfo) throws Exception {
+	public String receiveSampleAndPrint(String userInfo) throws Exception {
 
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
@@ -1537,77 +1548,50 @@ public class Billing {
 		new WebDriverWait(DriverFactory.getDriver(), 10)
 				.until(ExpectedConditions.visibilityOfElementLocated(By.name("singleSampleRecBtn")));
 
-		Actions actions = new Actions(DriverFactory.getDriver());
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		js.executeScript("arguments[0].click();", singleSampleRecBtn);
 
-		actions.moveToElement(rcvSamplePrintBtn).click().perform();
-
-		new WebDriverWait(DriverFactory.getDriver(), 10)
-				.until(ExpectedConditions.visibilityOfElementLocated(By.id("navbar-content-title")));
-
-		String pdf = savePdf.getText();
-
-		System.out.println("==" + pdf);
+		Thread.sleep(1000);
+		// String pdf = savePdf.getText();
+		//
+		// System.out.println("==" + pdf);
 
 		DriverFactory.getDriver().close();
 
-		String rcvdStatus = rcvSamplePrintBtn.getText();
+		String rcvdStatus = singleSampleRecBtn.getText();
 
-		return Arrays.asList(rcvdStatus, "Print");
+		return rcvdStatus;
 	}
 
-	public User ctConsentForm(User user) throws Exception {
+	public User ctConsentForm(User user, String userInfo) throws Exception {
 
-		registerUrl.click();
-		CommonMethods.waitForElementToClickable(settings);
-		settings.click();
-
-		CommonMethods.waitForElementToClickable(billConsentForm);
-
-		if (!billConsentForm.isSelected()) {
-			billConsentForm.click();
-		}
-
-		saveSetting.click();
-		DriverFactory.getDriver().navigate().refresh();
-
-		billing.click();
-		searchToBilling("benedict");
-		selectTestName("Ionised Calcium");
-
-		advanceAmount.clear();
-		advanceAmount.sendKeys(payableAmount.getText());
-
-		saveBill.click();
-
+		consentForm(userInfo);
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
-		js.executeScript("arguments[0].click();", consentDropDown);
-
-		new WebDriverWait(DriverFactory.getDriver(), 10)
-				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"uploadedForms\"]/li[1]/a")));
 
 		js.executeScript("arguments[0].click();", ctConsent);
+		js.executeScript("arguments[0].scrollIntoView(true);", ctConsent);
+		new WebDriverWait(DriverFactory.getDriver(), 20)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"ctForm\"]/input[2]")));
 
-		Actions builder = new Actions(DriverFactory.getDriver());
+		js.executeScript("arguments[0].click();", getPdf);
 
-		DriverFactory.getDriver().navigate().refresh();
-
-		// CommonMethods.waitForElementToClickable(mobile);
-		// mobile.clear();
-		builder.moveToElement(mobile).sendKeys(user.getPhoneNumber());
-
-		// indirectUserSearch.sendKeys(user.getName());
-
-		// age.clear();
-		age.sendKeys(user.getAge());
-		builder.moveToElement(age).sendKeys(user.getAge());
-
-		user.setName(indirectUserSearch.getAttribute("value"));
-		user.setPhoneNumber(mobile.getAttribute("value"));
-		user.setAge(age.getAttribute("value"));
-
-		System.out.println(user.getName());
-		System.out.println(user.getPhoneNumber());
-		System.out.println(user.getAge());
+		// Actions builder = new Actions(DriverFactory.getDriver());
+		//
+		// DriverFactory.getDriver().navigate().refresh();
+		//
+		//
+		// builder.moveToElement(mobile).sendKeys(user.getPhoneNumber());
+		//
+		// age.sendKeys(user.getAge());
+		// builder.moveToElement(age).sendKeys(user.getAge());
+		//
+		// user.setName(indirectUserSearch.getAttribute("value"));
+		// user.setPhoneNumber(mobile.getAttribute("value"));
+		// user.setAge(age.getAttribute("value"));
+		//
+		// System.out.println(user.getName());
+		// System.out.println(user.getPhoneNumber());
+		// System.out.println(user.getAge());
 
 		return user;
 	}
@@ -1622,7 +1606,7 @@ public class Billing {
 
 		saveBill.click();
 
-		Thread.sleep(500);
+		CommonMethods.waitForElementToClickable(backToRegistration);
 
 		backToRegistration.click();
 
@@ -1687,8 +1671,6 @@ public class Billing {
 		select.selectByValue("Self");
 
 		String firstSelected = select.getFirstSelectedOption().getAttribute("value");
-
-		// DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
 
 		return firstSelected;
 
@@ -2084,7 +2066,6 @@ public class Billing {
 		String confirmMsg = confirmBillMsg.getText();
 		String msg = confirmMsg.substring(1, confirmMsg.length());
 
-		Thread.sleep(3000);
 		DriverFactory.getDriver().close();
 		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#directRegistration");
 
@@ -2099,5 +2080,53 @@ public class Billing {
 
 		return msg.trim();
 
+	}
+
+	public void consentForm(String userInfo) throws Exception {
+		registerUrl.click();
+		CommonMethods.waitForElementToClickable(settings);
+		settings.click();
+
+		CommonMethods.waitForElementToClickable(billConsentForm);
+
+		if (!billConsentForm.isSelected()) {
+			billConsentForm.click();
+		}
+
+		saveSetting.click();
+		DriverFactory.getDriver().navigate().refresh();
+
+		billing.click();
+		searchToBilling(userInfo);
+		selectTestName("Ionised Calcium");
+
+		advanceAmount.clear();
+		advanceAmount.sendKeys(payableAmount.getText());
+
+		saveBill.click();
+
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		js.executeScript("arguments[0].click();", consentDropDown);
+
+		new WebDriverWait(DriverFactory.getDriver(), 10)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"uploadedForms\"]/li[1]/a")));
+
+	}
+
+	public String formFConsentForm(String userInfo) throws Exception {
+
+		consentForm(userInfo);
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		js.executeScript("arguments[0].click();", formF);
+
+		new WebDriverWait(DriverFactory.getDriver(), 10)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.id("pndtPatientName")));
+
+		String userName = pndtPatientName.getText().trim();
+
+		closeFormF.click();
+		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+
+		return userName;
 	}
 }

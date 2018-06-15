@@ -30,7 +30,7 @@ import com.livehealth.util.CommonMethods;
 import com.livehealth.util.WebContext;
 
 @Component
-public class Registration {
+public class RegistrationPage {
 
 	@FindBy(how = How.ID, using = "newError-msg")
 	private WebElement errorText;

@@ -1,5 +1,6 @@
 package com.livehealth.test;
 
+import java.io.File;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -15,9 +16,10 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.livehealth.base.DriverFactory;
+import com.livehealth.config.ConfigProperties;
 import com.livehealth.model.HomeCollection;
 import com.livehealth.model.User;
-import com.livehealth.pageobject.Billing;
+import com.livehealth.pageobject.BillingPage;
 import com.livehealth.pageobject.HomePage;
 import com.livehealth.util.CommonMethods;
 import com.livehealth.validator.RegistrationValidator;
@@ -28,7 +30,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	final static Logger logger = Logger.getLogger(RegisterTest.class);
 
-	Billing billing;
+	BillingPage billing;
 
 	@Autowired
 	HomePage pageLaunch;
@@ -42,11 +44,14 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	RegistrationValidator registerValidator;
 
+	@Autowired
+	ConfigProperties configProperties;
+
 	@BeforeClass(groups = { "billing", "billing2" })
 	public void launchSite() {
 		try {
 			billing = pageLaunch.navigateToBillingPage();
-			billing.signIn("auto-livehealth", "livehealth20");
+			billing.signIn(configProperties.getUsername(), configProperties.getPassword());
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -699,13 +704,12 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	// public void verifyReceiveSampleAndPrint() {
 	//
 	// SoftAssert softAssert = new SoftAssert();
-	// List<String> rcvSample;
+	// String rcvSample;
 	//
 	// try {
 	// rcvSample = billing.receiveSampleAndPrint("dtype");
 	//
-	// softAssert.assertEquals(rcvSample.get(0), "Received");
-	// softAssert.assertEquals(rcvSample.get(1), "Save");
+	// softAssert.assertEquals(rcvSample, "Received");
 	// } catch (Exception e) {
 	// logger.error(e.getMessage());
 	// Assert.assertTrue(false, e.getMessage());
@@ -951,6 +955,22 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	// Assert.assertTrue(false, e.getMessage());
 	// }
 	// }
+
+	// TC: 61
+	@Test(groups = { "billing" })
+	public void verifyFormF() {
+		User userInfo = getUserInfo();
+		userInfo.setName("benedict");
+		String userName;
+		try {
+			userName = billing.formFConsentForm(userInfo.getName());
+
+			Assert.assertEquals(userName, "Benedict");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
 
 	private User getUserInfo() {
 		User user = new User();

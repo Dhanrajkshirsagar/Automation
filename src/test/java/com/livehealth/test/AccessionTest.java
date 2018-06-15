@@ -11,7 +11,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.livehealth.base.DriverFactory;
-import com.livehealth.pageobject.Accession;
+import com.livehealth.config.ConfigProperties;
+import com.livehealth.pageobject.AccessionPage;
 import com.livehealth.pageobject.HomePage;
 import com.livehealth.util.CommonMethods;
 
@@ -20,7 +21,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 
 	final static Logger logger = Logger.getLogger(AccessionTest.class);
 
-	Accession accession;
+	AccessionPage accession;
 
 	@Autowired
 	HomePage pageLaunch;
@@ -28,11 +29,14 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	CommonMethods commonMethods;
 
+	@Autowired
+	ConfigProperties configProperties;
+
 	@BeforeClass(groups = { "accession" })
 	public void launchSite() {
 		try {
 			accession = pageLaunch.navigateToAccessionPage();
-			accession.signIn("auto-livehealth", "livehealth20");
+			accession.signIn(configProperties.getUsername(), configProperties.getPassword());
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
@@ -53,19 +57,33 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
+	// TC: 1
+	@Test(groups = { "accession" })
+	public void verifyReceiveButton() {
+		String pendingList;
+		try {
+
+			pendingList = accession.receiveButton("benedict");
+			// Assert.assertTrue(pendingList);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
 	// TC: 4
-//	@Test(groups = { "accession" })
-//	public void verifyDismissSample() {
-//		boolean dismissed;
-//		try {
-//
-//			dismissed = accession.dismissSample();
-//			Assert.assertTrue(dismissed);
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
+	// @Test(groups = { "accession" })
+	// public void verifyDismissSample() {
+	// boolean dismissed;
+	// try {
+	//
+	// dismissed = accession.dismissSample();
+	// Assert.assertTrue(dismissed);
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
 
 	@AfterClass(alwaysRun = true)
 	public void tearDown() {
