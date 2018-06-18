@@ -48,7 +48,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	@Autowired
 	CommonMethods commonMethods;
-	
+
 	@Autowired
 	ConfigProperties configProperties;
 
@@ -66,7 +66,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 01
 	@Test(groups = { "Registration" }, priority = 0)
-	public void verifyRegistrationPage() {
+	public void verifyRegistrationPage_01() {
 		CommonMethods.setTestDescription("Expected:registration page fields should be shown");
 		User registrationFields;
 		try {
@@ -82,7 +82,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 02
 	@Test(groups = { "Searching" })
-	public void isPatientGettingSearchedByName() {
+	public void isPatientGettingSearchedByName_02() {
 		User searchedUser;
 		try {
 			User user = getSearchingUserDetails();
@@ -100,7 +100,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 03
 	@Test(groups = { "Searching" })
-	public void isPatientGettingSearchedByPhoneNumber() {
+	public void isPatientGettingSearchedByPhoneNumber_03() {
 		User searchedUser;
 		try {
 			User user = getSearchingUserDetails();
@@ -136,7 +136,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:06
 	@Test(groups = { "Searching" })
-	public void verifyClearButton() {
+	public void verifyClearButton_06() {
 		User searchedUser;
 		try {
 			User inputUser = getSearchingUserDetails();
@@ -155,8 +155,8 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 07
-	@Test(groups = { "Registration" }, dependsOnMethods = { "verifyCardList" }, priority = 7)
-	public void verifyCalculator() {
+	@Test(groups = { "Registration" }, dependsOnMethods = { "verifyCardList_62" }, priority = 7)
+	public void verifyCalculator_07() {
 		List<String> testList = new ArrayList<>();
 		testList.add("CPK, Total");
 		testList.add("Cholesterol - Total");
@@ -174,7 +174,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:08-16,18
 	@Test(dataProvider = "typeOfUser", groups = { "Registration" })
-	public void verifyUserType(String userType) {
+	public void verifyUserType_08To16_18(String userType) {
 		CommonMethods.setTestDescription("Expected:Patient should be registered under specified type successfuly");
 		User inputUser = new User();
 		String name = commonMethods.getRandomString();
@@ -205,7 +205,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:17
 	@Test(groups = { "Registration" })
-	public void verifyInternationalNumber() {
+	public void verifyInternationalNumber_17() {
 		User inputUser = new User();
 		String name = commonMethods.getRandomString();
 		String phoneNo = commonMethods.getRandomNumber();
@@ -236,7 +236,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:19-20
 	@Test(groups = { "Registration" }, dataProvider = "mrAndMrs")
-	public void verifyDesignationWithGender(String designation) {
+	public void verifyDesignationWithGender_19_20(String designation) {
 		boolean selectedGender;
 		try {
 			selectedGender = registration.matchDesignationWithGender(designation);
@@ -252,7 +252,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// Tc:21-26
 	@Test(dataProvider = "typeOfDesignation", groups = { "Registration" })
-	public void verifyRegisteredUserDesignation(String desigType) {
+	public void verifyRegisteredUserDesignation_21_26(String desigType) {
 		User inputUser = new User();
 		String name = commonMethods.getRandomString();
 		String phoneNo = commonMethods.getRandomNumber();
@@ -280,7 +280,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:27
 	@Test(groups = { "Registration" })
-	public void verifyNameFieldNotNull() {
+	public void verifyNameFieldNotNull_27() {
 		CommonMethods.setTestDescription("Expected:error msg should be shown in case of null name field");
 		boolean errorMsg;
 		User user = new User();
@@ -300,7 +300,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:28
 	@Test(groups = { "Registration" })
-	public void verifyAgeFieldNotNull() {
+	public void verifyAgeFieldNotNull_28() {
 		CommonMethods.setTestDescription("Expected:error msg should be shown in case of null age field");
 		boolean errorMsg;
 		User user = new User();
@@ -322,7 +322,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:29
 	@Test(groups = { "Registration" })
-	public void isAgeCalculating() {
+	public void isAgeCalculating_29() {
 		CommonMethods.setTestDescription("Expected:Age should be calculated correctly as per entered date of birth");
 		String calculatedAge;
 		Age age = new Age();
@@ -342,7 +342,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:30
 	@Test(groups = { "Registration" })
-	public void verifyGenderCheckBox() {
+	public void verifyGenderCheckBox_30() {
 		CommonMethods.setTestDescription("Expected: gender under which patient registered");
 		String name = commonMethods.getRandomString();
 		String phoneNum = commonMethods.getRandomNumber();
@@ -365,7 +365,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:31
 	@Test(groups = { "Registration" })
-	public void isRegisteredUnderAlternateMobile() {
+	public void isRegisteredUnderAlternateMobile_31() {
 		CommonMethods.setTestDescription("Expected: alternate number under which patient registered");
 		String name = commonMethods.getRandomString();
 		String phoneNum = commonMethods.getRandomNumber();
@@ -388,7 +388,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:32
 	@Test(groups = { "Registration" })
-	public void verifyHeight() {
+	public void verifyHeight_32() {
 		CommonMethods.setTestDescription("Expected: Patient height should be shown correctly as per entered");
 		String name = commonMethods.getRandomString();
 		String phoneNum = commonMethods.getRandomNumber();
@@ -411,7 +411,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:33,34
 	@Test(groups = { "Registration" })
-	public void verifyWeight() {
+	public void verifyWeight_33() {
 		CommonMethods.setTestDescription("Expected: Patient weight should be shown correctly as per entered");
 		String name = commonMethods.getRandomString();
 		String phoneNum = commonMethods.getRandomNumber();
@@ -434,7 +434,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:36
 	@Test(groups = { "Searching" })
-	public void verifySearchOrganization() {
+	public void verifySearchOrganization_36() {
 		String searchedOrg;
 
 		try {
@@ -451,7 +451,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:37
 	@Test(groups = { "Registration" })
-	public void verifyAddOrganization() {
+	public void verifyAddOrganization_37() {
 		String addedOrganizationName;
 
 		try {
@@ -466,7 +466,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:39
 	@Test(groups = { "Searching" })
-	public void verifySearchReferrel() {
+	public void verifySearchReferrel_39() {
 		String searchedRef;
 
 		try {
@@ -483,7 +483,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:40,41
 	@Test(groups = { "Registration" })
-	public void verifyAddReferrel() {
+	public void verifyAddReferrel_40_41() {
 		List<String> searchedRef;
 
 		try {
@@ -499,7 +499,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:42,43
 	@Test(groups = { "Registration" })
-	public void verifyReferrelAddedWithDesignation() {
+	public void verifyReferrelAddedWithDesignation_42_43() {
 		List<String> searchedRef;
 
 		try {
@@ -514,7 +514,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:45
 	@Test(groups = { "Registration" })
-	public void verifyPincode() {
+	public void verifyPincode_45() {
 		String name = commonMethods.getRandomString();
 		String phoneNum = commonMethods.getRandomNumber();
 
@@ -556,7 +556,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 50
 	@Test(groups = { "Registration" })
-	public void verifyDefaultUserTypeSettings() {
+	public void verifyDefaultUserTypeSettings_50() {
 		String defaultUserType;
 
 		try {
@@ -571,7 +571,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 52
 	@Test(groups = { "Registration" })
-	public void verifyDefaultReferrelSettings() {
+	public void verifyDefaultReferrelSettings_52() {
 		String defaultReferrel;
 
 		try {
@@ -586,7 +586,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 53
 	@Test(groups = { "Registration" })
-	public void verifyDefaultOrganizationSettings() {
+	public void verifyDefaultOrganizationSettings_53() {
 		String defaultOrganization;
 
 		try {
@@ -601,7 +601,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 55
 	@Test(groups = { "Registration" })
-	public void verifyUserTypeHavingMobileNumber() {
+	public void verifyUserTypeHavingMobileNumber_55() {
 		User user = new User();
 		String name = commonMethods.getRandomString();
 		String phoneNo = commonMethods.getRandomNumber();
@@ -626,7 +626,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 56
 	@Test(groups = { "Registration" })
-	public void verifyUserTypeNotHavingMobileNumber() {
+	public void verifyUserTypeNotHavingMobileNumber_56() {
 		User user = new User();
 		String name = commonMethods.getRandomString();
 
@@ -649,7 +649,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 57
 	@Test(groups = { "Registration" })
-	public void verifyUserTypeWithAlternateNumber() {
+	public void verifyUserTypeWithAlternateNumber_57() {
 		User user = new User();
 		String name = commonMethods.getRandomString();
 		String phoneNo = commonMethods.getRandomNumber();
@@ -674,7 +674,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC:58
 	@Test(groups = { "Registration" })
-	public void verifyUserUpdationFlow() {
+	public void verifyUserUpdationFlow_58() {
 		String name = commonMethods.getRandomString();
 		String phoneNo = commonMethods.getRandomNumber();
 
@@ -695,7 +695,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 59
 	@Test(groups = { "Registration" })
-	public void verifyUserUpdateAndProceedToBilling() {
+	public void verifyUserUpdateAndProceedToBilling_59() {
 		String name = commonMethods.getRandomString();
 		String phoneNo = commonMethods.getRandomNumber();
 
@@ -716,7 +716,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 61
 	@Test(groups = { "Registration" })
-	public void verifyCardNumberListBoxAvailability() {
+	public void verifyCardNumberListBoxAvailability_61() {
 		boolean availabilityCheck = false;
 
 		try {
@@ -731,7 +731,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 62
 	@Test(priority = 10, groups = { "Registration" })
-	public void verifyCardList() {
+	public void verifyCardList_62() {
 		List<String> cardList;
 		try {
 			cardList = registration.showCardList("dhanraj");
@@ -746,7 +746,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 63
 	@Test(groups = { "Registration" })
-	public void verifyStrictCheckBoxAvailability() {
+	public void verifyStrictCheckBoxAvailability_63() {
 		boolean isStrictCheckBoxAvailable = false;
 
 		try {
@@ -761,7 +761,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 64,65
 	@Test(groups = { "Registration" })
-	public void verifyUpdateConfirmationModal() {
+	public void verifyUpdateConfirmationModal_64_65() {
 		User user = new User();
 		String registrationDate;
 		try {
@@ -808,7 +808,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC :69
 	@Test(groups = { "Registration" })
-	public void verifyUpdateWithStrictCheck() {
+	public void verifyUpdateWithStrictCheck_69() {
 		User user = new User();
 		user.setName("dhanraj");
 		try {
@@ -822,7 +822,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC :72
 	@Test(groups = { "Registration" })
-	public void verifyUpdateDirectUser() {
+	public void verifyUpdateDirectUser_72() {
 		User user = new User();
 		user.setName("Dtype");
 		try {
@@ -836,7 +836,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC :73
 	@Test(groups = { "Registration" })
-	public void verifyUpdateIndirectUser() {
+	public void verifyUpdateIndirectUser_73() {
 		User user = new User();
 		user.setName("Itype");
 		try {
@@ -850,7 +850,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC :35
 	@Test(groups = { "Registration" })
-	public void verifyShowingAllAddedOrganization() {
+	public void verifyShowingAllAddedOrganization_35() {
 		CommonMethods.setTestDescription("Expected: Organization field should be shown all names successfully");
 		try {
 			ArrayList<String> orgObject = OrganizationAPI.getOrganizationList();
@@ -876,7 +876,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC :38
 	@Test(groups = { "Registration" })
-	public void verifyShowingAllAddedReferrel() {
+	public void verifyShowingAllAddedReferrel_38() {
 		CommonMethods.setTestDescription("Expected: Referral Field able shown all added Referral names list correctly");
 		try {
 			ArrayList<String> refObject = ReferrelAPI.getReferrelList();
@@ -901,7 +901,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 
 	// TC :74
 	@Test(groups = { "Registration" })
-	public void verifyFilterReferrelByOrg() {
+	public void verifyFilterReferrelByOrg_74() {
 		try {
 			ArrayList<String> refNames = registration.filterReferrelByOrg();
 

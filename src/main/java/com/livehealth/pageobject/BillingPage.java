@@ -508,9 +508,10 @@ public class BillingPage {
 
 	public String getPageTitle() throws Exception {
 		CommonMethods.waitForElementToClickable(billUrl);
-		billUrl.click();
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		js.executeScript("arguments[0].click();", billUrl);
 
-		return DriverFactory.getDriver().getTitle();
+		return searchUserForBilling.getAttribute("placeholder");
 
 	}
 
@@ -931,6 +932,9 @@ public class BillingPage {
 
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 		js.executeScript("arguments[0].click();", closeTestBtn);
+
+		CommonMethods.waitForElementToClickable(testList);
+		testList.clear();
 
 		if (closeTestBtn.isDisplayed()) {
 			return false;
@@ -1608,7 +1612,8 @@ public class BillingPage {
 
 		CommonMethods.waitForElementToClickable(backToRegistration);
 
-		backToRegistration.click();
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		js.executeScript("arguments[0].click();", backToRegistration);
 
 		return DriverFactory.getDriver().getTitle();
 
@@ -2083,9 +2088,10 @@ public class BillingPage {
 	}
 
 	public void consentForm(String userInfo) throws Exception {
-		registerUrl.click();
-		CommonMethods.waitForElementToClickable(settings);
-		settings.click();
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		js.executeScript("arguments[0].click();", registerUrl);
+
+		js.executeScript("arguments[0].click();", settings);
 
 		CommonMethods.waitForElementToClickable(billConsentForm);
 
@@ -2105,7 +2111,6 @@ public class BillingPage {
 
 		saveBill.click();
 
-		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 		js.executeScript("arguments[0].click();", consentDropDown);
 
 		new WebDriverWait(DriverFactory.getDriver(), 10)
