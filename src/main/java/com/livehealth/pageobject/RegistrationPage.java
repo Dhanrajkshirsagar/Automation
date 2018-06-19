@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.livehealth.base.DriverFactory;
+import com.livehealth.config.Constants;
 import com.livehealth.model.Age;
 import com.livehealth.model.TestList;
 import com.livehealth.model.User;
@@ -719,7 +720,7 @@ public class RegistrationPage {
 	}
 
 	public User internationalNumber(User inUser) throws Exception {
-		
+		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 		countryList.click();
 		contry.click();
 		User searchedUser=registerUser(inUser);
@@ -759,6 +760,7 @@ public class RegistrationPage {
 	}
 
 	public boolean notNullFields(User user) throws Exception {
+		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 		boolean isErrorMsgDisplayed = false;
 		CommonMethods.waitForElementToClickable(saveForm);
 
@@ -812,7 +814,7 @@ public class RegistrationPage {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
-
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				Actions builder = new Actions(DriverFactory.getDriver());
 				CommonMethods.waitForElementToClickable(firstName);
 
@@ -864,8 +866,8 @@ public class RegistrationPage {
 	}
 
 	public void selectUnselectOrgList() throws Exception {
-
-		DriverFactory.getDriver().navigate().refresh();
+		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
+//		DriverFactory.getDriver().navigate().refresh();
 		CommonMethods.waitForElementToClickable(settings);
 		settings.click();
 
@@ -893,6 +895,7 @@ public class RegistrationPage {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				String searchedOrg;
 
 				selectUnselectOrgList();
@@ -925,6 +928,8 @@ public class RegistrationPage {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
+				
 				Actions builder = new Actions(DriverFactory.getDriver());
 
 				CommonMethods.waitForElementToClickable(addOrganizationBtn);
@@ -1035,6 +1040,7 @@ public class RegistrationPage {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				Actions builder = new Actions(DriverFactory.getDriver());
 
 				CommonMethods.waitForElementToClickable(addReferel);
@@ -1292,6 +1298,7 @@ public class RegistrationPage {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				CommonMethods.waitForElementToClickable(firstName);
 
 				Select desig = new Select(designation);
@@ -1328,7 +1335,7 @@ public class RegistrationPage {
 	}
 
 	public User updateExistingUser(User updateUser) throws Exception {
-
+		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 		Actions builder = new Actions(DriverFactory.getDriver());
 
 		CommonMethods.waitForElementToClickable(searchBtn);
@@ -1353,6 +1360,7 @@ public class RegistrationPage {
 
 	public String updateAndProceedToBilling(User updateUser) throws Exception {
 
+		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 		Actions builder = new Actions(DriverFactory.getDriver());
 
 		CommonMethods.waitForElementToClickable(searchBtn);
@@ -1381,6 +1389,7 @@ public class RegistrationPage {
 	}
 
 	public void checkCardNumberListFlag() throws Exception {
+		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 		CommonMethods.waitForElementToClickable(settings);
 		settings.click();
 
@@ -1405,6 +1414,7 @@ public class RegistrationPage {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				Actions builder = new Actions(DriverFactory.getDriver());
 
 				DriverFactory.getDriver().navigate().refresh();
@@ -1436,6 +1446,7 @@ public class RegistrationPage {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				CommonMethods.waitForElementToClickable(settings);
 				settings.click();
 
@@ -1457,6 +1468,7 @@ public class RegistrationPage {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				Actions builder = new Actions(DriverFactory.getDriver());
 
 				CommonMethods.waitForElementToClickable(searchBtn);
@@ -1571,6 +1583,7 @@ public class RegistrationPage {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				Actions builder = new Actions(DriverFactory.getDriver());
 
 				DriverFactory.getDriver().navigate().refresh();
@@ -1626,6 +1639,7 @@ public class RegistrationPage {
 
 	public String updateWithoutStrictCheck(User updateUser) throws Exception {
 
+		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 		Actions builder = new Actions(DriverFactory.getDriver());
 
 		DriverFactory.getDriver().navigate().refresh();
