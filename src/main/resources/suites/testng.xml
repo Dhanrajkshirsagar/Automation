@@ -2,19 +2,20 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Main Test Suite" data-provider-thread-count="100"
 	thread-count="100" group-by-instances="true" parallel="instances">
-	
+
 	<listeners>
 		<listener class-name="com.livehealth.listener.ReportListener" />
+		<listener class-name="com.livehealth.listener.RetryListener" />
 	</listeners>
+
 	<test name="Test" group-by-instances="true">
 
+		<classes>
+			<class name="com.livehealth.test.RegisterTest" />
+			<class name="com.livehealth.test.BillingTest" />
+			<class name="com.livehealth.test.AccessionTest" />
 
-	<classes>
-		<class name="com.livehealth.test.RegisterTest" />
-		<class name="com.livehealth.test.BillingTest" />
-		<class name="com.livehealth.test.AccessionTest" />
-
-	</classes>
+		</classes>
 
 	</test>
 </suite>

@@ -926,20 +926,19 @@ public class BillingPage {
 		return null;
 	}
 
-	public boolean removeTest(String userInfo) throws Exception {
+	public String removeTest(String userInfo) throws Exception {
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
+		selectTestName("Cholesterol - Total");
 
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 		js.executeScript("arguments[0].click();", closeTestBtn);
 
+		Thread.sleep(1000);
 		CommonMethods.waitForElementToClickable(testList);
 		testList.clear();
 
-		if (closeTestBtn.isDisplayed()) {
-			return false;
-		}
-		return true;
+		return payableAmount.getText().trim();
 
 	}
 

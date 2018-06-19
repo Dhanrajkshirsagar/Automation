@@ -363,11 +363,11 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	@Test(groups = { "Default" })
 	public void verifyCloseTestBtn_23() {
 		CommonMethods.setTestDescription("Expected:Close Test Btn Should close test");
-		boolean isClosed;
+		String amtAfterClosed;
 		try {
 			User userInfo = getUserInfo();
-			isClosed = billing.removeTest(userInfo.getName());
-			Assert.assertTrue(isClosed);
+			amtAfterClosed = billing.removeTest(userInfo.getName());
+			Assert.assertEquals(amtAfterClosed, "500");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -434,7 +434,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:30
-	@Test(groups = { "Default" })
+	@Test(groups = { "Default" }, priority = 20)
 	public void verifySelectHomeDelivery_30() {
 		String selectedOption;
 		try {
@@ -449,7 +449,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:32,33
-	@Test(groups = { "Default" })
+	@Test(groups = { "Default" }, priority = 21)
 	public void verifySelectCourierCollection_32_33() {
 		String selectedOption;
 		try {
@@ -802,9 +802,6 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 			testListOne = billing.discountPriceList(userInfo.getName());
 			testListTwo = billing.confirmDiscountPriceList();
 
-			System.out.println(testListOne.toString());
-			System.out.println(testListTwo.toString());
-
 			Assert.assertEquals(testListOne.toString(), testListTwo.toString());
 
 		} catch (Exception e) {
@@ -914,7 +911,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	// }
 
 	// TC: 82
-	@Test(groups = { "Billing" })
+	@Test(groups = { "Billing" }, priority = 10)
 	public void verifyAllowedDiscountOnBill_82() {
 		User userInfo = getUserInfo();
 		userInfo.setName("benedict");
