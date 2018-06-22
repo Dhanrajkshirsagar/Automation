@@ -208,20 +208,13 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	public void verifyInternationalNumber_17() {
 		User inputUser = new User();
 		String name = commonMethods.getRandomString();
-		String phoneNo = commonMethods.getRandomNumber();
+		String phoneNo = commonMethods.getInternationalNumber();
 		User createdUser;
 		try {
 			inputUser.setName(name);
 			inputUser.setDesignation("Mr.");
 			inputUser.setAge("10");
-			inputUser.setUserType("D");
-			inputUser.setEmail(Constants.EMAIL);
-			inputUser.setAlternateNumber(phoneNo);
-			inputUser.setHeight("6");
-			inputUser.setWeight("51");
-			inputUser.setPhoneNumber("6004000000");
-			inputUser.setPincode("461157");
-			inputUser.setGender("Male");
+			inputUser.setPhoneNumber(phoneNo);
 
 			createdUser = registration.internationalNumber(inputUser);
 
@@ -810,7 +803,7 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	@Test(groups = { "Registration" })
 	public void verifyUpdateWithStrictCheck_69() {
 		User user = new User();
-		user.setName("dhanraj");
+		user.setName("benedict");
 		try {
 			String msg = registration.updateWithStrictCheck(user);
 			Assert.assertEquals(msg, "Patient details has been updated successfully..");

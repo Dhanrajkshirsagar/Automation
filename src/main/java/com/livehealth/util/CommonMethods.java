@@ -93,4 +93,14 @@ public class CommonMethods {
 
 		return "6000" + pNumber;
 	}
+
+	public String getInternationalNumber() {
+
+		Random rnd = new Random();
+		int n = 100000 + rnd.nextInt(900000);
+
+		String pNumber = String.valueOf(n);
+
+		return "6004" + pNumber;
+	}
 }

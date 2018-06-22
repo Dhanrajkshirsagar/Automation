@@ -48,7 +48,7 @@ public class RegistrationPage {
 	@FindBy(how = How.XPATH, using = "/html/body/section/div[1]/div[3]/ul/ul/li/a")
 	private WebElement adminHover;
 
-	@FindBy(how = How.LINK_TEXT, using = "Registration")    
+	@FindBy(how = How.LINK_TEXT, using = "Registration")
 	private WebElement registration;
 
 	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div[1]/div[2]/div[4]/button[1]")
@@ -485,7 +485,7 @@ public class RegistrationPage {
 		CommonMethods.waitForElementToClickable(adminHover);
 		Actions actions = new Actions(DriverFactory.getDriver());
 		actions.moveToElement(adminHover).build().perform();
-		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#directRegistration");		
+		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 	}
 
 	public void selectSearchingUser() throws Exception {
@@ -524,7 +524,6 @@ public class RegistrationPage {
 		outUser.setUserType(userType.getAttribute("value"));
 
 		DriverFactory.getDriver().navigate().refresh();
-
 		return outUser;
 
 	}
@@ -668,65 +667,66 @@ public class RegistrationPage {
 
 	public User registerUser(User inUser) throws Exception {
 
-		int attempts = 0;
-		while (attempts < 2) {
-			try {
+		Actions builder = new Actions(DriverFactory.getDriver());
 
-				Actions builder = new Actions(DriverFactory.getDriver());
+		Select type = new Select(userType);
+		type.selectByValue(inUser.getUserType());
 
-				Select type = new Select(userType);
-				type.selectByValue(inUser.getUserType());
+		Select desig = new Select(designation);
+		desig.selectByValue(inUser.getDesignation());
 
-				Select desig = new Select(designation);
-				desig.selectByValue(inUser.getDesignation());
+		email.sendKeys(inUser.getEmail());
+		firstName.sendKeys(inUser.getName());
+		ageField.sendKeys(inUser.getAge());
+		alternateMobile.sendKeys(inUser.getAlternateNumber());
+		height.sendKeys(inUser.getHeight());
+		weight.sendKeys(inUser.getWeight());
+		phoneNumber.sendKeys(inUser.getPhoneNumber());
+		pincode.sendKeys(inUser.getPincode());
 
-				email.sendKeys(inUser.getEmail());
-				firstName.sendKeys(inUser.getName());
-				ageField.sendKeys(inUser.getAge());
-				alternateMobile.sendKeys(inUser.getAlternateNumber());
-				height.sendKeys(inUser.getHeight());
-				weight.sendKeys(inUser.getWeight());
-				phoneNumber.sendKeys(inUser.getPhoneNumber());
-				pincode.sendKeys(inUser.getPincode());
-
-				if (inUser.getDesignation().equals("Dr.")) {
-					((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;",
-							male);
-				}
-				if (inUser.getDesignation().equals("B/O")) {
-					((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;",
-							female);
-				}
-				if (inUser.getDesignation().equals("Baby")) {
-					((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;",
-							male);
-				}
-
-				saveForm.click();
-				DriverFactory.getDriver().navigate().refresh();
-
-				CommonMethods.waitForElementToClickable(registerUrl);
-				Thread.sleep(1000);
-
-				registerUrl.click();
-
-				return searchUserByName(inUser);
-
-			} catch (StaleElementReferenceException e) {
-				attempts++;
-			}
+		if (inUser.getDesignation().equals("Dr.")) {
+			((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;", male);
 		}
-		return null;
+		if (inUser.getDesignation().equals("B/O")) {
+			((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;", female);
+		}
+		if (inUser.getDesignation().equals("Baby")) {
+			((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].checked = true;", male);
+		}
+
+		saveForm.click();
+		DriverFactory.getDriver().navigate().refresh();
+
+		CommonMethods.waitForElementToClickable(registerUrl);
+		Thread.sleep(1000);
+
+		registerUrl.click();
+
+		return searchUserByName(inUser);
+
 	}
 
 	public User internationalNumber(User inUser) throws Exception {
 		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 		countryList.click();
 		contry.click();
-		User searchedUser=registerUser(inUser);
-		return searchedUser;		
+
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		Select desig = new Select(designation);
+		desig.selectByValue(inUser.getDesignation());
+
+		firstName.sendKeys(inUser.getName());
+		ageField.sendKeys(inUser.getAge());
+		phoneNumber.sendKeys(inUser.getPhoneNumber());
+
+		saveForm.click();
+
+		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
+
+		return searchUserByName(inUser);
 	}
-	
+
 	public boolean matchDesignationWithGender(String inputDesig) throws Exception {
 
 		int attempts = 0;
@@ -867,7 +867,7 @@ public class RegistrationPage {
 
 	public void selectUnselectOrgList() throws Exception {
 		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
-//		DriverFactory.getDriver().navigate().refresh();
+		// DriverFactory.getDriver().navigate().refresh();
 		CommonMethods.waitForElementToClickable(settings);
 		settings.click();
 
@@ -929,7 +929,7 @@ public class RegistrationPage {
 		while (attempts < 2) {
 			try {
 				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
-				
+
 				Actions builder = new Actions(DriverFactory.getDriver());
 
 				CommonMethods.waitForElementToClickable(addOrganizationBtn);
@@ -950,22 +950,7 @@ public class RegistrationPage {
 					String searchedOrg = element.getText().trim();
 
 					if (searchedOrg.equalsIgnoreCase(orgName)) {
-
-						CommonMethods.waitForElementToClickable(adminHover);
-
-						builder.moveToElement(adminHover).build().perform();
-
-						CommonMethods.waitForElementToClickable(admin);
-						admin.click();
-
-						CommonMethods.waitForElementToClickable(organizationManagement);
-						organizationManagement.click();
-
-						CommonMethods.waitForElementToClickable(addEditOrganization);
-						addEditOrganization.click();
-
-						CommonMethods.waitForElementToClickable(editOrgTab);
-						editOrgTab.click();
+						DriverFactory.getDriver().navigate().to(Constants.EDIT_ORGANIZATION_URL);
 
 						CommonMethods.waitForElementToClickable(orgEditList);
 						builder.moveToElement(orgEditList).click().sendKeys(orgName).build().perform();
@@ -986,11 +971,7 @@ public class RegistrationPage {
 						CommonMethods.waitForElementToClickable(orgDelete);
 						orgDelete.click();
 
-						CommonMethods.waitForElementToClickable(adminHover);
-						builder.moveToElement(adminHover).build().perform();
-
-						CommonMethods.waitForElementToClickable(registration);
-						registration.click();
+						DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 						CommonMethods.waitForElementToClickable(firstName);
 
 						return searchedOrg;
@@ -1008,7 +989,7 @@ public class RegistrationPage {
 		while (attempts < 2) {
 			try {
 				String searchedRef;
-				// Thread.sleep(1000);
+
 				selectUnselectOrgList();
 
 				CommonMethods.waitForElementToClickable(searchReferrel);
@@ -1064,19 +1045,7 @@ public class RegistrationPage {
 					String searchedReferel = element.getText().trim();
 
 					if (searchedReferel.equalsIgnoreCase(refName)) {
-
-						CommonMethods.waitForElementToClickable(adminHover);
-
-						builder.moveToElement(adminHover).build().perform();
-
-						CommonMethods.waitForElementToClickable(admin);
-						admin.click();
-
-						CommonMethods.waitForElementToClickable(addEditReferel);
-						addEditReferel.click();
-
-						CommonMethods.waitForElementToClickable(editReferralTab);
-						editReferralTab.click();
+						DriverFactory.getDriver().navigate().to(Constants.EDIT_REFERREL_URL);
 
 						CommonMethods.waitForElementToClickable(referralEditList);
 						builder.moveToElement(referralEditList).click().sendKeys(refName).build().perform();
@@ -1102,11 +1071,9 @@ public class RegistrationPage {
 						CommonMethods.waitForElementToClickable(deletebtn);
 						deletebtn.click();
 
-						CommonMethods.waitForElementToClickable(adminHover);
-						builder.moveToElement(adminHover).build().perform();
+						DriverFactory.getDriver().navigate().refresh();
 
-						CommonMethods.waitForElementToClickable(registration);
-						registration.click();
+						DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 
 						return referrel;
 					}
@@ -1160,10 +1127,10 @@ public class RegistrationPage {
 		firstName.clear();
 		CommonMethods.waitForElementToClickable(viewDocuments);
 		((JavascriptExecutor) DriverFactory.getDriver()).executeScript("arguments[0].click();", viewDocuments);
-		
-		new WebDriverWait(DriverFactory.getDriver(), 20).until(ExpectedConditions.visibilityOfElementLocated(
-				By.linkText("View")));
-		
+
+		new WebDriverWait(DriverFactory.getDriver(), 20)
+				.until(ExpectedConditions.visibilityOfElementLocated(By.linkText("View")));
+
 		CommonMethods.waitForElementToClickable(view);
 
 		String text = view.getText().trim();
@@ -1199,7 +1166,8 @@ public class RegistrationPage {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
-				DriverFactory.getDriver().navigate().refresh();
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
+				// DriverFactory.getDriver().navigate().refresh();
 				CommonMethods.waitForElementToClickable(settings);
 				settings.click();
 
@@ -1230,6 +1198,7 @@ public class RegistrationPage {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				CommonMethods.waitForElementToClickable(settings);
 				settings.click();
 
@@ -1242,7 +1211,7 @@ public class RegistrationPage {
 				savebillSetting.click();
 
 				DriverFactory.getDriver().navigate().refresh();
-				
+
 				CommonMethods.waitForElementToClickable(referrel);
 
 				Select select = new Select(referrel);
@@ -1264,6 +1233,7 @@ public class RegistrationPage {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				CommonMethods.waitForElementToClickable(settings);
 				settings.click();
 
@@ -1335,7 +1305,9 @@ public class RegistrationPage {
 	}
 
 	public User updateExistingUser(User updateUser) throws Exception {
+
 		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
+
 		Actions builder = new Actions(DriverFactory.getDriver());
 
 		CommonMethods.waitForElementToClickable(searchBtn);
@@ -1585,8 +1557,7 @@ public class RegistrationPage {
 			try {
 				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				Actions builder = new Actions(DriverFactory.getDriver());
-
-				DriverFactory.getDriver().navigate().refresh();
+				JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 
 				CommonMethods.waitForElementToClickable(settings);
 				settings.click();
@@ -1610,15 +1581,20 @@ public class RegistrationPage {
 
 				selectSearchingUser();
 
+				Thread.sleep(2000);
+
 				CommonMethods.waitForElementToClickable(male);
 
 				if (male.isSelected()) {
-					female.click();
+					js.executeScript("arguments[0].click();", female);
+
 				} else {
-					male.click();
+					js.executeScript("arguments[0].click();", male);
+
 				}
 
-				saveForm.click();
+				js.executeScript("arguments[0].click();", saveForm);
+
 				CommonMethods.waitForElementToClickable(adminPasswordForDeauthTxt);
 
 				adminPasswordForDeauthTxt.sendKeys("livehealth20");
@@ -1626,10 +1602,13 @@ public class RegistrationPage {
 
 				CommonMethods.waitForElementToClickable(btnUpdateConfirm);
 
-				btnUpdateConfirm.click();
-				CommonMethods.waitForElementToClickable(newDirectErrorDiv);
+				js.executeScript("arguments[0].click();", btnUpdateConfirm);
 
-				return newDirectErrorDiv.getText();
+				String errorMsg = newDirectErrorDiv.getText();
+
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
+
+				return errorMsg;
 			} catch (StaleElementReferenceException e) {
 				attempts++;
 			}
@@ -1640,6 +1619,7 @@ public class RegistrationPage {
 	public String updateWithoutStrictCheck(User updateUser) throws Exception {
 
 		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
+
 		Actions builder = new Actions(DriverFactory.getDriver());
 
 		DriverFactory.getDriver().navigate().refresh();
@@ -1723,9 +1703,11 @@ public class RegistrationPage {
 		int attempts = 0;
 		while (attempts < 2) {
 			try {
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
+
 				Actions builder = new Actions(DriverFactory.getDriver());
 
-				DriverFactory.getDriver().navigate().refresh();
+				// DriverFactory.getDriver().navigate().refresh();
 
 				CommonMethods.waitForElementToClickable(settings);
 				settings.click();
@@ -1767,15 +1749,20 @@ public class RegistrationPage {
 
 				saveForm.click();
 
-				new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions
-						.visibilityOfElementLocated(By.id("btnUpdateConfirm")));
+				new WebDriverWait(DriverFactory.getDriver(), 10)
+						.until(ExpectedConditions.visibilityOfElementLocated(By.id("btnUpdateConfirm")));
 
 				CommonMethods.waitForElementToClickable(btnUpdateConfirm);
 
 				btnUpdateConfirm.click();
 				CommonMethods.waitForElementToClickable(newDirectErrorDiv);
 
-				return newDirectErrorDiv.getText();
+				String errorMsg = newDirectErrorDiv.getText();
+
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
+
+				return errorMsg;
+				// return newDirectErrorDiv.getText();
 			} catch (StaleElementReferenceException e) {
 				attempts++;
 			}
@@ -1831,17 +1818,17 @@ public class RegistrationPage {
 
 	public ArrayList<String> filterReferrelByOrg() throws Exception {
 
-//		DriverFactory.getDriver().navigate().refresh();
-//
-//		CommonMethods.waitForElementToClickable(settings);
-//		settings.click();
-//
-//		if (!filterReferral.isSelected()) {
-//			filterReferral.click();
-//		}
-//
-//		CommonMethods.waitForElementToClickable(savebillSetting);
-//		savebillSetting.click();
+		// DriverFactory.getDriver().navigate().refresh();
+		//
+		// CommonMethods.waitForElementToClickable(settings);
+		// settings.click();
+		//
+		// if (!filterReferral.isSelected()) {
+		// filterReferral.click();
+		// }
+		//
+		// CommonMethods.waitForElementToClickable(savebillSetting);
+		// savebillSetting.click();
 
 		DriverFactory.getDriver().navigate().refresh();
 
