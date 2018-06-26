@@ -63,7 +63,10 @@ public class BillUpdatePage {
 	@FindBy(how = How.XPATH, using = "//*[@id=\"searchPatientBar\"]/div/div[2]/span")
 	private WebElement searchTab;
 
-	//
+	@FindBy(how = How.ID, using = "labelDiv0")
+	private WebElement labelDiv0;
+
+	//	
 	@Autowired
 	WebContext webContext;
 
@@ -88,28 +91,24 @@ public class BillUpdatePage {
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 
 		WebDriver driver = DriverFactory.getDriver();
-		Thread.sleep(2000);
-		pendingBills.click();
+		
+		CommonMethods.waitForElementToVisible(pendingBills);
+		CommonMethods.waitForElementToClickable(pendingBills);
 
-		List<WebElement> webElements = driver.findElements(By.id("userBillsContainer"));
+		js.executeScript("arguments[0].click();", pendingBills);
+		
+		CommonMethods.waitForElementToVisible(labelDiv0);
+		CommonMethods.waitForElementToClickable(labelDiv0);
 
-		if (!(webElements.size() > 1)) {
-			
-			js.executeScript("arguments[0].click();", selectDate);
-			js.executeScript("arguments[0].click();", yesterday);
-			js.executeScript("arguments[0].click();", pendingBills);
-
-		}
-		List<WebElement> elements = driver.findElements(By.xpath("//label[contains(text(),'Pending')] "));
-
-		for (WebElement element : elements) {
+		List<WebElement> webElements = driver.findElements(By.xpath("//label[contains(text(),'Pending')] "));
+	
+		for (WebElement element : webElements) {
 			
 			if (element.getText().equals("Completed")) {
 				return false;
 			}
-
 		}
-
+		
 		return true;
 	}
 
@@ -118,29 +117,24 @@ public class BillUpdatePage {
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 
 		WebDriver driver = DriverFactory.getDriver();
-		Thread.sleep(2000);
+		
+		CommonMethods.waitForElementToVisible(completedBills);
+		CommonMethods.waitForElementToClickable(completedBills);
+
 		completedBills.click();
 
-		List<WebElement> webElements = driver.findElements(By.id("userBillsContainer"));
+		CommonMethods.waitForElementToVisible(labelDiv0);
+		CommonMethods.waitForElementToClickable(labelDiv0);
 
-		if (!(webElements.size() > 1)) {
-
-			js.executeScript("arguments[0].click();", selectDate);
-			js.executeScript("arguments[0].click();", yesterday);
-			js.executeScript("arguments[0].click();", completedBills);
-
-		}
-
-		List<WebElement> elements = driver.findElements(By.xpath("//label[contains(text(),'Completed')] "));
-
-		for (WebElement element : elements) {
-
+		List<WebElement> webElements = driver.findElements(By.xpath("//label[contains(text(),'Completed')] "));
+		
+		for (WebElement element : webElements) {
+			
 			if (element.getText().equals("Pending")) {
 				return false;
 			}
-
 		}
-
+		
 		return true;
 	}
 

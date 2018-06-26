@@ -13,4 +13,6 @@ public class Constants {
 	public static String EDIT_REFERREL_URL = "https://beta.livehealth.solutions/referral/edit/";
 
 	public static String ALL_BILLSLIST_URL = "https://beta.livehealth.solutions/allBillList/";
+
+	public static String ACCESSION_URL = "https://beta.livehealth.solutions/sampleAccession/";
 }

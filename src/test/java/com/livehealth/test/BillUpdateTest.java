@@ -74,38 +74,38 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 		}
 
 	}
-
-	// TC: 03
-	@Test(groups = { "BillUpdate" }, priority = 0)
-	public void verifySearchBillListByRefName_03() {
-
-		boolean flag;
-		try {
-			flag = billUpdate.searchBillListByRefName();
-
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-
-	}
-
-	// TC: 04
-	@Test(groups = { "BillUpdate" }, priority = 0)
-	public void verifySearchBillListByUserName_04() {
-
-		boolean flag;
-		try {
-			flag = billUpdate.searchBillListByUserName();
-
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-
-	}
+//
+//	// TC: 03
+//	@Test(groups = { "BillUpdate" }, priority = 0)
+//	public void verifySearchBillListByRefName_03() {
+//
+//		boolean flag;
+//		try {
+//			flag = billUpdate.searchBillListByRefName();
+//
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//
+//	}
+//
+//	// TC: 04
+//	@Test(groups = { "BillUpdate" }, priority = 0)
+//	public void verifySearchBillListByUserName_04() {
+//
+//		boolean flag;
+//		try {
+//			flag = billUpdate.searchBillListByUserName();
+//
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//
+//	}
 
 	@AfterClass(alwaysRun = true)
 	public void tearDown() {

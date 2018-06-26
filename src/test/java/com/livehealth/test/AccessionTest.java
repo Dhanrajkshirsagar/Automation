@@ -32,7 +32,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	ConfigProperties configProperties;
 
-	@BeforeClass(groups = { "accession" })
+	@BeforeClass(groups = { "Accession" })
 	public void launchSite() {
 		try {
 			accession = pageLaunch.navigateToAccessionPage();
@@ -44,7 +44,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 1
-	@Test(groups = { "accession" })
+	@Test(groups = { "Accession" })
 	public void verifyPendingList() {
 		boolean pendingList;
 		try {
@@ -57,33 +57,47 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	// TC: 1
-	@Test(groups = { "accession" })
-	public void verifyReceiveButton() {
-		String pendingList;
+	// TC: 04
+	@Test(groups = { "Accession" })
+	public void verifyDismissSample() {
+		boolean dismissed;
 		try {
 
-			pendingList = accession.receiveButton("benedict");
-			// Assert.assertTrue(pendingList);
+			dismissed = accession.dismissSample();
+			Assert.assertTrue(dismissed);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
 
-	// TC: 4
-	// @Test(groups = { "accession" })
-	// public void verifyDismissSample() {
-	// boolean dismissed;
-	// try {
-	//
-	// dismissed = accession.dismissSample();
-	// Assert.assertTrue(dismissed);
-	// } catch (Exception e) {
-	// logger.error(e.getMessage());
-	// Assert.assertTrue(false, e.getMessage());
-	// }
-	// }
+	// TC: 05
+	@Test(groups = { "Accession" })
+	public void verifyDismissSampleConfirmationModel() {
+		String confirmation;
+		try {
+
+			confirmation = accession.dismissSampleConfirmation();
+			Assert.assertEquals(confirmation, "Do you want to dismiss this sample?");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 06
+	@Test(groups = { "Accession" })
+	public void verifyReceiveButton() {
+		boolean recv;
+		try {
+
+			recv = accession.receiveSample();
+			Assert.assertTrue(recv);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
 
 	@AfterClass(alwaysRun = true)
 	public void tearDown() {

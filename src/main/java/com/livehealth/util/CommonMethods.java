@@ -52,6 +52,12 @@ public class CommonMethods {
 
 	}
 
+	public static void waitForElementToVisible(WebElement element) throws Exception {
+
+		DriverFactory.getDriverWait().until(ExpectedConditions.visibilityOf(element));
+
+	}
+
 	/**
 	 * @param filePath
 	 * @return

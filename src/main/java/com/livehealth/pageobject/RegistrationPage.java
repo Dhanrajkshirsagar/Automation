@@ -666,7 +666,7 @@ public class RegistrationPage {
 	}
 
 	public User registerUser(User inUser) throws Exception {
-
+		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 		Actions builder = new Actions(DriverFactory.getDriver());
 
 		Select type = new Select(userType);
