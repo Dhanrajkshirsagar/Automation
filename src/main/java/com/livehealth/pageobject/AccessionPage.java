@@ -1,16 +1,20 @@
 package com.livehealth.pageobject;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -80,20 +84,74 @@ public class AccessionPage {
 
 	@FindBy(how = How.LINK_TEXT, using = "Accessed")
 	private WebElement accessed;
-
-	@FindAll({@FindBy(how = How.XPATH, using = "waitingListPaitentNameMargin")})
-	public List<WebElement> userNameList;
 	
-//	@FindAll({@FindBy(how = How.XPATH, using = "waitingListUserListTestText")})
-//	public List<WebElement> dates;
+	@FindAll({@FindBy(className = "waitingListPaitentNameMargin")})
+	public List<WebElement> sampleList;
+	
+	@FindAll({@FindBy(className = "userWaitingListCard")})
+	public List<WebElement> collectedSample;
 
-//	@FindAll({@FindBy(how = How.XPATH, using = "userwaitingListFontColor")})
-//	public List<WebElement> accessedDate;
+	@FindAll({@FindBy(xpath = "//*[contains(text(),'Options')]")})
+	public List<WebElement> options;
 
-//	@FindAll({@FindBy(how = How.XPATH, using = "waitingListUserListTestText")})
-//	public List<WebElement> accessedTest;
+	@FindBy(how = How.XPATH, using = "//a[contains(text(),'Dismiss Sample ')]")
+	private WebElement dismissSample;
 
-	//	
+	@FindAll({@FindBy(xpath = "//button[contains(text(),'Receive')]")})
+	public List<WebElement> receive;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div/div[8]/div[1]/div[7]/input[2]")
+	private WebElement redraw;
+
+	@FindBy(how = How.ID, using = "redrawComments")
+	private WebElement redrawComments;
+
+	@FindBy(how = How.ID, using = "redrawCommentBtn")
+	private WebElement redrawCommentBtn;
+
+	@FindAll({@FindBy(xpath = "//label[contains(text(),'Sample Redrawn')]")})
+	public List<WebElement> sampleRedrawn;
+
+	@FindBy(how = How.ID, using = "redrawCommentModalLabel")
+	private WebElement redrawCommentModalLabel;
+
+	@FindBy(how = How.LINK_TEXT, using = "Accession Settings")
+	private WebElement accessionSettings;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div[2]/div[2]/button")
+	private WebElement addEdit;
+
+	@FindBy(how = How.ID, using = "sampleTypeName")
+	private WebElement sampleTypeName;
+
+	@FindBy(how = How.ID, using = "typeOfSample")
+	private WebElement typeOfSample;
+
+	@FindBy(how = How.ID, using = "addNewSampleTypeModalLabel")
+	private WebElement addNewSampleTypeModalLabel;
+
+	@FindBy(how = How.ID, using = "addSampleBtn")
+	private WebElement addSampleBtn;
+
+	@FindBy(how = How.ID, using = "sampleNameTypeadhead")
+	private WebElement sampleNameTypeadhead;
+
+	@FindAll({@FindBy(xpath = "/html/body/section/div[2]/div[2]/div[4]/div/span/span")})
+	public List<WebElement> sampleDropDown;
+
+	@FindBy(how = How.ID, using = "sampleType")
+	private WebElement sampleType;
+
+	@FindBy(how = How.ID, using = "sampleDeleteBtn")
+	private WebElement sampleDeleteBtn;
+
+	@FindBy(how = How.ID, using = "editSampleFlag")
+	private WebElement editSampleFlag;
+
+	@FindAll({@FindBy(xpath = "/html/body/section/div[2]/div[2]/div[11]/div/div/div[2]/div[4]/span/span")})
+	public List<WebElement> editSampleDropDown;
+
+	//	   
 	@Autowired
 	BillingPage billing;
 
@@ -162,13 +220,13 @@ public class AccessionPage {
 
 		WebDriver driver = DriverFactory.getDriver();
 
-		List<WebElement> element = driver.findElements(By.xpath("//*[contains(text(),'Options')] "));
+//		List<WebElement> element = driver.findElements(By.xpath("//*[contains(text(),'Options')] "));
 
-		element.get(1).click();
+		options.get(1).click();
 
-		WebElement dismissElement = driver.findElement(By.xpath("//a[contains(text(),'Dismiss Sample ')] "));
+//		WebElement dismissElement = driver.findElement(By.xpath("//a[contains(text(),'Dismiss Sample ')] "));
 
-		dismissElement.click();
+		dismissSample.click();
 		rejectComments.sendKeys("reject");
 
 		String confirm = myModalLabel.getText().trim();
@@ -185,7 +243,6 @@ public class AccessionPage {
 		
 		WebDriver driver = DriverFactory.getDriver();
 
-		List<WebElement> sampleList = driver.findElements(By.className("waitingListPaitentNameMargin"));
 		List<WebElement> dates = driver.findElements(By.className("waitingListUserListTestText"));
 
 		sample.setUserName(sampleList.get(2).getText());
@@ -201,11 +258,10 @@ public class AccessionPage {
 		
 		TestSample verifySample = new TestSample();
 
-		List<WebElement> samples = driver.findElements(By.className("waitingListPaitentNameMargin"));
 		List<WebElement> accessedDate = driver.findElements(By.className("userwaitingListFontColor"));
 		List<WebElement> accessedTest = driver.findElements(By.className("waitingListUserListTestText"));
 
-		verifySample.setUserName(samples.get(2).getText());
+		verifySample.setUserName(sampleList.get(2).getText());
 		verifySample.setDate(accessedDate.get(1).getText()); 
 		verifySample.setTestName(accessedTest.get(0).getText());
 		
@@ -215,7 +271,146 @@ public class AccessionPage {
 		return false;
 
 	}
+	
+	public boolean accessionNumOnAccessedSample() throws Exception {
 
+		accessed.click();
+
+		int size = (sampleList.size() / 2);
+		
+		int size2 = collectedSample.size();
+
+		if (size == size2) {
+			DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+			return true;
+		}
+
+		return false;
+
+	}
+
+	public String redrawSample() throws Exception {
+		
+		receive.get(0).click();
+		accessed.click();
+		
+		redraw.click();
+		redrawComments.sendKeys("redraw");
+		
+		redrawCommentBtn.click();
+		
+		DriverFactory.getDriver().navigate().refresh();
+		
+		String var = sampleRedrawn.get(0).getText();
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+
+		return var;
+		
+	}
+	
+	public String redrawSampleConfirmation() throws Exception {
+		
+		receive.get(0).click();
+		accessed.click();
+		
+		redraw.click();
+		redrawComments.sendKeys("redraw");
+		
+		String var = redrawCommentModalLabel.getText();
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+
+		return var;
+		
+	}
+	
+	public String addEditAccessionType() throws Exception {
+
+		accessionSettings.click();
+		addEdit.click();
+
+		CommonMethods.waitForElementToVisible(sampleTypeName);
+		if (sampleTypeName.isDisplayed() && typeOfSample.isDisplayed()) {
+
+			String text = addNewSampleTypeModalLabel.getText();
+			DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+
+			return text;
+		}
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+
+		return null;
+
+	}
+	
+	public String addNewSample() throws Exception {
+		
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+
+		accessionSettings.click();
+		addEdit.click();
+
+		CommonMethods.waitForElementToVisible(sampleTypeName);
+		sampleTypeName.sendKeys("sampleTypeName");
+		typeOfSample.sendKeys("typeOfSample");
+		
+		addSampleBtn.click();
+		
+		CommonMethods.waitForElementToVisible(sampleNameTypeadhead);
+		Thread.sleep(1000);
+
+		sampleNameTypeadhead.sendKeys("sampleTypeName");
+		
+		CommonMethods.waitForElementToVisible(sampleDropDown.get(0));
+
+		sampleDropDown.get(0).click();
+
+		Thread.sleep(1000);
+		String text = sampleType.getText();
+		
+		js.executeScript("arguments[0].click();", sampleDeleteBtn);
+		js.executeScript("arguments[0].click();", addSampleBtn);
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+
+		return text; 
+		
+	}
+	
+	public List<String> editSample() throws Exception {
+	
+		String typeSample = commonMethods.getRandomString();
+		accessionSettings.click();
+		editSampleType();
+		
+		typeOfSample.sendKeys(typeSample);
+
+		addSampleBtn.click();
+
+		editSampleType();
+		
+		String text = typeOfSample.getText();
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+
+		return Arrays.asList(text,typeSample);
+		
+	}
+	
+	private void editSampleType() throws Exception {
+		addEdit.click();
+
+		editSampleFlag.click();
+		
+		CommonMethods.waitForElementToVisible(sampleTypeName);
+		sampleTypeName.sendKeys("sampleTypeName");
+		
+		CommonMethods.waitForElementToVisible(editSampleDropDown.get(0));
+		editSampleDropDown.get(0).click();
+
+	}
+	
 	// public void searchToBilling(String userInfo) throws Exception {
 	//
 	// DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");

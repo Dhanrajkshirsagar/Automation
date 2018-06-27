@@ -1,5 +1,7 @@
 package com.livehealth.test;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -71,7 +73,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 //		}
 //	}
 //
-//	// TC: 05
+	// TC: 05
 	@Test(groups = { "Accession" })
 	public void verifyDismissSampleConfirmationModel() {
 		String confirmation;
@@ -86,19 +88,103 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 06
+//	@Test(groups = { "Accession" })
+//	public void verifyReceiveButton() {
+//		boolean recv;
+//		try {
+//
+//			recv = accession.receiveSample();
+//			Assert.assertTrue(recv);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+	
+	// TC: 28
 	@Test(groups = { "Accession" })
-	public void verifyReceiveButton() {
+	public void verifyAccessionNumOnAccessedSample() {
 		boolean recv;
 		try {
 
-			recv = accession.receiveSample();
+			recv = accession.accessionNumOnAccessedSample();
 			Assert.assertTrue(recv);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
+	
+	// TC: 29
+	@Test(groups = { "Accession" })
+	public void verifyRedrawSample() {
+		String redrawe ;
+		try {
 
+			redrawe = accession.redrawSample();
+			Assert.assertEquals(redrawe, "Sample Redrawn");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 30
+	@Test(groups = { "Accession" })
+	public void verifyRedrawSampleConfirmation() {
+		String redrawConfirmation;
+		try {
+
+			redrawConfirmation = accession.redrawSampleConfirmation();
+			Assert.assertEquals(redrawConfirmation, "Do you want to redraw this report?");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	// TC: 52
+	@Test(groups = { "Accession" })
+	public void verifyAddEditAccessionType() {
+		String text;
+		try {
+
+			text = accession.addEditAccessionType();
+			Assert.assertEquals(text, "Add new sample type");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	// TC: 53
+	@Test(groups = { "Accession" })
+	public void verifyAddSampleCheckbox() {
+		String text;
+		try {
+
+			text = accession.addNewSample();
+			Assert.assertEquals(text, "sampleTypeName");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	// TC: 54
+	@Test(groups = { "Accession" })
+	public void verifyEditSample() {
+		List<String> list;
+		try {
+
+			list = accession.editSample();
+			Assert.assertEquals(list.get(0), list.get(1));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
 	@AfterClass(alwaysRun = true)
 	public void tearDown() {
 		DriverFactory.closeDriverObjects();
