@@ -56,22 +56,22 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-
-	// TC: 04
-	@Test(groups = { "Accession" })
-	public void verifyDismissSample() {
-		boolean dismissed;
-		try {
-
-			dismissed = accession.dismissSample();
-			Assert.assertTrue(dismissed);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-
-	// TC: 05
+//
+//	// TC: 04
+//	@Test(groups = { "Accession" })
+//	public void verifyDismissSample() {
+//		boolean dismissed;
+//		try {
+//
+//			dismissed = accession.dismissSample();
+//			Assert.assertTrue(dismissed);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//
+//	// TC: 05
 	@Test(groups = { "Accession" })
 	public void verifyDismissSampleConfirmationModel() {
 		String confirmation;

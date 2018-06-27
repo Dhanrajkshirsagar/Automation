@@ -5,23 +5,21 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.livehealth.base.DriverFactory;
 import com.livehealth.config.Constants;
+import com.livehealth.model.TestSample;
 import com.livehealth.util.CommonMethods;
 import com.livehealth.util.WebContext;
+
 
 @Component
 public class AccessionPage {
@@ -83,7 +81,19 @@ public class AccessionPage {
 	@FindBy(how = How.LINK_TEXT, using = "Accessed")
 	private WebElement accessed;
 
-	//
+	@FindAll({@FindBy(how = How.XPATH, using = "waitingListPaitentNameMargin")})
+	public List<WebElement> userNameList;
+	
+//	@FindAll({@FindBy(how = How.XPATH, using = "waitingListUserListTestText")})
+//	public List<WebElement> dates;
+
+//	@FindAll({@FindBy(how = How.XPATH, using = "userwaitingListFontColor")})
+//	public List<WebElement> accessedDate;
+
+//	@FindAll({@FindBy(how = How.XPATH, using = "waitingListUserListTestText")})
+//	public List<WebElement> accessedTest;
+
+	//	
 	@Autowired
 	BillingPage billing;
 
@@ -171,12 +181,36 @@ public class AccessionPage {
 
 	public boolean receiveSample() throws Exception {
 
+		TestSample sample = new TestSample();
+		
 		WebDriver driver = DriverFactory.getDriver();
 
-		List<WebElement> element = driver.findElements(By.xpath("//button[contains(text(),'Receive')] "));
+		List<WebElement> sampleList = driver.findElements(By.className("waitingListPaitentNameMargin"));
+		List<WebElement> dates = driver.findElements(By.className("waitingListUserListTestText"));
 
+		sample.setUserName(sampleList.get(2).getText());
+		sample.setDate(dates.get(0).getText());
+		sample.setTestName(dates.get(1).getText());
+
+		List<WebElement> element = driver.findElements(By.xpath("//button[contains(text(),'Receive')] "));
 		element.get(0).click();
+		
 		accessed.click();
+
+		Thread.sleep(1000);
+		
+		TestSample verifySample = new TestSample();
+
+		List<WebElement> samples = driver.findElements(By.className("waitingListPaitentNameMargin"));
+		List<WebElement> accessedDate = driver.findElements(By.className("userwaitingListFontColor"));
+		List<WebElement> accessedTest = driver.findElements(By.className("waitingListUserListTestText"));
+
+		verifySample.setUserName(samples.get(2).getText());
+		verifySample.setDate(accessedDate.get(1).getText()); 
+		verifySample.setTestName(accessedTest.get(0).getText());
+		
+		System.out.println(sample.toString());
+		System.out.println(verifySample.toString());
 
 		return false;
 

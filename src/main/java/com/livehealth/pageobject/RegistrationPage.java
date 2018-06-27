@@ -868,8 +868,11 @@ public class RegistrationPage {
 	public void selectUnselectOrgList() throws Exception {
 		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 		// DriverFactory.getDriver().navigate().refresh();
-		CommonMethods.waitForElementToClickable(settings);
-		settings.click();
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+
+//		CommonMethods.waitForElementToClickable(settings);
+//		settings.click();
+		js.executeScript("arguments[0].click();", settings);
 
 		CommonMethods.waitForElementToClickable(orgFlag);
 
@@ -1419,8 +1422,11 @@ public class RegistrationPage {
 		while (attempts < 2) {
 			try {
 				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
-				CommonMethods.waitForElementToClickable(settings);
-				settings.click();
+				JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+				
+//				CommonMethods.waitForElementToClickable(settings);
+				js.executeScript("arguments[0].click();", settings);
+			//	settings.click();
 
 				CommonMethods.waitForElementToClickable(strictCheck);
 				boolean isShown = strictCheck.isDisplayed();
@@ -1442,9 +1448,11 @@ public class RegistrationPage {
 			try {
 				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				Actions builder = new Actions(DriverFactory.getDriver());
+				JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 
-				CommonMethods.waitForElementToClickable(searchBtn);
-				searchBtn.click();
+//				CommonMethods.waitForElementToClickable(searchBtn);
+				js.executeScript("arguments[0].click();", searchBtn);
+//				searchBtn.click();
 
 				builder.moveToElement(searchUser).click().sendKeys(updateUser.getName().toLowerCase()).build()
 						.perform();
@@ -1557,10 +1565,11 @@ public class RegistrationPage {
 			try {
 				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				Actions builder = new Actions(DriverFactory.getDriver());
+				
 				JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
-
-				CommonMethods.waitForElementToClickable(settings);
-				settings.click();
+				js.executeScript("arguments[0].click();", settings);
+//				CommonMethods.waitForElementToClickable(settings);
+//				settings.click();
 
 				CommonMethods.waitForElementToClickable(strictCheck);
 
@@ -1708,9 +1717,11 @@ public class RegistrationPage {
 				Actions builder = new Actions(DriverFactory.getDriver());
 
 				// DriverFactory.getDriver().navigate().refresh();
+				JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+				js.executeScript("arguments[0].click();", settings);
 
-				CommonMethods.waitForElementToClickable(settings);
-				settings.click();
+//				CommonMethods.waitForElementToClickable(settings);
+//				settings.click();
 
 				CommonMethods.waitForElementToClickable(strictCheck);
 
