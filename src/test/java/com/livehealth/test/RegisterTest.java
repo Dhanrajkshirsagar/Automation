@@ -800,46 +800,46 @@ public class RegisterTest extends AbstractTestNGSpringContextTests {
 	// }
 
 	// TC :69
-	@Test(groups = { "Registration" })
-	public void verifyUpdateWithStrictCheck_69() {
-		User user = new User();
-		user.setName("benedict");
-		try {
-			String msg = registration.updateWithStrictCheck(user);
-			Assert.assertEquals(msg, "Patient details has been updated successfully..");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
+//	@Test(groups = { "Registration" })
+//	public void verifyUpdateWithStrictCheck_69() {
+//		User user = new User();
+//		user.setName("benedict");
+//		try {
+//			String msg = registration.updateWithStrictCheck(user);
+//			Assert.assertEquals(msg, "Patient details has been updated successfully..");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
 
 	// TC :72
-	@Test(groups = { "Registration" })
-	public void verifyUpdateDirectUser_72() {
-		User user = new User();
-		user.setName("Dtype");
-		try {
-			String userName = registration.updateUserDetailsForDirectIndirect(user);
-			Assert.assertEquals(userName, "Patient details has been updated successfully..");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
+//	@Test(groups = { "Registration" })
+//	public void verifyUpdateDirectUser_72() {
+//		User user = new User();
+//		user.setName("Dtype");
+//		try {
+//			String userName = registration.updateUserDetailsForDirectIndirect(user);
+//			Assert.assertEquals(userName, "Patient details has been updated successfully..");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
 
 	// TC :73
-	@Test(groups = { "Registration" })
-	public void verifyUpdateIndirectUser_73() {
-		User user = new User();
-		user.setName("Itype");
-		try {
-			String userName = registration.updateUserDetailsForDirectIndirect(user);
-			Assert.assertEquals(userName, "Patient details has been updated successfully..");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
+//	@Test(groups = { "Registration" })
+//	public void verifyUpdateIndirectUser_73() {
+//		User user = new User();
+//		user.setName("Itype");
+//		try {
+//			String userName = registration.updateUserDetailsForDirectIndirect(user);
+//			Assert.assertEquals(userName, "Patient details has been updated successfully..");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
 
 	// TC :35
 	@Test(groups = { "Registration" })

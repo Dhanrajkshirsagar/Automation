@@ -151,6 +151,24 @@ public class AccessionPage {
 	@FindAll({@FindBy(xpath = "/html/body/section/div[2]/div[2]/div[11]/div/div/div[2]/div[4]/span/span")})
 	public List<WebElement> editSampleDropDown;
 
+	@FindBy(how = How.ID, using = "addSampleTypeToTest")
+	private WebElement addSampleTypeToTest;
+
+	@FindAll({@FindBy(xpath = "/html/body/section/div[2]/div[2]/div[6]/span/span")})
+	public List<WebElement> addSampleTypeDropDown;
+
+	@FindBy(how = How.ID, using = "sampleTestBtn")
+	private WebElement sampleTestBtn;
+
+	@FindBy(how = How.XPATH, using = "//label[contains(text(),'Cholesterol - Total')]")
+	public WebElement cholesterolTotal;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"sampleTestList\"]/button[3]")
+	private WebElement removeTest;
+
+	@FindBy(how = How.ID, using = "error")
+	private WebElement error;
+
 	//	   
 	@Autowired
 	BillingPage billing;
@@ -409,6 +427,86 @@ public class AccessionPage {
 		CommonMethods.waitForElementToVisible(editSampleDropDown.get(0));
 		editSampleDropDown.get(0).click();
 
+	}
+	
+	public String searchSampleType() throws Exception {
+		
+		accessionSettings.click();
+
+		CommonMethods.waitForElementToVisible(sampleNameTypeadhead);
+
+		sampleNameTypeadhead.sendKeys("Ascitic Fluid");
+		
+		CommonMethods.waitForElementToVisible(sampleDropDown.get(0));
+
+		sampleDropDown.get(0).click();
+
+		String text = sampleType.getText();
+
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+
+		return text;
+		
+	}
+	
+	public String mappingTestAddForSelectedSample() throws Exception {
+		
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+
+		accessionSettings.click();
+
+		selectingSample();
+	
+		addSampleTypeToTest.sendKeys("Cholesterol - Total");
+		
+		CommonMethods.waitForElementToVisible(addSampleTypeDropDown.get(0));
+		addSampleTypeDropDown.get(0).click();
+		
+		sampleTestBtn.click();
+		
+		selectingSample();
+		
+		String testName = cholesterolTotal.getText();
+		
+		removeTest.click();
+		
+		sampleTestBtn.click();
+		
+		js.executeScript("arguments[0].click();", addSampleBtn);
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+
+		return testName;
+		
+	}
+	
+	private void selectingSample() throws Exception {
+
+		CommonMethods.waitForElementToVisible(sampleNameTypeadhead);
+
+		sampleNameTypeadhead.sendKeys("Water");
+		
+		CommonMethods.waitForElementToVisible(sampleDropDown.get(0));
+
+		sampleDropDown.get(0).click();
+	}
+	
+	public String alreadyAddedTestNotAbleToAdd() throws Exception {
+		
+		accessionSettings.click();
+		selectingSample();
+		
+		addSampleTypeToTest.sendKeys("Water Culture *");
+		
+		CommonMethods.waitForElementToVisible(addSampleTypeDropDown.get(0));
+		addSampleTypeDropDown.get(0).click();
+
+		String errorMsg = error.getText();
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		
+		return errorMsg;
+		
 	}
 	
 	// public void searchToBilling(String userInfo) throws Exception {
