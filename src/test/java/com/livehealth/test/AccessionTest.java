@@ -46,18 +46,18 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 1
-//	@Test(groups = { "Accession" })
-//	public void verifyPendingList() {
-//		boolean pendingList;
-//		try {
-//
-//			pendingList = accession.pendingAccessionList();
-//			Assert.assertTrue(pendingList);
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
+	@Test(groups = { "Accession" })
+	public void verifyPendingList() {
+		boolean pendingList;
+		try {
+
+			pendingList = accession.pendingAccessionList();
+			Assert.assertTrue(pendingList);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
 //
 //	// TC: 04
 //	@Test(groups = { "Accession" })
@@ -184,8 +184,8 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 //			Assert.assertTrue(false, e.getMessage());
 //		}
 //	}
-	
-	// TC: 55
+//	
+//	// TC: 55
 //	@Test(groups = { "Accession" })
 //	public void verifySearchSampleType() {
 //		String sampleType;
@@ -214,18 +214,62 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 //	}
 	
 	// TC: 57
-	@Test(groups = { "Accession" })
-	public void verifyAddingAlreadyAddedTest() {
-		String errorMsg;
+//	@Test(groups = { "Accession" })
+//	public void verifyAddingAlreadyAddedTest() {
+//		String errorMsg;
+//		try {
+//
+//			errorMsg = accession.alreadyAddedTestNotAbleToAdd();
+//			Assert.assertEquals(errorMsg, "Exists! The tests you are trying to add already exist in this list.");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	// TC: 68
+//	@Test(groups = { "Accession" })
+//	public void verifySampleSearch() {
+//		List<String> sampleIdList;
+//		try {
+//
+//			sampleIdList = accession.sampleSearchAbleToSelectSample();
+//			Assert.assertEquals(sampleIdList.get(0), sampleIdList.get(1));
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	// TC: 69
+//	@Test(groups = { "Accession" })
+//	public void verifySearchByUserName() {
+//		List<String> sampleIdList;
+//		try {
+//
+//			sampleIdList = accession.searchByUserName();
+//			Assert.assertEquals(sampleIdList.get(0), sampleIdList.get(1));
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+	
+	// TC: 70
+	@Test(groups = { "Accession" },priority= 0)
+	public void verifyReferralSearch() {
+		boolean referrel;
 		try {
 
-			errorMsg = accession.alreadyAddedTestNotAbleToAdd();
-			Assert.assertEquals(errorMsg, "Exists! The tests you are trying to add already exist in this list.");
+			referrel = accession.searchByReferrel();
+			Assert.assertTrue(referrel);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
+	
+	
 	
 	@AfterClass(alwaysRun = true)
 	public void tearDown() {

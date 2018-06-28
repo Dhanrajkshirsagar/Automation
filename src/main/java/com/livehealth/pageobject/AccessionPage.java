@@ -169,6 +169,24 @@ public class AccessionPage {
 	@FindBy(how = How.ID, using = "error")
 	private WebElement error;
 
+	@FindBy(how = How.ID, using = "optionLink")
+	private WebElement optionLink;
+
+	@FindBy(how = How.ID, using = "searchSampleAccessionInput")
+	private WebElement searchSampleAccessionInput;
+
+	@FindAll({@FindBy(xpath = "/html/body/section/div[2]/div/div[4]/div[1]/div[1]/span/span")})
+	public List<WebElement> sampleIdDropDown;
+
+	@FindAll({@FindBy(className = "userWaitingListCard")})
+	public List<WebElement> getSamples;
+
+	@FindBy(how = How.ID, using = "searchReferral")
+	private WebElement searchReferral;
+
+	@FindAll({@FindBy(xpath = "/html/body/section/div[2]/div/div[4]/div[1]/div[2]/span/span")})
+	public List<WebElement> referrelSearch;
+
 	//	   
 	@Autowired
 	BillingPage billing;
@@ -194,6 +212,7 @@ public class AccessionPage {
 
 	public boolean pendingAccessionList() throws Exception {
 
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		boolean flag = false;
 
 		List<WebElement> elements = DriverFactory.getDriver().findElements(By.id("pendingSampleList"));
@@ -236,6 +255,7 @@ public class AccessionPage {
 
 	public String dismissSampleConfirmation() throws Exception {
 
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		WebDriver driver = DriverFactory.getDriver();
 
 //		List<WebElement> element = driver.findElements(By.xpath("//*[contains(text(),'Options')] "));
@@ -292,6 +312,7 @@ public class AccessionPage {
 	
 	public boolean accessionNumOnAccessedSample() throws Exception {
 
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		accessed.click();
 
 		int size = (sampleList.size() / 2);
@@ -329,6 +350,8 @@ public class AccessionPage {
 	
 	public String redrawSampleConfirmation() throws Exception {
 		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		
 		receive.get(0).click();
 		accessed.click();
 		
@@ -345,6 +368,7 @@ public class AccessionPage {
 	
 	public String addEditAccessionType() throws Exception {
 
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		accessionSettings.click();
 		addEdit.click();
 
@@ -364,6 +388,7 @@ public class AccessionPage {
 	
 	public String addNewSample() throws Exception {
 		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 
 		accessionSettings.click();
@@ -398,6 +423,7 @@ public class AccessionPage {
 	
 	public List<String> editSample() throws Exception {
 	
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		String typeSample = commonMethods.getRandomString();
 		accessionSettings.click();
 		editSampleType();
@@ -431,6 +457,7 @@ public class AccessionPage {
 	
 	public String searchSampleType() throws Exception {
 		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		accessionSettings.click();
 
 		CommonMethods.waitForElementToVisible(sampleNameTypeadhead);
@@ -451,6 +478,7 @@ public class AccessionPage {
 	
 	public String mappingTestAddForSelectedSample() throws Exception {
 		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 
 		accessionSettings.click();
@@ -493,6 +521,7 @@ public class AccessionPage {
 	
 	public String alreadyAddedTestNotAbleToAdd() throws Exception {
 		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		accessionSettings.click();
 		selectingSample();
 		
@@ -507,6 +536,69 @@ public class AccessionPage {
 		
 		return errorMsg;
 		
+	}
+	
+	public List<String> sampleSearchAbleToSelectSample() throws Exception {
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		String sampleId = sampleList.get(0).getText();
+		
+		optionLink.click();
+		
+		searchSampleAccessionInput.sendKeys(sampleId);
+		
+		CommonMethods.waitForElementToVisible(sampleIdDropDown.get(0));
+		
+		sampleIdDropDown.get(0).click();
+		
+		String searchedId = sampleList.get(0).getText();
+		
+		return Arrays.asList(sampleId,searchedId);
+		
+	}
+	
+	public List<String> searchByUserName() throws Exception {
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		String sample = sampleList.get(1).getText();
+		
+		String userName=sample.substring(0, (sample.length()-8));
+				
+		optionLink.click();
+
+		searchSampleAccessionInput.sendKeys(userName);
+		
+		CommonMethods.waitForElementToVisible(sampleIdDropDown.get(0));
+		
+		sampleIdDropDown.get(0).click();
+		
+		String searchedSample = sampleList.get(1).getText();
+	
+		String searchedUser=searchedSample.substring(0, (sample.length()-8));
+
+		return Arrays.asList(userName,searchedUser);
+		
+	}
+	
+	public boolean searchByReferrel() throws Exception {
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		optionLink.click();
+		
+		searchReferral.sendKeys("Referrel  with sumit");
+		
+		CommonMethods.waitForElementToVisible(referrelSearch.get(0));
+		
+		referrelSearch.get(0).click();
+		
+		CommonMethods.waitForElementToVisible(getSamples.get(0));
+		
+		if(getSamples.size()>0) {
+			
+			return true;
+		}	
+		
+		return false;
 	}
 	
 	// public void searchToBilling(String userInfo) throws Exception {
