@@ -1303,10 +1303,11 @@ public class RegistrationPage {
 				}
 				saveForm.click();
 
+				DriverFactory.getDriver().navigate().refresh();
 				Thread.sleep(1000);
 				CommonMethods.waitForElementToClickable(registerUrl);
 				registerUrl.click();
-
+				DriverFactory.getDriver().navigate().refresh();
 				return searchUserByName(user);
 
 			} catch (StaleElementReferenceException e) {
