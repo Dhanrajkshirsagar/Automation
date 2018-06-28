@@ -1468,9 +1468,13 @@ public class RegistrationPage {
 				}
 
 				saveForm.click();
+				
+				CommonMethods.waitForElementToVisible(registrationDate);
 				CommonMethods.waitForElementToClickable(registrationDate);
 
-				return registrationDate.getText();
+				String registDate = registrationDate.getText();
+				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
+				return registDate;
 			} catch (StaleElementReferenceException e) {
 				attempts++;
 			}
