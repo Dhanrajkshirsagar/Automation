@@ -436,6 +436,10 @@ public class RegistrationPage {
 	@FindBy(how = How.XPATH, using = "//*[@id=\"newDirectRegistrationDataDiv\"]/div[3]/span/div/div/ul/li[37]/span[1]")
 	private WebElement contry;
 
+	@FindBy(how = How.XPATH, using = "//*[@id=\"patientReportDetailsHeader\"]/button")
+	private WebElement closeConfirmationModel;
+
+	
 	@Autowired
 	WebContext webContext;
 
@@ -722,7 +726,13 @@ public class RegistrationPage {
 
 		saveForm.click();
 
-		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
+		DriverFactory.getDriver().navigate().refresh();
+
+		CommonMethods.waitForElementToClickable(registerUrl);
+		Thread.sleep(1000);
+
+		registerUrl.click();
+		DriverFactory.getDriver().navigate().refresh();
 
 		return searchUserByName(inUser);
 	}
@@ -1473,6 +1483,8 @@ public class RegistrationPage {
 				CommonMethods.waitForElementToClickable(registrationDate);
 
 				String registDate = registrationDate.getText();
+				
+				js.executeScript("arguments[0].click();", closeConfirmationModel);
 				DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 				return registDate;
 			} catch (StaleElementReferenceException e) {
