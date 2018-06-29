@@ -1,5 +1,6 @@
 package com.livehealth.pageobject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -186,6 +188,60 @@ public class AccessionPage {
 
 	@FindAll({@FindBy(xpath = "/html/body/section/div[2]/div/div[4]/div[1]/div[2]/span/span")})
 	public List<WebElement> referrelSearch;
+
+	@FindBy(how = How.ID, using = "searchOrganisation")
+	private WebElement searchOrganisation;
+
+	@FindAll({@FindBy(xpath = "/html/body/section/div[2]/div/div[4]/div[1]/div[3]/span/span")})
+	public List<WebElement> organizationSearch;
+
+	@FindBy(how = How.ID, using = "outsourceSampleFlag")
+	private WebElement outsourceSampleFlag;
+
+	@FindBy(how = How.ID, using = "createBatchBtn")
+	private WebElement createBatchBtn;
+
+	@FindBy(how = How.ID, using = "checkBox0")
+	private WebElement checkBox0;
+
+	@FindBy(how = How.ID, using = "checkBox1")
+	private WebElement checkBox1;
+
+	@FindBy(how = How.ID, using = "accBatchCreateBtn")
+	private WebElement accBatchCreateBtn;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"pendingBatchPill\"]/a")
+	private WebElement batchManagement;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"sampleOfBatchAppendDiv\"]/div[4]/button")
+	private WebElement closeFirstSample;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"sampleOfBatchAppendDiv\"]/div[8]/button")
+	private WebElement closeSecondSample;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"sampleOfBatchAppendDiv\"]/div[1]/p")
+	private WebElement idToClose;
+
+	@FindBy(how = How.ID, using = "searchSamplePatient")
+	private WebElement searchSamplePatient;
+
+	@FindAll({@FindBy(xpath = "/html/body/section/div[2]/div/div[18]/div/div/div[2]/div[1]/div[1]/span/span")})
+	public List<WebElement> sampleIdSearchBox;
+
+	@FindBy(how = How.XPATH, using = "//p[contains(text(),'222')]")
+	public WebElement sampleId;
+
+	@FindBy(how = How.ID, using = "selectAllSampleBatchFlag")
+	private WebElement selectAllSampleBatchFlag;
+
+	@FindBy(how = How.ID, using = "containerCnt0")
+	private WebElement containerCnt0;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"sampleCreateTotal\"]/small")
+	private WebElement sampleTotal;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"vacutainerTotal\"]/small")
+	private WebElement vacutainerTotal;
 
 	//	   
 	@Autowired
@@ -585,7 +641,7 @@ public class AccessionPage {
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		optionLink.click();
 		
-		searchReferral.sendKeys("Referrel  with sumit");
+		searchReferral.sendKeys("self");
 		
 		CommonMethods.waitForElementToVisible(referrelSearch.get(0));
 		
@@ -599,6 +655,202 @@ public class AccessionPage {
 		}	
 		
 		return false;
+	}
+	
+	public boolean searchByOrganization() throws Exception {
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		optionLink.click();
+		
+		searchOrganisation.sendKeys("DIRECT");
+		
+		CommonMethods.waitForElementToVisible(organizationSearch.get(0));
+		
+		organizationSearch.get(0).click();
+		
+		CommonMethods.waitForElementToVisible(getSamples.get(0));
+		
+		if(getSamples.size()>0) {
+			
+			return true;
+		}	
+		
+		return false;
+	}
+	
+	public List<String> outsourcedOnlySamples() throws Exception{
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+//		optionLink.click();
+
+		List<WebElement> list = new ArrayList<>();
+		
+//		Select select = new Select(outsourceSampleFlag);
+//		select.selectByValue("1");
+
+		Thread.sleep(3000);
+	//	CommonMethods.waitForElementToVisible(getSamples.get(0));
+		System.out.println("=="+getSamples.get(0).toString());
+		System.out.println("=="+getSamples.get(1).toString());
+		System.out.println("=="+getSamples.get(2).toString());
+		
+		for(int index=1;index<=getSamples.size();index++) {
+			
+			WebDriver driver = DriverFactory.getDriver();
+			
+			WebElement element=driver.findElement(By.xpath("/html/body/section/div[2]/div/div[7]/div["+index+"]/div[5]/span/div/div"));
+			
+			list.add(element);
+			System.out.println("=="+list.get(index).toString());
+		}
+		
+	//	System.out.println("=="+list.toString());
+		return null;
+		
+	}
+	
+	public String createBatch() throws Exception {
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		createBatchBtn.click();
+		
+		checkBox0.click();
+		checkBox1.click();
+		
+		createBatchBtn.click();
+		accBatchCreateBtn.click();
+		batchManagement.click();
+		
+		
+		return null;
+		
+	}
+	
+	public boolean removeSampleFromBatch() throws Exception {
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		createBatchBtn.click();
+		
+		checkBox0.click();
+		checkBox1.click();
+	
+		createBatchBtn.click();
+	
+		String id1 = idToClose.getText();
+		
+		CommonMethods.waitForElementToVisible(closeFirstSample);
+		closeFirstSample.click();
+		
+		String id2 = idToClose.getText();
+		
+		if(id1.equals(id2)) {
+			DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+			return false;
+		}
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		return true;
+		
+	}
+	
+	public String searchSample() throws Exception {
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		createBatchBtn.click();
+		
+		checkBox0.click();
+		checkBox1.click();
+	
+		createBatchBtn.click();
+
+		CommonMethods.waitForElementToVisible(searchSamplePatient);
+		searchSamplePatient.sendKeys("222");
+		
+		CommonMethods.waitForElementToVisible(sampleIdSearchBox.get(0));
+		sampleIdSearchBox.get(0).click();
+		
+		String text = sampleId.getText();
+	
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		return text;
+		
+	}
+	
+	public String batchCanNotEmpty() throws Exception {
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		createBatchBtn.click();
+		
+		checkBox0.click();
+		checkBox1.click();
+	
+		createBatchBtn.click();
+
+		CommonMethods.waitForElementToVisible(closeFirstSample);
+		closeFirstSample.click();
+		searchSamplePatient.clear();
+		closeFirstSample.click();
+		
+		CommonMethods.waitForElementToVisible(error);
+		String errorMsg = error.getText();
+		
+		return errorMsg;
+		
+	}
+	
+	public List<Integer> vacutainerSummery() throws Exception {
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+	
+		int size = (sampleList.size()/2);
+		
+		createBatchBtn.click();
+		
+		CommonMethods.waitForElementToVisible(selectAllSampleBatchFlag);
+		selectAllSampleBatchFlag.click();
+		createBatchBtn.click();
+		
+		int totalSample = Integer.parseInt(containerCnt0.getAttribute("value"));
+		
+		return Arrays.asList(size,totalSample);
+		
+	}
+	
+	public List<Integer> sampleTotal() throws Exception {
+
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+
+		int size = (sampleList.size() / 2);
+
+		createBatchBtn.click();
+		
+		CommonMethods.waitForElementToVisible(selectAllSampleBatchFlag);
+		selectAllSampleBatchFlag.click();
+		createBatchBtn.click();
+		
+		CommonMethods.waitForElementToVisible(sampleTotal);
+		int totalSample = Integer.parseInt(sampleTotal.getText());
+
+		return Arrays.asList(size, totalSample);
+
+	}
+	
+	public List<Integer> vacutainerTotal() throws Exception {
+
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+
+		int size = (sampleList.size() / 2);
+
+		createBatchBtn.click();
+		
+		CommonMethods.waitForElementToVisible(selectAllSampleBatchFlag);
+		selectAllSampleBatchFlag.click();
+		createBatchBtn.click();
+		
+		CommonMethods.waitForElementToVisible(vacutainerTotal);
+		int totalSample = Integer.parseInt(vacutainerTotal.getText());
+
+		return Arrays.asList(size, totalSample);
+
 	}
 	
 	// public void searchToBilling(String userInfo) throws Exception {
