@@ -58,22 +58,22 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-//
-//	// TC: 04
-//	@Test(groups = { "Accession" })
-//	public void verifyDismissSample() {
-//		boolean dismissed;
-//		try {
-//
-//			dismissed = accession.dismissSample();
-//			Assert.assertTrue(dismissed);
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
-//
-	// TC: 05
+
+	// TC: 04
+	@Test(groups = { "Accession" })
+	public void verifyDismissSample() {
+		boolean dismissed;
+		try {
+
+			dismissed = accession.dismissSample();
+			Assert.assertTrue(dismissed);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 05 F
 	@Test(groups = { "Accession" })
 	public void verifyDismissSampleConfirmationModel() {
 		String confirmation;
@@ -88,19 +88,19 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 06
-//	@Test(groups = { "Accession" })
-//	public void verifyReceiveButton() {
-//		boolean recv;
-//		try {
-//
-//			recv = accession.receiveSample();
-//			Assert.assertTrue(recv);
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
-	
+	@Test(groups = { "Accession" })
+	public void verifyReceiveButton() {
+		boolean recv;
+		try {
+
+			recv = accession.receiveSample();
+			Assert.assertTrue(recv);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
 	// TC: 28
 	@Test(groups = { "Accession" })
 	public void verifyAccessionNumOnAccessedSample() {
@@ -114,11 +114,11 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 29
 	@Test(groups = { "Accession" })
 	public void verifyRedrawSample() {
-		String redrawe ;
+		String redrawe;
 		try {
 
 			redrawe = accession.redrawSample();
@@ -142,7 +142,21 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
+	// TC: 33
+	@Test(groups = { "Accession" })
+	public void verifyUncollectSample() {
+		List<String> uncollectId;
+		try {
+
+			uncollectId = accession.uncollectSample();
+			Assert.assertEquals(uncollectId.get(0), uncollectId.get(1));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
 	// TC: 52
 	@Test(groups = { "Accession" })
 	public void verifyAddEditAccessionType() {
@@ -156,7 +170,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 53
 	@Test(groups = { "Accession" })
 	public void verifyAddSampleCheckbox() {
@@ -170,8 +184,8 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	// TC: 54
+
+	// TC: 54 FF
 	@Test(groups = { "Accession" })
 	public void verifyEditSample() {
 		List<String> list;
@@ -184,7 +198,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 55
 	@Test(groups = { "Accession" })
 	public void verifySearchSampleType() {
@@ -198,8 +212,8 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	// TC: 56
+
+	// TC: 56 FF
 	@Test(groups = { "Accession" })
 	public void verifyAddTestField() {
 		String testName;
@@ -212,7 +226,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 57
 	@Test(groups = { "Accession" })
 	public void verifyAddingAlreadyAddedTest() {
@@ -226,7 +240,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 68
 	@Test(groups = { "Accession" })
 	public void verifySampleSearch() {
@@ -240,7 +254,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 69
 	@Test(groups = { "Accession" })
 	public void verifySearchByUserName() {
@@ -254,9 +268,9 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 70
-	@Test(groups = { "Accession" },priority= 0)
+	@Test(groups = { "Accession" }, priority = 0)
 	public void verifyReferralSearch() {
 		boolean referrel;
 		try {
@@ -268,7 +282,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 71
 	@Test(groups = { "Accession" })
 	public void verifyOrganizationSearch() {
@@ -282,21 +296,49 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 73
-//	@Test(groups = { "Accession" })
-//	public void verifyOutsourcedOnlySamples() {
-//		List<String> referrel;
-//		try {
-//
-//			referrel = accession.outsourcedOnlySamples();
-//			Assert.assertTrue(referrel);
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
-	
+	// @Test(groups = { "Accession" })
+	// public void verifyOutsourcedOnlySamples() {
+	// List<String> referrel;
+	// try {
+	//
+	// referrel = accession.outsourcedOnlySamples();
+	// Assert.assertTrue(referrel);
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
+
+	// TC: Batch_01
+	@Test(groups = { "Accession" })
+	public void verifyCreateBatch() {
+		List<String> list;
+		try {
+
+			list = accession.createBatch();
+			Assert.assertEquals(list.get(0), list.get(1));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: Batch_02
+	@Test(groups = { "Accession" })
+	public void verifyAddAllPendingButton() {
+		List<Integer> list;
+		try {
+
+			list = accession.addAllPending();
+			Assert.assertEquals(list.get(0), list.get(1));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
 	// TC: Batch_03
 	@Test(groups = { "Accession" })
 	public void verifyRemoveSampleFromBatch() {
@@ -310,7 +352,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: Batch_04
 	@Test(groups = { "Accession" })
 	public void verifySearchSample() {
@@ -324,7 +366,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: Batch_05
 	@Test(groups = { "Accession" })
 	public void verifyBatchCanNotEmpty() {
@@ -338,38 +380,38 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	// TC: Batch_06
+
+	// TC: Batch_06 F
 	@Test(groups = { "Accession" })
 	public void verifyVacutainerSummary() {
 		List<Integer> list;
 		try {
 
 			list = accession.vacutainerSummery();
-			
+
 			Assert.assertEquals(list.get(0), list.get(1));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	// TC: Batch_10
+
+	// TC: Batch_10 F
 	@Test(groups = { "Accession" })
 	public void verifyBatchSampleTotal() {
 		List<Integer> list;
 		try {
 
 			list = accession.sampleTotal();
-			
+
 			Assert.assertEquals(list.get(0), list.get(1));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	// TC: Batch_11
+
+	// TC: Batch_11 F
 	@Test(groups = { "Accession" })
 	public void verifyVacutainerTotal() {
 		List<Integer> list;
@@ -383,7 +425,52 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-		
+
+	// TC: Batch_14
+	@Test(groups = { "Accession" })
+	public void verifyViewAndReceiveButton() {
+		String viewReceive;
+		try {
+
+			viewReceive = accession.viewAndReceiveButton();
+
+			Assert.assertEquals(viewReceive, "Selenium Automation (Livehealth)");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: Batch_15
+	@Test(groups = { "Accession" })
+	public void verifyRejectLinkInViewAndReceive() {
+		boolean isRejected;
+		try {
+
+			isRejected = accession.rejectLinkInViewAndReceive();
+
+			Assert.assertTrue(isRejected);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: Batch_16
+	@Test(groups = { "Accession" })
+	public void verifyAcceptLinkInViewAndReceive() {
+		List<String> list;
+		try {
+
+			list = accession.acceptLinkInViewAndReceive();
+
+			Assert.assertEquals(list.get(0), list.get(1));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
 	@AfterClass(alwaysRun = true)
 	public void tearDown() {
 		DriverFactory.closeDriverObjects();

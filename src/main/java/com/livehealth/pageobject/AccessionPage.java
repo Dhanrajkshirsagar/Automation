@@ -3,13 +3,16 @@ package com.livehealth.pageobject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.annotation.PostConstruct;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
@@ -243,7 +246,61 @@ public class AccessionPage {
 	@FindBy(how = How.XPATH, using = "//*[@id=\"vacutainerTotal\"]/small")
 	private WebElement vacutainerTotal;
 
-	//	   
+	@FindBy(how = How.ID, using = "accessionDateRange")
+	private WebElement accessionDateRange;
+
+	@FindBy(how = How.XPATH, using = "//li[contains(text(),'This Week')]")
+	public WebElement thisWeek;
+
+	@FindBy(how = How.XPATH, using = "//li[contains(text(),'Last Week')]")
+	public WebElement lastWeek;
+
+	@FindBy(how = How.ID, using = "checkBox2")
+	private WebElement checkBox2;
+
+	@FindBy(how = How.ID, using = "batchRefNumber")
+	private WebElement batchRefNumber;
+
+	@FindAll({@FindBy(xpath = "//button[contains(text(),'View & Receive')]")})
+	public List<WebElement> viewReceive;
+
+	@FindAll({@FindBy(className = "reportViewFontSize")})
+	public List<WebElement> batchFrom;
+
+	@FindBy(how = How.ID, using = "sampleBatchViewModalLabel")
+	private WebElement sampleBatchViewModalLabel;
+
+	@FindBy(how = How.LINK_TEXT, using = "Uncollect Sample")
+	private WebElement uncollectSample;
+
+	@FindBy(how = How.ID, using = "selectAllTestFlag")
+	private WebElement selectAllTestFlag;
+
+	@FindBy(how = How.ID, using = "sampleUncollectComments")
+	private WebElement sampleUncollectComments;
+
+	@FindBy(how = How.ID, using = "uncollectSampleBtn")
+	private WebElement uncollectSampleBtn;
+
+	@FindBy(how = How.LINK_TEXT, using = "Pending Accession")
+	private WebElement pendingAccession;
+
+	@FindBy(how = How.ID, using = "allSampleInBatchQueue")
+	private WebElement allSampleInBatchQueue;
+
+	@FindAll({@FindBy(id = "rejectSample")})
+	public List<WebElement> reject;
+
+	@FindBy(how = How.ID, using = "accessBatchBtn")
+	private WebElement accessBatchBtn;
+
+	@FindAll({@FindBy(xpath = "//button[contains(text(),'Accept')]")})
+	public List<WebElement> accept;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div/div[2]/ul/li[3]/a")
+	public WebElement received;
+
+	//	 
 	@Autowired
 	BillingPage billing;
 
@@ -264,11 +321,15 @@ public class AccessionPage {
 		passwordField.sendKeys(password);
 		signIn.click();
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+//		accessionDateRange.click();
+//		thisWeek.click();
 	}
 
 	public boolean pendingAccessionList() throws Exception {
-
+		
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		accessionDateRange.click();
+		thisWeek.click();
 		boolean flag = false;
 
 		List<WebElement> elements = DriverFactory.getDriver().findElements(By.id("pendingSampleList"));
@@ -286,23 +347,24 @@ public class AccessionPage {
 	}
 
 	public boolean dismissSample() throws Exception {
-
-		WebDriver driver = DriverFactory.getDriver();
-
-		List<WebElement> sampleList = driver.findElements(By.className("waitingListPaitentNameMargin"));
-		String firstId = sampleList.get(1).getText();
+		accessionDateRange.click();
+		thisWeek.click();
+		String firstId = sampleList.get(0).getText();
 
 		dismissSampleConfirmation();
+		
+		options.get(1).click();
 
+		dismissSample.click();
+		rejectComments.sendKeys("reject");
+		
 		confirmedSampleRemoval.click();
 
 		DriverFactory.getDriver().navigate().refresh();
 
-		List<WebElement> sample = driver.findElements(By.className("waitingListPaitentNameMargin"));
-
-		String secondId = sample.get(1).getText();
-
-		if (!firstId.equals(secondId)) {
+		String sampleId = sampleList.get(0).getText();
+		
+		if (!firstId.equals(sampleId)) {
 			return true;
 		}
 		return false;
@@ -314,11 +376,9 @@ public class AccessionPage {
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		WebDriver driver = DriverFactory.getDriver();
 
-//		List<WebElement> element = driver.findElements(By.xpath("//*[contains(text(),'Options')] "));
-
+//		accessionDateRange.click();
+//		thisWeek.click();
 		options.get(1).click();
-
-//		WebElement dismissElement = driver.findElement(By.xpath("//a[contains(text(),'Dismiss Sample ')] "));
 
 		dismissSample.click();
 		rejectComments.sendKeys("reject");
@@ -386,6 +446,8 @@ public class AccessionPage {
 
 	public String redrawSample() throws Exception {
 		
+		accessionDateRange.click();
+		thisWeek.click();
 		receive.get(0).click();
 		accessed.click();
 		
@@ -408,6 +470,8 @@ public class AccessionPage {
 		
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		
+		accessionDateRange.click();
+		thisWeek.click();
 		receive.get(0).click();
 		accessed.click();
 		
@@ -419,6 +483,61 @@ public class AccessionPage {
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 
 		return var;
+		
+	}
+	
+	public List<String> uncollectSample() throws Exception {
+		
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.ACCESSION_URL);
+		
+		accessed.click();
+		
+		CommonMethods.waitForElementToVisible(accessionDateRange);
+//		accessionDateRange.click();
+//		lastWeek.click();
+		
+		CommonMethods.waitForElementToVisible(sampleList.get(0));
+		String id = sampleList.get(0).getText();
+		
+		System.out.println("@"+id);
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+
+//		js.executeScript("arguments[0].click();", options.get(1));
+
+		Thread.sleep(2000);
+		
+		options.get(1).click();	
+		options.get(1).click();	
+
+		Thread.sleep(2000);
+		CommonMethods.waitForElementToVisible(uncollectSample);
+
+		js.executeScript("arguments[0].click();", uncollectSample);
+
+		System.out.println("1");
+		System.out.println("2");
+		System.out.println("3");
+//		uncollectSample.click();
+//		uncollectSample.click();
+		
+		selectAllTestFlag.click();
+		
+		sampleUncollectComments.sendKeys("uncollect");
+		
+		js.executeScript("arguments[0].click();", uncollectSampleBtn);
+
+//		uncollectSampleBtn.click();
+		
+		CommonMethods.waitForElementToVisible(pendingAccession);
+//		Thread.sleep(2000);
+		js.executeScript("arguments[0].click();", pendingAccession);
+//		Thread.sleep(2000);
+		CommonMethods.waitForElementToVisible(sampleList.get(0));
+
+		String uncollectedId = sampleList.get(0).getText();
+		
+		return Arrays.asList(uncollectedId,id);
 		
 	}
 	
@@ -616,6 +735,8 @@ public class AccessionPage {
 	public List<String> searchByUserName() throws Exception {
 		
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		accessionDateRange.click();
+		thisWeek.click();
 		String sample = sampleList.get(1).getText();
 		
 		String userName=sample.substring(0, (sample.length()-8));
@@ -639,6 +760,8 @@ public class AccessionPage {
 	public boolean searchByReferrel() throws Exception {
 		
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		accessionDateRange.click();
+		thisWeek.click();
 		optionLink.click();
 		
 		searchReferral.sendKeys("self");
@@ -660,6 +783,8 @@ public class AccessionPage {
 	public boolean searchByOrganization() throws Exception {
 		
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		accessionDateRange.click();
+		thisWeek.click();
 		optionLink.click();
 		
 		searchOrganisation.sendKeys("DIRECT");
@@ -709,26 +834,72 @@ public class AccessionPage {
 		
 	}
 	
-	public String createBatch() throws Exception {
-		
-		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+	public List<String> createBatch() throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.ACCESSION_URL);
+		accessionDateRange.click();
+		lastWeek.click();
 		createBatchBtn.click();
+
+		checkBox0.click();
+		checkBox1.click();
+		checkBox2.click();
+
+		createBatchBtn.click();
+
+		String refNum = batchRefNumber.getText();
+		System.out.println("==1=="+refNum);
+		Thread.sleep(5000);
+		accBatchCreateBtn.click();
+		Thread.sleep(5000);
+		
+		ArrayList<String> tabs2 = new ArrayList<String> (driver.getWindowHandles());
+	    driver.switchTo().window(tabs2.get(1));
+	    driver.close();
+	    driver.switchTo().window(tabs2.get(0));
+
+		Thread.sleep(5000);
+		batchManagement.click();
+
+		WebElement element = driver.findElement(By.xpath("//span[contains(text(),'" + refNum + "')]"));
+		System.out.println("==2=="+element.getText());
+
+		return Arrays.asList(refNum, element.getText());
+	}
+	
+	public List<Integer> addAllPending() throws Exception {
+	
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+
+		accessionDateRange.click();
+		lastWeek.click();
+		Thread.sleep(1000);
+		CommonMethods.waitForElementToVisible(sampleList.get(0));
+		int size = (sampleList.size()/2);
+		
+		js.executeScript("arguments[0].click();", createBatchBtn);
 		
 		checkBox0.click();
 		checkBox1.click();
 		
 		createBatchBtn.click();
-		accBatchCreateBtn.click();
-		batchManagement.click();
+		CommonMethods.waitForElementToVisible(allSampleInBatchQueue);
+		allSampleInBatchQueue.click();
 		
-		
-		return null;
+		int totalSample = Integer.parseInt(containerCnt0.getAttribute("value"));
+
+		return Arrays.asList(size,totalSample);
 		
 	}
 	
 	public boolean removeSampleFromBatch() throws Exception {
 		
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		accessionDateRange.click();
+		thisWeek.click();
 		createBatchBtn.click();
 		
 		checkBox0.click();
@@ -755,6 +926,8 @@ public class AccessionPage {
 	public String searchSample() throws Exception {
 		
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		accessionDateRange.click();
+		thisWeek.click();
 		createBatchBtn.click();
 		
 		checkBox0.click();
@@ -778,6 +951,8 @@ public class AccessionPage {
 	public String batchCanNotEmpty() throws Exception {
 		
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		accessionDateRange.click();
+		thisWeek.click();
 		createBatchBtn.click();
 		
 		checkBox0.click();
@@ -800,6 +975,9 @@ public class AccessionPage {
 	public List<Integer> vacutainerSummery() throws Exception {
 		
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		
+//		accessionDateRange.click();
+//		thisWeek.click();
 	
 		int size = (sampleList.size()/2);
 		
@@ -818,6 +996,9 @@ public class AccessionPage {
 	public List<Integer> sampleTotal() throws Exception {
 
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		
+//		accessionDateRange.click();
+//		thisWeek.click();
 
 		int size = (sampleList.size() / 2);
 
@@ -838,6 +1019,9 @@ public class AccessionPage {
 
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 
+//		accessionDateRange.click();
+//		thisWeek.click();
+		
 		int size = (sampleList.size() / 2);
 
 		createBatchBtn.click();
@@ -853,70 +1037,119 @@ public class AccessionPage {
 
 	}
 	
-	// public void searchToBilling(String userInfo) throws Exception {
-	//
-	// DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
-	// DriverFactory.getDriver().navigate().refresh();
-	//
-	// searchUserForBilling.sendKeys(userInfo);
-	//
-	// WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-	// wait.until(ExpectedConditions
-	// .visibilityOfElementLocated(By.xpath("/html/body/section/div[3]/div[2]/div/div[1]/span/span")));
-	//
-	// List<WebElement> dropDowns = DriverFactory.getDriver()
-	// .findElements(By.xpath("/html/body/section/div[3]/div[2]/div/div[1]/span/span"));
-	//
-	// dropDowns.get(0).click();
-	//
-	// }
+	public String viewAndReceiveButton() throws Exception {
+		
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		batchManagement.click();
+		
+		accessionDateRange.click();
+		lastWeek.click();
+		
+		String refNum = sampleList.get(0).getText().trim();
+		
+		System.out.println("==1=="+refNum);
+		
+		viewReceive.get(0).click();
+		
+		CommonMethods.waitForElementToVisible(batchFrom.get(2));
+		
+		String text = sampleBatchViewModalLabel.getText().trim();
+		
+		StringTokenizer st = new StringTokenizer(text," ");  
+		
+	     while (st.hasMoreTokens()) {  
+	         System.out.println("==token="+st.nextToken());  
+	         if(refNum.equals(st.nextToken())) {
+	 			
+	 			System.out.println("==3=="+batchFrom.get(2).getText());
+	 			return batchFrom.get(2).getText();
+	 		}
+	     }  
+	     
+		return null;
+		
+	}
+	
+	public boolean rejectLinkInViewAndReceive() throws Exception {
+		
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 
-	// public void selectTestName(String testName) throws Exception {
-	// testList.sendKeys(testName);
-	// WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-	// wait.until(ExpectedConditions.visibilityOfElementLocated(
-	// By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span")));
-	//
-	// List<WebElement> dropDowns = DriverFactory.getDriver()
-	// .findElements(By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span"));
-	//
-	// dropDowns.get(0).click();
-	//
-	// concession.sendKeys(Keys.ENTER);
-	// }
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		batchManagement.click();
+		
+		CommonMethods.waitForElementToVisible(accessionDateRange);
+//		accessionDateRange.click();
+//		lastWeek.click();
+		
+		Thread.sleep(1000);
+		CommonMethods.waitForElementToVisible(sampleList.get(0));
+		String id1 = sampleList.get(0).getText();
+		
+		viewReceive.get(0).click();
+		
+		Thread.sleep(1000);
+		CommonMethods.waitForElementToVisible(reject.get(0));
+		
+		for(int index=0;index<reject.size();index++) {
+			
+			js.executeScript("arguments[0].click();", reject.get(index));
+		}
+		
+		Thread.sleep(1000);
+//		accessBatchBtn.click();
+		js.executeScript("arguments[0].click();", accessBatchBtn);
+		
+		Thread.sleep(1000);
+		CommonMethods.waitForElementToVisible(sampleList.get(0));
+		String id2 = sampleList.get(0).getText();
+		
+		if(!id1.equals(id2)) {
+			
+			return true;
+		}
+		return false;
+		
+	}
+	
+	public List<String> acceptLinkInViewAndReceive() throws Exception {
+		
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor)driver;
 
-	// public boolean dismissSample(String userInfo) throws Exception {
-	//
-	// DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
-	//
-	// searchToBilling(userInfo);
-	// selectTestName("Chloride");
-	//
-	// advanceAmount.clear();
-	// advanceAmount.sendKeys(payableAmount.getText());
-	//
-	// saveBill.click();
-	//
-	// DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/sampleAccession/");
-	// Thread.sleep(1000);
-	// CommonMethods.waitForElementToClickable(firstRow);
-	//
-	// String accessionId = firstRow.getText();
-	//
-	// JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
-	//
-	// DriverFactory.getDriver().findElement(By.id("options" +
-	// accessionId)).click();
-	// Thread.sleep(1000);
-	// // element.click();
-	// // js.executeScript("arguments[0].click();", element);
-	//
-	// dismissSample.click();
-	//
-	//// if (element.isDisplayed()) {
-	//// return false;
-	//// }
-	// return true;
-	//
-	// }
+		driver.navigate().to(Constants.ACCESSION_URL);
+		batchManagement.click();
+		
+		CommonMethods.waitForElementToVisible(accessionDateRange);
+//		accessionDateRange.click();
+//		lastWeek.click();
+		
+		Thread.sleep(1000);
+		CommonMethods.waitForElementToVisible(sampleList.get(0));
+		String id1 = sampleList.get(0).getText();
+		
+		viewReceive.get(0).click();
+		
+		Thread.sleep(1000);
+		CommonMethods.waitForElementToVisible(accept.get(0));
+		
+		for(int index=0;index<accept.size();index++) {
+			
+			js.executeScript("arguments[0].click();", accept.get(index));
+		}
+		
+		Thread.sleep(1000);
+//		accessBatchBtn.click();
+		js.executeScript("arguments[0].click();", accessBatchBtn);
+		
+		CommonMethods.waitForElementToVisible(received);
+		CommonMethods.waitForElementToClickable(received);
+		received.click();
+
+		WebElement element = driver.findElement(By.xpath("//span[contains(text(),'"+id1+"')]"));
+		
+		String text = element.getText();
+		
+		return Arrays.asList(text,id1);
+		
+	}
 }
