@@ -90,11 +90,39 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 	// TC: 06
 	@Test(groups = { "Accession" })
 	public void verifyReceiveButton() {
-		boolean recv;
+		String recv;
 		try {
 
-			recv = accession.receiveSample();
-			Assert.assertTrue(recv);
+			recv = accession.receiveSample("Checkreceive");
+			Assert.assertEquals(recv, "Checkreceive (M - 10)");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC:07
+	@Test(groups = { "Accession" })
+	public void verifyReceivePrintButton() {
+		String recv;
+		try {
+
+			recv = accession.receiveAndPrint();
+			Assert.assertEquals(recv, "Checkreceive (M - 10)");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC:24
+	@Test(groups = { "Accession" })
+	public void verifyAccessedSampleList() {
+		List<String> recv;
+		try {
+
+			recv = accession.accessedSampleListAbleToShowOnlyAccessedList("Accessedonly");
+			Assert.assertEquals(recv.get(0), recv.get(1));
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -144,13 +172,13 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 33
-	@Test(groups = { "Accession" })
+	@Test(groups = { "Accession" }/* ,dependsOnMethods="verifyReceiveButton" */)
 	public void verifyUncollectSample() {
-		List<String> uncollectId;
+		boolean uncollect;
 		try {
 
-			uncollectId = accession.uncollectSample();
-			Assert.assertEquals(uncollectId.get(0), uncollectId.get(1));
+			uncollect = accession.uncollectSample();
+			Assert.assertTrue(uncollect);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
