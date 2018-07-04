@@ -102,20 +102,48 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:07
+	// @Test(groups = { "Accession" })
+	// public void verifyReceivePrintButton() {
+	// String recv;
+	// try {
+	//
+	// recv = accession.receiveAndPrint();
+	// Assert.assertEquals(recv, "Checkreceive (M - 10)");
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
+
+	// TC:20
 	@Test(groups = { "Accession" })
-	public void verifyReceivePrintButton() {
-		String recv;
+	public void verifyTestsNameListInSimpleWorkList() {
+		int testList;
 		try {
 
-			recv = accession.receiveAndPrint();
-			Assert.assertEquals(recv, "Checkreceive (M - 10)");
+			testList = accession.testsNameListInSimpleWorkList();
+			Assert.assertEquals(testList, 955);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
 
-	// TC:24
+	// TC:23
+	@Test(groups = { "Accession" })
+	public void verifySimpleWorklistWithoutAccessionNo() {
+		int testList;
+		try {
+
+			testList = accession.testsNameListInSimpleWorkListWithoutAccNo();
+			Assert.assertEquals(testList, 955);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC:24,30
 	@Test(groups = { "Accession" })
 	public void verifyAccessedSampleList() {
 		List<String> recv;
@@ -149,7 +177,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 		String redrawe;
 		try {
 
-			redrawe = accession.redrawSample();
+			redrawe = accession.redrawSample("redraw");
 			Assert.assertEquals(redrawe, "Sample Redrawn");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -158,27 +186,84 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 30
+	// @Test(groups = { "Accession" })
+	// public void verifyRedrawSampleConfirmation() {
+	// String redrawConfirmation;
+	// try {
+	//
+	// redrawConfirmation = accession.redrawSampleConfirmation("redraw");
+	// Assert.assertEquals(redrawConfirmation, "Do you want to redraw this
+	// report?");
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
+
+	// TC: 33 (option not getting clicked)
+	// @Test(groups = { "Accession" }/* ,dependsOnMethods="verifyReceiveButton" */)
+	// public void verifyUncollectSample() {
+	// boolean uncollect;
+	// try {
+	//
+	// uncollect = accession.uncollectSample();
+	// Assert.assertTrue(uncollect);
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
+
+	// TC: 44
 	@Test(groups = { "Accession" })
-	public void verifyRedrawSampleConfirmation() {
-		String redrawConfirmation;
+	public void verifyTestsNameInDepartmentWiseWorkList() {
+		int testList;
 		try {
 
-			redrawConfirmation = accession.redrawSampleConfirmation();
-			Assert.assertEquals(redrawConfirmation, "Do you want to redraw this report?");
+			testList = accession.testsNameListInDepartmentWiseWorkList();
+			Assert.assertEquals(testList, 955);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
 
-	// TC: 33
-	@Test(groups = { "Accession" }/* ,dependsOnMethods="verifyReceiveButton" */)
-	public void verifyUncollectSample() {
-		boolean uncollect;
+	// TC: 45
+	@Test(groups = { "Accession" })
+	public void verifyTestsNameInTestWiseWorkList() {
+		int testList;
 		try {
 
-			uncollect = accession.uncollectSample();
-			Assert.assertTrue(uncollect);
+			testList = accession.testsNameListInTestwiseWorkList();
+			Assert.assertEquals(testList, 955);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 48
+	@Test(groups = { "Accession" })
+	public void verifySimpleWorklist_Accessed() {
+		int testList;
+		try {
+
+			testList = accession.testsNameListInSimpleWorkList_Accessed();
+			Assert.assertEquals(testList, 955);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 51
+	@Test(groups = { "Accession" })
+	public void verifySimpleWorklistWithoutAccessionNo_Accessed() {
+		int testList;
+		try {
+
+			testList = accession.testsNameInSimpleWorkListWithoutAccNo_Accessed();
+			Assert.assertEquals(testList, 955);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -186,18 +271,18 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 52
-	@Test(groups = { "Accession" })
-	public void verifyAddEditAccessionType() {
-		String text;
-		try {
-
-			text = accession.addEditAccessionType();
-			Assert.assertEquals(text, "Add new sample type");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
+	// @Test(groups = { "Accession" })
+	// public void verifyAddEditAccessionType() {
+	// String text;
+	// try {
+	//
+	// text = accession.addEditAccessionType();
+	// Assert.assertEquals(text, "Add new sample type");
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
 
 	// TC: 53
 	@Test(groups = { "Accession" })
@@ -205,27 +290,27 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 		String text;
 		try {
 
-			text = accession.addNewSample();
-			Assert.assertEquals(text, "sampleTypeName");
+			text = accession.addNewSample("fromSample");
+			Assert.assertEquals(text, "fromSample");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
 
-	// TC: 54 FF
-	@Test(groups = { "Accession" })
-	public void verifyEditSample() {
-		List<String> list;
-		try {
-
-			list = accession.editSample();
-			Assert.assertEquals(list.get(0), list.get(1));
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
+	// // TC: 54 FF__Pending
+	// @Test(groups = { "Accession" })
+	// public void verifyEditSample() {
+	// List<String> list;
+	// try {
+	// String typeSample = commonMethods.getRandomString();
+	// list = accession.editSample(typeSample);
+	// Assert.assertEquals(list.get(0), list.get(1));
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
 
 	// TC: 55
 	@Test(groups = { "Accession" })
@@ -241,19 +326,19 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	// TC: 56 FF
-	@Test(groups = { "Accession" })
-	public void verifyAddTestField() {
-		String testName;
-		try {
-
-			testName = accession.mappingTestAddForSelectedSample();
-			Assert.assertEquals(testName, "Cholesterol - Total");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
+	// TC: 56 FF__Pending
+	// @Test(groups = { "Accession" })
+	// public void verifyAddTestField() {
+	// String testName;
+	// try {
+	//
+	// testName = accession.mappingTestAddForSelectedSample();
+	// Assert.assertEquals(testName, "Cholesterol - Total");
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
 
 	// TC: 57
 	@Test(groups = { "Accession" })
@@ -263,6 +348,34 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 
 			errorMsg = accession.alreadyAddedTestNotAbleToAdd();
 			Assert.assertEquals(errorMsg, "Exists! The tests you are trying to add already exist in this list.");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 58
+	@Test(groups = { "Accession" })
+	public void verifyRemoveSymbol() {
+		String assigned;
+		try {
+
+			assigned = accession.removedTestsAssignedToSelectedSample();
+			Assert.assertEquals(assigned, "IONIC CALCIUM");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 59
+	@Test(groups = { "Accession" })
+	public void verifyRemoveSymbolForDefaultNone() {
+		String assigned;
+		try {
+
+			assigned = accession.removedTestsAssignedToDefaultNoneSample();
+			Assert.assertEquals(assigned, "None");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());

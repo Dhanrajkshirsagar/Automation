@@ -17,6 +17,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -311,8 +312,50 @@ public class AccessionPage {
 	@FindAll({ @FindBy(css = "btn btn-danger btn-sm") })
 	public List<WebElement> redrawList;
 
-	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div/div[8]/div[1]/div[8]/li/a")
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div/div[8]/div[1]/div[8]/li")
 	public WebElement firstOption;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div/div[1]/div[2]/div/div[1]/div/button[2]")
+	public WebElement worklistDropdown;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"workListOpe\"]/div/ul/li[5]/a")
+	public WebElement simpleWorklist;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"customTestNameDiv\"]/div[2]/div/div/button")
+	public WebElement testNameList;
+
+	@FindBy(how = How.ID, using = "testDropDownList")
+	private WebElement testDropDownList;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"workListOpe\"]/div/ul/li[7]/a")
+	public WebElement simpleWorklistWithoutAccNo;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"workListOpe\"]/div/ul/li[3]/a")
+	public WebElement departmentwiseWorklist;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"workListOpe\"]/div/ul/li[1]/a")
+	public WebElement testwiseWorklist;
+
+	@FindBy(how = How.XPATH, using = "//input[@value='Yes'][@id='addSampleBtn']")
+	public WebElement addSampleYesBtn;
+
+	@FindBy(how = How.XPATH, using = "//input[@value='Done'][@id='addSampleBtn']")
+	public WebElement addSampleDoneBtn;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"sampleTestList\"]/button[2]")
+	public WebElement remove;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"sampleTestList\"]/button")
+	public WebElement removeFirst;
+
+	@FindBy(how = How.ID, using = "newSampleIdForTest0")
+	private WebElement newSampleIdForTest0;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"sampleTestList\"]/div[4]/label")
+	public WebElement ionicCalcium;
+
+	@FindBy(how = How.XPATH, using = "//label[contains(text(),'IONIC CALCIUM')]")
+	public WebElement ionicTest;
 
 	//
 	@Autowired
@@ -505,6 +548,52 @@ public class AccessionPage {
 
 	}
 
+	public int testsNameListInSimpleWorkList() throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		driver.navigate().to(Constants.ACCESSION_URL);
+
+		CommonMethods.waitForElementToVisible(worklistDropdown);
+		js.executeScript("arguments[0].click();", worklistDropdown);
+
+		CommonMethods.waitForElementToVisible(simpleWorklist);
+		js.executeScript("arguments[0].click();", simpleWorklist);
+
+		CommonMethods.waitForElementToVisible(testNameList);
+		js.executeScript("arguments[0].click();", testNameList);
+
+		CommonMethods.waitForElementToVisible(testDropDownList);
+		List<WebElement> elements = testDropDownList.findElements(By.tagName("li"));
+
+		return elements.size();
+
+	}
+
+	public int testsNameListInSimpleWorkListWithoutAccNo() throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		driver.navigate().to(Constants.ACCESSION_URL);
+
+		CommonMethods.waitForElementToVisible(worklistDropdown);
+		js.executeScript("arguments[0].click();", worklistDropdown);
+
+		CommonMethods.waitForElementToVisible(simpleWorklistWithoutAccNo);
+		js.executeScript("arguments[0].click();", simpleWorklistWithoutAccNo);
+
+		CommonMethods.waitForElementToVisible(testNameList);
+		js.executeScript("arguments[0].click();", testNameList);
+
+		CommonMethods.waitForElementToVisible(testDropDownList);
+		List<WebElement> elements = testDropDownList.findElements(By.tagName("li"));
+
+		return elements.size();
+
+	}
+
 	public String receiveAndPrint() throws Exception {
 
 		WebDriver driver = DriverFactory.getDriver();
@@ -577,43 +666,50 @@ public class AccessionPage {
 
 	}
 
-	public String redrawSample() throws Exception {
+	public String redrawSample(String userName) throws Exception {
 
 		// accessionDateRange.click();
 		// lastWeek.click();
 		// receive.get(0).click();
-		// accessed.click();
+		receiveSample(userName);
 
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		accessed.click();
+		CommonMethods.waitForElementToVisible(redraw);
 		redraw.click();
+		CommonMethods.waitForElementToVisible(redrawComments);
 		redrawComments.sendKeys("redraw");
 
 		redrawCommentBtn.click();
 
 		DriverFactory.getDriver().navigate().refresh();
 
+		CommonMethods.waitForElementToVisible(sampleRedrawn.get(0));
 		String var = sampleRedrawn.get(0).getText();
-
-		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 
 		return var;
 
 	}
 
-	public String redrawSampleConfirmation() throws Exception {
+	public String redrawSampleConfirmation(String userName) throws Exception {
 
-		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		receiveSample(userName);
 
-		accessionDateRange.click();
-		thisWeek.click();
-		receive.get(0).click();
-		accessed.click();
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.ACCESSION_URL);
 
-		redraw.click();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].click();", accessed);
+
+		js.executeScript("arguments[0].click();", accessionDateRange);
+		js.executeScript("arguments[0].click();", lastWeek);
+
+		js.executeScript("arguments[0].click();", redraw);
 		redrawComments.sendKeys("redraw");
 
 		String var = redrawCommentModalLabel.getText();
 
-		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		driver.navigate().to(Constants.ACCESSION_URL);
 
 		return var;
 
@@ -635,7 +731,7 @@ public class AccessionPage {
 
 		System.out.println("@" + id);
 		Thread.sleep(1000);
-		js.executeScript("arguments[0].click();", options.get(1));
+		js.executeScript("arguments[0].click();", options.get(2));
 		// js.executeScript("arguments[0].click();", firstOption);
 		// js.executeScript("arguments[0].click();", firstOption);
 
@@ -664,6 +760,110 @@ public class AccessionPage {
 
 	}
 
+	public int testsNameListInDepartmentWiseWorkList() throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		driver.navigate().to(Constants.ACCESSION_URL);
+
+		CommonMethods.waitForElementToVisible(accessed);
+		js.executeScript("arguments[0].click();", accessed);
+
+		CommonMethods.waitForElementToVisible(worklistDropdown);
+		js.executeScript("arguments[0].click();", worklistDropdown);
+
+		CommonMethods.waitForElementToVisible(departmentwiseWorklist);
+		js.executeScript("arguments[0].click();", departmentwiseWorklist);
+
+		CommonMethods.waitForElementToVisible(testNameList);
+		js.executeScript("arguments[0].click();", testNameList);
+
+		CommonMethods.waitForElementToVisible(testDropDownList);
+		List<WebElement> elements = testDropDownList.findElements(By.tagName("li"));
+
+		return elements.size();
+
+	}
+
+	public int testsNameListInTestwiseWorkList() throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		driver.navigate().to(Constants.ACCESSION_URL);
+
+		CommonMethods.waitForElementToVisible(accessed);
+		js.executeScript("arguments[0].click();", accessed);
+
+		CommonMethods.waitForElementToVisible(worklistDropdown);
+		js.executeScript("arguments[0].click();", worklistDropdown);
+
+		CommonMethods.waitForElementToVisible(testwiseWorklist);
+		js.executeScript("arguments[0].click();", testwiseWorklist);
+
+		CommonMethods.waitForElementToVisible(testNameList);
+		js.executeScript("arguments[0].click();", testNameList);
+
+		CommonMethods.waitForElementToVisible(testDropDownList);
+		List<WebElement> elements = testDropDownList.findElements(By.tagName("li"));
+
+		return elements.size();
+
+	}
+
+	public int testsNameListInSimpleWorkList_Accessed() throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		driver.navigate().to(Constants.ACCESSION_URL);
+
+		CommonMethods.waitForElementToVisible(accessed);
+		js.executeScript("arguments[0].click();", accessed);
+
+		CommonMethods.waitForElementToVisible(worklistDropdown);
+		js.executeScript("arguments[0].click();", worklistDropdown);
+
+		CommonMethods.waitForElementToVisible(simpleWorklist);
+		js.executeScript("arguments[0].click();", simpleWorklist);
+
+		CommonMethods.waitForElementToVisible(testNameList);
+		js.executeScript("arguments[0].click();", testNameList);
+
+		CommonMethods.waitForElementToVisible(testDropDownList);
+		List<WebElement> elements = testDropDownList.findElements(By.tagName("li"));
+
+		return elements.size();
+
+	}
+
+	public int testsNameInSimpleWorkListWithoutAccNo_Accessed() throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		driver.navigate().to(Constants.ACCESSION_URL);
+
+		CommonMethods.waitForElementToVisible(accessed);
+		js.executeScript("arguments[0].click();", accessed);
+
+		CommonMethods.waitForElementToVisible(worklistDropdown);
+		js.executeScript("arguments[0].click();", worklistDropdown);
+
+		CommonMethods.waitForElementToVisible(simpleWorklistWithoutAccNo);
+		js.executeScript("arguments[0].click();", simpleWorklistWithoutAccNo);
+
+		CommonMethods.waitForElementToVisible(testNameList);
+		js.executeScript("arguments[0].click();", testNameList);
+
+		CommonMethods.waitForElementToVisible(testDropDownList);
+		List<WebElement> elements = testDropDownList.findElements(By.tagName("li"));
+
+		return elements.size();
+
+	}
+
 	public String addEditAccessionType() throws Exception {
 
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
@@ -678,75 +878,85 @@ public class AccessionPage {
 
 			return text;
 		}
-		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 
 		return null;
 
 	}
 
-	public String addNewSample() throws Exception {
+	public String addNewSample(String sampleName) throws Exception {
 
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 
+		CommonMethods.waitForElementToVisible(accessionSettings);
 		accessionSettings.click();
+
+		CommonMethods.waitForElementToVisible(addEdit);
 		addEdit.click();
 
 		CommonMethods.waitForElementToVisible(sampleTypeName);
-		sampleTypeName.sendKeys("sampleTypeName");
+		sampleTypeName.sendKeys(sampleName);
 		typeOfSample.sendKeys("typeOfSample");
 
-		addSampleBtn.click();
-
-		CommonMethods.waitForElementToVisible(sampleNameTypeadhead);
-		Thread.sleep(1000);
-
-		sampleNameTypeadhead.sendKeys("sampleTypeName");
-
-		CommonMethods.waitForElementToVisible(sampleDropDown.get(0));
-
-		sampleDropDown.get(0).click();
-
-		Thread.sleep(1000);
-		String text = sampleType.getText();
-
-		js.executeScript("arguments[0].click();", sampleDeleteBtn);
 		js.executeScript("arguments[0].click();", addSampleBtn);
 
-		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		Thread.sleep(1000);
+		CommonMethods.waitForElementToVisible(sampleNameTypeadhead);
+		sampleNameTypeadhead.sendKeys(sampleName);
+
+		CommonMethods.waitForElementToVisible(sampleDropDown.get(0));
+		sampleDropDown.get(0).click();
+
+		String text = sampleType.getText();
+
+		Thread.sleep(1000);
+		CommonMethods.waitForElementToVisible(sampleDeleteBtn);
+		CommonMethods.waitForElementToClickable(sampleDeleteBtn);
+		js.executeScript("arguments[0].click();", sampleDeleteBtn);
+
+		CommonMethods.waitForElementToVisible(addSampleYesBtn);
+		js.executeScript("arguments[0].click();", addSampleYesBtn);
 
 		return text;
 
 	}
 
-	public List<String> editSample() throws Exception {
+	public List<String> editSample(String typeSample) throws Exception {
 
-		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
-		String typeSample = commonMethods.getRandomString();
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		driver.navigate().to(Constants.ACCESSION_URL);
+
+		CommonMethods.waitForElementToVisible(accessionSettings);
 		accessionSettings.click();
-		editSampleType();
 
+		editSampleType(js);
+
+		CommonMethods.waitForElementToVisible(typeOfSample);
 		typeOfSample.sendKeys(typeSample);
 
+		CommonMethods.waitForElementToVisible(addSampleBtn);
 		addSampleBtn.click();
 
-		editSampleType();
+		editSampleType(js);
 
 		String text = typeOfSample.getText();
-
-		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 
 		return Arrays.asList(text, typeSample);
 
 	}
 
-	private void editSampleType() throws Exception {
-		addEdit.click();
+	private void editSampleType(JavascriptExecutor js) throws Exception {
 
-		editSampleFlag.click();
+		CommonMethods.waitForElementToVisible(addEdit);
+		js.executeScript("arguments[0].click();", addEdit);
+
+		CommonMethods.waitForElementToVisible(editSampleFlag);
+		js.executeScript("arguments[0].click();", editSampleFlag);
 
 		CommonMethods.waitForElementToVisible(sampleTypeName);
-		sampleTypeName.sendKeys("sampleTypeName");
+		sampleTypeName.sendKeys("sample");
 
 		CommonMethods.waitForElementToVisible(editSampleDropDown.get(0));
 		editSampleDropDown.get(0).click();
@@ -767,8 +977,6 @@ public class AccessionPage {
 		sampleDropDown.get(0).click();
 
 		String text = sampleType.getText();
-
-		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 
 		return text;
 
@@ -830,9 +1038,85 @@ public class AccessionPage {
 
 		String errorMsg = error.getText();
 
-		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
-
 		return errorMsg;
+
+	}
+
+	public void removeSymbol() throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.ACCESSION_URL);
+
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		CommonMethods.waitForElementToVisible(accessionSettings);
+		js.executeScript("arguments[0].click();", accessionSettings);
+
+		CommonMethods.waitForElementToVisible(sampleNameTypeadhead);
+		sampleNameTypeadhead.sendKeys("sample");
+
+		CommonMethods.waitForElementToVisible(sampleDropDown.get(0));
+		sampleDropDown.get(0).click();
+
+		addSampleTypeToTest.sendKeys("IONIC CALCIUM");
+
+		CommonMethods.waitForElementToVisible(addSampleTypeDropDown.get(0));
+		addSampleTypeDropDown.get(0).click();
+
+		CommonMethods.waitForElementToVisible(remove);
+		js.executeScript("arguments[0].click();", remove);
+
+		js.executeScript("arguments[0].click();", sampleTestBtn);
+
+		CommonMethods.waitForElementToVisible(newSampleIdForTest0);
+	}
+
+	public String removedTestsAssignedToSelectedSample() throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		removeSymbol();
+		Select select = new Select(newSampleIdForTest0);
+		select.selectByVisibleText("bajaj");
+
+		js.executeScript("arguments[0].click();", addSampleDoneBtn);
+
+		driver.navigate().refresh();
+		CommonMethods.waitForElementToVisible(sampleNameTypeadhead);
+		sampleNameTypeadhead.sendKeys("bajaj");
+
+		CommonMethods.waitForElementToVisible(sampleDropDown.get(0));
+		sampleDropDown.get(0).click();
+
+		CommonMethods.waitForElementToVisible(ionicCalcium);
+		String ionic = ionicCalcium.getText().trim();
+		js.executeScript("arguments[0].click();", removeFirst);
+		js.executeScript("arguments[0].click();", sampleTestBtn);
+		js.executeScript("arguments[0].click();", addSampleDoneBtn);
+
+		return ionic;
+	}
+
+	public String removedTestsAssignedToDefaultNoneSample() throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		removeSymbol();
+		Select select = new Select(newSampleIdForTest0);
+		WebElement element = select.getFirstSelectedOption();
+
+		js.executeScript("arguments[0].click();", addSampleDoneBtn);
+
+		return element.getText().trim();
+	}
+
+	public String deleteSampleAssignTestToSelectedSample() throws Exception {
+
+		// addNewSample("fromSample");
+
+		return null;
 
 	}
 
