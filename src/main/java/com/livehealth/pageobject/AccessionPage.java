@@ -342,10 +342,13 @@ public class AccessionPage {
 	@FindBy(how = How.XPATH, using = "//input[@value='Done'][@id='addSampleBtn']")
 	public WebElement addSampleDoneBtn;
 
+	@FindBy(how = How.XPATH, using = "//input[@value='Edit'][@id='addSampleBtn']")
+	public WebElement addSampleEditBtn;
+
 	@FindBy(how = How.XPATH, using = "//*[@id=\"sampleTestList\"]/button[2]")
 	public WebElement remove;
 
-	@FindBy(how = How.XPATH, using = "//*[@id=\"sampleTestList\"]/button")
+	@FindBy(how = How.XPATH, using = "//*[@id=\"sampleTestList\"]/button[1]")
 	public WebElement removeFirst;
 
 	@FindBy(how = How.ID, using = "newSampleIdForTest0")
@@ -356,6 +359,12 @@ public class AccessionPage {
 
 	@FindBy(how = How.XPATH, using = "//label[contains(text(),'IONIC CALCIUM')]")
 	public WebElement ionicTest;
+
+	@FindAll({ @FindBy(className = "sampleTypecardlabel") })
+	public List<WebElement> addedTests;
+
+	@FindBy(how = How.ID, using = "newSampleIdForAllTest")
+	private WebElement newSampleIdForAllTest;
 
 	//
 	@Autowired
@@ -671,10 +680,13 @@ public class AccessionPage {
 		// accessionDateRange.click();
 		// lastWeek.click();
 		// receive.get(0).click();
-		receiveSample(userName);
+		// receiveSample(userName);
 
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		accessed.click();
+		accessionDateRange.click();
+		lastWeek.click();
+
 		CommonMethods.waitForElementToVisible(redraw);
 		redraw.click();
 		CommonMethods.waitForElementToVisible(redrawComments);
@@ -693,7 +705,7 @@ public class AccessionPage {
 
 	public String redrawSampleConfirmation(String userName) throws Exception {
 
-		receiveSample(userName);
+		// receiveSample(userName);
 
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.ACCESSION_URL);
@@ -883,7 +895,7 @@ public class AccessionPage {
 
 	}
 
-	public String addNewSample(String sampleName) throws Exception {
+	public void addNewSample(String sampleName) throws Exception {
 
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
@@ -907,6 +919,12 @@ public class AccessionPage {
 		CommonMethods.waitForElementToVisible(sampleDropDown.get(0));
 		sampleDropDown.get(0).click();
 
+	}
+
+	public String deleteSample(String sampleName) throws Exception {
+
+		addNewSample(sampleName);
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 		String text = sampleType.getText();
 
 		Thread.sleep(1000);
@@ -934,14 +952,17 @@ public class AccessionPage {
 		editSampleType(js);
 
 		CommonMethods.waitForElementToVisible(typeOfSample);
+		typeOfSample.clear();
 		typeOfSample.sendKeys(typeSample);
 
-		CommonMethods.waitForElementToVisible(addSampleBtn);
-		addSampleBtn.click();
+		CommonMethods.waitForElementToVisible(addSampleEditBtn);
+		addSampleEditBtn.click();
 
+		driver.navigate().refresh();
 		editSampleType(js);
 
-		String text = typeOfSample.getText();
+		CommonMethods.waitForElementToVisible(typeOfSample);
+		String text = typeOfSample.getAttribute("value");
 
 		return Arrays.asList(text, typeSample);
 
@@ -1112,12 +1133,117 @@ public class AccessionPage {
 		return element.getText().trim();
 	}
 
-	public String deleteSampleAssignTestToSelectedSample() throws Exception {
+	public List<String> deleteSampleAssignTestToSelectedSample(String sampleName) throws Exception {
 
-		// addNewSample("fromSample");
+		addNewSample(sampleName);
 
-		return null;
+		String[] tNames = { "IONIC CALCIUM", "CPK, Total" };
 
+		for (int index = 0; index < tNames.length; index++) {
+			addSampleTypeToTest.sendKeys(tNames[index]);
+
+			CommonMethods.waitForElementToVisible(addSampleTypeDropDown.get(0));
+			addSampleTypeDropDown.get(0).click();
+		}
+
+		CommonMethods.waitForElementToVisible(sampleTestBtn);
+		CommonMethods.waitForElementToClickable(sampleTestBtn);
+		sampleTestBtn.click();
+
+		DriverFactory.getDriver().navigate().refresh();
+		CommonMethods.waitForElementToVisible(sampleNameTypeadhead);
+		sampleNameTypeadhead.sendKeys(sampleName);
+
+		CommonMethods.waitForElementToVisible(sampleDropDown.get(0));
+		sampleDropDown.get(0).click();
+
+		CommonMethods.waitForElementToVisible(sampleDeleteBtn);
+		CommonMethods.waitForElementToClickable(sampleDeleteBtn);
+		sampleDeleteBtn.click();
+
+		CommonMethods.waitForElementToVisible(newSampleIdForAllTest);
+		Select select = new Select(newSampleIdForAllTest);
+		select.selectByVisibleText("tosample");
+
+		addSampleYesBtn.click();
+
+		DriverFactory.getDriver().navigate().refresh();
+		CommonMethods.waitForElementToVisible(sampleNameTypeadhead);
+		sampleNameTypeadhead.sendKeys("tosample");
+
+		CommonMethods.waitForElementToVisible(sampleDropDown.get(0));
+		sampleDropDown.get(0).click();
+
+		CommonMethods.waitForElementToVisible(addedTests.get(3));
+		String firstTest = addedTests.get(3).getText();
+		String secondTest = addedTests.get(5).getText();
+
+		removeFirst.click();
+		removeFirst.click();
+
+		sampleTestBtn.click();
+		CommonMethods.waitForElementToVisible(addSampleDoneBtn);
+		addSampleDoneBtn.click();
+
+		return Arrays.asList(firstTest, secondTest);
+	}
+
+	public String deleteSampleAssignTestToDefaultNone(String sampleName) throws Exception {
+
+		addNewSample(sampleName);
+
+		String[] tNames = { "IONIC CALCIUM", "CPK, Total" };
+
+		for (int index = 0; index < tNames.length; index++) {
+			addSampleTypeToTest.sendKeys(tNames[index]);
+
+			CommonMethods.waitForElementToVisible(addSampleTypeDropDown.get(0));
+			addSampleTypeDropDown.get(0).click();
+		}
+
+		CommonMethods.waitForElementToVisible(sampleTestBtn);
+		CommonMethods.waitForElementToClickable(sampleTestBtn);
+		sampleTestBtn.click();
+
+		DriverFactory.getDriver().navigate().refresh();
+		CommonMethods.waitForElementToVisible(sampleNameTypeadhead);
+		sampleNameTypeadhead.sendKeys(sampleName);
+
+		CommonMethods.waitForElementToVisible(sampleDropDown.get(0));
+		sampleDropDown.get(0).click();
+
+		CommonMethods.waitForElementToVisible(sampleDeleteBtn);
+		CommonMethods.waitForElementToClickable(sampleDeleteBtn);
+		sampleDeleteBtn.click();
+
+		CommonMethods.waitForElementToVisible(newSampleIdForAllTest);
+		Select select = new Select(newSampleIdForAllTest);
+		WebElement element = select.getFirstSelectedOption();
+
+		addSampleYesBtn.click();
+
+		return element.getText();
+	}
+
+	public List<String> sampleTypeShouldShowAssignedTests(String sampleName) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.ACCESSION_URL);
+
+		CommonMethods.waitForElementToVisible(accessionSettings);
+		accessionSettings.click();
+
+		CommonMethods.waitForElementToVisible(sampleNameTypeadhead);
+		sampleNameTypeadhead.sendKeys(sampleName);
+
+		CommonMethods.waitForElementToVisible(sampleDropDown.get(0));
+		sampleDropDown.get(0).click();
+
+		CommonMethods.waitForElementToVisible(addedTests.get(3));
+		String firstTest = addedTests.get(3).getText();
+		String secondTest = addedTests.get(5).getText();
+
+		return Arrays.asList(firstTest, secondTest);
 	}
 
 	public List<String> sampleSearchAbleToSelectSample() throws Exception {
