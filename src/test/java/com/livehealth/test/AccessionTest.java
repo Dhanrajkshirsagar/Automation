@@ -45,7 +45,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 		}
 
 	}
-
+	/*
 	// TC: 01
 	@Test(groups = { "Accession" })
 	public void verifyPendingList_01() {
@@ -399,7 +399,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 		softAssert.assertAll();
 	}
 
-	// TC: 61
+	// TC: 61,62
 	@Test(groups = { "Accession" })
 	public void verifyDeleteSymbolForDefaultNone_61() {
 		String assigned;
@@ -430,6 +430,34 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 		softAssert.assertAll();
 	}
 
+	// TC: 65
+	@Test(groups = { "Accession" })
+	public void verifyEmergencyFlagPendingAccession_65() {
+		String flag;
+		try {
+
+			flag = accession.emergencyFlagOnPendingAccession("Roger");
+			Assert.assertEquals(flag, "Emergency Reports");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	// TC: 66
+	@Test(groups = { "Accession" },dependsOnMethods="verifyEmergencyFlagPendingAccession_65")
+	public void verifyEmergencyFlagAccessedAccession_66() {
+		String flag;
+		try {
+
+			flag = accession.emergencyFlagOnAccessedAccession();
+			Assert.assertEquals(flag, "Emergency Reports");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}*/
+/*	
 	// TC: 68
 	@Test(groups = { "Accession" })
 	public void verifySampleSearch_68() {
@@ -484,22 +512,52 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
+	}*/
+
+	// TC: 72
+	@Test(groups = { "Accession" })
+	public void verifyAllSamplesDropdown_72() {
+		boolean referrel;
+		try {
+
+			referrel = accession.allSamplesDropdown();
+			Assert.assertTrue(referrel);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	// TC: 73
+	@Test(groups = { "Accession" })
+	public void verifyOutsourcedOnlyDropdown_73() {
+		boolean referrel;
+		try {
+
+			referrel = accession.outsourcedOnlyDropdown();
+			Assert.assertTrue(referrel);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	// TC: 74
+	@Test(groups = { "Accession" })
+	public void verifyNotOutsourcedOnlyDropdown_74() {
+		boolean referrel;
+		try {
+
+			referrel = accession.notOutsourcedOnlyDropdown();
+			Assert.assertTrue(referrel);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
 	}
 
-	// TC: 73
-	// @Test(groups = { "Accession" })
-	// public void verifyOutsourcedOnlySamples() {
-	// List<String> referrel;
-	// try {
-	//
-	// referrel = accession.outsourcedOnlySamples();
-	// Assert.assertTrue(referrel);
-	// } catch (Exception e) {
-	// logger.error(e.getMessage());
-	// Assert.assertTrue(false, e.getMessage());
-	// }
-	// }
-
+	
+/*
 	// TC: Batch_01
 	@Test(groups = { "Accession" })
 	public void verifyCreateBatch() {
@@ -658,7 +716,7 @@ public class AccessionTest extends AbstractTestNGSpringContextTests {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
-	}
+	}*/
 
 	@AfterClass(alwaysRun = true)
 	public void tearDown() {

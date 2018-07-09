@@ -2,6 +2,7 @@ package com.livehealth.util;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Random;
 
 import org.openqa.selenium.JavascriptExecutor;
@@ -55,6 +56,12 @@ public class CommonMethods {
 	public static void waitForElementToVisible(WebElement element) throws Exception {
 
 		DriverFactory.getDriverWait().until(ExpectedConditions.visibilityOf(element));
+
+	}
+	
+	public static void waitForAllElementsToVisible(List<WebElement> elements) throws Exception {
+
+		DriverFactory.getDriverWait().until(ExpectedConditions.visibilityOfAllElements(elements));
 
 	}
 

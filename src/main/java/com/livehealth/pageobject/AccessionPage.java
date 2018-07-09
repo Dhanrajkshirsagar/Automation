@@ -177,7 +177,7 @@ public class AccessionPage {
 	@FindBy(how = How.ID, using = "searchSampleAccessionInput")
 	private WebElement searchSampleAccessionInput;
 
-	@FindAll({ @FindBy(xpath = "/html/body/section/div[2]/div/div[4]/div[1]/div[1]/span/span") })
+	@FindAll({ @FindBy(xpath = "/html/body/section/div[2]/div/div[5]/div[1]/div[1]/span/span") })
 	public List<WebElement> sampleIdDropDown;
 
 	@FindAll({ @FindBy(className = "userWaitingListCard") })
@@ -186,17 +186,20 @@ public class AccessionPage {
 	@FindBy(how = How.ID, using = "searchReferral")
 	private WebElement searchReferral;
 
-	@FindAll({ @FindBy(xpath = "/html/body/section/div[2]/div/div[4]/div[1]/div[2]/span/span") })
+	@FindAll({ @FindBy(xpath = "/html/body/section/div[2]/div/div[5]/div[1]/div[2]/span/span") })
 	public List<WebElement> referrelSearch;
 
 	@FindBy(how = How.ID, using = "searchOrganisation")
 	private WebElement searchOrganisation;
-
-	@FindAll({ @FindBy(xpath = "/html/body/section/div[2]/div/div[4]/div[1]/div[3]/span/span") })
+							//  /html/body/section/div[2]/div/div[5]/div[1]/div[3]/span/span	
+	@FindAll({ @FindBy(xpath = "/html/body/section/div[2]/div/div[5]/div[1]/div[3]/span/span") })
 	public List<WebElement> organizationSearch;
 
 	@FindBy(how = How.ID, using = "outsourceSampleFlag")
 	private WebElement outsourceSampleFlag;
+
+	@FindBy(how = How.ID, using = "patientTypeFilter")
+	private WebElement patientTypeFilter;
 
 	@FindBy(how = How.ID, using = "createBatchBtn")
 	private WebElement createBatchBtn;
@@ -366,7 +369,25 @@ public class AccessionPage {
 	@FindBy(how = How.ID, using = "newSampleIdForAllTest")
 	private WebElement newSampleIdForAllTest;
 
-	//
+	@FindBy(how = How.ID, using = "reportModeFlag")
+	private WebElement reportModeFlag;
+
+	@FindBy(how = How.ID, using = "totalAmount")
+	private WebElement totalAmount;
+
+	@FindBy(how = How.ID, using = "AdvanceAmount")
+	private WebElement AdvanceAmount;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div/div[8]/div[1]/div[5]/label")
+	public WebElement emergencyFlag;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div/div[9]/div/div[6]/label")
+	public WebElement emergencyAccessedFlag;
+
+	@FindBy(how = How.ID, using = "clearFilterLink")
+	private WebElement clearFilterLink;
+
+	//	
 	@Autowired
 	BillingPage billing;
 
@@ -497,6 +518,8 @@ public class AccessionPage {
 
 	public void selectTestName(String testName) throws Exception {
 
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+
 		testList.sendKeys(testName);
 		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -508,14 +531,21 @@ public class AccessionPage {
 		dropDowns.get(0).click();
 
 		concession.sendKeys(Keys.ENTER);
+		
+		CommonMethods.waitForElementToVisible(reportModeFlag);
+		js.executeScript("arguments[0].click();", reportModeFlag);
+		
+		advanceAmount.clear();
+		advanceAmount.sendKeys(totalAmount.getText());
+		
 		CommonMethods.waitForElementToVisible(saveBill);
-		saveBill.click();
+		js.executeScript("arguments[0].click();", saveBill);
 	}
 
 	public void createBillForAccession(String userName) throws Exception {
 
 		searchToBilling(userName);
-		selectTestName("CPK, Total");
+		selectTestName("Ionised Calcium");
 
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.ACCESSION_URL);
@@ -1245,6 +1275,32 @@ public class AccessionPage {
 
 		return Arrays.asList(firstTest, secondTest);
 	}
+	
+	public String emergencyFlagOnPendingAccession(String userName) throws Exception {
+		
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		createBillForAccession(userName);
+		
+		String flag = emergencyFlag.getText();
+		
+		CommonMethods.waitForElementToVisible(receive.get(0));
+		js.executeScript("arguments[0].click();", receive.get(0));
+
+		js.executeScript("arguments[0].click();", accessed);
+
+		return flag;
+		
+	} 
+	
+	public String emergencyFlagOnAccessedAccession() throws Exception {
+		
+		CommonMethods.waitForElementToVisible(accessionDateRange);
+		CommonMethods.waitForElementToVisible(emergencyAccessedFlag);
+		String flag = emergencyAccessedFlag.getText();
+		
+		return flag;
+		
+	}
 
 	public List<String> sampleSearchAbleToSelectSample() throws Exception {
 
@@ -1272,7 +1328,7 @@ public class AccessionPage {
 		thisWeek.click();
 		String sample = sampleList.get(1).getText();
 
-		String userName = sample.substring(0, (sample.length() - 8));
+		String userName = sample.substring(3, (sample.length() - 8));
 
 		optionLink.click();
 
@@ -1284,7 +1340,7 @@ public class AccessionPage {
 
 		String searchedSample = sampleList.get(1).getText();
 
-		String searchedUser = searchedSample.substring(0, (sample.length() - 8));
+		String searchedUser = searchedSample.substring(3, (sample.length() - 8));
 
 		return Arrays.asList(userName, searchedUser);
 
@@ -1335,7 +1391,97 @@ public class AccessionPage {
 
 		return false;
 	}
+	
+	public boolean allSamplesDropdown() throws Exception {
+		
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.ACCESSION_URL);
+		
+		CommonMethods.waitForElementToVisible(optionLink);
+		optionLink.click();
+		
+		CommonMethods.waitForElementToVisible(outsourceSampleFlag);
+		Select select = new Select(outsourceSampleFlag);
+		select.selectByVisibleText("Select all Sample");
+		
+		List<WebElement> elements = pendingSampleList.findElements(By.tagName("div"));
+		
+		if(elements.size()>1) {
+			
+			return true;
+		}
+		return false;
+		
+	}
 
+	public boolean outsourcedOnlyDropdown() throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.ACCESSION_URL);
+
+		CommonMethods.waitForElementToVisible(optionLink);
+		optionLink.click();
+
+		CommonMethods.waitForElementToVisible(outsourceSampleFlag);
+		Select select = new Select(outsourceSampleFlag);
+		select.selectByVisibleText("Outsourced Only");
+
+		List<WebElement> elements = pendingSampleList.findElements(By.tagName("div"));
+
+		if (elements.size() > 1) {
+
+			return true;
+		}
+		return false;
+
+	}
+	
+	public boolean notOutsourcedOnlyDropdown() throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.ACCESSION_URL);
+
+		CommonMethods.waitForElementToVisible(optionLink);
+		optionLink.click();
+
+		CommonMethods.waitForElementToVisible(outsourceSampleFlag);
+		Select select = new Select(outsourceSampleFlag);
+		select.selectByVisibleText("Not Outsourced Only");
+
+		List<WebElement> elements = pendingSampleList.findElements(By.tagName("div"));
+
+		if (elements.size() > 1) {
+
+			return true;
+		}
+		return false;
+
+	}
+	
+	public List<String> clearFilterLink() throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.ACCESSION_URL);
+
+		accessed.click();
+		CommonMethods.waitForElementToVisible(optionLink);
+		optionLink.click();
+
+		CommonMethods.waitForElementToVisible(outsourceSampleFlag);
+		Select select = new Select(outsourceSampleFlag);
+		select.selectByVisibleText("Outsourced Only");
+
+		Select select1 = new Select(patientTypeFilter);
+		select1.selectByVisibleText("Direct (D)");
+
+		clearFilterLink.click();
+
+		String defaultSampleType = select.getFirstSelectedOption().getText();
+		String defaultUserType = select1.getFirstSelectedOption().getText();
+
+		return Arrays.asList(defaultSampleType, defaultUserType);
+	}
+	
 	public List<String> outsourcedOnlySamples() throws Exception {
 
 		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
@@ -1346,7 +1492,6 @@ public class AccessionPage {
 		// Select select = new Select(outsourceSampleFlag);
 		// select.selectByValue("1");
 
-		Thread.sleep(3000);
 		// CommonMethods.waitForElementToVisible(getSamples.get(0));
 		System.out.println("==" + getSamples.get(0).toString());
 		System.out.println("==" + getSamples.get(1).toString());

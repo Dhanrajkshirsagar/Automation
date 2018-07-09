@@ -18,4 +18,6 @@ public class Constants {
 	
 	public static String Billing_URL = "https://beta.livehealth.solutions/billing/#";
 
+	public static String BillingUpdate_URL = "https://beta.livehealth.solutions/billUpdate/";
+
 }
