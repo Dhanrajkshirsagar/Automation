@@ -189,6 +189,78 @@ public class BillUpdatePage {
 	@FindBy(how = How.XPATH, using = "//*[@id=\"labBillId\"]/span")
 	private WebElement billStatus;
 
+	@FindBy(how = How.ID, using = "submitForm")
+	private WebElement submitForm;
+
+	@FindBy(how = How.ID, using = "billLocked")
+	private WebElement billLocked;
+
+	@FindBy(how = How.ID, using = "confirmedBillUpdate")
+	private WebElement confirmedBillUpdate;
+
+	@FindBy(how = How.ID, using = "writeoffBtn")
+	private WebElement writeoffBtn;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"allUpdateBtnsDiv\"]/div/ul/li[3]/a")
+	private WebElement removeLastoption;
+
+	@FindBy(how = How.ID, using = "billAdvance")
+	private WebElement billAdvance;
+
+	@FindAll({ @FindBy(xpath = "//*[@id=\"parentBillUpdateDiv\"]/div[4]/span/span/div") })
+	public List<WebElement> refDropdown;
+
+	@FindAll({ @FindBy(xpath = "//*[@id=\"parentBillUpdateDiv\"]/div[6]/span/span/div") })
+	public List<WebElement> orgDropdown;
+
+	@FindBy(how = How.ID, using = "additionalCharges")
+	private WebElement additionalCharges;
+
+	@FindBy(how = How.ID, using = "additionalCost")
+	private WebElement additionalCost;
+
+	@FindBy(how = How.ID, using = "refundBtn")
+	private WebElement refundBtn;
+
+	@FindBy(how = How.ID, using = "clearBtn")
+	private WebElement clearBtn;
+
+	@FindBy(how = How.ID, using = "clearBillBtn")
+	private WebElement clearBillBtn;
+
+	@FindBy(how = How.ID, using = "editTest0")
+	private WebElement editTest0;
+
+	@FindBy(how = How.ID, using = "billTestRefund")
+	private WebElement billTestRefund;
+
+	@FindBy(how = How.ID, using = "testRefundComment")
+	private WebElement testRefundComment;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"individualTestRefundConfirmModal\"]/div/div/div[3]/button[2]")
+	private WebElement testRefundConfirmt;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"tName0\"]/span[1]")
+	private WebElement testStatus;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"editTestDiv\"]/ul/li[1]/a")
+	private WebElement justCancelTest;
+
+	@FindBy(how = How.ID, using = "testCancelComment")
+	private WebElement testCancelComment;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"individualConfirmModal\"]/div/div/div[3]/button[2]")
+	private WebElement individualConfirmModal;
+
+	@FindBy(how = How.ID, using = "textInput")
+	private WebElement textInput;
+
+	@FindBy(how = How.ID, using = "editTestDiv")
+	private WebElement editTestDiv;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"removeButton\"]")
+	private WebElement removeTest;
+
 	//	
 	@Autowired
 	WebContext webContext;
@@ -395,7 +467,7 @@ public class BillUpdatePage {
 		// bill.setOrganizationAdvance(organizationAdvance.getText());
 		// bill.setBalanceRemaining(balanceAmount.getText());
 		// bill.setReportModeFlag(reportModeFlag.isSelected());
-
+		
 		advanceAmount.clear();
 		advanceAmount.sendKeys(totalAmount.getText());
 
@@ -426,29 +498,325 @@ public class BillUpdatePage {
 		return Arrays.asList(bill, updateData);
 	}
 	
-	public String justCancelBill(User user, BillData bill) throws Exception {
+	public List<String> justCancelBill(User user, BillData bill) throws Exception {
 
 		List<BillData> billData = billingAndBillUpdate(user, bill);
 		String billId = billData.get(0).getBillId();
 
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		
+		unlockBill(billId);
+		int attempts=0;
+		
+		while (attempts < 2) {
+			try {
+				CommonMethods.waitForElementToVisible(removeButton);
+				js.executeScript("arguments[0].click();", removeButton);
 
-		Thread.sleep(1000);
-		CommonMethods.waitForElementToVisible(removeButton);
-		removeButton.click();
+				CommonMethods.waitForElementToVisible(justCancelBill);
+				js.executeScript("arguments[0].click();", justCancelBill);
 
-		CommonMethods.waitForElementToVisible(justCancelBill);
-		justCancelBill.click();
-
+				attempts=4;
+			} catch (Exception e) {
+				driver.navigate().refresh();
+				unlockBill(billId);
+				attempts++;
+			}
+		}
+		
 		CommonMethods.waitForElementToVisible(bill_comment);
-		bill_comment.click();
+		bill_comment.sendKeys("remove");
 
-		confirmedBillRemoval.click();
+		js.executeScript("arguments[0].click();", confirmedBillRemoval);
+
 		driver.navigate().refresh();
 
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
 
+		CommonMethods.waitForElementToVisible(billStatus);
+		
+		return Arrays.asList(billStatus.getText(),billId);
+	}
+	
+	public void unlockBill(String billId) throws Exception {
+		
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		
+		CommonMethods.waitForElementToVisible(submitForm);
+		js.executeScript("arguments[0].click();", submitForm);
+
+		CommonMethods.waitForElementToVisible(billLocked);
+
+		if (billLocked.isSelected()) {
+			js.executeScript("arguments[0].click();", billLocked);
+		}
+		confirmedBillUpdate.click();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+	}
+	
+	public String writeOffBill(User user, BillData bill) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		List<BillData> billData = billingAndBillUpdate(user, bill);
+		String billId = billData.get(0).getBillId();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+
+		unlockBill(billId);
+		
+		int attempts=0;
+		
+		while (attempts < 2) {
+			try {
+				CommonMethods.waitForElementToVisible(writeoffBtn);
+				js.executeScript("arguments[0].click();", writeoffBtn);
+
+				attempts=4;
+			} catch (Exception e) {
+				driver.navigate().refresh();
+				unlockBill(billId);
+				attempts++;
+			}
+		}
+		
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+
+		CommonMethods.waitForElementToVisible(billStatus);
 		return billStatus.getText();
 	}
+	
+	public List<String> cancelAndClearBillPaymentAndAmount(User user, BillData bill) throws Exception {
+
+		List<BillData> billData = billingAndBillUpdate(user, bill);
+		String billId = billData.get(0).getBillId();
+
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		unlockBill(billId);
+		
+		CommonMethods.waitForElementToVisible(removeButton);
+		js.executeScript("arguments[0].click();", removeButton);
+
+		CommonMethods.waitForElementToVisible(removeLastoption);
+		js.executeScript("arguments[0].click();", removeLastoption);
+
+		CommonMethods.waitForElementToVisible(bill_comment);
+		bill_comment.sendKeys("remove");
+
+		js.executeScript("arguments[0].click();", confirmedBillRemoval);
+
+		driver.navigate().refresh();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+
+		CommonMethods.waitForElementToVisible(billTotalAmountLabel);
+		String payableAmt = billTotalAmountLabel.getText();
+		String advancePaid = billAdvance.getAttribute("value");
+
+		return Arrays.asList(payableAmt, advancePaid);
+	}
+	
+	public List<BillData> billUpdate(User user, BillData bill) throws Exception {
+	
+		List<BillData> billData = billingAndBillUpdate(user, bill);
+		String billId = billData.get(0).getBillId();
+
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+
+		unlockBill(billId);
+		BillData billInfo = generatBillDataForUpdation();
+		
+		CommonMethods.waitForElementToVisible(referralList);
+		referralList.clear();
+		referralList.sendKeys(billInfo.getReferrelPriceList());
+		
+		CommonMethods.waitForAllElementsToVisible(refDropdown);
+		refDropdown.get(0).click();
+		
+		organizationList.clear();
+		organizationList.sendKeys(billInfo.getOrganization());
+		
+		CommonMethods.waitForAllElementsToVisible(orgDropdown);
+		orgDropdown.get(0).click();
+		
+		Select services = new Select(additionalCharges);
+		services.selectByVisibleText(billInfo.getAdditionalServices());
+		
+		additionalCost.clear();
+		additionalCost.sendKeys(billInfo.getAdditionalPrice());
+		
+		submitForm.click();
+		
+		CommonMethods.waitForElementToVisible(confirmedBillUpdate);
+		confirmedBillUpdate.click();
+		
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		BillData updated= new BillData();
+
+		CommonMethods.waitForElementToVisible(referralList);
+		updated.setReferrelPriceList(referralList.getAttribute("value"));
+		updated.setOrganization(organizationList.getAttribute("value"));
+		updated.setAdditionalServices(services.getFirstSelectedOption().getText());
+		updated.setAdditionalPrice(additionalCost.getAttribute("value"));
+		
+		return Arrays.asList(billInfo,updated);
+	}
+	
+	private BillData generatBillDataForUpdation() {
+		
+		BillData billData= new BillData();
+		
+		billData.setReferrelPriceList("SELF");
+		billData.setOrganization("DIRECT");
+		billData.setAdditionalServices("Home Visit Services");
+		billData.setAdditionalPrice("5");
+		
+		return billData;
+	} 
+	
+	public String refundBill(User user, BillData bill) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		List<BillData> billData = billingAndBillUpdate(user, bill);
+		String billId = billData.get(0).getBillId();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+
+		unlockBill(billId);
+
+		CommonMethods.waitForElementToVisible(refundBtn);
+		js.executeScript("arguments[0].click();", refundBtn);
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+
+		CommonMethods.waitForElementToVisible(billStatus);
+		return billStatus.getText();
+	}
+	
+	public String resetBill(String billId) throws Exception {
+		
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+//		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+//		driver.navigate().refresh();
+		
+		CommonMethods.waitForElementToVisible(clearBtn);
+		js.executeScript("arguments[0].click();", clearBtn);
+
+		CommonMethods.waitForElementToVisible(clearBillBtn);
+		js.executeScript("arguments[0].click();", clearBillBtn);
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		
+		CommonMethods.waitForElementToVisible(billStatus);
+		
+		return billStatus.getText();
+	}
+	
+	public List<String> singleTestRefund(String billId) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		
+		CommonMethods.waitForElementToVisible(editTest0);
+		js.executeScript("arguments[0].click();", editTest0);
+
+		CommonMethods.waitForElementToVisible(billTestRefund);
+		js.executeScript("arguments[0].click();", billTestRefund);
+
+		CommonMethods.waitForElementToVisible(testRefundComment);
+		testRefundComment.sendKeys("refundtest");
+
+		js.executeScript("arguments[0].click();", testRefundConfirmt);
+
+		CommonMethods.waitForElementToVisible(submitForm);
+		js.executeScript("arguments[0].click();", submitForm);
+
+		CommonMethods.waitForElementToVisible(confirmedBillUpdate);
+		js.executeScript("arguments[0].click();", confirmedBillUpdate);
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+
+		CommonMethods.waitForElementToVisible(testStatus);
+
+		String status = testStatus.getText();
+
+		String price = testPrice.getText().trim();
+
+		return Arrays.asList(status, price);
+	}
+
+	public List<String> justCancelSingleTest(User user, BillData bill) throws Exception{
+		
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		searchToBilling(user.getName());
+		selectTestName(bill.getTestName(), bill.getReferrelPriceList());
+
+		CommonMethods.waitForElementToVisible(saveBill);
+		js.executeScript("arguments[0].click();", saveBill);
+
+		CommonMethods.waitForElementToVisible(confirmBillId);
+		String billId = confirmBillId.getText();
+		bill.setBillId(billId);
+		
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		
+		unlockBill(billId);
+		
+		CommonMethods.waitForElementToVisible(editTest0);
+		js.executeScript("arguments[0].click();", editTest0);
+
+//		CommonMethods.waitForElementToVisible(editTestDiv);
+//		js.executeScript("arguments[0].click();", editTestDiv);
+		Thread.sleep(1000);
+		CommonMethods.waitForElementToVisible(removeTest);
+		js.executeScript("arguments[0].click();", removeTest);
+//		js.executeScript("arguments[0].click();", removeButton);
+		
+		CommonMethods.waitForElementToVisible(justCancelTest);
+		js.executeScript("arguments[0].click();", justCancelTest);
+
+		CommonMethods.waitForElementToVisible(testCancelComment);
+		testCancelComment.sendKeys("remove");
+		
+		js.executeScript("arguments[0].click();", individualConfirmModal);
+		
+		CommonMethods.waitForElementToVisible(submitForm);
+		js.executeScript("arguments[0].click();", submitForm);
+
+		CommonMethods.waitForElementToVisible(confirmedBillUpdate);
+		js.executeScript("arguments[0].click();", confirmedBillUpdate);
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+
+		CommonMethods.waitForElementToVisible(billTotalAmountLabel);
+		String payableAmt = billTotalAmountLabel.getText();
+		String advancedpaid = billAdvance.getText();
+		
+		return Arrays.asList(payableAmt,advancedpaid);
+	}
+	
 }

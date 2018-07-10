@@ -25,6 +25,10 @@ public class BillUpdationValidation {
 
 			softAssert.assertEquals(inputBill.getTestPrice(), updateBill.getTestPrice());
 
+			softAssert.assertEquals(inputBill.getAdditionalServices(), updateBill.getAdditionalServices());
+
+			softAssert.assertEquals(inputBill.getAdditionalPrice(), updateBill.getAdditionalPrice());
+
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			softAssert.assertTrue(false, e.getMessage());
