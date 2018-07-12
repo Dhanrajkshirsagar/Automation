@@ -43,7 +43,7 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	BillUpdationValidation billUpdationValidation;
 
-	@BeforeClass(groups = { "BillUpdate" })
+	@BeforeClass(groups = { "BillUpdate", "Update" })
 	public void launchSite() {
 		try {
 			billUpdate = pageLaunch.navigateToBillUpdatePage();
@@ -85,72 +85,72 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 	// }
 	//
 	// }
-	//
-	// // TC: 03
-	// @Test(groups = { "BillUpdate" })
-	// public void verifySearchBillListByRefName_03() {
-	//
-	// boolean flag;
-	// try {
-	// flag = billUpdate.searchBillListByRefName();
-	//
-	// Assert.assertTrue(flag);
-	// } catch (Exception e) {
-	// logger.error(e.getMessage());
-	// Assert.assertTrue(false, e.getMessage());
-	// }
-	//
-	// }
-	//
-	// // TC: 04
-	// @Test(groups = { "BillUpdate" })
-	// public void verifySearchBillListByUserName_04() {
-	//
-	// boolean flag;
-	// try {
-	// flag = billUpdate.searchBillListByUserName();
-	//
-	// Assert.assertTrue(flag);
-	// } catch (Exception e) {
-	// logger.error(e.getMessage());
-	// Assert.assertTrue(false, e.getMessage());
-	// }
-	//
-	// }
+
+	// TC: 03
+	@Test(groups = { "BillUpdate" })
+	public void verifySearchBillListByRefName_03() {
+
+		boolean flag;
+		try {
+			flag = billUpdate.searchBillListByRefName();
+
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+
+	}
+
+	// TC: 04
+	@Test(groups = { "BillUpdate" })
+	public void verifySearchBillListByUserName_04() {
+
+		boolean flag;
+		try {
+			flag = billUpdate.searchBillListByUserName();
+
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+
+	}
 
 	// TC: 05
-//	@Test(groups = { "BillUpdate" })
-//	public void verifyBillingAndBillUpdate_05() {
-//		List<BillData> list;
-//		User user = new User();
-//		user.setName("Robert");
-//		try {
-//			BillData bill = userBillingData();
-//			list = billUpdate.billingAndBillUpdate(user, bill);
-//			billUpdationValidation.verifyBillUpdation(list.get(0), list.get(1));
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
+	@Test(groups = { "BillUpdate" })
+	public void verifyBillingAndBillUpdate_05() {
+		List<BillData> list;
+		User user = new User();
+		user.setName("Robert");
+		try {
+			BillData bill = userBillingData();
+			list = billUpdate.billingAndBillUpdate(user, bill);
+			billUpdationValidation.verifyBillUpdation(list.get(0), list.get(1));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
 
 	// TC: 06
-//	@Test(groups = { "BillUpdate" }, priority = 0)
-//	public void verifyJustCancelBill_06() {
-//		User user = new User();
-//		user.setName("Uthappa");
-//		BillData bill = userBillingData();
-//		List<String> status;
-//		try {
-//			status = billUpdate.justCancelBill(user, bill);
-//			billId = status.get(1);
-//			Assert.assertEquals(status.get(0), "Cancel");
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
-	/*
+	@Test(groups = { "BillUpdate" }, priority = 0)
+	public void verifyJustCancelBill_06() {
+		User user = new User();
+		user.setName("Uthappa");
+		BillData bill = userBillingData();
+		List<String> status;
+		try {
+			status = billUpdate.justCancelBill(user, bill);
+			billId = status.get(1);
+			Assert.assertEquals(status.get(0), "Cancel");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
 	// TC: 11
 	@Test(groups = { "BillUpdate" }, dependsOnMethods = "verifyJustCancelBill_06")
 	public void verifyResetBill_11() {
@@ -227,24 +227,24 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
-	}*/
+	}
 
 	// TC: 12
-//	@Test(groups = { "BillUpdate" })
-//	public void verifySingleTestRefundBill_12() {
-//		SoftAssert softAssert = new SoftAssert();
-//		List<String> status;
-//		try {
-//			status = billUpdate.singleTestRefund(billId);
-//			softAssert.assertEquals(status.get(0), "Refunded");
-//			softAssert.assertEquals(status.get(1), "0");
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			softAssert.assertTrue(false, e.getMessage());
-//		}
-//		softAssert.assertAll();
-//	}
-	
+	@Test(groups = { "BillUpdate" })
+	public void verifySingleTestRefundBill_12() {
+		SoftAssert softAssert = new SoftAssert();
+		List<String> status;
+		try {
+			status = billUpdate.singleTestRefund(billId);
+			softAssert.assertEquals(status.get(0), "Refunded");
+			softAssert.assertEquals(status.get(1), "0");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			softAssert.assertTrue(false, e.getMessage());
+		}
+		softAssert.assertAll();
+	}
+
 	// TC: 13
 	@Test(groups = { "BillUpdate" })
 	public void verifyJustCancelSingleTest_13() {
@@ -260,7 +260,121 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
+	// TC: 14
+	@Test(groups = { "BillUpdate" })
+	public void verifyEditLink_14() {
+		User user = new User();
+		user.setName("Robert");
+		BillData bill = userBillingData();
+		List<BillData> billData;
+		try {
+			billData = billUpdate.editLinkVerification(user, bill);
+
+			billUpdationValidation.verifyBillUpdation(billData.get(0), billData.get(1));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 15
+	// @Test(groups = { "BillUpdate" })
+	// public void verifyDoctorRevenueDetails_15() {
+	// BillData bill = userBillingData();
+	// bill.setTestName("Bence Jones Protein - BJP Qualitative *");
+	// List<BillData> billData;
+	// try {
+	// billData = billUpdate.doctorRevenueAmountVerification("Chahal", bill);
+	//
+	// System.out.println("=1=" + billData.get(0).toString());
+	// System.out.println("=2=" + billData.get(1).toString());
+	//
+	// billUpdationValidation.verifyBillUpdation(billData.get(0), billData.get(1));
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
+
+	// TC: 16
+	// @Test(groups = { "BillUpdate" })
+	// public void verifyOutsouceAmountDetails_16() {
+	// String testName = "Protein Ascitic Fluid *";
+	// List<BillData> billData;
+	// try {
+	// billData = billUpdate.outsourceAmountDetails("Chahal", testName);
+	//
+	// System.out.println("=1=" + billData.get(0).toString());
+	// System.out.println("=2=" + billData.get(1).toString());
+	//
+	// billUpdationValidation.verifyBillUpdation(billData.get(0), billData.get(1));
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
+
+	// // TC: 17
+	// @Test(groups = { "Update" })
+	// public void verifyUpdateDoctorRevenueLink_16() {
+	// String testName = "Protein Ascitic Fluid *";
+	// List<BillData> billData;
+	// try {
+	// billData = billUpdate.updateDoctorRevenueLink("Malinga", testName);
+	//
+	//// System.out.println("=1=" + billData.get(0).toString());
+	//// System.out.println("=2=" + billData.get(1).toString());
+	//
+	// billUpdationValidation.verifyBillUpdation(billData.get(0), billData.get(1));
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
+
+	// TC: 18 Date Format
+	@Test(groups = { "BillUpdate" })
+	public void verifyViewPaymentLink_18() {
+		String testName = "Protein Ascitic Fluid *";
+		List<BillData> billData;
+		try {
+			billData = billUpdate.viewPaymentLink("Pujara", testName);
+			billUpdationValidation.verifyBillUpdation(billData.get(0), billData.get(1));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 19
+	@Test(groups = { "BillUpdate" })
+	public void verifySubmit_19() {
+		String testName = "Protein Ascitic Fluid *";
+		List<BillData> billData;
+		try {
+			billData = billUpdate.submitButton("malinga", testName);
+			billUpdationValidation.verifyBillUpdation(billData.get(0), billData.get(1));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 20
+	@Test(groups = { "Update" })
+	public void verifyBillLock_20() {
+
+		String error;
+		try {
+			error = billUpdate.lockBill("555");
+			Assert.assertEquals(error, "The bill is locked. Please unlock bill.");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
 	private BillData userBillingData() {
 
 		BillData bill = new BillData();

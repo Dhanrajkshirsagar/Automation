@@ -27,6 +27,7 @@ import com.livehealth.model.User;
 import com.livehealth.util.CommonMethods;
 import com.livehealth.util.WebContext;
 
+
 @Component
 public class BillUpdatePage {
 
@@ -258,8 +259,107 @@ public class BillUpdatePage {
 	@FindBy(how = How.ID, using = "editTestDiv")
 	private WebElement editTestDiv;
 
-	@FindBy(how = How.XPATH, using = "//*[@id=\"removeButton\"]")
+	@FindBy(how = How.XPATH, using = "//*[@id=\"removeButton\"]") 
 	private WebElement removeTest;
+	
+	@FindBy(how = How.XPATH, using = "(//*[@id=\"removeButton\"])[2]") 
+	private WebElement removeTest_2;
+
+	@FindBy(how = How.ID, using = "billTestAmount")
+	private WebElement billTestAmount;
+
+	@FindBy(how = How.ID, using = "docRevList")
+	private WebElement docRevList;
+
+	@FindBy(how = How.ID, using = "billTestConc")
+	private WebElement billTestConc;
+
+	@FindBy(how = How.ID, using = "docRevAmount")
+	private WebElement docRevAmount;
+
+	@FindBy(how = How.ID, using = "billTestSave")
+	private WebElement billTestSave;
+
+	@FindBy(how = How.ID, using = "billReferal")
+	private WebElement billReferal;
+
+	@FindBy(how = How.ID, using = "listName")
+	private WebElement listName;
+
+	@FindAll({ @FindBy(xpath = "//*[@id=\"listNameParent\"]/div/span/span/div") })
+	public List<WebElement> listGrpDropdown;
+
+	@FindBy(how = How.ID, using = "textInput11869")
+	private WebElement textInput11869;
+
+	@FindBy(how = How.ID, using = "editBillTestName")
+	private WebElement editBillTestName;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"test11869\"]/label")
+	private WebElement bjpTest;
+
+	@FindBy(how = How.ID, using = "outsourceList")
+	private WebElement outsourceList;
+
+	@FindBy(how = How.ID, using = "outsourceAmount")
+	private WebElement outsourceAmount;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"listOfDoctorSearch\"]/div/div[1]/p")
+	private WebElement premiumPlan;
+
+	@FindBy(how = How.ID, using = "textInput11840")
+	private WebElement textInput11840;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"test11840\"]/label")
+	private WebElement proteinAscetic;
+
+	@FindBy(how = How.ID, using = "linkUpdateRefRev")
+	private WebElement linkUpdateRefRev;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"testListContainer\"]/div[2]/div[2]")
+	private WebElement revenueTest;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"testListContainer\"]/div[2]/div[3]")
+	private WebElement revenueTestPrice;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"testListContainer\"]/div[2]/div[4]")
+	private WebElement docRevenueAmt;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"updateRevModal\"]/div/div/div[3]/button[2]")
+	private WebElement updateAmt;
+
+	@FindBy(how = How.ID, using = "testPrice11840")
+	private WebElement testPrice11840;
+
+	@FindBy(how = How.ID, using = "viewPayment")
+	private WebElement viewPayment;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"1\"]/td[2]")
+	private WebElement cashMode;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"1\"]/td[5]")
+	private WebElement amount;
+
+	@FindBy(how = How.ID, using = "addAnother")
+	private WebElement addAnother;
+
+	@FindBy(how = How.ID, using = "paymentAmount_2")
+	private WebElement paymentAmount_2;
+
+	@FindBy(how = How.ID, using = "savebillSetting")
+	private WebElement savebillSetting;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"2\"]/td[2]")
+	private WebElement cashMode_2;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"2\"]/td[5]")
+	private WebElement amount_2;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div[4]/div[12]/div/div[2]/p")
+	private WebElement test_Price;
+
+	@FindBy(how = How.ID, using = "billLockError")
+	private WebElement billLockError;
 
 	//	
 	@Autowired
@@ -787,13 +887,9 @@ public class BillUpdatePage {
 		
 		CommonMethods.waitForElementToVisible(editTest0);
 		js.executeScript("arguments[0].click();", editTest0);
-
-//		CommonMethods.waitForElementToVisible(editTestDiv);
-//		js.executeScript("arguments[0].click();", editTestDiv);
-		Thread.sleep(1000);
-		CommonMethods.waitForElementToVisible(removeTest);
-		js.executeScript("arguments[0].click();", removeTest);
-//		js.executeScript("arguments[0].click();", removeButton);
+	
+		CommonMethods.waitForElementToVisible(removeTest_2);
+		js.executeScript("arguments[0].click();", removeTest_2);
 		
 		CommonMethods.waitForElementToVisible(justCancelTest);
 		js.executeScript("arguments[0].click();", justCancelTest);
@@ -814,9 +910,386 @@ public class BillUpdatePage {
 
 		CommonMethods.waitForElementToVisible(billTotalAmountLabel);
 		String payableAmt = billTotalAmountLabel.getText();
-		String advancedpaid = billAdvance.getText();
+		String advancedpaid = test_Price.getText().trim();
 		
 		return Arrays.asList(payableAmt,advancedpaid);
 	}
 	
+	public List<BillData> editLinkVerification(User user, BillData bill) throws Exception {
+
+		List<BillData> billData = billingAndBillUpdate(user, bill);
+		String billId = billData.get(0).getBillId();
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+
+		unlockBill(billId);
+		BillData testInfo = testEditdata();
+
+		CommonMethods.waitForElementToVisible(editTest0);
+		js.executeScript("arguments[0].click();", editTest0);
+
+		CommonMethods.waitForElementToVisible(billTestAmount);
+		billTestAmount.clear();
+		billTestAmount.sendKeys(testInfo.getTestPrice());
+
+		billTestConc.clear();
+		billTestConc.sendKeys(testInfo.getConcession());
+
+		Select referrel = new Select(docRevList);
+		referrel.selectByVisibleText(testInfo.getReferrel());
+
+		docRevAmount.clear();
+		docRevAmount.sendKeys(testInfo.getAmountPaid());
+
+		js.executeScript("arguments[0].click();", billTestSave);
+
+		CommonMethods.waitForElementToVisible(submitForm);
+		js.executeScript("arguments[0].click();", submitForm);
+
+		CommonMethods.waitForElementToVisible(confirmedBillUpdate);
+		js.executeScript("arguments[0].click();", confirmedBillUpdate);
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+
+		CommonMethods.waitForElementToVisible(editTest0);
+		js.executeScript("arguments[0].click();", editTest0);
+
+		BillData testUpdated = new BillData();
+
+		CommonMethods.waitForElementToVisible(docRevList);
+		testUpdated.setTestPrice(billTestAmount.getAttribute("value"));
+		testUpdated.setConcession(billTestConc.getAttribute("value"));
+		testUpdated.setReferrel(referrel.getFirstSelectedOption().getText().trim());
+		testUpdated.setAmountPaid(docRevAmount.getAttribute("value"));
+
+		return Arrays.asList(testInfo, testUpdated);
+	}
+
+	private BillData testEditdata() {
+
+		BillData billData = new BillData();
+
+		billData.setTestPrice("300");
+		billData.setConcession("10");
+		billData.setReferrel("Delative");
+		billData.setAmountPaid("10");
+
+		return billData;
+	}
+	
+	public List<BillData> doctorRevenueAmountVerification(String userName, BillData bill) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+
+		searchToBilling(userName);
+		selectTest(bill.getTestName());
+
+		otherInfo.click();
+		otherInfo.click();
+
+		Thread.sleep(3000);
+		Select referrel = new Select(billReferal);
+		referrel.selectByVisibleText("Dhanraj");
+
+		System.out.println("@@@@@@@@    "+referrel.getFirstSelectedOption().getText());
+		
+		CommonMethods.waitForElementToVisible(saveBill);
+		saveBill.click();
+		Thread.sleep(5000);
+		CommonMethods.waitForElementToVisible(confirmBillId);
+		String billId = confirmBillId.getText();
+		bill.setBillId(billId);
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+
+		unlockBill(billId);
+		Thread.sleep(5000);
+		driver.navigate().refresh();
+		CommonMethods.waitForElementToVisible(editTest0);
+		editTest0.click();
+		Thread.sleep(3000);
+		CommonMethods.waitForElementToVisible(docRevList);
+		Select select = new Select(docRevList);
+
+		bill.setTestName(editBillTestName.getText());
+		bill.setReferrel(select.getFirstSelectedOption().getText().trim());
+		bill.setAmountPaid(docRevAmount.getAttribute("value"));
+		bill.setReferrelPriceList(null);
+		bill.setOrganization(null);
+		Thread.sleep(3000);
+		driver.navigate().to(Constants.ListAndGroupManagement_URL);
+
+		BillData billData = new BillData();
+
+		CommonMethods.waitForElementToVisible(listName);
+		listName.sendKeys("Dr. Delative ");
+
+		CommonMethods.waitForElementToVisible(listGrpDropdown.get(0));
+		listGrpDropdown.get(0).click();
+
+		CommonMethods.waitForElementToVisible(textInput11869);
+		String test = bjpTest.getText();
+		String refRevenue = textInput11869.getAttribute("value");
+
+		billData.setTestName(test);
+		billData.setReferrel("Dhanraj");
+		billData.setAmountPaid(refRevenue);
+
+		return Arrays.asList(bill, billData);
+	}
+	
+	private void selectTest(String testName) throws Exception {
+		
+		CommonMethods.waitForElementToVisible(testList);
+		testList.sendKeys(testName);
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span")));
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span"));
+
+		dropDowns.get(0).click();
+
+		concession.sendKeys(Keys.ENTER);
+	}
+	
+	public List<BillData> outsourceAmountDetails(String userName, String testName) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+
+		searchToBilling(userName);
+		selectTest(testName);
+		Thread.sleep(7000);
+		CommonMethods.waitForElementToVisible(saveBill);
+		saveBill.click();
+
+		CommonMethods.waitForElementToVisible(confirmBillId);
+		String billId = confirmBillId.getText();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+
+		unlockBill(billId);
+
+		CommonMethods.waitForElementToVisible(editTest0);
+		editTest0.click();
+
+		Select select = new Select(outsourceList);
+		String outlistName = select.getFirstSelectedOption().getText();
+
+		BillData billData = new BillData();
+
+		billData.setOutSouceList(outlistName);
+		billData.setAmountPaid(outsourceAmount.getAttribute("value"));
+		billData.setTestName(editBillTestName.getText());
+
+		driver.navigate().to(Constants.ListAndGroupManagement_URL);
+
+		BillData billInfo = new BillData();
+
+		CommonMethods.waitForElementToVisible(listName);
+		listName.sendKeys("Normal Outsource");
+
+		CommonMethods.waitForElementToVisible(listGrpDropdown.get(0));
+		listGrpDropdown.get(0).click();
+
+		billInfo.setOutSouceList(premiumPlan.getText().trim());
+		billInfo.setAmountPaid(textInput11840.getAttribute("value"));
+		billInfo.setTestName(proteinAscetic.getText());
+
+		return Arrays.asList(billData, billInfo);
+	}
+
+	public List<BillData> updateDoctorRevenueLink(String userName, String testName) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+
+		searchToBilling(userName);
+		selectTest(testName);
+
+		CommonMethods.waitForElementToVisible(saveBill);
+		saveBill.click();
+
+		CommonMethods.waitForElementToVisible(confirmBillId);
+		String billId = confirmBillId.getText();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		Thread.sleep(20000);
+		unlockBill(billId);
+		
+		CommonMethods.waitForElementToVisible(referralList);
+		referralList.clear();
+		referralList.sendKeys("dhanraj");
+		CommonMethods.waitForAllElementsToVisible(refDropdown);
+		refDropdown.get(0).click();
+
+		CommonMethods.waitForElementToVisible(linkUpdateRefRev);
+		linkUpdateRefRev.click();
+
+		CommonMethods.waitForElementToVisible(revenueTest);
+		String tName = revenueTest.getText();
+		String tPrice = revenueTestPrice.getText();
+		String revenAmt = docRevenueAmt.getText();
+
+		BillData billData = new BillData();
+
+		billData.setTestName(tName);
+		billData.setTestPrice(tPrice);
+		billData.setConcession(revenAmt);
+
+		updateAmt.click();
+
+		driver.navigate().to(Constants.ListAndGroupManagement_URL);
+		
+		BillData billInfo = new BillData();
+
+		CommonMethods.waitForElementToVisible(listName);
+		listName.sendKeys("Dr. Delative");
+
+		CommonMethods.waitForElementToVisible(listGrpDropdown.get(0));
+		listGrpDropdown.get(0).click();
+		Thread.sleep(5000);
+		String t_Name = proteinAscetic.getText();
+		String t_Price = testPrice11840.getAttribute("value");
+		String t_Concession = textInput11840.getAttribute("value");
+
+		System.out.println(" ");
+		System.out.println("t_Name=="+t_Name);
+		System.out.println("t_Price=="+t_Price);
+		System.out.println("t_Concession=="+t_Concession);
+		System.out.println(" ");
+		
+		billInfo.setTestName(t_Name);
+		billInfo.setTestPrice(t_Price);
+		billInfo.setConcession(t_Concession);
+
+		return Arrays.asList(billData, billInfo);
+	}
+	
+	public List<BillData> viewPaymentLink(String userName, String testName) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+
+		searchToBilling(userName);
+		selectTest(testName);
+
+		BillData bill = new BillData();
+
+		CommonMethods.waitForElementToVisible(advanceAmount);
+		advanceAmount.clear();
+		advanceAmount.sendKeys(totalAmount.getText());
+
+		bill.setTestPrice(totalAmount.getText());
+		bill.setConcession("CASH");
+
+		CommonMethods.waitForElementToVisible(saveBill);
+		saveBill.click();
+
+		CommonMethods.waitForElementToVisible(confirmBillId);
+		String billId = confirmBillId.getText();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		unlockBill(billId);
+
+		CommonMethods.waitForElementToVisible(viewPayment);
+		viewPayment.click();
+
+		BillData billing = new BillData();
+
+		CommonMethods.waitForElementToVisible(cashMode);
+		String cash = cashMode.getText();
+
+		String amt = amount.getText();
+
+		billing.setTestPrice(amt);
+		billing.setConcession(cash);
+
+		return Arrays.asList(bill, billing);
+	}
+	
+	public List<BillData> submitButton(String userName, String testName) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+
+		searchToBilling(userName);
+		selectTest(testName);
+
+		BillData bill = new BillData();
+
+		CommonMethods.waitForElementToVisible(totalAmount);
+		bill.setTestPrice(totalAmount.getText());
+		bill.setConcession("CASH");
+
+		CommonMethods.waitForElementToVisible(saveBill);
+		saveBill.click();
+
+		CommonMethods.waitForElementToVisible(confirmBillId);
+		String billId = confirmBillId.getText();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		unlockBill(billId);
+
+		CommonMethods.waitForElementToVisible(viewPayment);
+		viewPayment.click();
+
+		BillData billing = new BillData();
+
+		CommonMethods.waitForElementToVisible(addAnother);
+		addAnother.click();
+
+		CommonMethods.waitForElementToVisible(paymentAmount_2);
+		paymentAmount_2.clear();
+		paymentAmount_2.sendKeys(bill.getTestPrice());
+
+		savebillSetting.click();
+		Thread.sleep(1000);
+		CommonMethods.waitForElementToVisible(viewPayment);
+		viewPayment.click();
+
+		CommonMethods.waitForElementToVisible(cashMode_2);
+		String type = cashMode_2.getText();
+		String amt = amount_2.getText();
+
+		billing.setTestPrice(amt);
+		billing.setConcession(type);
+
+		return Arrays.asList(bill, billing);
+	}
+	
+	public String lockBill(String billId) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		
+		CommonMethods.waitForElementToVisible(submitForm);
+		js.executeScript("arguments[0].click();", submitForm);
+
+		CommonMethods.waitForElementToVisible(billLocked);
+
+		if (!billLocked.isSelected()) {
+			js.executeScript("arguments[0].click();", billLocked);
+		}
+		confirmedBillUpdate.click();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+
+		CommonMethods.waitForElementToVisible(billLockError);
+		String error = billLockError.getText();
+
+		String errorMsg = error.substring(1, error.length());
+
+		return errorMsg.trim();
+	}
 }

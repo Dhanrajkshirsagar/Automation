@@ -10,6 +10,8 @@ public class BillData {
 
 	private String organization;
 
+	private String referrel;
+
 	private String patientAdvance;
 
 	private String organizationAdvance;
@@ -30,6 +32,8 @@ public class BillData {
 
 	private String additionalServices;
 
+	private String outSouceList;
+
 	// private boolean reportModeFlag;
 
 	// public boolean isReportModeFlag() {
@@ -46,6 +50,22 @@ public class BillData {
 
 	public void setBillId(String billId) {
 		this.billId = billId;
+	}
+
+	public String getOutSouceList() {
+		return outSouceList;
+	}
+
+	public void setOutSouceList(String outSouceList) {
+		this.outSouceList = outSouceList;
+	}
+
+	public String getReferrel() {
+		return referrel;
+	}
+
+	public void setReferrel(String referrel) {
+		this.referrel = referrel;
 	}
 
 	public String getAdditionalServices() {
@@ -159,11 +179,12 @@ public class BillData {
 	@Override
 	public String toString() {
 		return "BillData [billId=" + billId + ", referrelPriceList=" + referrelPriceList + ", discountPriceList="
-				+ discountPriceList + ", organization=" + organization + ", patientAdvance=" + patientAdvance
-				+ ", organizationAdvance=" + organizationAdvance + ", payableAmount=" + payableAmount + ", amountPaid="
-				+ amountPaid + ", concession=" + concession + ", testName=" + testName + ", balanceRemaining="
-				+ balanceRemaining + ", testPrice=" + testPrice + ", additionalPrice=" + additionalPrice
-				+ ", additionalServices=" + additionalServices + "]";
+				+ discountPriceList + ", organization=" + organization + ", referrel=" + referrel + ", patientAdvance="
+				+ patientAdvance + ", organizationAdvance=" + organizationAdvance + ", payableAmount=" + payableAmount
+				+ ", amountPaid=" + amountPaid + ", concession=" + concession + ", testName=" + testName
+				+ ", balanceRemaining=" + balanceRemaining + ", testPrice=" + testPrice + ", additionalPrice="
+				+ additionalPrice + ", additionalServices=" + additionalServices + ", outSouceList=" + outSouceList
+				+ "]";
 	}
 
 }

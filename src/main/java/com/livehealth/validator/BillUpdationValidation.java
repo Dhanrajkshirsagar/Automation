@@ -29,6 +29,12 @@ public class BillUpdationValidation {
 
 			softAssert.assertEquals(inputBill.getAdditionalPrice(), updateBill.getAdditionalPrice());
 
+			softAssert.assertEquals(inputBill.getConcession(), updateBill.getConcession());
+
+			softAssert.assertEquals(inputBill.getReferrel(), updateBill.getReferrel());
+
+			softAssert.assertEquals(inputBill.getAmountPaid(), updateBill.getAmountPaid());
+
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			softAssert.assertTrue(false, e.getMessage());
