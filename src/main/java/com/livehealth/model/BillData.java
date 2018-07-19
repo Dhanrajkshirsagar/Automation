@@ -34,15 +34,15 @@ public class BillData {
 
 	private String outSouceList;
 
-	// private boolean reportModeFlag;
+	private String organizationPriceList;
 
-	// public boolean isReportModeFlag() {
-	// return reportModeFlag;
-	// }
-	//
-	// public void setReportModeFlag(boolean reportModeFlag) {
-	// this.reportModeFlag = reportModeFlag;
-	// }
+	public String getOrganizationPriceList() {
+		return organizationPriceList;
+	}
+
+	public void setOrganizationPriceList(String organizationPriceList) {
+		this.organizationPriceList = organizationPriceList;
+	}
 
 	public String getBillId() {
 		return billId;

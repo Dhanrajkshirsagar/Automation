@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import com.livehealth.base.DriverFactory;
 import com.livehealth.config.ConfigProperties;
+import com.livehealth.config.Constants;
 import com.livehealth.model.HomeCollection;
 import com.livehealth.model.User;
 import com.livehealth.util.CommonMethods;
@@ -396,11 +398,11 @@ public class BillingPage {
 	@FindBy(how = How.XPATH, using = "/html/body/section/div[3]/div[4]/div[1]/div[8]/div[3]/div[3]/p")
 	private WebElement discount_3;
 
-	@FindBy(how = How.ID, using = "textInput12775")
-	private WebElement hangingDrop;
+	@FindBy(how = How.ID, using = "textInput12151")
+	private WebElement textInput12151;
 
-	@FindBy(how = How.ID, using = "textInput12772")
-	private WebElement eosinophils;
+	@FindBy(how = How.ID, using = "textInput12347")
+	private WebElement textInput12347;
 
 	@FindBy(how = How.ID, using = "textInput12771")
 	private WebElement monocyte;
@@ -480,7 +482,16 @@ public class BillingPage {
 	@FindBy(how = How.XPATH, using = "//*[@id=\"ctForm\"]/input[2]")
 	private WebElement getPdf;
 
-	//
+	@FindBy(how = How.XPATH, using = "//*[@id=\"userAmntDivId\"]/div[2]/b")
+	private WebElement userDue;
+
+	@FindBy(how = How.ID, using = "totalAmount")
+	private WebElement totalAmount;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"calulateTestModal\"]/div/div/div[1]/button")
+	private WebElement closeCalculator;
+
+	//   
 	@Autowired
 	WebContext webContext;
 
@@ -494,6 +505,8 @@ public class BillingPage {
 	}
 
 	public void signIn(String userName, String password) throws Exception {
+	
+		WebDriver driver = DriverFactory.getDriver();
 		userNameField.sendKeys(userName);
 		passwordField.sendKeys(password);
 		signIn.click();
@@ -502,30 +515,31 @@ public class BillingPage {
 		actions.moveToElement(adminHover).build().perform();
 		CommonMethods.waitForElementToClickable(registration);
 		registration.click();
-		CommonMethods.waitForElementToClickable(billUrl);
-		billUrl.click();
+		driver.navigate().to(Constants.Billing_URL);
+
 	}
 
 	public String getPageTitle() throws Exception {
-		CommonMethods.waitForElementToClickable(billUrl);
-		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
-		js.executeScript("arguments[0].click();", billUrl);
+		
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.Billing_URL);
 
 		return searchUserForBilling.getAttribute("placeholder");
 
 	}
 
 	public void searchToBilling(String userInfo) throws Exception {
-		DriverFactory.getDriver().navigate().refresh();
-		CommonMethods.waitForElementToClickable(billUrl);
-		billUrl.click();
+		
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.Billing_URL);
+	
 		searchUserForBilling.sendKeys(userInfo);
 
-		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		WebDriverWait wait = new WebDriverWait(driver, 10);
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.xpath("/html/body/section/div[3]/div[2]/div/div[1]/span/span")));
 
-		List<WebElement> dropDowns = DriverFactory.getDriver()
+		List<WebElement> dropDowns = driver
 				.findElements(By.xpath("/html/body/section/div[3]/div[2]/div/div[1]/span/span"));
 
 		dropDowns.get(0).click();
@@ -555,9 +569,10 @@ public class BillingPage {
 	}
 
 	public boolean searchLoader(String userInfo) throws Exception {
-		DriverFactory.getDriver().navigate().refresh();
-		CommonMethods.waitForElementToClickable(billUrl);
-		billUrl.click();
+	
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.Billing_URL);
+		
 		searchUserForBilling.sendKeys(userInfo);
 
 		return circleLoader.isDisplayed();
@@ -565,13 +580,37 @@ public class BillingPage {
 
 	public List<String> dueAmountVerification(String userInfo) throws Exception {
 
+		WebDriver driver = DriverFactory.getDriver();
+
 		searchToBilling(userInfo);
 		selectTestName("Albumin Serum");
 
-		if (balanceAmount.getText().length() > 0) {
-			return Arrays.asList(balanceAmount.getText().trim(), firstTestAmt.getText().trim());
-		}
-		return null;
+		CommonMethods.waitForElementToVisible(userDue);
+
+		String text = userDue.getText();
+		System.out.println("==1=="+text);
+		String due = text.substring(2, text.length());
+
+		int intDue = Integer.parseInt(due);
+
+		int tAmt = Integer.parseInt(totalAmount.getText());
+
+		String totalDue = String.valueOf(intDue + tAmt);
+
+		CommonMethods.waitForElementToVisible(saveBill);
+		saveBill.click();
+		Thread.sleep(50000);
+		driver.navigate().to(Constants.Billing_URL);
+		
+		searchToBilling(userInfo);
+		selectTestName("Albumin Serum");
+
+		String text1 = userDue.getText();
+		System.out.println("==1=="+text1);
+
+		String due1 = text1.substring(2, text1.length());
+
+		return Arrays.asList(due1, totalDue);
 
 	}
 
@@ -632,42 +671,36 @@ public class BillingPage {
 
 	public List<String> confirmPriceListAsPerSelectedReferrel() throws Exception {
 
-		Actions builder = new Actions(DriverFactory.getDriver());
-
-		CommonMethods.waitForElementToClickable(adminHover);
-
-		builder.moveToElement(adminHover).build().perform();
-
-		CommonMethods.waitForElementToClickable(admin);
-		admin.click();
-
-		listManagement.click();
+		WebDriver driver = DriverFactory.getDriver();
+		
+		driver.navigate().to(Constants.ListAndGroupManagement_URL);
 
 		listName.sendKeys("Ref Dhanraj");
 
-		new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions
+		new WebDriverWait(driver, 10).until(ExpectedConditions
 				.visibilityOfElementLocated(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div")));
 
-		List<WebElement> dropDowns = DriverFactory.getDriver()
+		List<WebElement> dropDowns = driver
 				.findElements(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div"));
 
 		dropDowns.get(0).click();
 
 		List<String> list = new ArrayList<>();
 
-		new WebDriverWait(DriverFactory.getDriver(), 10)
+		new WebDriverWait(driver, 10)
 				.until(ExpectedConditions.visibilityOfElementLocated(By.id("textInput12012")));
 
 		list.add(test1.getAttribute("value"));
 		list.add(test2.getAttribute("value"));
 		list.add(test3.getAttribute("value"));
 
-		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+		driver.navigate().to(Constants.Billing_URL);
 
 		return list;
 	}
 
 	public List<String> companyPriceList(String userInfo) throws Exception {
+	
 		searchToBilling(userInfo);
 
 		Select select = new Select(companyList);
@@ -717,37 +750,30 @@ public class BillingPage {
 
 	public List<String> confirmPriceListAsPerSelectedCompany() throws Exception {
 
-		Actions builder = new Actions(DriverFactory.getDriver());
-
-		CommonMethods.waitForElementToClickable(adminHover);
-
-		builder.moveToElement(adminHover).build().perform();
-
-		CommonMethods.waitForElementToClickable(admin);
-		admin.click();
-
-		listManagement.click();
-
+		WebDriver driver = DriverFactory.getDriver();
+		
+		driver.navigate().to(Constants.ListAndGroupManagement_URL);
+		
 		listName.sendKeys("Postpaid Organization");
 
-		new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions
+		new WebDriverWait(driver, 10).until(ExpectedConditions
 				.visibilityOfElementLocated(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div")));
 
-		List<WebElement> dropDowns = DriverFactory.getDriver()
+		List<WebElement> dropDowns = driver
 				.findElements(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div"));
 
 		dropDowns.get(0).click();
 
 		List<String> list = new ArrayList<>();
 
-		new WebDriverWait(DriverFactory.getDriver(), 10)
+		new WebDriverWait(driver, 10)
 				.until(ExpectedConditions.visibilityOfElementLocated(By.id("textInput12530")));
 
 		list.add(orgTest1.getAttribute("value"));
 		list.add(orgTest2.getAttribute("value"));
 		list.add(orgTest3.getAttribute("value"));
 
-		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+		driver.navigate().to(Constants.Billing_URL);
 
 		return list;
 	}
@@ -795,6 +821,7 @@ public class BillingPage {
 
 			String calculatedAmt = totalAmt.getText();
 
+			closeCalculator.click();
 			return calculatedAmt;
 		}
 
@@ -890,7 +917,7 @@ public class BillingPage {
 		list.add(tPrice2.getText().trim());
 		list.add(tPrice3.getText().trim());
 
-		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+		DriverFactory.getDriver().navigate().to(Constants.Billing_URL);
 
 		return list;
 
@@ -931,10 +958,10 @@ public class BillingPage {
 		selectTestName("Ionised Calcium");
 		selectTestName("Cholesterol - Total");
 
+		Thread.sleep(1000);
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 		js.executeScript("arguments[0].click();", closeTestBtn);
 
-		Thread.sleep(1000);
 		CommonMethods.waitForElementToClickable(testList);
 		testList.clear();
 
@@ -944,18 +971,20 @@ public class BillingPage {
 
 	public List<String> alreadySelectedOrganization(String userInfo) throws Exception {
 
-		registerUrl.click();
-		Actions builder = new Actions(DriverFactory.getDriver());
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.REGISTRATION_URL);
+		
+		Actions builder = new Actions(driver);
 
 		CommonMethods.waitForElementToClickable(searchBtn);
 		searchBtn.click();
 
 		builder.moveToElement(searchUser).click().sendKeys(userInfo.toLowerCase()).build().perform();
 
-		new WebDriverWait(DriverFactory.getDriver(), 10).until(ExpectedConditions
+		new WebDriverWait(driver, 10).until(ExpectedConditions
 				.visibilityOfElementLocated(By.xpath("//*[@id=\"searchNewDirectPatientDiv\"]/span/span/div[2]")));
 
-		List<WebElement> dropDowns = DriverFactory.getDriver()
+		List<WebElement> dropDowns = driver
 				.findElements(By.xpath("//*[@id=\"searchNewDirectPatientDiv\"]/span/span/div[2]"));
 
 		dropDowns.get(0).click();
@@ -979,8 +1008,11 @@ public class BillingPage {
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
 
-		Select select = new Select(companyList);
-		select.selectByVisibleText("link org ");
+		otherInfo.click();
+		otherInfo.click();
+		
+		Select select = new Select(billOrg);
+		select.selectByVisibleText("postpaid Organization");
 
 		String selectedOrg = select.getFirstSelectedOption().getText().trim();
 
@@ -1021,28 +1053,14 @@ public class BillingPage {
 
 	public void deleteAddedOrgByAddOrgLink(String orgName) throws Exception {
 
-		Actions builder = new Actions(DriverFactory.getDriver());
+		WebDriver driver = DriverFactory.getDriver();
+		Actions builder = new Actions(driver);
 
-		CommonMethods.waitForElementToClickable(adminHover);
-
-		builder.moveToElement(adminHover).build().perform();
-
-		CommonMethods.waitForElementToClickable(admin);
-		admin.click();
-
-		CommonMethods.waitForElementToClickable(organizationManagement);
-		organizationManagement.click();
-
-		CommonMethods.waitForElementToClickable(addEditOrganization);
-		addEditOrganization.click();
-
-		CommonMethods.waitForElementToClickable(editOrgTab);
-		editOrgTab.click();
-
+		driver.navigate().to(Constants.EDIT_ORGANIZATION_URL);
 		CommonMethods.waitForElementToClickable(orgEditList);
 		builder.moveToElement(orgEditList).click().sendKeys(orgName).build().perform();
 
-		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		WebDriverWait wait = new WebDriverWait(driver, 10);
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.xpath("/html/body/section/div[2]/div[1]/div[4]/div/div/span/span")));
 
@@ -1058,7 +1076,7 @@ public class BillingPage {
 		CommonMethods.waitForElementToClickable(orgDelete);
 		orgDelete.click();
 
-		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+		driver.navigate().to(Constants.Billing_URL);
 
 	}
 
@@ -1076,6 +1094,9 @@ public class BillingPage {
 
 	public String selectHomeDelivery(String userInfo) throws Exception {
 
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.Billing_URL);
+		
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
 
@@ -1090,6 +1111,9 @@ public class BillingPage {
 	}
 
 	public String selectCourierCollection(String userInfo) throws Exception {
+		
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.Billing_URL);
 
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
@@ -1120,6 +1144,7 @@ public class BillingPage {
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
 
+		Thread.sleep(1000);
 		Select select = new Select(paymentMode);
 		select.selectByValue(defaultMode);
 
@@ -1156,14 +1181,17 @@ public class BillingPage {
 
 	public String uniqueTestNames(String userInfo) throws Exception {
 
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.Billing_URL);
+		
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
 
 		testList.sendKeys("Ionised Calcium");
-		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		WebDriverWait wait = new WebDriverWait(driver, 10);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]")));
 
-		List<WebElement> dropDowns = DriverFactory.getDriver()
+		List<WebElement> dropDowns = driver
 				.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]"));
 
 		dropDowns.get(0).click();
@@ -1251,28 +1279,15 @@ public class BillingPage {
 
 	public void setOrganizationAdvance(String advanceAmt) throws Exception {
 
-		Actions builder = new Actions(DriverFactory.getDriver());
+		WebDriver driver = DriverFactory.getDriver();
+		Actions builder = new Actions(driver);
 
-		CommonMethods.waitForElementToClickable(adminHover);
-
-		builder.moveToElement(adminHover).build().perform();
-
-		CommonMethods.waitForElementToClickable(admin);
-		admin.click();
-
-		CommonMethods.waitForElementToClickable(organizationManagement);
-		organizationManagement.click();
-
-		CommonMethods.waitForElementToClickable(addEditOrganization);
-		addEditOrganization.click();
-
-		CommonMethods.waitForElementToClickable(editOrgTab);
-		editOrgTab.click();
-
+		driver.navigate().to(Constants.EDIT_ORGANIZATION_URL);
+		
 		CommonMethods.waitForElementToClickable(orgEditList);
 		builder.moveToElement(orgEditList).click().sendKeys("prepaid Organization").build().perform();
 
-		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		WebDriverWait wait = new WebDriverWait(driver, 10);
 		wait.until(ExpectedConditions
 				.visibilityOfElementLocated(By.xpath("//*[@id=\"editOrgDiv\"]/div[4]/div/div/span/span/div")));
 
@@ -1289,7 +1304,7 @@ public class BillingPage {
 
 		orgUploadButton.click();
 
-		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+		driver.navigate().to(Constants.Billing_URL);
 
 	}
 
@@ -1336,7 +1351,7 @@ public class BillingPage {
 		select.selectByVisibleText("postpaid Organization");
 
 		String errorMsg = saveBillErrorMsg.getText();
-
+		Thread.sleep(5000);
 		String msg = errorMsg.substring(1, errorMsg.length());
 
 		return msg.trim();
@@ -1643,15 +1658,17 @@ public class BillingPage {
 
 		Select select = new Select(additionalCharges);
 
-		select.selectByValue("NONE");
+		select.selectByValue("HOME VISIT SERVICES");
 
-		return select.getFirstSelectedOption().getText();
+		return select.getFirstSelectedOption().getText().trim();
 
 	}
 
 	public String collectedSampleType(String userInfo) throws Exception {
 
-		registerUrl.click();
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.REGISTRATION_URL);
+		
 		CommonMethods.waitForElementToClickable(settings);
 		settings.click();
 
@@ -1662,7 +1679,7 @@ public class BillingPage {
 		}
 
 		saveSetting.click();
-		DriverFactory.getDriver().navigate().refresh();
+		driver.navigate().refresh();
 
 		billing.click();
 		searchToBilling(userInfo);
@@ -1688,18 +1705,17 @@ public class BillingPage {
 		select.selectByVisibleText("Discount list ");
 
 		List<String> list = new ArrayList<>();
-		list.add("Hanging Drop Preparation *");
-		list.add("Absolute Eosinophils Count *"); //
-		list.add("Absolute Monocyte Count *");
+		list.add("Ionised Calcium");
+		list.add("Glucose PP"); //
 
 		for (String test : list) {
 			testList.sendKeys(test);
 			WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
 			wait.until(ExpectedConditions
-					.visibilityOfElementLocated(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]/span")));
+					.visibilityOfElementLocated(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]")));
 
 			List<WebElement> dropDowns = DriverFactory.getDriver()
-					.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]/span"));
+					.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]"));
 
 			dropDowns.get(0).click();
 
@@ -1710,9 +1726,7 @@ public class BillingPage {
 
 		String d1 = discount_1.getText().substring(0, discount_1.getText().length() - 2);
 		String d2 = discount_2.getText().substring(0, discount_2.getText().length() - 2);
-		String d3 = discount_3.getText().substring(0, discount_3.getText().length() - 2);
 
-		list.add(d3);
 		list.add(d2);
 		list.add(d1);
 
@@ -1738,11 +1752,10 @@ public class BillingPage {
 
 		List<String> list = new ArrayList<>();
 
-		list.add(hangingDrop.getAttribute("value"));
-		list.add(eosinophils.getAttribute("value"));
-		list.add(monocyte.getAttribute("value"));
+		list.add(textInput12151.getAttribute("value"));
+		list.add(textInput12347.getAttribute("value"));
 
-		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+		DriverFactory.getDriver().navigate().to(Constants.Billing_URL);
 
 		return list;
 	}
@@ -1867,13 +1880,14 @@ public class BillingPage {
 
 	public String backDatedBillGettingSaved(String userInfo) throws Exception {
 
+		WebDriver driver = DriverFactory.getDriver();
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
 
 		calender.click();
 		String may = month.getText().trim();
 
-		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 
 		do {
 			js.executeScript("arguments[0].click();", leftArrow);
@@ -1889,8 +1903,8 @@ public class BillingPage {
 		String confirmDate = confirmBillDate.getText();
 		String[] values = confirmDate.split(",");
 
-		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
-		DriverFactory.getDriver().navigate().refresh();
+		driver.navigate().to(Constants.Billing_URL);
+		driver.navigate().refresh();
 		return values[0];
 	}
 
@@ -1951,7 +1965,7 @@ public class BillingPage {
 			// DriverFactory.getDriver().navigate().refresh();
 			// String tAmt = billTotalAmountLabel.getText().trim();
 
-			DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+			DriverFactory.getDriver().navigate().to(Constants.Billing_URL);
 
 			return pay;
 		}
@@ -1998,7 +2012,7 @@ public class BillingPage {
 		select.selectByValue("Percentage");
 
 		totalConcessionAmt.clear();
-		totalConcessionAmt.sendKeys("90");
+		totalConcessionAmt.sendKeys("50");
 		comments.sendKeys("concession");
 
 		String totalAmt = firstTestprice.getText();
@@ -2046,6 +2060,7 @@ public class BillingPage {
 
 	public String saveAndPrintBill(String userInfo) throws Exception {
 
+		WebDriver driver = DriverFactory.getDriver();
 		registerUrl.click();
 		CommonMethods.waitForElementToClickable(settings);
 		settings.click();
@@ -2054,7 +2069,7 @@ public class BillingPage {
 		oldVersionBillingPage.click();
 
 		saveSetting.click();
-		DriverFactory.getDriver().navigate().refresh();
+		driver.navigate().refresh();
 
 		billing.click();
 
@@ -2070,8 +2085,8 @@ public class BillingPage {
 		String confirmMsg = confirmBillMsg.getText();
 		String msg = confirmMsg.substring(1, confirmMsg.length());
 
-		DriverFactory.getDriver().close();
-		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#directRegistration");
+		driver.close();
+		driver.navigate().to(Constants.REGISTRATION_URL);
 
 		CommonMethods.waitForElementToClickable(settings);
 		settings.click();
@@ -2080,7 +2095,7 @@ public class BillingPage {
 		newVersionBillingPage.click();
 
 		saveSetting.click();
-		DriverFactory.getDriver().navigate().refresh();
+		driver.navigate().refresh();
 
 		return msg.trim();
 
@@ -2129,7 +2144,7 @@ public class BillingPage {
 		String userName = pndtPatientName.getText().trim();
 
 		closeFormF.click();
-		DriverFactory.getDriver().navigate().to("https://beta.livehealth.solutions/billing/#");
+		DriverFactory.getDriver().navigate().to(Constants.Billing_URL);
 
 		return userName;
 	}

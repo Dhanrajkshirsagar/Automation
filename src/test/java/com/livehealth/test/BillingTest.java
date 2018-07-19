@@ -45,7 +45,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	ConfigProperties configProperties;
 
-	@BeforeClass(groups = { "Billing", "Default" })
+	@BeforeClass(groups = { "Billing", "BillTest" })
 	public void launchSite() {
 		try {
 			billing = pageLaunch.navigateToBillingPage();
@@ -162,19 +162,19 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	// }
 
 	// TC: 09
-	@Test(groups = { "Billing" })
-	public void verifyRemainingDueAmt_09() {
-		CommonMethods.setTestDescription("Expected: Patient Due remaining amount");
-		List<String> billAmt;
-		try {
-			User userInfo = getUserInfo();
-			billAmt = billing.dueAmountVerification(userInfo.getName());
-			Assert.assertEquals(billAmt.get(0), billAmt.get(1));
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
+//	@Test(groups = { "bill" })
+//	public void verifyRemainingDueAmt_09() {
+//		CommonMethods.setTestDescription("Expected: Patient Due remaining amount");
+//		List<String> billAmt;
+//		try {
+//			User userInfo = getUserInfo();
+//			billAmt = billing.dueAmountVerification("jadeja");
+//			Assert.assertEquals(billAmt.get(0), billAmt.get(1));
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
 
 	// TC: 10
 	@Test(groups = { "Billing" })
@@ -255,9 +255,10 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		List<String> orgList;
 		try {
 			orgList = billing.companyPriceList(userInfo.getName());
-
-			softAssert.assertEquals(orgList.get(1), "link org");
-			softAssert.assertEquals(orgList.get(2), "DIRECT");
+			
+			softAssert.assertEquals(orgList.get(1), "DIRECT");
+			softAssert.assertEquals(orgList.get(2), "postpaid Organization");
+			softAssert.assertEquals(orgList.get(3), "Co Pay");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -360,7 +361,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 23
-	@Test(groups = { "Default" })
+	@Test(groups = { "BillTest" })
 	public void verifyCloseTestBtn_23() {
 		CommonMethods.setTestDescription("Expected:Close Test Btn Should close test");
 		String amtAfterClosed;
@@ -396,7 +397,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		try {
 			User userInfo = getUserInfo();
 			selectedOrg = billing.selectOrganization(userInfo.getName());
-			Assert.assertEquals(selectedOrg, "link org");
+			Assert.assertEquals(selectedOrg, "postpaid Organization");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -434,7 +435,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:30
-	@Test(groups = { "Default" }, priority = 20)
+	@Test(groups = { "BillTest" }, priority = 20)
 	public void verifySelectHomeDelivery_30() {
 		String selectedOption;
 		try {
@@ -449,7 +450,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC:32,33
-	@Test(groups = { "Default" }, priority = 21)
+	@Test(groups = { "BillTest" }, priority = 21)
 	public void verifySelectCourierCollection_32_33() {
 		String selectedOption;
 		try {
@@ -482,11 +483,9 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	// TC: 35-42
 	@Test(groups = { "Billing" }, dataProvider = "paymentMode")
 	public void verifySetDefaultPaymentMode_35To42(String setPaymentMode) {
-		User userInfo = getUserInfo();
-		userInfo.setName("dtype");
 		String paymentMode;
 		try {
-			paymentMode = billing.setDefaultPaymentMode(userInfo.getName(), setPaymentMode);
+			paymentMode = billing.setDefaultPaymentMode("dtype", setPaymentMode);
 
 			Assert.assertEquals(paymentMode, setPaymentMode);
 		} catch (Exception e) {
@@ -761,7 +760,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 67
-	@Test(groups = { "Default" })
+	@Test(groups = { "BillTest" })
 	public void verifyAdditionalServicesFlag_67() {
 		User userInfo = getUserInfo();
 		userInfo.setName("dtype");
@@ -769,7 +768,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		try {
 			firstOption = billing.additionalServicesFlag(userInfo.getName());
 
-			Assert.assertEquals(firstOption, "Additional Services (Default: None)");
+			Assert.assertEquals(firstOption, "Home Visit Services");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -777,7 +776,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 70
-	@Test(groups = { "Default" })
+	@Test(groups = { "Billing" })
 	public void verifycollectedSampleType_70() {
 		User userInfo = getUserInfo();
 		userInfo.setName("dtype");
@@ -827,7 +826,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 76
-	@Test(groups = { "Billing" })
+	@Test(groups = { "default" })
 	public void verify​BackDatedBillGettingSaved_76() {
 		User userInfo = getUserInfo();
 		userInfo.setName("Benedict");
@@ -878,7 +877,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	// }
 
 	// TC: 81
-	@Test(groups = { "Default" })
+	@Test(groups = { "BillTest" })
 	public void verify​DiscountToDiscountDiscardedTestFlag_81() {
 		User userInfo = getUserInfo();
 		userInfo.setName("Benedict");
@@ -919,7 +918,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		try {
 			amount = billing.allowedDiscountOnBill(userInfo.getName());
 
-			Assert.assertEquals(amount, "50");
+			Assert.assertEquals(amount, "250");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -935,7 +934,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		try {
 			errorMessage = billing.moreThanAllowedDiscountOnBill(userInfo.getName());
 
-			Assert.assertEquals(errorMessage, "You can give only 90% discount.");
+			Assert.assertEquals(errorMessage, "You can give only 50% discount.");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
