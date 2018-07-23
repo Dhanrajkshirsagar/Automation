@@ -12,6 +12,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
@@ -491,6 +492,21 @@ public class BillingPage {
 	@FindBy(how = How.XPATH, using = "//*[@id=\"calulateTestModal\"]/div/div/div[1]/button")
 	private WebElement closeCalculator;
 
+	@FindAll({ @FindBy(xpath = "//*[@id=\"inputT\"]/span/span/div[1]") })
+	public List<WebElement> testListDropdown;
+
+	@FindBy(how = How.ID, using = "prepaidOrganizationList")
+	private WebElement prepaidOrganizationList;
+
+	@FindAll({ @FindBy(xpath = "//*[@id=\"prepaidOrganizationListParent\"]/div/span/span/div") })
+	public List<WebElement> orgDropdown;
+
+	@FindBy(how = How.ID, using = "advanceAmount")
+	private WebElement advance_Amount;
+
+	@FindBy(how = How.ID, using = "submitOrgAdvanceBtn")
+	private WebElement submitOrgAdvanceBtn;
+
 	//   
 	@Autowired
 	WebContext webContext;
@@ -532,7 +548,7 @@ public class BillingPage {
 		
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.Billing_URL);
-	
+		driver.navigate().refresh();
 		searchUserForBilling.sendKeys(userInfo);
 
 		WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -1228,64 +1244,88 @@ public class BillingPage {
 
 	}
 
+	private void selectTestsToBill(String testName) throws Exception {
+		
+		CommonMethods.waitForElementToVisible(testList);
+		testList.sendKeys(testName);
+
+		CommonMethods.waitForAllElementsToVisible(testListDropdown);
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[1]"));
+
+		dropDowns.get(0).click();
+
+		concession.sendKeys(Keys.ENTER);
+	}
+	
 	public String organizationAdvance(String userInfo) throws Exception {
 
-		setOrganizationAdvance("1000");
-
 		searchToBilling(userInfo);
-		selectTestName("Cholesterol - Total");
+		
+		Select select = new Select(companyList);
+		select.selectByVisibleText("Custom Org ");
 
-		otherInfo.click();
-		otherInfo.click();
-
-		Select select = new Select(billOrg);
-		select.selectByVisibleText("prepaid Organization");
+		selectTestsToBill("Ionised Calcium");
+		
+		CommonMethods.waitForElementToVisible(orgAdvance);
 		CommonMethods.waitForElementToClickable(orgAdvance);
 
 		return orgAdvance.getText().trim();
-
 	}
 
-	public List<String> dueCutFromOrganizationAdvance(String userInfo) throws Exception {
+	public String dueCutFromOrganizationAdvance(String userInfo, String organization) throws Exception {
 
-		setOrganizationAdvance("1000");
-
+		WebDriver driver = DriverFactory.getDriver();
 		searchToBilling(userInfo);
-		selectTestName("Cholesterol - Total");
+		
+		Select select = new Select(companyList);
+		select.selectByVisibleText(organization);
 
-		otherInfo.click();
-		otherInfo.click();
-
-		Select select = new Select(billOrg);
-		select.selectByVisibleText("prepaid Organization");
-
-		String orgAdv = orgAdvance.getText().trim();
-
-		String strOrgAdv = orgAdv.substring(2, orgAdv.length());
-
-		int intOrgadv = Integer.parseInt(strOrgAdv);
-		int tAmt = Integer.parseInt(payableAmount.getText().trim());
-
-		String calRemainedAmt = String.valueOf(intOrgadv - tAmt);
-
+		selectTestsToBill("Ionised Calcium");
+		
+		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
+		driver.navigate().to(Constants.Billing_URL);
+		
+		searchToBilling(userInfo);
+		
+		CommonMethods.waitForElementToVisible(companyList);
+		select.selectByVisibleText(organization);
 
-		String remainedAmt = organizationAdvance(userInfo);
-		String strRemainedAmt = remainedAmt.substring(2, remainedAmt.length());
+		selectTestsToBill("Ionised Calcium");
 
-		return Arrays.asList(strRemainedAmt, calRemainedAmt);
+		CommonMethods.waitForElementToVisible(orgAdvance);
+		
+		String orgDeduct = orgAdvance.getText();
+		
+		driver.navigate().to(Constants.ORG_COLLECTION_URL);
+		
+		CommonMethods.waitForElementToVisible(prepaidOrganizationList);
+		prepaidOrganizationList.sendKeys(organization);
+		
+		CommonMethods.waitForAllElementsToVisible(orgDropdown);
+		orgDropdown.get(0).click();
+		
+		CommonMethods.waitForElementToVisible(advance_Amount);
+		advance_Amount.sendKeys("450");
+		
+		submitOrgAdvanceBtn.click();
+		
+		driver.navigate().to(Constants.Billing_URL);
 
+		return orgDeduct;
 	}
 
-	public void setOrganizationAdvance(String advanceAmt) throws Exception {
+	public String setOrganizationAdvance(String advanceAmt,String orgName) throws Exception {
 
 		WebDriver driver = DriverFactory.getDriver();
 		Actions builder = new Actions(driver);
-
+		
 		driver.navigate().to(Constants.EDIT_ORGANIZATION_URL);
 		
 		CommonMethods.waitForElementToClickable(orgEditList);
-		builder.moveToElement(orgEditList).click().sendKeys("prepaid Organization").build().perform();
+		builder.moveToElement(orgEditList).click().sendKeys(orgName).build().perform();
 
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 		wait.until(ExpectedConditions
@@ -1298,19 +1338,23 @@ public class BillingPage {
 
 		manageLedger.click();
 		manageLedger.click();
-
+		CommonMethods.waitForElementToVisible(editOpeningBal);
+		CommonMethods.waitForElementToClickable(editOpeningBal);
+		
+		String organizationCut = editOpeningBal.getText();
 		editOpeningBal.clear();
 		editOpeningBal.sendKeys(advanceAmt);
 
 		orgUploadButton.click();
 
 		driver.navigate().to(Constants.Billing_URL);
-
+	
+		return organizationCut;
 	}
 
 	public String ifOrganizationAdvanceLessThanBillAmount(String userInfo) throws Exception {
 
-		setOrganizationAdvance("100");
+		setOrganizationAdvance("100","prepaid organization");
 
 		searchToBilling(userInfo);
 		selectTestName("Cholesterol - Total");
@@ -1762,6 +1806,8 @@ public class BillingPage {
 
 	public int testQuantityOptionFlag(String userInfo) throws Exception {
 
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+
 		int cnt = 0;
 		registerUrl.click();
 		CommonMethods.waitForElementToClickable(settings);
@@ -1773,7 +1819,8 @@ public class BillingPage {
 			testQuantityFlag.click();
 		}
 
-		saveSetting.click();
+		js.executeScript("arguments[0].click();", saveSetting);
+
 		DriverFactory.getDriver().navigate().refresh();
 
 		billing.click();

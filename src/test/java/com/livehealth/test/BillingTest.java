@@ -45,7 +45,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	ConfigProperties configProperties;
 
-	@BeforeClass(groups = { "Billing", "BillTest" })
+	@BeforeClass(groups = { "Billing", "BillTest", "Test" })
 	public void launchSite() {
 		try {
 			billing = pageLaunch.navigateToBillingPage();
@@ -256,9 +256,11 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		try {
 			orgList = billing.companyPriceList(userInfo.getName());
 			
-			softAssert.assertEquals(orgList.get(1), "DIRECT");
-			softAssert.assertEquals(orgList.get(2), "postpaid Organization");
-			softAssert.assertEquals(orgList.get(3), "Co Pay");
+			softAssert.assertEquals(orgList.get(1), "Co Pay");
+			softAssert.assertEquals(orgList.get(2), "DIRECT");
+			softAssert.assertEquals(orgList.get(3), "postpaid Organization");
+			softAssert.assertEquals(orgList.get(4), "Custom Org");
+			softAssert.assertEquals(orgList.get(5), "Custom Prepaid");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -410,10 +412,10 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		User userInfo = getUserInfo();
 		String orgName;
 		try {
-			orgName = billing.addOrgLinkAbleToAddOrg(userInfo.getName(), "live");
+			orgName = billing.addOrgLinkAbleToAddOrg(userInfo.getName(), "alpha");
 			billing.deleteAddedOrgByAddOrgLink(orgName);
 
-			Assert.assertEquals(orgName, "live");
+			Assert.assertEquals(orgName, "alpha");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -557,20 +559,19 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 48
-	// @Test(groups = { "Billing" })
-	// public void verifyDueCutFromOrganizationAdvance() {
-	// User userInfo = getUserInfo();
-	// userInfo.setName("roger");
-	// List<String> dueList;
-	// try {
-	// dueList = billing.dueCutFromOrganizationAdvance(userInfo.getName());
-	//
-	// Assert.assertEquals(dueList.get(0), dueList.get(1));
-	// } catch (Exception e) {
-	// logger.error(e.getMessage());
-	// Assert.assertTrue(false, e.getMessage());
-	// }
-	// }
+	@Test(groups = { "Billing" })
+	public void verifyDueCutFromOrganizationAdvance() {
+		String organization = "Custom Prepaid ";
+		String orgAmtDeduct;
+		try {
+			orgAmtDeduct = billing.dueCutFromOrganizationAdvance("nipun",organization);
+
+			Assert.assertEquals(orgAmtDeduct, "₹ 550");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
 
 	// TC: 49
 	@Test(groups = { "Billing" })

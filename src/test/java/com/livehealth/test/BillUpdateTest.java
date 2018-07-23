@@ -275,7 +275,7 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	// TC: 
+	// TC:
 	@Test(groups = { "verify" })
 	public void verifyCancelwithAddTestAmountToAdvance() {
 		BillData bill = userBillingData();
@@ -437,7 +437,7 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 25
 	@Test(groups = { "BillUpdate" })
 	public void verifyOrganizationPriceList_25() {
@@ -453,14 +453,14 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 26
 	@Test(groups = { "BillUpdate" })
 	public void verifyDiscountPriceList_26() {
 		SoftAssert softAssert = new SoftAssert();
 		BillData bill = userBillingData();
 		bill.setDiscountPriceList("Discount list ");
-	
+
 		List<String> price;
 		try {
 			price = billUpdate.discountPriceList("Neymar", bill);
@@ -471,15 +471,15 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 		}
 		softAssert.assertAll();
 	}
-	
+
 	// TC: 27
 	@Test(groups = { "BillUpdate" })
 	public void verifyProfileTest_27() {
 		SoftAssert softAssert = new SoftAssert();
-		String profileName = "verify bill update";		
+		String profileName = "verify bill update";
 		List<String> tList;
 		try {
-			tList = billUpdate.profileTest("amar",profileName);
+			tList = billUpdate.profileTest("amar", profileName);
 			softAssert.assertEquals(tList.get(0), "Ionised CalciumProfile - verify bill update");
 			softAssert.assertEquals(tList.get(1), "Protein Ascitic Fluid *Profile - verify bill update");
 			softAssert.assertEquals(tList.get(2), "Albumin SerumProfile - verify bill update");
@@ -489,7 +489,7 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 		}
 		softAssert.assertAll();
 	}
-	
+
 	// TC: 28
 	@Test(groups = { "BillUpdate" })
 	public void verifyCancelTestFromMultipleTest_28() {
@@ -502,7 +502,7 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 29
 	@Test(groups = { "BillUpdate" })
 	public void verifyRefundTestFromMultipleTest_29() {
@@ -515,7 +515,7 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 30
 	@Test(groups = { "BillUpdate" })
 	public void verifyPercentageWiseConcession_30() {
@@ -528,7 +528,7 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 31
 	@Test(groups = { "BillUpdate" })
 	public void verifyCashModeInCaseOfUserAdvance_31() {
@@ -541,7 +541,7 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 32
 	@Test(groups = { "BillUpdate" }, dependsOnMethods = "verifyCashModeInCaseOfUserAdvance_31")
 	public void verifyMoreThanAllowedDiscount_32() {
@@ -554,7 +554,7 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 33
 	@Test(groups = { "BillUpdate" }, dependsOnMethods = "verifyMoreThanAllowedDiscount_32")
 	public void verifyConcessionInRupees_33() {
@@ -567,8 +567,8 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	// TC: 36
+
+	// TC: 34
 	@Test(groups = { "BillUpdate" })
 	public void verifyAdditionalPriceField_34() {
 		String error;
@@ -580,8 +580,8 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	// TC: 37
+
+	// TC: 35
 	@Test(groups = { "BillUpdate" })
 	public void verifyAdvancedPaidGreaterThanPayableAmt_35() {
 		String error;
@@ -593,19 +593,115 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 36
-	@Test(groups = { "Update" })
-	public void verifyUpdatedReferrelNameAfterReset_35() {
-		String refName;
+	@Test(groups = { "BillUpdate" })
+	public void verifyRefundAndCancelTests_36() {
+		String billAmt;
 		try {
-			refName = billUpdate.referrelNameAfterReset("referrel");
-			Assert.assertEquals(refName, "Delative");
+			billAmt = billUpdate.refundAndCancelTests("referrel");
+			Assert.assertEquals(billAmt, "270");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
+
+//	// TC: 
+//	@Test(groups = { "" })
+//	public void verifyUpdatedReferrelNameAfterReset_37() {
+//		String refName;
+//		try {
+//			refName = billUpdate.referrelNameAfterReset("referrel");
+//			Assert.assertEquals(refName, "Delative");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+
+	// TC: 37
+	@Test(groups = { "BillUpdate" })
+	public void verifyBillStatusIfPaidTotalAmount_37() {
+		String refName;
+		try {
+			refName = billUpdate.checkStatusIfPaidTotalBillAmount("referrel");
+			Assert.assertEquals(refName, "Completed");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 38
+	@Test(groups = { "BillUpdate" })
+	public void verifyBillStatusIfPaidPartialAmount_38() {
+		String refName;
+		try {
+			refName = billUpdate.checkStatusIfPaidPartialBillAmount("referrel");
+			Assert.assertEquals(refName, "Pending");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	// TC: 39
+	@Test(groups = { "BillUpdate" })
+	public void verifyNameAgeGender_39() {
+		String name;
+		try {
+			name = billUpdate.nameGenderAgeVerification("swapnil");
+			Assert.assertEquals(name, "Bill Of Swapnil (M - 10)");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	// TC: 40
+	@Test(groups = { "Update" })
+	public void verifyConcessionToOutsourceTest_40() {
+		String name;
+		try {
+			name = billUpdate.concessionToOutsourceTest("benedict");
+			Assert.assertEquals(name, "Sorry! you can not give concession on outsourced test.");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	// TC: 41
+	@Test(groups = { "BillUpdate" })
+	public void verifyBillOrder_41() {
+		SoftAssert softAssert = new SoftAssert();
+		List<String> names;
+		try {
+			names = billUpdate.billOrder();
+			softAssert.assertEquals(names.get(0), "Thirduser");
+			softAssert.assertEquals(names.get(1), "Seconduser");
+			softAssert.assertEquals(names.get(2), "Firstuser");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			softAssert.assertTrue(false, e.getMessage());
+		}
+		softAssert.assertAll();
+	}
+	
+	// TC: 42
+//	@Test(groups = { "" })
+//	public void verifyDueAmountShowingCorrectly_41() {
+//		
+//		List<String> price;
+//		try {
+//			price = billUpdate.showingDueCorrectly("advance");
+//			Assert.assertEquals(price.get(0), price.get(1));
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
 	
 	private BillData userBillingData() {
 
