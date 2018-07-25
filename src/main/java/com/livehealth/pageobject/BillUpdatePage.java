@@ -445,7 +445,30 @@ public class BillUpdatePage {
 	@FindBy(how = How.XPATH, using = "//*[@id=\"userMetaInfo2\"]/div[2]/p/strong")
 	public WebElement third_User;
 
-	
+	@FindBy(how = How.XPATH, using = "//*[@id=\"confirmBillTestList\"]/div/div[3]/button")
+	public WebElement sampleRecived;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"testStatus0\"]/span")
+	public WebElement testStatus0;
+
+	@FindBy(how = How.XPATH, using = "(//*[@id=\"hoverDropdown\"]/a)[1]")
+	public WebElement hoverDropdown;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"hoverDropdown\"]/ul/li[13]/a")
+	public WebElement allDepartments;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"userWaiting1317\"]/div/div[1]")
+	public WebElement user;
+
+	@FindBy(how = How.XPATH, using = "/html/body/section/div[2]/div[3]/div[3]/div[1]/div[1]/div[3]")
+	public WebElement editFirst;
+
+	@FindBy(how = How.ID, using = "quickSaveBtn")
+	private WebElement quickSaveBtn;
+
+	@FindAll({ @FindBy(xpath = "//button[contains(text(),'Submit')]") })
+	public List<WebElement> submit;
+
 	//	
 	@Autowired
 	WebContext webContext;
@@ -1681,19 +1704,8 @@ public class BillUpdatePage {
 		WebDriver driver = DriverFactory.getDriver();
 
 		searchToBilling(userName);
-		
-		CommonMethods.waitForElementToVisible(testList);
-		testList.sendKeys(profile);
-
-		CommonMethods.waitForAllElementsToVisible(profileDropdown);
-
-		List<WebElement> dropDowns = DriverFactory.getDriver()
-				.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]"));
-
-		dropDowns.get(0).click();
-
-		concession.sendKeys(Keys.ENTER);
-
+		selectProfile(profile);
+	
 		CommonMethods.waitForElementToVisible(advanceAmount);
 		advanceAmount.clear();
 		advanceAmount.sendKeys(totalAmount.getText());
@@ -1719,6 +1731,21 @@ public class BillUpdatePage {
 		tList.add(t_Name3);
 		
 		return tList;
+	}
+	
+	private void selectProfile(String profile) throws Exception {
+		
+		CommonMethods.waitForElementToVisible(testList);
+		testList.sendKeys(profile);
+
+		CommonMethods.waitForAllElementsToVisible(profileDropdown);
+
+		List<WebElement> dropDowns = DriverFactory.getDriver()
+				.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]"));
+
+		dropDowns.get(0).click();
+
+		concession.sendKeys(Keys.ENTER);
 	}
 	
 	public String cancelTestFromMultipleTest(String userName) throws Exception {
@@ -2302,6 +2329,225 @@ public class BillUpdatePage {
 		
 		return Arrays.asList(due,dueAmt);
 	}
+	
+	public String payableAmountAfterRefund(String userName) throws Exception {
+		
+		WebDriver driver = DriverFactory.getDriver();
+		createBill(userName);
+		
+		CommonMethods.waitForElementToVisible(advanceAmount);
+		advanceAmount.clear();
+		advanceAmount.sendKeys("270");
+		
+		CommonMethods.waitForElementToVisible(saveBill);
+		saveBill.click();
+
+		CommonMethods.waitForElementToVisible(confirmBillId);
+		String billId = confirmBillId.getText();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		unlockBill(billId);
+
+		CommonMethods.waitForElementToVisible(refundBtn);
+		refundBtn.click();
+		Thread.sleep(10000);
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+
+		CommonMethods.waitForElementToVisible(billTotalAmountLabel);
+		
+		return billTotalAmountLabel.getText();
+	}
+	
+	public List<String> partialPaymentBillUpdateVerification(String userName) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		createBill(userName);
+
+		CommonMethods.waitForElementToVisible(advanceAmount);
+		advanceAmount.clear();
+		advanceAmount.sendKeys("270");
+
+		CommonMethods.waitForElementToVisible(saveBill);
+		saveBill.click();
+
+		CommonMethods.waitForElementToVisible(confirmBillId);
+		String billId = confirmBillId.getText();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		unlockBill(billId);
+
+		CommonMethods.waitForElementToVisible(viewPayment);
+		viewPayment.click();
+
+		CommonMethods.waitForElementToVisible(addAnother);
+		addAnother.click();
+
+		CommonMethods.waitForElementToVisible(paymentAmount_2);
+		paymentAmount_2.clear();
+		paymentAmount_2.sendKeys("500");
+
+		savebillSetting.click();
+		CommonMethods.waitForElementToVisible(submitForm);
+		submitForm.click();
+
+		CommonMethods.waitForElementToVisible(confirmedBillUpdate);
+		confirmedBillUpdate.click();
+		Thread.sleep(10000);
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+
+		CommonMethods.waitForElementToVisible(billTotalAmountLabel);
+		String payableAmt = billTotalAmountLabel.getText();
+		String balanceAmt = balanceAmount.getText();
+
+		List<String> list = new ArrayList<>();
+		list.add(payableAmt);
+		list.add(balanceAmt);
+
+		return list;
+	}
+	
+	public List<String> partialPaymentWithProfileTest(String userName,String profile) throws Exception{
+	
+		WebDriver driver = DriverFactory.getDriver();
+		searchToBilling(userName);
+		selectProfile(profile);
+		selectProfile("bjp");
+		
+		CommonMethods.waitForElementToVisible(advanceAmount);
+		advanceAmount.clear();
+		advanceAmount.sendKeys("100");
+
+		CommonMethods.waitForElementToVisible(saveBill);
+		saveBill.click();
+
+		CommonMethods.waitForElementToVisible(confirmBillId);
+		String billId = confirmBillId.getText();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		unlockBill(billId);
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+
+		CommonMethods.waitForElementToVisible(billTotalAmountLabel);
+		String payableAmt = billTotalAmountLabel.getText();
+		String balanceAmt = balanceAmount.getText();
+
+		List<String> list = new ArrayList<>();
+		list.add(payableAmt);
+		list.add(balanceAmt);
+
+		return list;	
+	}
+	
+	public String notFilledStatusVerification(String userName) throws Exception {
+		
+		WebDriver driver = DriverFactory.getDriver();
+		
+		String billId = receiveSample(userName);
+		
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		unlockBill(billId);
+		
+		CommonMethods.waitForElementToVisible(testStatus0);
+		
+		return testStatus0.getText();
+	}
+	
+	private String receiveSample(String userName) throws Exception {
+		
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		WebDriver driver = DriverFactory.getDriver();
+		searchToBilling(userName);
+		selectProfile("Mantoux test Tuberculin test");
+
+		CommonMethods.waitForElementToVisible(advanceAmount);
+		advanceAmount.clear();
+		advanceAmount.sendKeys(totalAmount.getText());
+
+		CommonMethods.waitForElementToVisible(saveBill);
+		saveBill.click();
+		
+		CommonMethods.waitForElementToVisible(confirmBillId);
+		String billId = confirmBillId.getText();
+		
+		String originalHandle = driver.getWindowHandle();
+
+		CommonMethods.waitForElementToVisible(sampleRecived);
+		js.executeScript("arguments[0].click();", sampleRecived);
+
+	    for(String handle : driver.getWindowHandles()) {
+	        if (!handle.equals(originalHandle)) {
+	            driver.switchTo().window(handle);
+	            driver.close();
+	        }
+	    }
+
+	    driver.switchTo().window(originalHandle);
+	
+	    return billId;
+	}
+	
+	public String pendingApprovalStatusVerification(String userName) throws Exception {
+		
+		WebDriver driver = DriverFactory.getDriver();
+		
+		String billId = receiveSample(userName);
+		
+		driver.navigate().to(Constants.WAITING_LIST_URL);
+		CommonMethods.waitForElementToVisible(hoverDropdown);
+		hoverDropdown.click();
+		
+		CommonMethods.waitForElementToVisible(allDepartments);
+		allDepartments.click();
+		
+		CommonMethods.waitForElementToVisible(user);
+		user.click();
+		
+		CommonMethods.waitForElementToVisible(editFirst);
+		editFirst.click();
+		
+		CommonMethods.waitForElementToVisible(quickSaveBtn);
+		quickSaveBtn.click();
+		
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		unlockBill(billId);
+
+		CommonMethods.waitForElementToVisible(testStatus0);
+		
+		return testStatus0.getText();
+	}
+	
+	public String pendingSubmitVerification(String userName) throws Exception {
+		
+		WebDriver driver = DriverFactory.getDriver();
+		
+		String billId = receiveSample(userName);
+		
+		driver.navigate().to(Constants.WAITING_LIST_URL);
+		CommonMethods.waitForElementToVisible(hoverDropdown);
+		hoverDropdown.click();
+		
+		CommonMethods.waitForElementToVisible(allDepartments);
+		allDepartments.click();
+		
+		CommonMethods.waitForElementToVisible(user);
+		user.click();
+		
+		CommonMethods.waitForElementToVisible(editFirst);
+		editFirst.click();
+		
+//		CommonMethods.waitForElementToVisible(element);
+		
+		
+		return userName;
+		
+	}
+	
 	
 //	public String paymentModeIfUserAdvanceIsAvailable(String userName) throws Exception {
 //		

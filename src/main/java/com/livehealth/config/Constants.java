@@ -23,5 +23,9 @@ public class Constants {
 	public static String ListAndGroupManagement_URL = "https://beta.livehealth.solutions/newListManagement/";
 	
 	public static String ORG_COLLECTION_URL = "https://beta.livehealth.solutions/organization/advanceCollection/";
+	
+	public static String WAITING_LIST_URL = "https://beta.livehealth.solutions/waitingList/#userWatingList";
+	
+	public static String USER_ADVANCE_URL = "https://beta.livehealth.solutions/advanceCollection/";
 
 }

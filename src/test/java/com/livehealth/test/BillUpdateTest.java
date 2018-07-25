@@ -660,7 +660,7 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// TC: 40
-	@Test(groups = { "Update" })
+	@Test(groups = { "BillUpdate" })
 	public void verifyConcessionToOutsourceTest_40() {
 		String name;
 		try {
@@ -690,7 +690,79 @@ public class BillUpdateTest extends AbstractTestNGSpringContextTests {
 	}
 	
 	// TC: 42
-//	@Test(groups = { "" })
+	@Test(groups = { "BillUpdate" })
+	public void verifyPayableAmountAfterRefund_42() {
+		String payableAmount;
+		try {
+			payableAmount = billUpdate.payableAmountAfterRefund("user");
+			Assert.assertEquals(payableAmount, "700");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	// TC: 43
+	@Test(groups = { "BillUpdate" })
+	public void verifyPayableAmtIfBillPaidPartially_43() {
+		SoftAssert softAssert = new SoftAssert();
+		List<String> list;
+		try {
+			list = billUpdate.partialPaymentBillUpdateVerification("user");
+			softAssert.assertEquals(list.get(0), "970");
+			softAssert.assertEquals(list.get(1), "200");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			softAssert.assertTrue(false, e.getMessage());
+		}
+		softAssert.assertAll();
+	}
+	
+	// TC: 44
+	@Test(groups = { "BillUpdate" })
+	public void verifyPayableAmtIfBillPaidPartiallyForProfile_44() {
+		SoftAssert softAssert = new SoftAssert();
+		String profileName = "verify bill update";
+		List<String> list;
+		try {
+			list = billUpdate.partialPaymentWithProfileTest("user",profileName);
+			softAssert.assertEquals(list.get(0), "750");
+			softAssert.assertEquals(list.get(1), "650");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			softAssert.assertTrue(false, e.getMessage());
+		}
+		softAssert.assertAll();
+	}
+	
+	// TC: 45
+	@Test(groups = { "BillUpdate" })
+	public void verifyNotFilledStatus_45() {
+		String status;
+		try {
+			status = billUpdate.notFilledStatusVerification("user");
+			Assert.assertEquals(status, "Not filled");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	// TC: 46
+	@Test(groups = { "Update" })
+	public void verifyPendingApprovalStatus_46() {
+		String status;
+		try {
+			status = billUpdate.pendingApprovalStatusVerification("user");
+			Assert.assertEquals(status, "Pending approval");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	// TC: 43
+//	@Test(groups = { "" })  
 //	public void verifyDueAmountShowingCorrectly_41() {
 //		
 //		List<String> price;

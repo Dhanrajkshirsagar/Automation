@@ -58,7 +58,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 01
 	@Test(groups = { "Billing" }, priority = 0)
-	public void verifyBillingPage_01() {
+	public void verifyBillingPage_TC_01() {
 
 		String title;
 		try {
@@ -69,12 +69,11 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
-
 	}
 
 	// TC: 02
 	@Test(groups = { "Billing" })
-	public void verifySearchUsingMobileNumber_02() {
+	public void verifySearchUsingMobileNumber_TC_02() {
 		CommonMethods.setTestDescription("Expected: Patient should be searched using patient mobile number");
 		String title;
 		try {
@@ -88,9 +87,9 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	}
 
-	// TC: 02
+	// TC: 03
 	@Test(groups = { "Billing" })
-	public void verifySearchUsingName_02() {
+	public void verifySearchUsingName_TC_03() {
 		CommonMethods.setTestDescription("Expected: Patient should be searched using patient name");
 		String title;
 		try {
@@ -104,9 +103,9 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	}
 
-	// TC: 03,06
+	// TC: 04,06
 	@Test(groups = { "Billing" })
-	public void verifySearchingDirectUser_03_06() {
+	public void verifySearchingDirectUser_TC_04_06() {
 		CommonMethods.setTestDescription("Expected: Select Patient field able to search direct patients");
 		String title;
 		try {
@@ -118,9 +117,9 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	// TC: 03
+	// TC: 05
 	@Test(groups = { "Billing" })
-	public void verifySearchingIndirectUser_03() {
+	public void verifySearchingIndirectUser_TC_05() {
 		CommonMethods.setTestDescription("Expected: Select Patient field able to search indirect patients");
 		String title;
 		try {
@@ -132,9 +131,9 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	// TC: 05
+	// TC: 07
 	@Test(groups = { "Billing" })
-	public void verifySearchPerEnteredNumber_05() {
+	public void verifySearchPerEnteredNumber_TC_07() {
 		CommonMethods.setTestDescription("Expected: Search as per entered number");
 		String title;
 		try {
@@ -162,23 +161,23 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	// }
 
 	// TC: 09
-//	@Test(groups = { "bill" })
-//	public void verifyRemainingDueAmt_09() {
-//		CommonMethods.setTestDescription("Expected: Patient Due remaining amount");
-//		List<String> billAmt;
-//		try {
-//			User userInfo = getUserInfo();
-//			billAmt = billing.dueAmountVerification("jadeja");
-//			Assert.assertEquals(billAmt.get(0), billAmt.get(1));
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
+	// @Test(groups = { "bill" })
+	// public void verifyRemainingDueAmt_09() {
+	// CommonMethods.setTestDescription("Expected: Patient Due remaining amount");
+	// List<String> billAmt;
+	// try {
+	// User userInfo = getUserInfo();
+	// billAmt = billing.dueAmountVerification("jadeja");
+	// Assert.assertEquals(billAmt.get(0), billAmt.get(1));
+	// } catch (Exception e) {
+	// logger.error(e.getMessage());
+	// Assert.assertTrue(false, e.getMessage());
+	// }
+	// }
 
 	// TC: 10
 	@Test(groups = { "Billing" })
-	public void verifyAdvanceAmount_10() {
+	public void verifyAdvanceAmount_TC_10() {
 		CommonMethods.setTestDescription("Expected: patient Advance Should be 1000 in rupees");
 		User userInfo = getUserInfo();
 		userInfo.setName("smith");
@@ -195,7 +194,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 11
 	@Test(groups = { "Billing" })
-	public void verifyReferrelPriceList_11() {
+	public void verifyReferrelPriceList_TC_11() {
 		CommonMethods.setTestDescription("Expected: Referral price List");
 		User userInfo = getUserInfo();
 		SoftAssert softAssert = new SoftAssert();
@@ -214,7 +213,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 12
 	@Test(groups = { "Billing" })
-	public void verifyPriceListAsPerSelectedReferrel_12() {
+	public void verifyPriceListAsPerSelectedReferrel_TC_12() {
 		CommonMethods.setTestDescription("Expected: Referral price List should be as per selected referral");
 		User userInfo = getUserInfo();
 		userInfo.setName("dtype");
@@ -234,7 +233,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 13
 	@Test(groups = { "Billing" })
-	public void verifyCalculator_13() {
+	public void verifyCalculator_TC_13() {
 		CommonMethods.setTestDescription("Expected: Calculated price should be 1050");
 		String calculatedPrice;
 		try {
@@ -249,13 +248,13 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 14
 	@Test(groups = { "Billing" })
-	public void verifyCompanyPriceList_14() {
+	public void verifyCompanyPriceList_TC_14() {
 		User userInfo = getUserInfo();
 		SoftAssert softAssert = new SoftAssert();
 		List<String> orgList;
 		try {
 			orgList = billing.companyPriceList(userInfo.getName());
-			
+
 			softAssert.assertEquals(orgList.get(1), "Co Pay");
 			softAssert.assertEquals(orgList.get(2), "DIRECT");
 			softAssert.assertEquals(orgList.get(3), "postpaid Organization");
@@ -270,7 +269,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 15
 	@Test(groups = { "Billing" })
-	public void verifyPriceListAsPerSelectedCompany_15() {
+	public void verifyPriceListAsPerSelectedCompany_TC_15() {
 		User userInfo = getUserInfo();
 		List<String> testListOne;
 		List<String> testListTwo;
@@ -288,7 +287,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 18
 	@Test(groups = { "Billing" })
-	public void verifyTypeTestNameField_18() {
+	public void verifyTypeTestNameField_TC_18() {
 		User userInfo = getUserInfo();
 		String searchTest;
 		try {
@@ -303,7 +302,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 19
 	@Test(groups = { "Billing" })
-	public void verifyTestPriceAsPerSelectedTest_19() {
+	public void verifyTestPriceAsPerSelectedTest_TC_19() {
 		User userInfo = getUserInfo();
 		List<String> testListOne;
 		List<String> testListTwo;
@@ -321,7 +320,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 20,24
 	@Test(groups = { "Billing" })
-	public void verifyMultipleTestAddingSuccessfully_20_24() {
+	public void verifyMultipleTestAddingSuccessfully_TC_20_24() {
 		String calculatedPrice;
 		try {
 			User userInfo = getUserInfo();
@@ -335,7 +334,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 21
 	@Test(groups = { "Billing" })
-	public void verifySingleTestAddingSuccessfully_21() {
+	public void verifySingleTestAddingSuccessfully_TC_21() {
 		String calculatedPrice;
 		try {
 			User userInfo = getUserInfo();
@@ -349,7 +348,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 22
 	@Test(groups = { "Billing" })
-	public void verifyPercentageConcession_22() {
+	public void verifyPercentageConcession_TC_22() {
 		CommonMethods.setTestDescription("Expected: PercentageConcession should be calculated correctly");
 		String concession;
 		try {
@@ -364,7 +363,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 23
 	@Test(groups = { "BillTest" })
-	public void verifyCloseTestBtn_23() {
+	public void verifyCloseTestBtn_TC_23() {
 		CommonMethods.setTestDescription("Expected:Close Test Btn Should close test");
 		String amtAfterClosed;
 		try {
@@ -379,7 +378,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 25
 	@Test(groups = { "Billing" })
-	public void verifyAlreadySelectedOrganization_25() {
+	public void verifyAlreadySelectedOrganization_TC_25() {
 		List<String> orgNames;
 		try {
 			User userInfo = getUserInfo();
@@ -394,7 +393,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC:26
 	@Test(groups = { "Billing" })
-	public void verifySelectOrganization_26() {
+	public void verifySelectOrganization_TC_26() {
 		String selectedOrg;
 		try {
 			User userInfo = getUserInfo();
@@ -408,7 +407,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC:27
 	@Test(groups = { "Billing" })
-	public void verifyAddOrgLink_27() {
+	public void verifyAddOrgLink_TC_27() {
 		User userInfo = getUserInfo();
 		String orgName;
 		try {
@@ -424,7 +423,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC:29
 	@Test(groups = { "Billing" })
-	public void verifyOtherReferrelField_29() {
+	public void verifyOtherReferrelField_TC_29() {
 		boolean referelField;
 		try {
 			User userInfo = getUserInfo();
@@ -438,7 +437,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC:30
 	@Test(groups = { "BillTest" }, priority = 20)
-	public void verifySelectHomeDelivery_30() {
+	public void verifySelectHomeDelivery_TC_30() {
 		String selectedOption;
 		try {
 			User userInfo = getUserInfo();
@@ -453,7 +452,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC:32,33
 	@Test(groups = { "BillTest" }, priority = 21)
-	public void verifySelectCourierCollection_32_33() {
+	public void verifySelectCourierCollection_TC_32_33() {
 		String selectedOption;
 		try {
 			User userInfo = getUserInfo();
@@ -468,7 +467,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 34
 	@Test(groups = { "Billing" })
-	public void verifyDefaultPaymentMode_34() {
+	public void verifyDefaultPaymentMode_TC_34() {
 		User userInfo = getUserInfo();
 		userInfo.setName("dtype");
 		String paymentMode;
@@ -484,7 +483,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 35-42
 	@Test(groups = { "Billing" }, dataProvider = "paymentMode")
-	public void verifySetDefaultPaymentMode_35To42(String setPaymentMode) {
+	public void verifySetDefaultPaymentMode_TC_35To42(String setPaymentMode) {
 		String paymentMode;
 		try {
 			paymentMode = billing.setDefaultPaymentMode("dtype", setPaymentMode);
@@ -496,9 +495,9 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	// TC: 43,44
+	// TC: 43
 	@Test(groups = { "Billing" })
-	public void verifyAddPaymentMode_43_44() {
+	public void verifyAddPaymentMode_TC_43() {
 		String amount;
 		try {
 			User userInfo = getUserInfo();
@@ -510,10 +509,25 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
+	
+	// TC: 44
+	@Test(groups = { "Billing" })
+	public void verifyEditPaymentMode_TC_44() {
+		String amount;
+		try {
+			User userInfo = getUserInfo();
+			amount = billing.editPaymentMode(userInfo.getName());
+
+			Assert.assertEquals(amount, "450");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
 
 	// TC: 45
 	@Test(groups = { "Billing" })
-	public void verifyUniqueTestNameList_45() {
+	public void verifyUniqueTestNameList_TC_45() {
 		User userInfo = getUserInfo();
 		userInfo.setName("dtype");
 		String warningMsg;
@@ -529,7 +543,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 46
 	@Test(groups = { "Billing" })
-	public void verifyUniqueTestNameForProfileTest_46() {
+	public void verifyUniqueTestNameForProfileTest_TC_46() {
 		User userInfo = getUserInfo();
 		String warningMsg;
 		try {
@@ -544,7 +558,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 47
 	@Test(groups = { "Billing" })
-	public void verifyOrganizationAdvance_47() {
+	public void verifyOrganizationAdvance_TC_47() {
 		User userInfo = getUserInfo();
 		userInfo.setName("dtype");
 		String prepaidOrgAdv;
@@ -560,11 +574,11 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 48
 	@Test(groups = { "Billing" })
-	public void verifyDueCutFromOrganizationAdvance() {
+	public void verifyDueCutFromOrganizationAdvance_TC_48() {
 		String organization = "Custom Prepaid ";
 		String orgAmtDeduct;
 		try {
-			orgAmtDeduct = billing.dueCutFromOrganizationAdvance("nipun",organization);
+			orgAmtDeduct = billing.dueCutFromOrganizationAdvance("nipun", organization);
 
 			Assert.assertEquals(orgAmtDeduct, "₹ 550");
 		} catch (Exception e) {
@@ -575,7 +589,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 49
 	@Test(groups = { "Billing" })
-	public void ifOrgAdvanceLessThanBillAmount_49() {
+	public void ifOrgAdvanceLessThanBillAmount_TC_49() {
 		User userInfo = getUserInfo();
 		userInfo.setName("roger");
 		String saveBillErrorMsg;
@@ -592,7 +606,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 50
 	@Test(groups = { "Billing" })
-	public void verifyOrgCreditLimitLessThanBillAmount_50() {
+	public void verifyOrgCreditLimitLessThanBillAmount_TC_50() {
 		User userInfo = getUserInfo();
 		userInfo.setName("roger");
 		String saveBillErrorMsg;
@@ -608,26 +622,20 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 51
 	@Test(groups = { "Billing" })
-	public void verifyUserAdvanceAndPayableAmount_51() {
-		User userInfo = getUserInfo();
-		userInfo.setName("Smith");
-		SoftAssert softAssert = new SoftAssert();
-		List<String> amtAndAdvance;
+	public void verifyUserAdvanceAndPayableAmount_TC_51() {
+		String deductedAdvance;
 		try {
-			amtAndAdvance = billing.userAdvanceAndPayableAmount(userInfo.getName());
-
-			softAssert.assertEquals(amtAndAdvance.get(0), "₹ 1000");
-			softAssert.assertEquals(amtAndAdvance.get(1), "950");
+			deductedAdvance = billing.userAdvanceAndPayableAmount("krunal");
+			Assert.assertEquals(deductedAdvance, "₹ 500");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
-		softAssert.assertAll();
 	}
 
 	// TC: 52
 	@Test(groups = { "Billing" })
-	public void verifyAdditionalPriceField_52() {
+	public void verifyAdditionalPriceField_TC_52() {
 		User userInfo = getUserInfo();
 		String additionalPrice;
 		try {
@@ -642,7 +650,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 53
 	@Test(groups = { "Billing" })
-	public void verifyConcessionInRupees_53() {
+	public void verifyConcessionInRupees_TC_53() {
 		User userInfo = getUserInfo();
 		userInfo.setName("dtype");
 		String amount;
@@ -658,7 +666,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 54
 	@Test(groups = { "Billing" })
-	public void verifyConcessionInPercentage_54() {
+	public void verifyConcessionInPercentage_TC_54() {
 		User userInfo = getUserInfo();
 		userInfo.setName("dtype");
 		String amount;
@@ -674,7 +682,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 55
 	@Test(groups = { "Billing" })
-	public void verifyDiscountCommentsFieldCompulsory_55() {
+	public void verifyDiscountCommentsFieldCompulsory_TC_55() {
 		User userInfo = getUserInfo();
 		userInfo.setName("dtype");
 		boolean highlighted;
@@ -688,56 +696,49 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	// TC: 56
-	// @Test(groups = { "Billing" })
-	// public void verifyCriticalEmergencyCheckBox() {
-	// User userInfo = getUserInfo();
-	// userInfo.setName("roger");
-	// String amount;
-	// try {
-	// amount = billing.criticalAndEmergencyCheckBoxAbleToSet(userInfo.getName());
-	//
-	// // Assert.assertEquals(amount, "945");
-	// } catch (Exception e) {
-	// logger.error(e.getMessage());
-	// Assert.assertTrue(false, e.getMessage());
-	// }
-	// }
+	// TC: 56   
+	@Test(groups = { "Billing" })
+	public void verifyCriticalEmergencyCheckBox_TC_56() {
+		
+		String label;
+		try {
+			label = billing.criticalAndEmergencyCheckBoxAbleToSet("benedict");
+			
+			 Assert.assertEquals(label, "Emergency Reports");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
 
 	// TC: 57
-	// @Test(groups = { "Billing" })
-	// public void verifyReceiveSampleAndPrint() {
-	//
-	// SoftAssert softAssert = new SoftAssert();
-	// String rcvSample;
-	//
-	// try {
-	// rcvSample = billing.receiveSampleAndPrint("dtype");
-	//
-	// softAssert.assertEquals(rcvSample, "Received");
-	// } catch (Exception e) {
-	// logger.error(e.getMessage());
-	// Assert.assertTrue(false, e.getMessage());
-	// }
-	// softAssert.assertAll();
-	// }
+	@Test(groups = { "Billing" })
+	public void verifyReceiveSampleAndPrint_TC_57() {
+		String status;
+		try {
+			status = billing.notFilledStatusVerification("user");
+			Assert.assertEquals(status, "Not filled");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
 
-	// TC: 58
-	// @Test(groups = { "Billing" })
+	// // TC: 58
+	// @Test(groups = { "Test" })
 	// public void verifyCTConsentFormEditable() {
 	// User inputUser = new User();
 	// String name = commonMethods.getRandomString();
 	// String phoneNo = commonMethods.getRandomNumber();
 	//
-	// User editUser;
+	// String editUser;
 	// try {
 	// inputUser.setName(name);
 	// inputUser.setPhoneNumber(phoneNo);
 	// inputUser.setAge("11");
 	//
-	// editUser = billing.ctConsentForm(inputUser);
-	//
-	// registerValidator.verifyRegister(inputUser, editUser);
+	// editUser = billing.ctConsentForm("benedict");
+	// Assert.assertTrue(true);
 	// } catch (Exception e) {
 	// logger.error(e.getMessage());
 	// Assert.assertTrue(false, e.getMessage());
@@ -746,7 +747,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 66
 	@Test(groups = { "Billing" })
-	public void verifyBackToRegistrationPage_66() {
+	public void verifyBackToRegistrationPage_TC_66() {
 		User userInfo = getUserInfo();
 		userInfo.setName("dtype");
 		String title;
@@ -762,7 +763,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 67
 	@Test(groups = { "BillTest" })
-	public void verifyAdditionalServicesFlag_67() {
+	public void verifyAdditionalServicesFlag_TC_67() {
 		User userInfo = getUserInfo();
 		userInfo.setName("dtype");
 		String firstOption;
@@ -778,7 +779,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 70
 	@Test(groups = { "Billing" })
-	public void verifycollectedSampleType_70() {
+	public void verifycollectedSampleType_TC_70() {
 		User userInfo = getUserInfo();
 		userInfo.setName("dtype");
 		String selectedSampleType;
@@ -794,7 +795,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 71,72
 	@Test(groups = { "Billing" })
-	public void verifyDiscountPriceList_71_72() {
+	public void verifyDiscountPriceList_TC_71_72() {
 		User userInfo = getUserInfo();
 		List<String> testListOne;
 		List<String> testListTwo;
@@ -809,10 +810,24 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
+	
+	// TC: 73
+	@Test(groups = { "Billing" })
+	public void verify​DefaultPriceList_TC_78() {
+		String defaultPrice;
+		try {
+			defaultPrice = billing.defaultTestPriceList("benedict");
+
+			Assert.assertEquals(defaultPrice, "500");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
 
 	// TC: 74
 	@Test(groups = { "Billing" })
-	public void verify​TestQuantityOption_74() {
+	public void verify​TestQuantityOption_TC_74() {
 		User userInfo = getUserInfo();
 		userInfo.setName("dtype");
 		int actual;
@@ -828,7 +843,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 76
 	@Test(groups = { "default" })
-	public void verify​BackDatedBillGettingSaved_76() {
+	public void verify​BackDatedBillGettingSaved_TC_76() {
 		User userInfo = getUserInfo();
 		userInfo.setName("Benedict");
 		String backdate;
@@ -844,7 +859,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 78
 	@Test(groups = { "Billing" })
-	public void verify​SearchAccessionNoBoxSearching_78() {
+	public void verify​SearchAccessionNoBoxSearching_TC_78() {
 		String useName;
 		try {
 			useName = billing.searchAccessionNo("123");
@@ -879,7 +894,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 81
 	@Test(groups = { "BillTest" })
-	public void verify​DiscountToDiscountDiscardedTestFlag_81() {
+	public void verify​DiscountToDiscountDiscardedTestFlag_TC_81() {
 		User userInfo = getUserInfo();
 		userInfo.setName("Benedict");
 		String discountedAmt;
@@ -912,7 +927,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 82
 	@Test(groups = { "Billing" }, priority = 10)
-	public void verifyAllowedDiscountOnBill_82() {
+	public void verifyAllowedDiscountOnBill_TC_82() {
 		User userInfo = getUserInfo();
 		userInfo.setName("benedict");
 		String amount;
@@ -928,7 +943,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 83
 	@Test(groups = { "Billing" })
-	public void verifyMoreThanAllowedDiscountOnBill_83() {
+	public void verifyMoreThanAllowedDiscountOnBill_TC_83() {
 		User userInfo = getUserInfo();
 		userInfo.setName("benedict");
 		String errorMessage;
@@ -960,18 +975,19 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 
 	// TC: 61
 	@Test(groups = { "Billing" })
-	public void verifyFormF_61() {
-		User userInfo = getUserInfo();
-		userInfo.setName("benedict");
-		String userName;
+	public void verifyFormF_TC_61() {
+		SoftAssert softAssert = new SoftAssert();
+		List<String> list;
 		try {
-			userName = billing.formFConsentForm(userInfo.getName());
+			list = billing.formFConsentForm("benedict");
 
-			Assert.assertEquals(userName, "Benedict");
+			softAssert.assertEquals(list.get(0), "Benedict");
+			softAssert.assertEquals(list.get(1), "Age - 10");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
+			softAssert.assertTrue(false, e.getMessage());
 		}
+		softAssert.assertAll();
 	}
 
 	private User getUserInfo() {

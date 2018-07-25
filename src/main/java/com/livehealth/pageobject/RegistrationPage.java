@@ -11,6 +11,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -558,6 +559,31 @@ public class RegistrationPage {
 		return outUser;
 
 	}
+	
+	public List<String> searchDirectIndirectUser(String userName) throws Exception{
+		
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().to(Constants.REGISTRATION_URL);
+		Actions builder = new Actions(DriverFactory.getDriver());
+
+		CommonMethods.waitForElementToClickable(searchBtn);
+		searchBtn.click();
+
+		builder.moveToElement(searchUser).click().sendKeys(userName).build().perform();
+
+		selectSearchingUser();
+		
+		String name = firstName.getAttribute("value");
+		
+		Select select = new Select(userType);
+		String dType = select.getFirstSelectedOption().getText();
+		
+		List<String> list = new ArrayList<>();
+		list.add(name);
+		list.add(dType);
+
+		return list;
+	}
 
 	public User clearButton(User inputUser) throws Exception {
 
@@ -714,8 +740,6 @@ public class RegistrationPage {
 		DriverFactory.getDriver().navigate().to(Constants.REGISTRATION_URL);
 		countryList.click();
 		contry.click();
-
-		Actions builder = new Actions(DriverFactory.getDriver());
 
 		Select desig = new Select(designation);
 		desig.selectByValue(inUser.getDesignation());
