@@ -540,6 +540,12 @@ public class BillingPage {
 	@FindBy(how = How.XPATH, using = "//*[@id=\"testStatus0\"]/span")
 	public WebElement testStatus0;
 
+	@FindBy(how = How.XPATH, using = "//*[@id=\"testStatus1\"]/span")
+	public WebElement testStatus1;
+
+	@FindBy(how = How.XPATH, using = "//*[@id=\"testStatus2\"]/span")
+	public WebElement testStatus2;
+
 	@FindBy(how = How.ID, using = "radiobutton")
 	private WebElement radiobutton;
 
@@ -548,6 +554,9 @@ public class BillingPage {
 
 	@FindBy(how = How.ID, using = "pndtAge")
 	private WebElement pndtAge;
+
+	@FindBy(how = How.ID, using = "printAllSampleId")
+	private WebElement printAllSampleId;
 
 	//   
 	@Autowired
@@ -1239,10 +1248,12 @@ public class BillingPage {
 	
 	public String editPaymentMode(String userInfo) throws Exception {
 		
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+
 		addPaymentMode(userInfo);
 		
 		CommonMethods.waitForElementToVisible(advanceAmount);
-		advanceAmount.click();
+		js.executeScript("arguments[0].click();", advanceAmount);
 		
 		CommonMethods.waitForElementToVisible(paymentAmount_1);
 		paymentAmount_1.clear();
@@ -1679,6 +1690,71 @@ public class BillingPage {
 		CommonMethods.waitForElementToVisible(testStatus0);
 
 		return testStatus0.getText();
+	}
+	
+	private void createBill(String userName) throws Exception {
+
+		String[] tests = { "Ionised Calcium", "Albumin Serum", "Protein Ascitic Fluid *" };
+
+		searchToBilling(userName);
+
+		for (int index = 0; index < tests.length; index++) {
+
+			CommonMethods.waitForElementToVisible(testList);
+
+			testList.sendKeys(tests[index]);
+
+			CommonMethods.waitForAllElementsToVisible(profileDropdown);
+
+			List<WebElement> dropDowns = DriverFactory.getDriver()
+					.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]"));
+
+			dropDowns.get(0).click();
+
+			concession.sendKeys(Keys.ENTER);
+		}
+	}
+	
+	public List<String> receiveAllSampleVerification(String userName) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		createBill(userName);
+
+		CommonMethods.waitForElementToVisible(advanceAmount);
+		advanceAmount.clear();
+		advanceAmount.sendKeys(totalAmount.getText());
+
+		CommonMethods.waitForElementToVisible(saveBill);
+		saveBill.click();
+
+		CommonMethods.waitForElementToVisible(confirmBillId);
+		String billId = confirmBillId.getText();
+
+		String originalHandle = driver.getWindowHandle();
+
+		CommonMethods.waitForElementToVisible(printAllSampleId);
+		js.executeScript("arguments[0].click();", printAllSampleId);
+
+		for (String handle : driver.getWindowHandles()) {
+			if (!handle.equals(originalHandle)) {
+				driver.switchTo().window(handle);
+				driver.close();
+			}
+		}
+
+		driver.switchTo().window(originalHandle);
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		unlockBill(billId);
+
+		CommonMethods.waitForElementToVisible(testStatus0);
+		String text0 = testStatus0.getText();
+		String text1 = testStatus1.getText();
+		String text2 = testStatus2.getText();
+
+		return Arrays.asList(text0, text1, text2);
 	}
 
 	public void unlockBill(String billId) throws Exception {

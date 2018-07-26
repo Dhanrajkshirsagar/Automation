@@ -469,7 +469,13 @@ public class BillUpdatePage {
 	@FindAll({ @FindBy(xpath = "//button[contains(text(),'Submit')]") })
 	public List<WebElement> submit;
 
-	//	
+	@FindBy(how = How.ID, using = "quickDefaultDocPass")
+	private WebElement quickDefaultDocPass;
+
+	@FindBy(how = How.ID, using = "quickSubmitBtn")
+	private WebElement quickSubmitBtn;
+
+	//
 	@Autowired
 	WebContext webContext;
 
@@ -494,9 +500,9 @@ public class BillUpdatePage {
 		DriverFactory.getDriver().navigate().to(Constants.ALL_BILLSLIST_URL);
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 
-		CommonMethods.waitForElementToVisible(allBillListDateRange);
-		allBillListDateRange.click();
-		lastWeek.click();
+//		CommonMethods.waitForElementToVisible(allBillListDateRange);
+//		allBillListDateRange.click();
+//		lastWeek.click();
 		CommonMethods.waitForElementToVisible(pendingBills);
 		CommonMethods.waitForElementToClickable(pendingBills);
 
@@ -635,7 +641,7 @@ public class BillUpdatePage {
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 
 		searchToBilling(user.getName());
-		
+
 		CommonMethods.waitForElementToVisible(referralList);
 		Select selectRef = new Select(referralList);
 		selectRef.selectByVisibleText(bill.getReferrelPriceList());
@@ -892,9 +898,9 @@ public class BillUpdatePage {
 		js.executeScript("arguments[0].click();", refundBtn);
 
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
-       
+
 		boolean enabled = viewPayment.isEnabled();
-		
+
 		CommonMethods.waitForElementToVisible(billStatus);
 		return billStatus.getText();
 	}
@@ -904,8 +910,8 @@ public class BillUpdatePage {
 		WebDriver driver = DriverFactory.getDriver();
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 
-		// driver.navigate().to(Constants.BillingUpdate_URL + billId);
-		// driver.navigate().refresh();
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
 
 		CommonMethods.waitForElementToVisible(clearBtn);
 		js.executeScript("arguments[0].click();", clearBtn);
@@ -964,7 +970,7 @@ public class BillUpdatePage {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 
 		searchToBilling(user.getName());
-		selectTestName(bill.getTestName());
+		selectTestName("Ionised Calcium");
 
 		CommonMethods.waitForElementToVisible(saveBill);
 		js.executeScript("arguments[0].click();", saveBill);
@@ -1521,7 +1527,7 @@ public class BillUpdatePage {
 		WebDriver driver = DriverFactory.getDriver();
 
 		searchToBilling(userName);
-		
+
 		CommonMethods.waitForElementToVisible(referralList);
 		Select selectRef = new Select(referralList);
 		selectRef.selectByVisibleText(bill.getReferrelPriceList());
@@ -1633,19 +1639,19 @@ public class BillUpdatePage {
 		advanceAmount.clear();
 		advanceAmount.sendKeys(totalAmount.getText());
 	}
-	
+
 	public List<String> discountPriceList(String userName, BillData bill) throws Exception {
 
 		WebDriver driver = DriverFactory.getDriver();
 
 		searchToBilling(userName);
-		
+
 		CommonMethods.waitForElementToVisible(discountList);
 		Select org = new Select(discountList);
 		org.selectByVisibleText(bill.getDiscountPriceList());
 
 		discountPriceListTest();
-		
+
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
 
@@ -1657,9 +1663,9 @@ public class BillUpdatePage {
 		unlockBill(billId);
 
 		CommonMethods.waitForElementToVisible(totalConcessionAmt);
-		
+
 		String concessn = totalConcessionAmt.getAttribute("value");
-		
+
 		driver.navigate().to(Constants.ListAndGroupManagement_URL);
 
 		CommonMethods.waitForElementToVisible(listName);
@@ -1670,9 +1676,9 @@ public class BillUpdatePage {
 
 		int t1 = Integer.parseInt(textInput11840.getAttribute("value"));
 		int t2 = Integer.parseInt(textInput12347.getAttribute("value"));
-		
-		String tAmt = String.valueOf(t1+t2);
-		
+
+		String tAmt = String.valueOf(t1 + t2);
+
 		return Arrays.asList(concessn, tAmt);
 	}
 
@@ -1698,18 +1704,18 @@ public class BillUpdatePage {
 		advanceAmount.clear();
 		advanceAmount.sendKeys(totalAmount.getText());
 	}
-	
+
 	public List<String> profileTest(String userName, String profile) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
 
 		searchToBilling(userName);
 		selectProfile(profile);
-	
+
 		CommonMethods.waitForElementToVisible(advanceAmount);
 		advanceAmount.clear();
 		advanceAmount.sendKeys(totalAmount.getText());
-	
+
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
 
@@ -1729,12 +1735,12 @@ public class BillUpdatePage {
 		tList.add(t_Name1);
 		tList.add(t_Name2);
 		tList.add(t_Name3);
-		
+
 		return tList;
 	}
-	
+
 	private void selectProfile(String profile) throws Exception {
-		
+
 		CommonMethods.waitForElementToVisible(testList);
 		testList.sendKeys(profile);
 
@@ -1747,14 +1753,14 @@ public class BillUpdatePage {
 
 		concession.sendKeys(Keys.ENTER);
 	}
-	
+
 	public String cancelTestFromMultipleTest(String userName) throws Exception {
 
 		WebDriver driver = DriverFactory.getDriver();
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 
 		createBill(userName);
-		
+
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
 
@@ -1764,7 +1770,7 @@ public class BillUpdatePage {
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
 		driver.navigate().refresh();
 		unlockBill(billId);
-		
+
 		CommonMethods.waitForElementToVisible(editTest0);
 		editTest0.click();
 		CommonMethods.waitForElementToVisible(removeTest_2);
@@ -1792,17 +1798,17 @@ public class BillUpdatePage {
 
 		return payableAmt;
 	}
-	
+
 	private void createBill(String userName) throws Exception {
-		
-		String[] tests = { "Ionised Calcium","Albumin Serum", "Protein Ascitic Fluid *" };
+
+		String[] tests = { "Ionised Calcium", "Albumin Serum", "Protein Ascitic Fluid *" };
 
 		searchToBilling(userName);
-		
+
 		for (int index = 0; index < tests.length; index++) {
-			
+
 			CommonMethods.waitForElementToVisible(testList);
-			
+
 			testList.sendKeys(tests[index]);
 
 			CommonMethods.waitForAllElementsToVisible(profileDropdown);
@@ -1813,19 +1819,19 @@ public class BillUpdatePage {
 			dropDowns.get(0).click();
 
 			concession.sendKeys(Keys.ENTER);
-		}		
+		}
 	}
-	
+
 	public String refundTestFromMultipleTest(String userName) throws Exception {
 
 		WebDriver driver = DriverFactory.getDriver();
 
 		createBill(userName);
-		
+
 		CommonMethods.waitForElementToVisible(advanceAmount);
 		advanceAmount.clear();
 		advanceAmount.sendKeys(totalAmount.getText());
-		
+
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
 
@@ -1835,10 +1841,10 @@ public class BillUpdatePage {
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
 		driver.navigate().refresh();
 		unlockBill(billId);
-		
+
 		CommonMethods.waitForElementToVisible(editTest0);
 		editTest0.click();
-		
+
 		CommonMethods.waitForElementToVisible(billTestRefund);
 		billTestRefund.click();
 
@@ -1846,18 +1852,18 @@ public class BillUpdatePage {
 		testRefundComment.sendKeys("refundtest");
 
 		testRefundConfirmt.click();
-		
+
 		CommonMethods.waitForElementToVisible(billTotalAmountLabel);
 
 		return billTotalAmountLabel.getText();
 	}
-	
+
 	public String percentagewiseConcession(String userName) throws Exception {
-	
+
 		WebDriver driver = DriverFactory.getDriver();
 
 		createBill(userName);
-		
+
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
 
@@ -1871,10 +1877,10 @@ public class BillUpdatePage {
 		CommonMethods.waitForElementToVisible(totalConcessionType);
 		Select org = new Select(totalConcessionType);
 		org.selectByValue("Percentage");
-		
+
 		totalConcessionAmt.clear();
 		totalConcessionAmt.sendKeys("20");
-		
+
 		CommonMethods.waitForElementToVisible(submitForm);
 		submitForm.click();
 
@@ -1888,7 +1894,7 @@ public class BillUpdatePage {
 
 		return billTotalAmountLabel.getText();
 	}
-	
+
 	public String cashPaymentInCaseOfUserAdvance(String userName) throws Exception {
 
 		WebDriver driver = DriverFactory.getDriver();
@@ -1927,57 +1933,57 @@ public class BillUpdatePage {
 
 		CommonMethods.waitForElementToVisible(cashMode);
 		String mode = cashMode.getText();
-		
+
 		paymentModeClose.click();
 		return mode;
 	}
-	
+
 	public String moreThanAllowedDiscount() throws Exception {
-		
+
 		CommonMethods.waitForElementToVisible(totalConcessionType);
 		Select org = new Select(totalConcessionType);
 		org.selectByValue("Percentage");
-		
+
 		totalConcessionAmt.clear();
 		totalConcessionAmt.sendKeys("60");
 
 		billTotalAmountLabel.click();
 		CommonMethods.waitForElementToVisible(updateAmountError);
 		String str = updateAmountError.getText();
-		
+
 		String erroMsg = str.substring(1, str.length()).trim();
-		
-		return erroMsg;	
+
+		return erroMsg;
 	}
-	
+
 	public String concessionInRupees() throws Exception {
-		
+
 		CommonMethods.waitForElementToVisible(totalConcessionType);
 		Select org = new Select(totalConcessionType);
 		org.selectByValue("Rupees");
-		
+
 		totalConcessionAmt.clear();
 		billTotalAmountLabel.click();
-		
+
 		int beforeConession = Integer.parseInt(billTotalAmountLabel.getText());
 
 		totalConcessionAmt.sendKeys("60");
 
 		billTotalAmountLabel.click();
-		
+
 		int afterConession = Integer.parseInt(billTotalAmountLabel.getText());
 
-		String discount = String.valueOf(beforeConession-afterConession);
-		
+		String discount = String.valueOf(beforeConession - afterConession);
+
 		return discount;
 	}
-	
+
 	public String additionalPriceVerification(String userName) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		createBill(userName);
-		
+
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
 
@@ -1987,11 +1993,11 @@ public class BillUpdatePage {
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
 		driver.navigate().refresh();
 		unlockBill(billId);
-		
+
 		CommonMethods.waitForElementToVisible(additionalCost);
 		additionalCost.clear();
 		additionalCost.sendKeys("10");
-		
+
 		CommonMethods.waitForElementToVisible(submitForm);
 		submitForm.click();
 
@@ -2005,11 +2011,11 @@ public class BillUpdatePage {
 
 		return billTotalAmountLabel.getText();
 	}
-	
+
 	public String advancedPaidAmountGreaterThanPayableAmount(String userName) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		createBill(userName);
 		CommonMethods.waitForElementToVisible(advanceAmount);
 		advanceAmount.clear();
@@ -2027,32 +2033,32 @@ public class BillUpdatePage {
 
 		CommonMethods.waitForElementToVisible(viewPayment);
 		viewPayment.click();
-		
+
 		CommonMethods.waitForElementToVisible(addAnother);
 		addAnother.click();
-		
+
 		CommonMethods.waitForElementToVisible(paymentAmount_2);
 		paymentAmount_2.clear();
 		paymentAmount_2.sendKeys("10");
-		
+
 		savebillSetting.click();
-		
+
 		CommonMethods.waitForElementToVisible(submitForm);
 		submitForm.click();
-		
+
 		CommonMethods.waitForElementToVisible(updateError);
 		String str = updateError.getText();
-		
+
 		String errorMsg = str.substring(1, str.length()).trim();
 		return errorMsg;
 	}
-	
+
 	public String referrelNameAfterReset(String userName) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		createBill(userName);
-		
+
 		otherInfo.click();
 		otherInfo.click();
 
@@ -2067,7 +2073,7 @@ public class BillUpdatePage {
 
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
 		unlockBill(billId);
-		
+
 		CommonMethods.waitForElementToVisible(referralList);
 		referralList.clear();
 		referralList.sendKeys("delative");
@@ -2080,7 +2086,7 @@ public class BillUpdatePage {
 
 		CommonMethods.waitForElementToVisible(updateAmt);
 		updateAmt.click();
-		
+
 		CommonMethods.waitForElementToVisible(submitForm);
 		submitForm.click();
 
@@ -2112,20 +2118,20 @@ public class BillUpdatePage {
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
 		Thread.sleep(1000);
 		driver.navigate().refresh();
-		return referralList.getText();	
+		return referralList.getText();
 	}
-	
+
 	public String refundAndCancelTests(String userName) throws Exception {
-		
+
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		createBill(userName);
-		
+
 		CommonMethods.waitForElementToVisible(advanceAmount);
 		advanceAmount.clear();
 		advanceAmount.sendKeys(totalAmount.getText());
-		
+
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
 
@@ -2164,66 +2170,66 @@ public class BillUpdatePage {
 		CommonMethods.waitForElementToVisible(billTotalAmountLabel);
 		return billTotalAmountLabel.getText();
 	}
-	
+
 	public String checkStatusIfPaidTotalBillAmount(String userName) throws Exception {
-	
+
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		createBill(userName);
-		
+
 		CommonMethods.waitForElementToVisible(advanceAmount);
 		advanceAmount.clear();
 		advanceAmount.sendKeys(totalAmount.getText());
-		
+
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
-		
+
 		CommonMethods.waitForElementToVisible(confirmBillId);
 		String billId = confirmBillId.getText();
 
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
 		driver.navigate().refresh();
 		unlockBill(billId);
-		
+
 		CommonMethods.waitForElementToVisible(billStatus);
-		
+
 		return billStatus.getText();
 	}
-	
+
 	public String checkStatusIfPaidPartialBillAmount(String userName) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		createBill(userName);
-			
+
 		CommonMethods.waitForElementToVisible(advanceAmount);
 		advanceAmount.clear();
 		advanceAmount.sendKeys("100");
 
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
-		
+
 		CommonMethods.waitForElementToVisible(confirmBillId);
 		String billId = confirmBillId.getText();
 
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
 		driver.navigate().refresh();
 		unlockBill(billId);
-		
+
 		CommonMethods.waitForElementToVisible(billStatus);
-		
+
 		return billStatus.getText();
 	}
-	
+
 	public String nameGenderAgeVerification(String userName) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		createBill(userName);
-		
+
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
-		
+
 		CommonMethods.waitForElementToVisible(confirmBillId);
 		String billId = confirmBillId.getText();
 
@@ -2232,12 +2238,12 @@ public class BillUpdatePage {
 		unlockBill(billId);
 
 		CommonMethods.waitForElementToVisible(billUserName);
-		
-		return billUserName.getText();	
+
+		return billUserName.getText();
 	}
-	
+
 	public String concessionToOutsourceTest(String userName) throws Exception {
-	
+
 		WebDriver driver = DriverFactory.getDriver();
 
 		searchToBilling(userName);
@@ -2253,68 +2259,68 @@ public class BillUpdatePage {
 		dropDowns.get(0).click();
 
 		concession.sendKeys(Keys.ENTER);
-		
+
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
-		
+
 		CommonMethods.waitForElementToVisible(confirmBillId);
 		String billId = confirmBillId.getText();
 
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
 		driver.navigate().refresh();
 		unlockBill(billId);
-		
+
 		driver.navigate().refresh();
 		CommonMethods.waitForElementToVisible(totalConcessionAmt);
 		totalConcessionAmt.clear();
 		totalConcessionAmt.sendKeys("50");
-		
+
 		billTotalAmountLabel.click();
 		CommonMethods.waitForElementToVisible(updateAmountError);
 		String str = updateAmountError.getText();
-		
+
 		String errorMsg = str.substring(1, str.length()).trim();
-		
+
 		return errorMsg;
 	}
-	
+
 	public List<String> billOrder() throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
 		String[] names = { "Firstuser", "Seconduser", "Thirduser" };
-		
+
 		for (String name : names) {
 			createBill(name);
 			CommonMethods.waitForElementToVisible(saveBill);
 			saveBill.click();
 			driver.navigate().to(Constants.Billing_URL);
 		}
-		
+
 		driver.navigate().to(Constants.ALL_BILLSLIST_URL);
-		
+
 		CommonMethods.waitForElementToVisible(first_User);
 		String user1 = first_User.getText().trim();
 		String user2 = second_User.getText().trim();
 		String user3 = third_User.getText().trim();
-		
+
 		List<String> list = new ArrayList<>();
 		list.add(user1);
 		list.add(user2);
 		list.add(user3);
-		
-		return list;	
+
+		return list;
 	}
-	
+
 	public List<String> showingDueCorrectly(String userName) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		createBill(userName);
-		
+
 		String due = totalAmount.getText();
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
-		
+
 		CommonMethods.waitForElementToVisible(confirmBillId);
 		String billId = confirmBillId.getText();
 
@@ -2324,21 +2330,21 @@ public class BillUpdatePage {
 
 		CommonMethods.waitForElementToVisible(userAdvLabel);
 		String str = userAdvLabel.getText();
-		
-		String dueAmt = str.substring(str.indexOf("₹")+1, str.length()).trim();
-		
-		return Arrays.asList(due,dueAmt);
+
+		String dueAmt = str.substring(str.indexOf("₹") + 1, str.length()).trim();
+
+		return Arrays.asList(due, dueAmt);
 	}
-	
+
 	public String payableAmountAfterRefund(String userName) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
 		createBill(userName);
-		
+
 		CommonMethods.waitForElementToVisible(advanceAmount);
 		advanceAmount.clear();
 		advanceAmount.sendKeys("270");
-		
+
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
 
@@ -2355,10 +2361,10 @@ public class BillUpdatePage {
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
 
 		CommonMethods.waitForElementToVisible(billTotalAmountLabel);
-		
+
 		return billTotalAmountLabel.getText();
 	}
-	
+
 	public List<String> partialPaymentBillUpdateVerification(String userName) throws Exception {
 
 		WebDriver driver = DriverFactory.getDriver();
@@ -2407,14 +2413,14 @@ public class BillUpdatePage {
 
 		return list;
 	}
-	
-	public List<String> partialPaymentWithProfileTest(String userName,String profile) throws Exception{
-	
+
+	public List<String> partialPaymentWithProfileTest(String userName, String profile) throws Exception {
+
 		WebDriver driver = DriverFactory.getDriver();
 		searchToBilling(userName);
 		selectProfile(profile);
 		selectProfile("bjp");
-		
+
 		CommonMethods.waitForElementToVisible(advanceAmount);
 		advanceAmount.clear();
 		advanceAmount.sendKeys("100");
@@ -2439,26 +2445,26 @@ public class BillUpdatePage {
 		list.add(payableAmt);
 		list.add(balanceAmt);
 
-		return list;	
+		return list;
 	}
-	
+
 	public String notFilledStatusVerification(String userName) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		String billId = receiveSample(userName);
-		
+
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
 		driver.navigate().refresh();
 		unlockBill(billId);
-		
+
 		CommonMethods.waitForElementToVisible(testStatus0);
-		
+
 		return testStatus0.getText();
 	}
-	
+
 	private String receiveSample(String userName) throws Exception {
-		
+
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 		WebDriver driver = DriverFactory.getDriver();
 		searchToBilling(userName);
@@ -2470,108 +2476,146 @@ public class BillUpdatePage {
 
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
-		
+
 		CommonMethods.waitForElementToVisible(confirmBillId);
 		String billId = confirmBillId.getText();
-		
+
 		String originalHandle = driver.getWindowHandle();
 
 		CommonMethods.waitForElementToVisible(sampleRecived);
 		js.executeScript("arguments[0].click();", sampleRecived);
 
-	    for(String handle : driver.getWindowHandles()) {
-	        if (!handle.equals(originalHandle)) {
-	            driver.switchTo().window(handle);
-	            driver.close();
-	        }
-	    }
+		for (String handle : driver.getWindowHandles()) {
+			if (!handle.equals(originalHandle)) {
+				driver.switchTo().window(handle);
+				driver.close();
+			}
+		}
 
-	    driver.switchTo().window(originalHandle);
-	
-	    return billId;
+		driver.switchTo().window(originalHandle);
+
+		return billId;
 	}
-	
+
 	public String pendingApprovalStatusVerification(String userName) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		String billId = receiveSample(userName);
-		
+
 		driver.navigate().to(Constants.WAITING_LIST_URL);
 		CommonMethods.waitForElementToVisible(hoverDropdown);
 		hoverDropdown.click();
-		
+
 		CommonMethods.waitForElementToVisible(allDepartments);
 		allDepartments.click();
-		
+
+		Thread.sleep(2000);
+		// driver.navigate().refresh();
+
 		CommonMethods.waitForElementToVisible(user);
 		user.click();
-		
+
 		CommonMethods.waitForElementToVisible(editFirst);
 		editFirst.click();
-		
+
 		CommonMethods.waitForElementToVisible(quickSaveBtn);
 		quickSaveBtn.click();
-		
+
 		driver.navigate().to(Constants.BillingUpdate_URL + billId);
 		driver.navigate().refresh();
 		unlockBill(billId);
 
 		CommonMethods.waitForElementToVisible(testStatus0);
-		
+
 		return testStatus0.getText();
 	}
-	
+
 	public String pendingSubmitVerification(String userName) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		String billId = receiveSample(userName);
-		
+
 		driver.navigate().to(Constants.WAITING_LIST_URL);
 		CommonMethods.waitForElementToVisible(hoverDropdown);
 		hoverDropdown.click();
-		
+
 		CommonMethods.waitForElementToVisible(allDepartments);
 		allDepartments.click();
-		
+
+		Thread.sleep(2000);
 		CommonMethods.waitForElementToVisible(user);
 		user.click();
-		
+
 		CommonMethods.waitForElementToVisible(editFirst);
 		editFirst.click();
-		
-//		CommonMethods.waitForElementToVisible(element);
-		
-		
-		return userName;
-		
+
+		CommonMethods.waitForElementToVisible(quickSubmitBtn);
+
+		if (quickDefaultDocPass.isEnabled()) {
+			CommonMethods.waitForElementToVisible(quickDefaultDocPass);
+			quickDefaultDocPass.sendKeys("livehealth20");
+		}
+
+		quickSubmitBtn.click();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		unlockBill(billId);
+
+		CommonMethods.waitForElementToVisible(testStatus0);
+
+		return testStatus0.getText();
 	}
-	
-	
-//	public String paymentModeIfUserAdvanceIsAvailable(String userName) throws Exception {
-//		
-//		WebDriver driver = DriverFactory.getDriver();
-//		
-//		createBill(userName);
-//			
-//		CommonMethods.waitForElementToVisible(saveBill);
-//		saveBill.click();
-//		
-//		CommonMethods.waitForElementToVisible(confirmBillId);
-//		String billId = confirmBillId.getText();
-//
-//		driver.navigate().to(Constants.BillingUpdate_URL + billId);
-//		driver.navigate().refresh();
-//		unlockBill(billId);
-//
-//		CommonMethods.waitForElementToVisible(viewPayment);
-//		viewPayment.click();
-//
-//		CommonMethods.waitForElementToVisible(cashMode);
-//		String mode = cashMode.getText();
-//		
-//		paymentModeClose.click();
-//		return mode;
-//	}
+
+	public String sampleNotReceivedStatus(String userName) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
+		createBill(userName);
+
+		CommonMethods.waitForElementToVisible(advanceAmount);
+		advanceAmount.clear();
+		advanceAmount.sendKeys(totalAmount.getText());
+
+		CommonMethods.waitForElementToVisible(saveBill);
+		saveBill.click();
+
+		CommonMethods.waitForElementToVisible(confirmBillId);
+		String billId = confirmBillId.getText();
+
+		driver.navigate().to(Constants.BillingUpdate_URL + billId);
+		driver.navigate().refresh();
+		unlockBill(billId);
+
+		CommonMethods.waitForElementToVisible(testStatus0);
+
+		return testStatus0.getText();
+	}
+	// public String paymentModeIfUserAdvanceIsAvailable(String userName) throws
+	// Exception {
+	//
+	// WebDriver driver = DriverFactory.getDriver();
+	//
+	// createBill(userName);
+	//
+	// CommonMethods.waitForElementToVisible(saveBill);
+	// saveBill.click();
+	//
+	// CommonMethods.waitForElementToVisible(confirmBillId);
+	// String billId = confirmBillId.getText();
+	//
+	// driver.navigate().to(Constants.BillingUpdate_URL + billId);
+	// driver.navigate().refresh();
+	// unlockBill(billId);
+	//
+	// CommonMethods.waitForElementToVisible(viewPayment);
+	// viewPayment.click();
+	//
+	// CommonMethods.waitForElementToVisible(cashMode);
+	// String mode = cashMode.getText();
+	//
+	// paymentModeClose.click();
+	// return mode;
+	// }
 }

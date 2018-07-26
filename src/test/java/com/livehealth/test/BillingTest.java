@@ -509,7 +509,7 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 44
 	@Test(groups = { "Billing" })
 	public void verifyEditPaymentMode_TC_44() {
@@ -696,15 +696,15 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	// TC: 56   
+	// TC: 56
 	@Test(groups = { "Billing" })
 	public void verifyCriticalEmergencyCheckBox_TC_56() {
-		
+
 		String label;
 		try {
 			label = billing.criticalAndEmergencyCheckBoxAbleToSet("benedict");
-			
-			 Assert.assertEquals(label, "Emergency Reports");
+
+			Assert.assertEquals(label, "Emergency Reports");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -744,6 +744,24 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 	// Assert.assertTrue(false, e.getMessage());
 	// }
 	// }
+
+	// TC: 64
+	@Test(groups = { "Billing" })
+	public void verifyReceiveAllSample_TC_64() {
+		SoftAssert softAssert = new SoftAssert();
+		List<String> list;
+		try {
+			list = billing.receiveAllSampleVerification("Aaron");
+
+			softAssert.assertEquals(list.get(0), "Not filled");
+			softAssert.assertEquals(list.get(1), "Not filled");
+			softAssert.assertEquals(list.get(2), "Not filled");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+		softAssert.assertAll();
+	}
 
 	// TC: 66
 	@Test(groups = { "Billing" })
@@ -810,10 +828,10 @@ public class BillingTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	// TC: 73
 	@Test(groups = { "Billing" })
-	public void verify​DefaultPriceList_TC_78() {
+	public void verify​DefaultPriceList_TC_73() {
 		String defaultPrice;
 		try {
 			defaultPrice = billing.defaultTestPriceList("benedict");
