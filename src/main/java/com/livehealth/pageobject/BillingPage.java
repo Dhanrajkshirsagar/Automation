@@ -23,10 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.livehealth.base.DriverFactory;
-import com.livehealth.config.ConfigProperties;
 import com.livehealth.config.Constants;
 import com.livehealth.model.HomeCollection;
-import com.livehealth.model.User;
 import com.livehealth.util.CommonMethods;
 import com.livehealth.util.WebContext;
 
@@ -558,7 +556,7 @@ public class BillingPage {
 	@FindBy(how = How.ID, using = "printAllSampleId")
 	private WebElement printAllSampleId;
 
-	//   
+	//
 	@Autowired
 	WebContext webContext;
 
@@ -572,7 +570,7 @@ public class BillingPage {
 	}
 
 	public void signIn(String userName, String password) throws Exception {
-	
+
 		WebDriver driver = DriverFactory.getDriver();
 		userNameField.sendKeys(userName);
 		passwordField.sendKeys(password);
@@ -587,7 +585,7 @@ public class BillingPage {
 	}
 
 	public String getPageTitle() throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.Billing_URL);
 
@@ -596,7 +594,7 @@ public class BillingPage {
 	}
 
 	public void searchToBilling(String userInfo) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.Billing_URL);
 		driver.navigate().refresh();
@@ -636,10 +634,10 @@ public class BillingPage {
 	}
 
 	public boolean searchLoader(String userInfo) throws Exception {
-	
+
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.Billing_URL);
-		
+
 		searchUserForBilling.sendKeys(userInfo);
 
 		return circleLoader.isDisplayed();
@@ -655,7 +653,7 @@ public class BillingPage {
 		CommonMethods.waitForElementToVisible(userDue);
 
 		String text = userDue.getText();
-		System.out.println("==1=="+text);
+		System.out.println("==1==" + text);
 		String due = text.substring(2, text.length());
 
 		int intDue = Integer.parseInt(due);
@@ -668,12 +666,12 @@ public class BillingPage {
 		saveBill.click();
 		Thread.sleep(50000);
 		driver.navigate().to(Constants.Billing_URL);
-		
+
 		searchToBilling(userInfo);
 		selectTestName("Albumin Serum");
 
 		String text1 = userDue.getText();
-		System.out.println("==1=="+text1);
+		System.out.println("==1==" + text1);
 
 		String due1 = text1.substring(2, text1.length());
 
@@ -739,7 +737,7 @@ public class BillingPage {
 	public List<String> confirmPriceListAsPerSelectedReferrel() throws Exception {
 
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		driver.navigate().to(Constants.ListAndGroupManagement_URL);
 
 		listName.sendKeys("Ref Dhanraj");
@@ -747,15 +745,13 @@ public class BillingPage {
 		new WebDriverWait(driver, 10).until(ExpectedConditions
 				.visibilityOfElementLocated(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div")));
 
-		List<WebElement> dropDowns = driver
-				.findElements(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div"));
+		List<WebElement> dropDowns = driver.findElements(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div"));
 
 		dropDowns.get(0).click();
 
 		List<String> list = new ArrayList<>();
 
-		new WebDriverWait(driver, 10)
-				.until(ExpectedConditions.visibilityOfElementLocated(By.id("textInput12012")));
+		new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.id("textInput12012")));
 
 		list.add(test1.getAttribute("value"));
 		list.add(test2.getAttribute("value"));
@@ -767,7 +763,7 @@ public class BillingPage {
 	}
 
 	public List<String> companyPriceList(String userInfo) throws Exception {
-	
+
 		searchToBilling(userInfo);
 
 		Select select = new Select(companyList);
@@ -818,23 +814,21 @@ public class BillingPage {
 	public List<String> confirmPriceListAsPerSelectedCompany() throws Exception {
 
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		driver.navigate().to(Constants.ListAndGroupManagement_URL);
-		
+
 		listName.sendKeys("Postpaid Organization");
 
 		new WebDriverWait(driver, 10).until(ExpectedConditions
 				.visibilityOfElementLocated(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div")));
 
-		List<WebElement> dropDowns = driver
-				.findElements(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div"));
+		List<WebElement> dropDowns = driver.findElements(By.xpath("//*[@id=\"listNameParent\"]/div/span/span/div"));
 
 		dropDowns.get(0).click();
 
 		List<String> list = new ArrayList<>();
 
-		new WebDriverWait(driver, 10)
-				.until(ExpectedConditions.visibilityOfElementLocated(By.id("textInput12530")));
+		new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(By.id("textInput12530")));
 
 		list.add(orgTest1.getAttribute("value"));
 		list.add(orgTest2.getAttribute("value"));
@@ -1040,7 +1034,7 @@ public class BillingPage {
 
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.REGISTRATION_URL);
-		
+
 		Actions builder = new Actions(driver);
 
 		CommonMethods.waitForElementToClickable(searchBtn);
@@ -1077,7 +1071,7 @@ public class BillingPage {
 
 		otherInfo.click();
 		otherInfo.click();
-		
+
 		Select select = new Select(billOrg);
 		select.selectByVisibleText("postpaid Organization");
 
@@ -1163,7 +1157,7 @@ public class BillingPage {
 
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.Billing_URL);
-		
+
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
 
@@ -1178,7 +1172,7 @@ public class BillingPage {
 	}
 
 	public String selectCourierCollection(String userInfo) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.Billing_URL);
 
@@ -1245,20 +1239,20 @@ public class BillingPage {
 
 		return advanceAmount.getText();
 	}
-	
+
 	public String editPaymentMode(String userInfo) throws Exception {
-		
+
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 
 		addPaymentMode(userInfo);
-		
+
 		CommonMethods.waitForElementToVisible(advanceAmount);
 		js.executeScript("arguments[0].click();", advanceAmount);
-		
+
 		CommonMethods.waitForElementToVisible(paymentAmount_1);
 		paymentAmount_1.clear();
 		paymentAmount_1.sendKeys("450");
-		
+
 		savebillSetting.click();
 
 		CommonMethods.waitForElementToVisible(advanceAmount);
@@ -1269,7 +1263,7 @@ public class BillingPage {
 
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.Billing_URL);
-		
+
 		searchToBilling(userInfo);
 		selectTestName("Ionised Calcium");
 
@@ -1277,8 +1271,7 @@ public class BillingPage {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]")));
 
-		List<WebElement> dropDowns = driver
-				.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]"));
+		List<WebElement> dropDowns = driver.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]"));
 
 		dropDowns.get(0).click();
 
@@ -1315,7 +1308,7 @@ public class BillingPage {
 	}
 
 	private void selectTestsToBill(String testName) throws Exception {
-		
+
 		CommonMethods.waitForElementToVisible(testList);
 		testList.sendKeys(testName);
 
@@ -1328,16 +1321,16 @@ public class BillingPage {
 
 		concession.sendKeys(Keys.ENTER);
 	}
-	
+
 	public String organizationAdvance(String userInfo) throws Exception {
 
 		searchToBilling(userInfo);
-		
+
 		Select select = new Select(companyList);
 		select.selectByVisibleText("Custom Org ");
 
 		selectTestsToBill("Ionised Calcium");
-		
+
 		CommonMethods.waitForElementToVisible(orgAdvance);
 		CommonMethods.waitForElementToClickable(orgAdvance);
 
@@ -1348,52 +1341,52 @@ public class BillingPage {
 
 		WebDriver driver = DriverFactory.getDriver();
 		searchToBilling(userInfo);
-		
+
 		Select select = new Select(companyList);
 		select.selectByVisibleText(organization);
 
 		selectTestsToBill("Ionised Calcium");
-		
+
 		CommonMethods.waitForElementToVisible(saveBill);
 		saveBill.click();
 		driver.navigate().to(Constants.Billing_URL);
-		
+
 		searchToBilling(userInfo);
-		
+
 		CommonMethods.waitForElementToVisible(companyList);
 		select.selectByVisibleText(organization);
 
 		selectTestsToBill("Ionised Calcium");
 
 		CommonMethods.waitForElementToVisible(orgAdvance);
-		
+
 		String orgDeduct = orgAdvance.getText();
-		
+
 		driver.navigate().to(Constants.ORG_COLLECTION_URL);
-		
+
 		CommonMethods.waitForElementToVisible(prepaidOrganizationList);
 		prepaidOrganizationList.sendKeys(organization);
-		
+
 		CommonMethods.waitForAllElementsToVisible(orgDropdown);
 		orgDropdown.get(0).click();
-		
+
 		CommonMethods.waitForElementToVisible(advance_Amount);
 		advance_Amount.sendKeys("450");
-		
+
 		submitOrgAdvanceBtn.click();
-		
+
 		driver.navigate().to(Constants.Billing_URL);
 
 		return orgDeduct;
 	}
 
-	public String setOrganizationAdvance(String advanceAmt,String orgName) throws Exception {
+	public String setOrganizationAdvance(String advanceAmt, String orgName) throws Exception {
 
 		WebDriver driver = DriverFactory.getDriver();
 		Actions builder = new Actions(driver);
-		
+
 		driver.navigate().to(Constants.EDIT_ORGANIZATION_URL);
-		
+
 		CommonMethods.waitForElementToClickable(orgEditList);
 		builder.moveToElement(orgEditList).click().sendKeys(orgName).build().perform();
 
@@ -1410,7 +1403,7 @@ public class BillingPage {
 		manageLedger.click();
 		CommonMethods.waitForElementToVisible(editOpeningBal);
 		CommonMethods.waitForElementToClickable(editOpeningBal);
-		
+
 		String organizationCut = editOpeningBal.getText();
 		editOpeningBal.clear();
 		editOpeningBal.sendKeys(advanceAmt);
@@ -1418,13 +1411,13 @@ public class BillingPage {
 		orgUploadButton.click();
 
 		driver.navigate().to(Constants.Billing_URL);
-	
+
 		return organizationCut;
 	}
 
 	public String ifOrganizationAdvanceLessThanBillAmount(String userInfo) throws Exception {
 
-		setOrganizationAdvance("100","prepaid organization");
+		setOrganizationAdvance("100", "prepaid organization");
 
 		searchToBilling(userInfo);
 		selectTestName("Cholesterol - Total");
@@ -1473,9 +1466,9 @@ public class BillingPage {
 	}
 
 	public String userAdvanceAndPayableAmount(String userName) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
-		
+
 		setUserAdvance(userName);
 
 		searchToBilling(userName);
@@ -1484,40 +1477,40 @@ public class BillingPage {
 		saveBill.click();
 		Thread.sleep(20000);
 		driver.navigate().to(Constants.Billing_URL);
-		
+
 		searchToBilling(userName);
 		selectTestName("Ionised Calcium");
-		
+
 		String userAdvance = userAmntDivId.getText();
-		
+
 		return userAdvance;
 	}
 
 	public String setUserAdvance(String userName) throws Exception {
-	
+
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.USER_ADVANCE_URL);
-		String adv="";
-		
+		String adv = "";
+
 		CommonMethods.waitForElementToVisible(searchPatient);
 		searchPatient.sendKeys(userName);
-		
+
 		CommonMethods.waitForAllElementsToVisible(searchForm);
 		searchForm.get(0).click();
-		
+
 		advance_Amount.clear();
 		advance_Amount.sendKeys("1000");
-		
+
 		if (advanceGiven.isDisplayed()) {
 			CommonMethods.waitForElementToVisible(advanceGiven);
 			adv = advanceGiven.getText();
 		}
-		
+
 		submit.click();
-		
-		return adv;	
+
+		return adv;
 	}
-	
+
 	public String additionalPriceField(String userInfo) throws Exception {
 
 		searchToBilling(userInfo);
@@ -1676,7 +1669,7 @@ public class BillingPage {
 
 		return text;
 	}
-	
+
 	public String notFilledStatusVerification(String userName) throws Exception {
 
 		WebDriver driver = DriverFactory.getDriver();
@@ -1691,7 +1684,7 @@ public class BillingPage {
 
 		return testStatus0.getText();
 	}
-	
+
 	private void createBill(String userName) throws Exception {
 
 		String[] tests = { "Ionised Calcium", "Albumin Serum", "Protein Ascitic Fluid *" };
@@ -1714,7 +1707,7 @@ public class BillingPage {
 			concession.sendKeys(Keys.ENTER);
 		}
 	}
-	
+
 	public List<String> receiveAllSampleVerification(String userName) throws Exception {
 
 		WebDriver driver = DriverFactory.getDriver();
@@ -1831,20 +1824,20 @@ public class BillingPage {
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 
 		js.executeScript("arguments[0].click();", ctConsent);
-		
+
 		CommonMethods.waitForElementToVisible(radiobutton);
-		
-		if(radiobutton.isSelected()) {
+
+		if (radiobutton.isSelected()) {
 			radiobutton1.click();
-			
-		}else {
+
+		} else {
 			radiobutton.click();
 		}
-//		js.executeScript("arguments[0].scrollIntoView(true);", ctConsent);
-//		new WebDriverWait(DriverFactory.getDriver(), 20)
-//				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"ctForm\"]/input[2]")));
-//
-//		js.executeScript("arguments[0].click();", getPdf);
+		// js.executeScript("arguments[0].scrollIntoView(true);", ctConsent);
+		// new WebDriverWait(DriverFactory.getDriver(), 20)
+		// .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"ctForm\"]/input[2]")));
+		//
+		// js.executeScript("arguments[0].click();", getPdf);
 
 		// Actions builder = new Actions(DriverFactory.getDriver());
 		//
@@ -1921,7 +1914,7 @@ public class BillingPage {
 
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.REGISTRATION_URL);
-		
+
 		CommonMethods.waitForElementToClickable(settings);
 		settings.click();
 
@@ -1964,8 +1957,7 @@ public class BillingPage {
 		for (String test : list) {
 			testList.sendKeys(test);
 			WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-			wait.until(ExpectedConditions
-					.visibilityOfElementLocated(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]")));
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]")));
 
 			List<WebElement> dropDowns = DriverFactory.getDriver()
 					.findElements(By.xpath("//*[@id=\"inputT\"]/span/span/div[2]"));
@@ -2012,12 +2004,12 @@ public class BillingPage {
 
 		return list;
 	}
-	
+
 	public String defaultTestPriceList(String userInfo) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().to(Constants.Billing_URL);
-		
+
 		searchToBilling(userInfo);
 
 		CommonMethods.waitForElementToVisible(referralList);
@@ -2034,7 +2026,7 @@ public class BillingPage {
 		dropDowns.get(0).click();
 
 		concession.sendKeys(Keys.ENTER);
-		
+
 		CommonMethods.waitForElementToVisible(totalAmount);
 
 		return totalAmount.getText();
@@ -2430,6 +2422,6 @@ public class BillingPage {
 		closeFormF.click();
 		DriverFactory.getDriver().navigate().to(Constants.Billing_URL);
 
-		return Arrays.asList(userName,text);
+		return Arrays.asList(userName, text);
 	}
 }

@@ -15,6 +15,7 @@
 			<class name="com.livehealth.test.BillingTest" />
 			<class name="com.livehealth.test.BillUpdateTest" />
 			<class name="com.livehealth.test.AccessionTest" />
+			<class name="com.livehealth.test.BillSettlementTest" />
 
 		</classes>
 

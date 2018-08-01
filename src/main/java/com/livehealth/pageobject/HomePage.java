@@ -68,6 +68,16 @@ public class HomePage {
 		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), AccessionPage.class);
 
 	}
+	
+	public BillSettlementPage navigateToBillSettlementPage() throws Exception {
+
+		DriverFactory.getDriver().get(configProperties.getLivehealthUrl());
+		commonMethods.waitForPageToLoad();
+
+		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), BillSettlementPage.class);
+
+	}
+
 
 	public String getPageTitle() throws Exception {
 		String title = DriverFactory.getDriver().getTitle();

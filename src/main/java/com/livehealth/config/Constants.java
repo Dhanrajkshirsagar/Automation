@@ -27,5 +27,7 @@ public class Constants {
 	public static String WAITING_LIST_URL = "https://beta.livehealth.solutions/waitingList/#userWatingList";
 	
 	public static String USER_ADVANCE_URL = "https://beta.livehealth.solutions/advanceCollection/";
+	
+	public static String BillSettlement_URL = "https://beta.livehealth.solutions/pendingBills/";
 
 }
