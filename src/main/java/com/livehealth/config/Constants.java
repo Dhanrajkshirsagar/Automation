@@ -29,5 +29,9 @@ public class Constants {
 	public static String USER_ADVANCE_URL = "https://beta.livehealth.solutions/advanceCollection/";
 	
 	public static String BillSettlement_URL = "https://beta.livehealth.solutions/pendingBills/";
+	
+	public static String ReferralSettlemet_URL = "https://beta.livehealth.solutions/referral/settlement/";
+	
+	public static String ReferralManagement_URL = "https://beta.livehealth.solutions/referralManagement/";
 
 }

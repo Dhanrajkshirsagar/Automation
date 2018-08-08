@@ -3,6 +3,7 @@ package com.livehealth.pageobject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -11,10 +12,12 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
 import org.springframework.stereotype.Component;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -22,13 +25,13 @@ import com.livehealth.base.DriverFactory;
 import com.livehealth.config.Constants;
 import com.livehealth.util.CommonMethods;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+
 @Component
 public class BillSettlementPage {
-	
-	SoftAssert SoftAssert = new SoftAssert();
 
 	public static String billId;
-	
+
 	@FindBy(how = How.ID, using = "username")
 	private WebElement userNameField;
 
@@ -37,7 +40,7 @@ public class BillSettlementPage {
 
 	@FindBy(how = How.XPATH, using = "/html/body/div[1]/div[1]/ul/div[1]/form/input[2]")
 	private WebElement signIn;
-	
+
 	@FindBy(how = How.XPATH, using = "/html/body/section/div[1]/div[3]/ul/ul/li/a")
 	private WebElement adminHover;
 
@@ -211,15 +214,15 @@ public class BillSettlementPage {
 		PageFactory.initElements(DriverFactory.getDriver(), this);
 
 	}
-	
+
 	public void signIn(String userName, String password) throws Exception {
-		
+
 		WebDriver driver = DriverFactory.getDriver();
 		userNameField.sendKeys(userName);
 		passwordField.sendKeys(password);
 		signIn.click();
 		CommonMethods.waitForElementToClickable(adminHover);
-		
+
 		driver.navigate().to(Constants.Billing_URL);
 
 	}
@@ -229,10 +232,10 @@ public class BillSettlementPage {
 		return billSettlementId.getCssValue("background-color");
 	}
 
-	public void patientBill(String name, String amount, String test1, String test2) throws Exception {
+	public String patientBill(String name, String amount, String test1, String test2) throws Exception {
 		billUrl.click();
 		searchPatient.sendKeys(name);
-		Thread.sleep(2000);
+		Thread.sleep(1300);
 		searchPatient.sendKeys(Keys.ARROW_DOWN);
 		searchPatient.sendKeys(Keys.ENTER);
 		Thread.sleep(500);
@@ -243,10 +246,9 @@ public class BillSettlementPage {
 		saveBill.click();
 		billId = confirmBillId.getText();
 		String success = confirmBillMsgDiv.getText();
-		SoftAssert.assertEquals(success, "×\n" + "Bill saved successfully.");
-		SoftAssert.assertAll();
 		Thread.sleep(1000);
 		backToRegistration.click();
+		return success;
 
 	}
 
@@ -258,7 +260,7 @@ public class BillSettlementPage {
 		concession.sendKeys(Keys.ENTER);
 	}
 
-	public void lockBillLabel(String duepatientName) throws Exception {
+	public String lockBillLabel(String duepatientName) throws Exception {
 		selectPatient(duepatientName);
 		Thread.sleep(1000);
 		List<WebElement> list = DriverFactory.getDriver().findElements(By.className("label-position"));
@@ -266,39 +268,33 @@ public class BillSettlementPage {
 		for (int i = 0; i < list.size(); i++) {
 			color = list.get(i).getCssValue("background-color");
 		}
-		Assert.assertEquals(color, "rgba(217, 83, 79, 1)");
+		return color;
 
 	}
 
-	public void verifydetails(String duepatientName) throws Exception {
+	public boolean verifydetails(String duepatientName) throws Exception {
 		BillSettlemetTab.click();
 		selectPatient(duepatientName);
 		String name = custName.getText();
-		SoftAssert.assertEquals(name, "Tushar");
+		Assert.assertEquals(name, "Tushar");
 		Thread.sleep(3000);
 		java.util.List<WebElement> bills = billList.findElements(By.name("labBillId"));
 		int length = bills.size();
 
 		for (int i = 0; i < length; i++) {
 			String billslist = bills.get(i).getText();
-			try {
 
-				if (billslist.contains(billId)) {
-					SoftAssert.assertTrue(true, "Bill Id shown correctly");
-					SoftAssert.assertAll();
-				} else {
-					Assert.assertFalse(false, "Bill Id shown Incorrectly");
-				}
-			} catch (Exception e) {
-				System.out.println("verifyBillSettlementAllDetails getting fails");
+			if (billslist.contains(billId)) {
+				return true;
 			}
 		}
+		return false;
 
 	}
 
 	public List<Integer> calculateDue(String duepatientName) throws Exception {
 		selectPatient(duepatientName);
-		Thread.sleep(1000);
+		CommonMethods.waitForElementToVisible(billList);
 		java.util.List<WebElement> dueAmounts = billList.findElements(By.name("dueId"));
 		int length = dueAmounts.size();
 		int sum = 0;
@@ -311,37 +307,43 @@ public class BillSettlementPage {
 		}
 		recalculateDueLink.click();
 		CommonMethods.waitForElementToVisible(errorDueAmnt);
-		
-			String success = errorDueAmnt.getText();
-			SoftAssert.assertEquals(success, "×\n" + "Successfully calculated.");
-			Thread.sleep(1000);
-			int finalDue = Integer.parseInt(dueAmount.getText());
-			ArrayList<Integer> amounts=new ArrayList();
-			amounts.add(sum);
-			amounts.add(finalDue);
-			return amounts;
-			
-	
+
+		String success = errorDueAmnt.getText();
+		Assert.assertEquals(success, "×\n" + "Successfully calculated.");
+		Thread.sleep(1000);
+		int finalDue = Integer.parseInt(dueAmount.getText());
+		ArrayList<Integer> amounts = new ArrayList();
+		amounts.add(sum);
+		amounts.add(finalDue);
+		return amounts;
+
 	}
 
-	public String editBillLink() throws Exception {
+	public ArrayList<String> editBillLink(String patientName) throws Exception {
+		selectPatient(patientName);
+		CommonMethods.waitForElementToVisible(billList);
+		List<WebElement> bills = billList.findElements(By.name("labBillId"));
+		String billId = bills.get(1).getText();
+
+		String winHandleBefore = DriverFactory.getDriver().getWindowHandle();
 		List<WebElement> link = DriverFactory.getDriver().findElements(By.xpath("//a[contains(text(),'Edit Bill')] "));
 		link.get(1).click();
-		java.util.List<WebElement> bills = billList.findElements(By.name("labBillId"));
-		String billId = bills.get(1).getText();
-		String winHandleBefore = DriverFactory.getDriver().getWindowHandle();
 		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
 			DriverFactory.getDriver().switchTo().window(winHandle);
 		}
-		DriverFactory.getDriver().close();
+		String Url = DriverFactory.getDriver().getCurrentUrl();
+		ArrayList<String> list = new ArrayList<>();
+		list.add(billId);
+		list.add(Url);
 		DriverFactory.getDriver().switchTo().window(winHandleBefore);
-		return billId;
+		return list;
+
 	}
 
-	public String billSettlement(String duepatientName) throws Exception {
+	public boolean billSettlement(String duepatientName) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		selectPatient(duepatientName);
-		Thread.sleep(2000);
+		CommonMethods.waitForElementToVisible(billList);
 		int currentDueAmount = Integer.parseInt(dueAmount.getText());
 
 		DriverFactory.getDriver().findElement(By.id("tick0")).click();
@@ -349,7 +351,7 @@ public class BillSettlementPage {
 		Thread.sleep(1000);
 		int settlementAmt = Integer.parseInt(settlementAmount.getAttribute("value"));
 
-		java.util.List<WebElement> settleAmounts = billList.findElements(By.name("amount"));
+		List<WebElement> settleAmounts = billList.findElements(By.name("amount"));
 		int length = settleAmounts.size();
 		int sum = 0;
 		int finalDue = 0;
@@ -366,19 +368,16 @@ public class BillSettlementPage {
 
 		if (finalDue == afterdeductedDueAmount) {
 			Assert.assertTrue(true);
-		} else {
-			SoftAssert.assertFalse(true);
 		}
-
-		SoftAssert.assertEquals(settlementAmt, sum);
+		Assert.assertEquals(settlementAmt, sum);
 		submit.click();
 		Thread.sleep(1000);
 		String success = successDiv.getText();
-		
-		SoftAssert.assertAll();
-		return success;
-		
-
+		if (success.contains("×\n" + "Close\n"
+				+ "Success! Click on below links to print the receipts for successful bill settlements")) {
+			return true;
+		}
+		return false;
 	}
 
 	public void selectPatient(String duepatientName) throws InterruptedException {
@@ -389,11 +388,11 @@ public class BillSettlementPage {
 		searchCreditUsers.sendKeys(Keys.ENTER);
 	}
 
-	public void settleHalfAmount(String duepatientName) throws Exception {
+	public boolean settleHalfAmount(String duepatientName) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		selectPatient(duepatientName);
-		Thread.sleep(2000);
-		java.util.List<WebElement> settleAmounts = billList.findElements(By.name("amount"));
+		CommonMethods.waitForElementToVisible(billList);
+		List<WebElement> settleAmounts = billList.findElements(By.name("amount"));
 		DriverFactory.getDriver().findElement(By.id("tick0")).click();
 		int fullAmount = Integer.parseInt(settleAmounts.get(0).getAttribute("value"));
 		int halfAmount = fullAmount / 2;
@@ -405,736 +404,682 @@ public class BillSettlementPage {
 		if (success.contains("×\n" + "Close\n"
 				+ "Success! Click on below links to print the receipts for successful bill settlements")) {
 			Assert.assertTrue(true);
-		} else {
-			SoftAssert.assertFalse(false);
-			System.out.println("Bill Settlement getting fails");
 		}
 		selectPatient(duepatientName);
-		Thread.sleep(2000);
-		try {
-			String result = DriverFactory.getDriver().findElement(By.id("dueId0")).getText();
-			if (result.equals(Integer.toString(halfAmount))) {
-				Assert.assertTrue(true);
-			} else {
-				SoftAssert.assertFalse(false);
-				System.out.println("Half amount Bill Settlement getting fails");
+		Thread.sleep(1000);
+
+		String result = DriverFactory.getDriver().findElement(By.id("dueId0")).getText();
+		if (result.equals(Integer.toString(halfAmount))) {
+			return true;
+		}
+		return false;
+
+	}
+
+	public ArrayList<String> searchPatientUsingContactNumber(String patientConct) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		selectPatient(patientConct);
+		Thread.sleep(1000);
+		String name = custName.getText();
+		String originalHandle = DriverFactory.getDriver().getWindowHandle();
+		System.out.println("1111" + originalHandle);
+		DriverFactory.getDriver().findElement(By.id("linkDiv")).click();
+		String url = null;
+		for (String handle : DriverFactory.getDriver().getWindowHandles()) {
+			if (!handle.equals(originalHandle)) {
+				DriverFactory.getDriver().switchTo().window(handle);
+				url = DriverFactory.getDriver().getCurrentUrl();
+//				DriverFactory.getDriver().close();
 			}
-			SoftAssert.assertAll();
+		}
+		ArrayList<String> list = new ArrayList<>();
+		list.add(name);
+		list.add(url);
+		
+		DriverFactory.getDriver().switchTo().window(originalHandle);
+		return list;
+	}
+
+	public String paymentMode(String name, String mode, String value) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		selectPatient(name);
+		CommonMethods.waitForElementToVisible(billList);
+		List<WebElement> bills = billList.findElements(By.tagName("li"));
+		bills.get(0).click();
+
+		if (mode.equals("Cheque")) {
+			Select ele = new Select(paymentType);
+			ele.selectByVisibleText("Cheque");
+		}
+
+		if (mode.equals("Credit")) {
+			Select ele = new Select(paymentType);
+			ele.selectByVisibleText("Credit");
+		}
+
+		if (mode.equals("Credit Card")) {
+			Select ele = new Select(paymentType);
+			ele.selectByVisibleText("Credit Card");
+		}
+
+		if (mode.equals("Debit Card")) {
+			Select ele = new Select(paymentType);
+			ele.selectByVisibleText("Debit Card");
+		}
+
+		if (mode.equals("Free")) {
+			Select ele = new Select(paymentType);
+			ele.selectByVisibleText("Free");
+		}
+
+		if (mode.equals("Other")) {
+			Select ele = new Select(paymentType);
+			ele.selectByVisibleText("Other");
+		}
+		Thread.sleep(1000);
+		submit.click();
+		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		js.executeScript("arguments[0].scrollIntoView();", searchCreditUsers);
+		Thread.sleep(1000);
+		List<WebElement> link = DriverFactory.getDriver().findElements(By.xpath("//a[contains(text(),'Edit Bill')] "));
+		link.get(0).click();
+		String beforehandle = DriverFactory.getDriver().getWindowHandle();
+		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
+			DriverFactory.getDriver().switchTo().window(winHandle);
+		}
+		Thread.sleep(1000);
+		DriverFactory.getDriver().findElement(By.id("textInput")).click();
+		Thread.sleep(1000);
+		String billListPayMode = DriverFactory.getDriver()
+				.findElement(By.xpath("//td[contains(text(),'" + value + "')]")).getText();
+		// DriverFactory.getDriver().close();
+		DriverFactory.getDriver().switchTo().window(beforehandle);
+		return billListPayMode;
+
+	}
+
+	public boolean pendingBillsTab() throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		BillSettlemetTab.click();
+		billPendingId.click();
+		Thread.sleep(2000);
+		List<WebElement> link = DriverFactory.getDriver()
+				.findElements(By.xpath("//label[contains(text(),'completed')] "));
+		int length = link.size();
+		if (length >= 1) {
+			return false;
+		}
+		return true;
+		
+	}
+
+	public String commenBillAction(String option, String url, int length) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		BillSettlemetTab.click();
+		billPendingId.click();
+		Thread.sleep(2000);
+		List<WebElement> opt = userBillsContainer.findElements(By.className("dropdown-toggle"));
+		opt.get(0).click();
+		String beforehandle = DriverFactory.getDriver().getWindowHandle();
+		if (option.equals("Complete & Print Bill")) {
+			WebElement links = DriverFactory.getDriver()
+					.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
+			links.click();
+			Thread.sleep(1000);
+			String success = msg.getText();
+			Assert.assertEquals(success, " ×\n" + "Success! Bill completed Successfully.");
+		}
+
+		if (option.equals("Print Bill")) {
+			WebElement links = DriverFactory.getDriver()
+					.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
+			links.click();
+		}
+
+		if (option.equals("Edit Bill")) {
+			WebElement links = DriverFactory.getDriver()
+					.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
+			links.click();
+		}
+
+		if (option.equals("View Transactions")) {
+			WebElement links = DriverFactory.getDriver()
+					.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
+			links.click();
+		}
+		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
+			DriverFactory.getDriver().switchTo().window(winHandle);
+		}
+		String Url = DriverFactory.getDriver().getCurrentUrl();
+		String actualUrl = Url.substring(0, length);
+		// DriverFactory.getDriver().close();
+		DriverFactory.getDriver().switchTo().window(beforehandle);
+		return actualUrl;
+	}
+
+	public String completeBill() throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		BillSettlemetTab.click();
+		billPendingId.click();
+		Thread.sleep(2000);
+		List<WebElement> opt = userBillsContainer.findElements(By.className("dropdown-toggle"));
+		opt.get(0).click();
+		WebElement links = DriverFactory.getDriver().findElement(By.xpath("//a[contains(text(),'Complete Bill')] "));
+		links.click();
+		Thread.sleep(1000);
+		String success = msg.getText();
+		return success;
+	}
+
+	public void sentBillSMSToPatient() throws Exception {
+		BillSettlemetTab.click();
+		billPendingId.click();
+		List<WebElement> opt = userBillsContainer.findElements(By.className("dropdown-toggle"));
+		opt.get(0).click();
+		WebElement link = DriverFactory.getDriver()
+				.findElement(By.xpath("//a[contains(text(),'Send Bill SMS To Patient')] "));
+		link.click();
+		Thread.sleep(1000);
+		String alert = msg.getText();
+		Assert.assertEquals(alert, " ×\n" + "Please convert patient into direct.");
+		Thread.sleep(2000);
+		List<WebElement> links = userBillsContainer.findElements(By.tagName("p"));
+		for (int i = 0; i < links.size(); i++) {
+			if (links.get(i).getText().contains("Name : Mayur (M - 3 months)")) {
+				List<WebElement> opt1 = userBillsContainer.findElements(By.className("dropdown-toggle"));
+				opt1.get(i).click();
+				break;
+			}
+		}
+		WebElement option = DriverFactory.getDriver()
+				.findElement(By.xpath("//a[contains(text(),'Send Bill SMS To Patient')] "));
+		option.click();
+
+	}
+
+	public boolean completedBillsTab() throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		BillSettlemetTab.click();
+		billPendingId.click();
+		Thread.sleep(1000);
+		completedBills.click();
+		Thread.sleep(2000);
+		List<WebElement> link = DriverFactory.getDriver().findElements(By.xpath("//label[contains(text(),'Pending')]"));
+		int length = link.size();
+
+		if (length >= 1) {
+			return false; 
+		}
+		return true; 
+	}
+
+	public void completedBillsActions(String option, String url, int length) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		BillSettlemetTab.click();
+		billPendingId.click();
+		Thread.sleep(1000);
+		completedBills.click();
+		Thread.sleep(1000);
+		List<WebElement> opt = userBillsContainer.findElements(By.className("dropdown-toggle"));
+		opt.get(0).click();
+
+		if (option.equals("Print Bill")) {
+			WebElement links = DriverFactory.getDriver()
+					.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+			links.click();
+		}
+
+		if (option.equals("Edit Bill")) {
+			WebElement links = DriverFactory.getDriver()
+					.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+			links.click();
+		}
+
+		if (option.equals("View Transactions")) {
+			WebElement links = DriverFactory.getDriver()
+					.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+			links.click();
+		}
+		String beforehandle = DriverFactory.getDriver().getWindowHandle();
+		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
+			DriverFactory.getDriver().switchTo().window(winHandle);
+		}
+		try {
+			String Url = DriverFactory.getDriver().getCurrentUrl();
+			String actualUrl = Url.substring(0, length);
+			Assert.assertEquals(actualUrl, url);
+			// TestBase.driver.close();
+			DriverFactory.getDriver().switchTo().window(beforehandle);
 		} catch (Exception e) {
-			System.out.println("Issue in settleHalfAmount");
+			System.out.println("completedBillsActions fails");
 		}
 	}
-//
-//	public void searchPatientUsingContactNumber(String patientConct) throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		selectPatient(patientConct);
-//		Thread.sleep(1000);
-//		String name = custName.getText();
-//		SoftAssert.assertEquals(name, "Mayur");
-//		TestBase.driver.findElement(By.id("linkDiv")).click();
-//		String beforehandle = TestBase.driver.getWindowHandle();
-//		for (String winHandle : TestBase.driver.getWindowHandles()) {
-//			TestBase.driver.switchTo().window(winHandle);
-//		}
-//		String url = TestBase.driver.getCurrentUrl();
-//		String subUrl = url.substring(0, 66);
-//		SoftAssert.assertEquals(subUrl, "https://beta.livehealth.solutions/searchRegistration/#registration");
-//		SoftAssert.assertAll();
-//		TestBase.driver.close();
-//		TestBase.driver.switchTo().window(beforehandle);
-//
-//	}
-//
-//	public void paymentMode(String name, String mode, String value) throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		selectPatient(name);
-//		Thread.sleep(2000);
-//		List<WebElement> bills = billList.findElements(By.tagName("li"));
-//		bills.get(0).click();
-//
-//		if (mode.equals("Cheque")) {
-//			Select ele = new Select(paymentType);
-//			ele.selectByVisibleText("Cheque");
-//		}
-//
-//		if (mode.equals("Credit")) {
-//			Select ele = new Select(paymentType);
-//			ele.selectByVisibleText("Credit");
-//		}
-//
-//		if (mode.equals("Credit Card")) {
-//			Select ele = new Select(paymentType);
-//			ele.selectByVisibleText("Credit Card");
-//		}
-//
-//		if (mode.equals("Debit Card")) {
-//			Select ele = new Select(paymentType);
-//			ele.selectByVisibleText("Debit Card");
-//		}
-//
-//		if (mode.equals("Free")) {
-//			Select ele = new Select(paymentType);
-//			ele.selectByVisibleText("Free");
-//		}
-//
-//		if (mode.equals("Other")) {
-//			Select ele = new Select(paymentType);
-//			ele.selectByVisibleText("Other");
-//		}
-//		Thread.sleep(1000);
-//		submit.click();
-//		JavascriptExecutor js = (JavascriptExecutor) TestBase.driver;
-//		js.executeScript("arguments[0].scrollIntoView();", searchCreditUsers);
-//		Thread.sleep(1000);
-//		List<WebElement> link = TestBase.driver.findElements(By.xpath("//a[contains(text(),'Edit Bill')] "));
-//		link.get(0).click();
-//		String beforehandle = TestBase.driver.getWindowHandle();
-//		for (String winHandle : TestBase.driver.getWindowHandles()) {
-//			TestBase.driver.switchTo().window(winHandle);
-//		}
-//		Thread.sleep(1000);
-//		TestBase.driver.findElement(By.id("textInput")).click();
-//		Thread.sleep(1000);
-//		try {
-//			String billListPayMode = TestBase.driver.findElement(By.xpath("//td[contains(text(),'" + value + "')]"))
-//					.getText();
-//			SoftAssert.assertEquals(billListPayMode, value);
-//			TestBase.driver.close();
-//			TestBase.driver.switchTo().window(beforehandle);
-//			SoftAssert.assertAll();
-//		} catch (Exception e) {
-//
-//		}
-//	}
-//
-//	public void pendingBillsTab() throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		BillSettlemetTab.click();
-//		billPendingId.click();
-//		Thread.sleep(2000);
-//		List<WebElement> link = TestBase.driver.findElements(By.xpath("//label[contains(text(),'completed')] "));
-//		int length = link.size();
-//
-//		if (length >= 1) {
-//			Assert.assertFalse(true);
-//		} else {
-//			Assert.assertTrue(true);
-//		}
-//	}
-//
-//	public void commenBillAction(String option, String url, int length) throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		BillSettlemetTab.click();
-//		billPendingId.click();
-//		Thread.sleep(2000);
-//		List<WebElement> opt = userBillsContainer.findElements(By.className("dropdown-toggle"));
-//		opt.get(0).click();
-//
-//		if (option.equals("Complete & Print Bill")) {
-//			WebElement links = TestBase.driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
-//			links.click();
-//			Thread.sleep(1000);
-//			String success = msg.getText();
-//			SoftAssert.assertEquals(success, " ×\n" + "Success! Bill completed Successfully.");
-//		}
-//
-//		if (option.equals("Print Bill")) {
-//			WebElement links = TestBase.driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
-//			links.click();
-//		}
-//
-//		if (option.equals("Edit Bill")) {
-//			WebElement links = TestBase.driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
-//			links.click();
-//		}
-//
-//		if (option.equals("View Transactions")) {
-//			WebElement links = TestBase.driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
-//			links.click();
-//		}
-//		String beforehandle = TestBase.driver.getWindowHandle();
-//		for (String winHandle : TestBase.driver.getWindowHandles()) {
-//			TestBase.driver.switchTo().window(winHandle);
-//		}
-//		String Url = TestBase.driver.getCurrentUrl();
-//		String actualUrl = Url.substring(0, length);
-//		SoftAssert.assertEquals(actualUrl, url);
-//		TestBase.driver.close();
-//		TestBase.driver.switchTo().window(beforehandle);
-//	}
-//
-//	public void completeBill() throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		BillSettlemetTab.click();
-//		billPendingId.click();
-//		Thread.sleep(2000);
-//		List<WebElement> opt = userBillsContainer.findElements(By.className("dropdown-toggle"));
-//		opt.get(0).click();
-//		WebElement links = TestBase.driver.findElement(By.xpath("//a[contains(text(),'Complete Bill')] "));
-//		links.click();
-//		Thread.sleep(1000);
-//		try {
-//			String success = msg.getText();
-//			SoftAssert.assertEquals(success, "×\n" + "Success! Bill completed Successfully.");
-//		} catch (Exception e) {
-//			System.out.println("Complete link getting fails");
-//		}
-//
-//		SoftAssert.assertAll();
-//	}
-//
-//	public void sentBillSMSToPatient() throws InterruptedException {
-//		BillSettlemetTab.click();
-//		billPendingId.click();
-//		List<WebElement> opt = userBillsContainer.findElements(By.className("dropdown-toggle"));
-//		opt.get(0).click();
-//		WebElement link = TestBase.driver.findElement(By.xpath("//a[contains(text(),'Send Bill SMS To Patient')] "));
-//		link.click();
-//		Thread.sleep(1000);
-//		String alert = msg.getText();
-//		Assert.assertEquals(alert, " ×\n" + "Please convert patient into direct.");
-//		Thread.sleep(2000);
-//		List<WebElement> links = userBillsContainer.findElements(By.tagName("p"));
-//		for (int i = 0; i < links.size(); i++) {
-//			if (links.get(i).getText().contains("Name : Mayur (M - 3 months)")) {
-//				List<WebElement> opt1 = userBillsContainer.findElements(By.className("dropdown-toggle"));
-//				opt1.get(i).click();
-//				break;
-//			}
-//		}
-//		WebElement option = TestBase.driver.findElement(By.xpath("//a[contains(text(),'Send Bill SMS To Patient')] "));
-//		option.click();
-//
-//	}
-//
-//	public void completedBillsTab() throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		BillSettlemetTab.click();
-//		billPendingId.click();
-//		Thread.sleep(1000);
-//		completedBills.click();
-//		Thread.sleep(2000);
-//		List<WebElement> link = TestBase.driver.findElements(By.xpath("//label[contains(text(),'Pending')] "));
-//
-//		int length = link.size();
-//
-//		if (length >= 1) {
-//			Assert.assertFalse(true);
-//		} else {
-//			Assert.assertTrue(true);
-//
-//		}
-//	}
-//
-//	public void completedBillsActions(String option, String url, int length) throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		BillSettlemetTab.click();
-//		billPendingId.click();
-//		Thread.sleep(1000);
-//		completedBills.click();
-//		Thread.sleep(1000);
-//		List<WebElement> opt = userBillsContainer.findElements(By.className("dropdown-toggle"));
-//		opt.get(0).click();
-//
-//		if (option.equals("Print Bill")) {
-//			WebElement links = TestBase.driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
-//			links.click();
-//		}
-//
-//		if (option.equals("Edit Bill")) {
-//			WebElement links = TestBase.driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
-//			links.click();
-//		}
-//
-//		if (option.equals("View Transactions")) {
-//			WebElement links = TestBase.driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
-//			links.click();
-//		}
-//		String beforehandle = TestBase.driver.getWindowHandle();
-//		for (String winHandle : TestBase.driver.getWindowHandles()) {
-//			TestBase.driver.switchTo().window(winHandle);
-//		}
-//		try {
-//			String Url = TestBase.driver.getCurrentUrl();
-//			String actualUrl = Url.substring(0, length);
-//			SoftAssert.assertEquals(actualUrl, url);
-//			TestBase.driver.close();
-//			TestBase.driver.switchTo().window(beforehandle);
-//		} catch (Exception e) {
-//			System.out.println("completedBillsActions fails");
-//		}
-//	}
-//
-//	public void searchReferralAndPatinetTab(String option, String name) throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		BillSettlemetTab.click();
-//		billPendingId.click();
-//		Thread.sleep(1000);
-//		searchBills.click();
-//		refAndPatientoptions.click();
-//		if (option.equals("Search by Referral Name")) {
-//			WebElement link = TestBase.driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
-//			link.click();
-//			searchBillsforRefAndPatient.sendKeys(name);
-//			Thread.sleep(1000);
-//			searchBillsforRefAndPatient.sendKeys(Keys.ARROW_DOWN);
-//			searchBillsforRefAndPatient.sendKeys(Keys.DOWN);
-//			searchBillsforRefAndPatient.sendKeys(Keys.ENTER);
-//			Thread.sleep(2000);
-//		}
-//
-//		if (option.equals("Search by Patient Name")) {
-//			WebElement link = TestBase.driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
-//			link.click();
-//			searchBillsforRefAndPatient.sendKeys(name);
-//			Thread.sleep(1000);
-//			searchBillsforRefAndPatient.sendKeys(Keys.ARROW_DOWN);
-//			searchBillsforRefAndPatient.sendKeys(Keys.ENTER);
-//		}
-//
-//		if (option.equals("Search by Referral Name")) {
-//			List<WebElement> list = TestBase.driver
-//					.findElements(By.xpath("//label[contains(text(),'Referral - " + option + "')] "));
-//
-//			for (int i = 0; i < list.size(); i++) {
-//				String actualText = list.get(i).getText();
-//				if (actualText.equals("Referral - autoReferral")) {
-//					Assert.assertTrue(true);
-//				} else {
-//					SoftAssert.assertFalse(false);
-//					SoftAssert.assertAll();
-//					System.out.println("Only selected referrals bills not showing");
-//				}
-//			}
-//
-//		} else {
-//			if (option.equals("Search by Patient Name")) {
-//				List<WebElement> links = userBillsContainer.findElements(By.tagName("p"));
-//				for (int i = 0; i < links.size(); i++) {
-//					if (links.get(i).getText().contains("Name : Mayur (M - 3 months)")) {
-//						Assert.assertTrue(true);
-//					} else {
-//						SoftAssert.assertFalse(false);
-//						System.out.println("Only selected patient bills not showing");
-//						SoftAssert.assertAll();
-//					}
-//				}
-//			}
-//		}
-//	}
-//
-//	public void searchedBillsActions(String option, String url, int length, String name) throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		BillSettlemetTab.click();
-//		billPendingId.click();
-//		Thread.sleep(1000);
-//		searchBills.click();
-//		refAndPatientoptions.click();
-//		WebElement link = TestBase.driver.findElement(By.xpath("//a[contains(text(),'Search by Patient Name')] "));
-//		link.click();
-//		searchBillsforRefAndPatient.sendKeys(name);
-//		Thread.sleep(1000);
-//		searchBillsforRefAndPatient.sendKeys(Keys.ARROW_DOWN);
-//		searchBillsforRefAndPatient.sendKeys(Keys.ENTER);
-//		Thread.sleep(1000);
-//		List<WebElement> opt = userBillsContainer.findElements(By.className("dropdown-toggle"));
-//		opt.get(0).click();
-//		if (option.equals("Print Bill")) {
-//			WebElement links = TestBase.driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
-//			links.click();
-//		}
-//
-//		if (option.equals("Edit Bill")) {
-//			WebElement links = TestBase.driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
-//			links.click();
-//		}
-//
-//		if (option.equals("View Transactions")) {
-//			WebElement links = TestBase.driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
-//			links.click();
-//		}
-//		String beforehandle = TestBase.driver.getWindowHandle();
-//		for (String winHandle : TestBase.driver.getWindowHandles()) {
-//			TestBase.driver.switchTo().window(winHandle);
-//		}
-//		try {
-//			String Url = TestBase.driver.getCurrentUrl();
-//			String actualUrl = Url.substring(0, length);
-//			SoftAssert.assertEquals(actualUrl, url);
-//			TestBase.driver.close();
-//			TestBase.driver.switchTo().window(beforehandle);
-//		} catch (Exception e) {
-//			System.out.println("searchedBillsActions fails");
-//		}
-//	}
-//
-//	public void viewAllBillsList() throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		BillSettlemetTab.click();
-//		billPendingId.click();
-//		Thread.sleep(1000);
-//		allBills.click();
-//		Thread.sleep(1000);
-//		List<WebElement> completedBills = TestBase.driver
-//				.findElements(By.xpath("//label[contains(text(),'completed')] "));
-//		int CompletedLength = completedBills.size();
-//		List<WebElement> pendingBills = TestBase.driver.findElements(By.xpath("//label[contains(text(),'Pending')] "));
-//		int PendingLength = pendingBills.size();
-//
-//		if (CompletedLength > 0 && PendingLength > 0) {
-//			Assert.assertTrue(true);
-//		} else {
-//			SoftAssert.fail("viewAllBillsList falis");
-//			SoftAssert.assertAll();
-//		}
-//
-//	}
-//
-//	public void generateInvoice(String invType, String name) throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		BillSettlemetTab.click();
-//		invoiceReportTab.click();
-//		if (invType.equals("Organization")) {
-//			Select ele = new Select(invoiceType);
-//			ele.selectByVisibleText("Organization");
-//		}
-//
-//		if (invType.equals("Referral")) {
-//			Select ele = new Select(invoiceType);
-//			ele.selectByVisibleText("Referral");
-//		}
-//
-//		if (invType.equals("Customer")) {
-//			Select ele = new Select(invoiceType);
-//			ele.selectByVisibleText("Customer");
-//		}
-//		searchInvoiceName.sendKeys(name);
-//		Thread.sleep(2000);
-//		searchInvoiceName.sendKeys(Keys.ARROW_DOWN);
-//		searchInvoiceName.sendKeys(Keys.ENTER);
-//		Thread.sleep(1000);
-//		GenerateInvoice.click();
-//		try {
-//			Thread.sleep(1000);
-//			String success = errorDiv.getText();
-//			SoftAssert.assertEquals(success,
-//					"×\n" + "Invoice has been generated successfully! Click here to print the invoice.");
-//			SoftAssert.assertAll();
-//			String beforehandle = TestBase.driver.getWindowHandle();
-//			for (String winHandle : TestBase.driver.getWindowHandles()) {
-//				TestBase.driver.switchTo().window(winHandle);
-//			}
-//			String url = TestBase.driver.getCurrentUrl();
-//			String actualUrl = url.substring(0, 46);
-//			SoftAssert.assertEquals(actualUrl, "https://beta.livehealth.solutions/printInvoice");
-//			TestBase.driver.close();
-//			TestBase.driver.switchTo().window(beforehandle);
-//			SoftAssert.assertAll();
-//		} catch (Exception e) {
-//
-//		}
-//
-//	}
-//
-//	public void selectPatientForAddTestToBill(String name) throws InterruptedException {
-//		BillSettlemetTab.click();
-//		addTestToBill.click();
-//		searchPatientBill.sendKeys(name);
-//		Thread.sleep(2000);
-//		searchPatientBill.sendKeys(Keys.ARROW_DOWN);
-//		searchPatientBill.sendKeys(Keys.ENTER);
-//
-//	}
-//
-//	public void addTestToExistingBill(String name, String test1, String test2, String amount) throws Exception {
-//		TestBase.driver.navigate().refresh();
-//		selectPatientForAddTestToBill(name);
-//		Thread.sleep(1000);
-//		selectTests(test1);
-//		selectTests(test2);
-//		AdvanceAmount.clear();
-//		AdvanceAmount.sendKeys(amount);
-//		saveExistingBill.click();
-//		CommenMethods.waitForElementToClickable(confirmedBillUpdate);
-//		confirmedBillUpdate.click();
-//		Thread.sleep(1000);
-//		try {
-//			String tittle = GetTittile.getText();
-//			Assert.assertEquals(tittle, "Add Tests In Existing Bill");
-//		} catch (Exception e) {
-//			System.out.println("addTestToExistingBill fails");
-//		}
-//	}
-//
-//	public void addTestToNewBillWithSameSampleId(String name, String test1, String test2, String amount)
-//			throws Exception {
-//		TestBase.driver.navigate().refresh();
-//		selectPatientForAddTestToBill(name);
-//		Thread.sleep(1000);
-//		List<WebElement> bills = billListDiv.findElements(By.className("userContainer"));
-//		int beforeLength = bills.size();
-//		selectTests(test1);
-//		selectTests(test2);
-//		AdvanceAmount.clear();
-//		AdvanceAmount.sendKeys(amount);
-//		saveNewBill.click();
-//		CommenMethods.waitForElementToClickable(confirmedBillUpdate);
-//		java.util.Date now = new java.util.Date();
-//		SimpleDateFormat df2 = new SimpleDateFormat("d MMM, yyyy, hh:mm a");
-//		String dateText = df2.format(now);
-//		confirmedBillUpdate.click();
-//		Thread.sleep(1000);
-//		try {
-//			String tittle = GetTittile.getText();
-//			Assert.assertEquals(tittle, "Add Tests In Existing Bill");
-//
-//			selectPatientForAddTestToBill(name);
-//			bills = billListDiv.findElements(By.className("userContainer"));
-//			int afterLength = bills.size();
-//			if (beforeLength < afterLength) {
-//				String data = bills.get(0).getText();
-//				if (data.contains(dateText)) {
-//					Assert.assertTrue(true);
-//				} else {
-//					SoftAssert.assertFalse(true);
-//					SoftAssert.assertAll();
-//				}
-//			}
-//
-//		} catch (Exception e) {
-//			System.out.println("addTestToNewBillWithSameSampleId fails");
-//		}
-//
-//	}
-//
-//	public void alreadyExistingTestAdd(String name, String name1, String test1) throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		selectPatientForAddTestToBill(name);
-//		try {
-//			Thread.sleep(1000);
-//			String warning = errorDivNoBill.getText();
-//			SoftAssert.assertEquals(warning, "×\n" + "Error!No existing bill found for this patient");
-//		} catch (Exception e) {
-//			System.out.println("Error!No existing bill found for this patient warning not shown");
-//		}
-//		selectPatientForAddTestToBill(name1);
-//		Thread.sleep(2000);
-//		selectTests(test1);
-//		searchInputforTests.sendKeys(test1);
-//		Thread.sleep(1000);
-//		searchInputforTests.sendKeys(Keys.ARROW_DOWN);
-//		searchInputforTests.sendKeys(Keys.ENTER);
-//		String existedWarning = warerrorDiv.getText();
-//		SoftAssert.assertEquals(existedWarning, "×\n" + "Warning! This test is already added.");
-//		SoftAssert.assertAll();
-//
-//	}
-//
-//	public void stopbill(String name, String test1) throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		selectPatientForAddTestToBill(name);
-//		Thread.sleep(1000);
-//		if (name.equals("pos")) {
-//			selectTests(test1);
-//			String mesg = saveBillError.getText();
-//			SoftAssert.assertEquals(mesg, "×\n"
-//					+ "Sorry! This organization have a insufficient advance amount to complete bill, This bill be in pending state");
-//		}
-//
-//		if (name.equals("pramo")) {
-//			selectTests(test1);
-//			String mesg = saveBillError.getText();
-//			SoftAssert.assertEquals(mesg, "×\n" + "Error! This organization have a insufficient advance amount");
-//
-//		}
-//		SoftAssert.assertAll();
-//
-//	}
-//
-//	public void orgAdavanceCalc(String name, String amount, String test1) throws Exception {
-//		TestBase.driver.navigate().refresh();
-//		selectPatientForAddTestToBill(name);
-//		Thread.sleep(1000);
-//		selectTests(test1);
-//		String orgAdvance = OrgAdvanceAmount.getText();
-//		AdvanceAmount.clear();
-//		AdvanceAmount.sendKeys(amount);
-//		String due = balanceAmount.getText();
-//
-//		int advAmount = Integer.parseInt(orgAdvance.replaceAll("₹", "").trim());
-//		int paidAmount = Integer.parseInt(due.replaceAll("₹", "").trim());
-//		int finalAdv = advAmount - paidAmount;
-//
-//		AdvanceAmount.clear();
-//		AdvanceAmount.sendKeys(amount);
-//		saveExistingBill.click();
-//		CommenMethods.waitForElementToClickable(confirmedBillUpdate);
-//		confirmedBillUpdate.click();
-//		Thread.sleep(2000);
-//		selectPatientForAddTestToBill(name);
-//		Thread.sleep(1000);
-//		selectTests(test1);
-//		try {
-//			orgAdvance = OrgAdvanceAmount.getText();
-//			int orgAdv = Integer.parseInt(orgAdvance.replaceAll("₹", "").trim());
-//			Assert.assertEquals(orgAdv, finalAdv);
-//		} catch (Exception e) {
-//			System.out.println("orgAdavanceCalc fails");
-//		}
-//
-//	}
-//
-//	public void discountRestrictionOnOutsourceTest(String test, String name, String discount) throws Exception {
-//		TestBase.driver.navigate().refresh();
-//		selectPatientForAddTestToBill(name);
-//		Thread.sleep(1000);
-//		List<WebElement> bills = TestBase.driver.findElements(By.name("lab"));
-//		if (test.equals("Mumps Virus IgM Antibody")) {
-//			bills.get(0).click();
-//			getDiscount(test, discount);
-//			String warningMegs = errorDiv.getText();
-//			SoftAssert.assertEquals(warningMegs, "×\n" + "Error!Consession cannot be allowed for outsource test.");
-//
-//		}
-//
-//		if (test.equals("Cytology (Non-Gyn) Nipple")) {
-//			bills.get(1).click();
-//			getDiscount(test, discount);
-//
-//			int caltotal = Integer.parseInt(testPrice) - Integer.parseInt(discount);
-//			int payableAmt = Integer.parseInt(totalAmount.getText());
-//			SoftAssert.assertEquals(payableAmt, caltotal);
-//			saveExistingBill.click();
-//			CommenMethods.waitForElementToClickable(confirmedBillUpdate);
-//			confirmedBillUpdate.click();
-//
-//		}
-//		if (test.equals("Protein/Creatinine Ratio")) {
-//			bills.get(2).click();
-//			Select ele = new Select(changeConcession);
-//			ele.selectByVisibleText("Concession (in %)");
-//			getDiscount(test, discount);
-//			try {
-//				int num = (int) (Integer.parseInt(testPrice) * Integer.parseInt(discount) / 100);
-//				int caltotal = Integer.parseInt(testPrice) - num;
-//				int payableAmt = Integer.parseInt(totalAmount.getText());
-//				SoftAssert.assertEquals(payableAmt, caltotal);
-//				saveExistingBill.click();
-//				CommenMethods.waitForElementToClickable(confirmedBillUpdate);
-//				confirmedBillUpdate.click();
-//			} catch (Exception e) {
-//				System.out.println("% Discount not able to add ");
-//			}
-//		}
-//
-//		SoftAssert.assertAll();
-//
-//	}
-//
-//	String testPrice;
-//
-//	public void getDiscount(String testName, String discount) throws InterruptedException {
-//		searchInputforTests.sendKeys(testName);
-//		Thread.sleep(1000);
-//		searchInputforTests.sendKeys(Keys.ARROW_DOWN);
-//		searchInputforTests.sendKeys(Keys.ENTER);
-//		testPrice = price.getAttribute("value");
-//		concession.clear();
-//		concession.sendKeys(discount);
-//		concession.sendKeys(Keys.ENTER);
-//	}
-//
-//	public void paymentType(String payMode, String value, String name, String test1, String paidAmt) throws Exception {
-//		TestBase.driver.navigate().refresh();
-//		selectPatientForAddTestToBill(name);
-//		Thread.sleep(1000);
-//		List<WebElement> bills = TestBase.driver.findElements(By.name("lab"));
-//
-//		if (payMode.equals("Cheque")) {
-//			bills.get(0).click();
-//			selectTests(test1);
-//			Select ele = new Select(paymentMode);
-//			ele.selectByVisibleText("Cheque");
-//		}
-//
-//		if (payMode.equals("Credit")) {
-//			bills.get(1).click();
-//			selectTests(test1);
-//			Select ele = new Select(paymentMode);
-//			ele.selectByVisibleText("Credit");
-//		}
-//
-//		if (payMode.equals("Credit Card")) {
-//			bills.get(2).click();
-//			selectTests(test1);
-//			Select ele = new Select(paymentMode);
-//			ele.selectByVisibleText("Credit Card");
-//		}
-//
-//		if (payMode.equals("Debit Card")) {
-//			bills.get(3).click();
-//			selectTests(test1);
-//			Select ele = new Select(paymentMode);
-//			ele.selectByVisibleText("Debit Card");
-//		}
-//
-//		if (payMode.equals("Free")) {
-//			bills.get(4).click();
-//			selectTests(test1);
-//			Select ele = new Select(paymentMode);
-//			ele.selectByVisibleText("Free");
-//		}
-//
-//		if (payMode.equals("Other")) {
-//			bills.get(5).click();
-//			selectTests(test1);
-//			Select ele = new Select(paymentMode);
-//			ele.selectByVisibleText("Other");
-//		}
-//
-//		AdvanceAmount.clear();
-//		AdvanceAmount.sendKeys(paidAmt);
-//		try {
-//			saveExistingBill.click();
-//			CommenMethods.waitForElementToClickable(confirmedBillUpdate);
-//			confirmedBillUpdate.click();
-//			Thread.sleep(1000);
-//			String tittle = GetTittile.getText();
-//			SoftAssert.assertEquals(tittle, "Add Tests In Existing Bill");
-//			SoftAssert.assertAll();
-//		} catch (Exception e) {
-//			System.out.println("issue in add test to bill with selected payment type");
-//		}
-//	}
-//
-//	public void searchUsingAccessionNo(String AccesionNo) throws InterruptedException {
-//		TestBase.driver.navigate().refresh();
-//		BillSettlemetTab.click();
-//		addTestToBill.click();
-//		if (AccesionNo.equals("000117018")) {
-//			searchByAccessionNo.sendKeys(AccesionNo);
-//		}
-//
-//		if (AccesionNo.equals("000317018")) {
-//			searchByAccessionNo.sendKeys(AccesionNo);
-//		}
-//		if (AccesionNo.equals("000217018")) {
-//			searchByAccessionNo.sendKeys(AccesionNo);
-//		}
-//		Thread.sleep(1000);
-//		searchAccBtn.click();
-//		Thread.sleep(2000);
-//		List<WebElement> list = billListDiv.findElements(By.className("userContainer"));
-//		int length = list.size();
-//		if (length > 0) {
-//			Assert.assertTrue(true);
-//		} else {
-//			SoftAssert.assertFalse(true);
-//			System.out.println("searchUsingAccessionNo not working");
-//		}
-//		SoftAssert.assertAll();
-//	}
-//}
 
+	public boolean SearchByPatientName(String option, String name) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		BillSettlemetTab.click();
+		billPendingId.click();
+		Thread.sleep(1000);
+		searchBills.click();
+		refAndPatientoptions.click();
+		WebElement link = DriverFactory.getDriver().findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+		link.click();
+		searchBillsforRefAndPatient.sendKeys(name);
+		Thread.sleep(1000);
+		searchBillsforRefAndPatient.sendKeys(Keys.ARROW_DOWN);
+		searchBillsforRefAndPatient.sendKeys(Keys.ENTER);
+
+		List<WebElement> links = userBillsContainer.findElements(By.tagName("p"));
+		for (int i = 0; i < links.size(); i++) {
+			if (links.get(i).getText().contains("Name : Mayur (M - 3 months)")) {
+				return true;
+			}
+		}
+		return false;
+
+	}
+
+	public boolean SearchByReferralName(String option, String name) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		BillSettlemetTab.click();
+		billPendingId.click();
+		Thread.sleep(1000);
+		searchBills.click();
+		refAndPatientoptions.click();
+		WebElement link = DriverFactory.getDriver().findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+		link.click();
+		searchBillsforRefAndPatient.sendKeys(name);
+		Thread.sleep(1000);
+		searchBillsforRefAndPatient.sendKeys(Keys.ARROW_DOWN);
+		searchBillsforRefAndPatient.sendKeys(Keys.DOWN);
+		searchBillsforRefAndPatient.sendKeys(Keys.ENTER);
+		Thread.sleep(1000);
+		List<WebElement> list = DriverFactory.getDriver()
+				.findElements(By.xpath("//label[contains(text(),'Referral - " + option + "')]"));
+
+		for (int i = 0; i < list.size(); i++) {
+			String actualText = list.get(i).getText();
+			if (actualText.equals("Referral - autoReferral")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void searchedBillsActions(String option, String url, int length, String name) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		BillSettlemetTab.click();
+		billPendingId.click();
+		Thread.sleep(1000);
+		searchBills.click();
+		refAndPatientoptions.click();
+		WebElement link = DriverFactory.getDriver()
+				.findElement(By.xpath("//a[contains(text(),'Search by Patient Name')] "));
+		link.click();
+		searchBillsforRefAndPatient.sendKeys(name);
+		Thread.sleep(1000);
+		searchBillsforRefAndPatient.sendKeys(Keys.ARROW_DOWN);
+		searchBillsforRefAndPatient.sendKeys(Keys.ENTER);
+		Thread.sleep(1000);
+		List<WebElement> opt = userBillsContainer.findElements(By.className("dropdown-toggle"));
+		opt.get(0).click();
+		if (option.equals("Print Bill")) {
+			WebElement links = DriverFactory.getDriver()
+					.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+			links.click();
+		}
+
+		if (option.equals("Edit Bill")) {
+			WebElement links = DriverFactory.getDriver()
+					.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+			links.click();
+		}
+
+		if (option.equals("View Transactions")) {
+			WebElement links = DriverFactory.getDriver()
+					.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+			links.click();
+		}
+		String beforehandle = DriverFactory.getDriver().getWindowHandle();
+		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
+			DriverFactory.getDriver().switchTo().window(winHandle);
+		}
+			String Url = DriverFactory.getDriver().getCurrentUrl();
+			String actualUrl = Url.substring(0, length);
+			Assert.assertEquals(actualUrl, url);
+			// DriverFactory.getDriver().close();
+			DriverFactory.getDriver().switchTo().window(beforehandle);
+	
+	}
+
+	public boolean viewAllBillsList() throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		BillSettlemetTab.click();
+		billPendingId.click();
+		Thread.sleep(1000);
+		allBills.click();
+		Thread.sleep(1000);
+		List<WebElement> completedBills = DriverFactory.getDriver()
+				.findElements(By.xpath("//label[contains(text(),'completed')] "));
+		int CompletedLength = completedBills.size();
+		List<WebElement> pendingBills = DriverFactory.getDriver()
+				.findElements(By.xpath("//label[contains(text(),'Pending')]"));
+		int PendingLength = pendingBills.size();
+		ArrayList<Integer> size = new ArrayList<>();
+		size.add(CompletedLength);
+		size.add(PendingLength);
+		if (size.get(0) > 0 && size.get(1) > 0) {
+			return true;
+		}
+		return false;
+
+	}
+
+	public String generateInvoice(String invType, String name) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		BillSettlemetTab.click();
+		invoiceReportTab.click();
+		if (invType.equals("Organization")) {
+			Select ele = new Select(invoiceType);
+			ele.selectByVisibleText("Organization");
+		}
+
+		if (invType.equals("Referral")) {
+			Select ele = new Select(invoiceType);
+			ele.selectByVisibleText("Referral");
+		}
+
+		if (invType.equals("Customer")) {
+			Select ele = new Select(invoiceType);
+			ele.selectByVisibleText("Customer");
+		}
+		searchInvoiceName.sendKeys(name);
+		Thread.sleep(1500);
+		searchInvoiceName.sendKeys(Keys.ARROW_DOWN);
+		searchInvoiceName.sendKeys(Keys.ENTER);
+		Thread.sleep(1000);
+		GenerateInvoice.click();
+		Thread.sleep(1000);
+		String success = errorDiv.getText();
+		Assert.assertEquals(success,"×\n" + "Invoice has been generated successfully! Click here to print the invoice.");
+		String beforehandle = DriverFactory.getDriver().getWindowHandle();
+		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
+			DriverFactory.getDriver().switchTo().window(winHandle);
+		}
+		String url = DriverFactory.getDriver().getCurrentUrl();
+		String actualUrl = url.substring(0, 46);
+//		DriverFactory.getDriver().close();
+		DriverFactory.getDriver().switchTo().window(beforehandle);
+		return actualUrl;
+
+	}
+
+	public void selectPatientForAddTestToBill(String name) throws InterruptedException {
+		BillSettlemetTab.click();
+		addTestToBill.click();
+		searchPatientBill.sendKeys(name);
+		Thread.sleep(1500);
+		searchPatientBill.sendKeys(Keys.ARROW_DOWN);
+		searchPatientBill.sendKeys(Keys.ENTER);
+
+	}
+
+	public String addTestToExistingBill(String name, String test1, String test2, String amount) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		selectPatientForAddTestToBill(name);
+		Thread.sleep(1000);
+		selectTests(test1);
+		selectTests(test2);
+		AdvanceAmount.clear();
+		AdvanceAmount.sendKeys(amount);
+		saveExistingBill.click();
+		CommonMethods.waitForElementToClickable(confirmedBillUpdate);
+		confirmedBillUpdate.click();
+		Thread.sleep(1000);
+		String tittle = GetTittile.getText();
+		return tittle;
+	}
+
+	public boolean addTestToNewBillWithSameSampleId(String name, String test1, String test2, String amount)
+			throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		selectPatientForAddTestToBill(name);
+		Thread.sleep(1000);
+		List<WebElement> bills = billListDiv.findElements(By.className("userContainer"));
+		int beforeLength = bills.size();
+		selectTests(test1);
+		selectTests(test2);
+		AdvanceAmount.clear();
+		AdvanceAmount.sendKeys(amount);
+		saveNewBill.click();
+		CommonMethods.waitForElementToClickable(confirmedBillUpdate);
+		confirmedBillUpdate.click();
+		Thread.sleep(1000);
+		String tittle = GetTittile.getText();
+		Assert.assertEquals(tittle, "Add Tests In Existing Bill");
+
+		selectPatientForAddTestToBill(name);
+		Thread.sleep(1000);
+		List<WebElement> bill = billListDiv.findElements(By.className("userContainer"));
+		int afterLength = bill.size();
+		if (beforeLength <= afterLength) {
+			return true;
+		}
+		return false;
+	
+
+	}
+
+	public ArrayList<String> alreadyExistingTestAdd(String name, String name1, String test1) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		selectPatientForAddTestToBill(name);
+		Thread.sleep(1000);
+		String warning = errorDivNoBill.getText();
+
+		selectPatientForAddTestToBill(name1);
+		Thread.sleep(2000);
+		selectTests(test1);
+		searchInputforTests.sendKeys(test1);
+		Thread.sleep(1000);
+		searchInputforTests.sendKeys(Keys.ARROW_DOWN);
+		searchInputforTests.sendKeys(Keys.ENTER);
+		String existedWarning = warerrorDiv.getText();
+		ArrayList<String> list = new ArrayList<>();
+		list.add(warning);
+		list.add(existedWarning);
+		return list;
+	}
+
+	public void stopbill(String name, String test1) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		SoftAssert softAssert = new SoftAssert();
+		selectPatientForAddTestToBill(name);
+		Thread.sleep(1000);
+		if (name.equals("pos")) {
+			selectTests(test1);
+			String mesg = saveBillError.getText();
+			softAssert.assertEquals(mesg, "×\n"
+					+ "Sorry! This organization have a insufficient advance amount to complete bill, This bill be in pending state");
+		}
+
+		if (name.equals("pramo")) {
+			selectTests(test1);
+			String mesg = saveBillError.getText();
+			softAssert.assertEquals(mesg, "×\n" + "Error! This organization have a insufficient advance amount");
+		}
+		softAssert.assertAll();
+
+	}
+
+	public ArrayList<Integer> orgAdavanceCalc(String name, String amount, String test1) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		selectPatientForAddTestToBill(name);
+		Thread.sleep(1000);
+		selectTests(test1);
+		String orgAdvance = OrgAdvanceAmount.getText();
+		AdvanceAmount.clear();
+		AdvanceAmount.sendKeys(amount);
+		String due = balanceAmount.getText();
+
+		int advAmount = Integer.parseInt(orgAdvance.replaceAll("₹", "").trim());
+		int paidAmount = Integer.parseInt(due.replaceAll("₹", "").trim());
+		int finalAdv = advAmount - paidAmount;
+
+		AdvanceAmount.clear();
+		AdvanceAmount.sendKeys(amount);
+		saveExistingBill.click();
+		CommonMethods.waitForElementToClickable(confirmedBillUpdate);
+		confirmedBillUpdate.click();
+		Thread.sleep(2000);
+		selectPatientForAddTestToBill(name);
+		Thread.sleep(1000);
+		selectTests(test1);
+		orgAdvance = OrgAdvanceAmount.getText();
+		int orgAdv = Integer.parseInt(orgAdvance.replaceAll("₹", "").trim());
+		ArrayList<Integer> orgAdvAmt = new ArrayList<>();
+		orgAdvAmt.add(finalAdv);
+		orgAdvAmt.add(orgAdv);
+		return orgAdvAmt;
+
+	}
+
+	public void discountRestrictionOnOutsourceTest(String test, String name, String discount) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		selectPatientForAddTestToBill(name);
+		Thread.sleep(1000);
+		List<WebElement> bills = DriverFactory.getDriver().findElements(By.name("lab"));
+		if (test.equals("Mumps Virus IgM Antibody")) {
+			bills.get(0).click();
+			getDiscount(test, discount);
+			String warningMegs = errorDiv.getText();
+			Assert.assertEquals(warningMegs, "×\n" + "Error!Consession cannot be allowed for outsource test.");
+
+		}
+
+		if (test.equals("Cytology (Non-Gyn) Nipple")) {
+			bills.get(1).click();
+			getDiscount(test, discount);
+
+			int caltotal = Integer.parseInt(testPrice) - Integer.parseInt(discount);
+			int payableAmt = Integer.parseInt(totalAmount.getText());
+			Assert.assertEquals(payableAmt, caltotal);
+			saveExistingBill.click();
+			CommonMethods.waitForElementToClickable(confirmedBillUpdate);
+			confirmedBillUpdate.click();
+
+		}
+		if (test.equals("Protein/Creatinine Ratio")) {
+			bills.get(2).click();
+			Select ele = new Select(changeConcession);
+			ele.selectByVisibleText("Concession (in %)");
+			getDiscount(test, discount);
+
+			int num = (int) (Integer.parseInt(testPrice) * Integer.parseInt(discount) / 100);
+			int caltotal = Integer.parseInt(testPrice) - num;
+			int payableAmt = Integer.parseInt(totalAmount.getText());
+			Assert.assertEquals(payableAmt, caltotal);
+			saveExistingBill.click();
+			CommonMethods.waitForElementToClickable(confirmedBillUpdate);
+			confirmedBillUpdate.click();
+		}
+
+	}
+
+	String testPrice;
+
+	public void getDiscount(String testName, String discount) throws InterruptedException {
+		searchInputforTests.sendKeys(testName);
+		Thread.sleep(1000);
+		searchInputforTests.sendKeys(Keys.ARROW_DOWN);
+		searchInputforTests.sendKeys(Keys.ENTER);
+		testPrice = price.getAttribute("value");
+		concession.clear();
+		concession.sendKeys(discount);
+		concession.sendKeys(Keys.ENTER);
+	}
+
+	public String paymentType(String payMode, String value, String name, String test1, String paidAmt)
+			throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		selectPatientForAddTestToBill(name);
+		Thread.sleep(1000);
+		List<WebElement> bills = DriverFactory.getDriver().findElements(By.name("lab"));
+
+		if (payMode.equals("Cheque")) {
+			bills.get(0).click();
+			selectTests(test1);
+			Select ele = new Select(paymentMode);
+			ele.selectByVisibleText("Cheque");
+		}
+
+		if (payMode.equals("Credit")) {
+			bills.get(1).click();
+			selectTests(test1);
+			Select ele = new Select(paymentMode);
+			ele.selectByVisibleText("Credit");
+		}
+
+		if (payMode.equals("Credit Card")) {
+			bills.get(2).click();
+			selectTests(test1);
+			Select ele = new Select(paymentMode);
+			ele.selectByVisibleText("Credit Card");
+		}
+
+		if (payMode.equals("Debit Card")) {
+			bills.get(3).click();
+			selectTests(test1);
+			Select ele = new Select(paymentMode);
+			ele.selectByVisibleText("Debit Card");
+		}
+
+		if (payMode.equals("Free")) {
+			bills.get(4).click();
+			selectTests(test1);
+			Select ele = new Select(paymentMode);
+			ele.selectByVisibleText("Free");
+		}
+
+		if (payMode.equals("Other")) {
+			bills.get(5).click();
+			selectTests(test1);
+			Select ele = new Select(paymentMode);
+			ele.selectByVisibleText("Other");
+		}
+
+		AdvanceAmount.clear();
+		AdvanceAmount.sendKeys(paidAmt);
+		saveExistingBill.click();
+		CommonMethods.waitForElementToClickable(confirmedBillUpdate);
+		confirmedBillUpdate.click();
+		Thread.sleep(1000);
+		String tittle = GetTittile.getText();
+		return tittle;
+	}
+
+	public boolean searchUsingAccessionNo(String AccesionNo) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		BillSettlemetTab.click();
+		addTestToBill.click();
+		if (AccesionNo.equals("000117018")) {
+			searchByAccessionNo.sendKeys(AccesionNo);
+		}
+
+		if (AccesionNo.equals("000317018")) {
+			searchByAccessionNo.sendKeys(AccesionNo);
+		}
+		if (AccesionNo.equals("000217018")) {
+			searchByAccessionNo.sendKeys(AccesionNo);
+		}
+		Thread.sleep(1000);
+		searchAccBtn.click();
+		Thread.sleep(1000);
+		List<WebElement> list = billListDiv.findElements(By.className("userContainer"));
+		int length = list.size();
+		if (length > 0) {
+			return true;
+		}
+		return false;
+	}
 
 }

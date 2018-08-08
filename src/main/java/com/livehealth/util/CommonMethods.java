@@ -2,16 +2,17 @@ package com.livehealth.util;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
-
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 import org.testng.ITestResult;
 import org.testng.Reporter;
-
 import com.livehealth.base.DriverFactory;
 import com.livehealth.config.Constants;
 
@@ -65,6 +66,9 @@ public class CommonMethods {
 
 	}
 
+	
+
+
 	/**
 	 * @param filePath
 	 * @return
@@ -96,6 +100,50 @@ public class CommonMethods {
 		return saltStr;
 
 	}
+	
+	public static String generateRandomName() {
+
+		String text = "";
+		String possible = "abcdefghijklnmopqrstuvwxyzhahdgyskwioiuwyebjdjs";
+
+		for (int i = 0; i < 6; i++)
+			text += possible.charAt((int) Math.floor(Math.random() * possible.length()));
+		return text;
+
+	}
+
+	public static String generateRandomPatientId() {
+
+		String text = "";
+		String possible = "1234567894561455548248554458815";
+
+		for (int i = 0; i < 4; i++)
+			text += possible.charAt((int) Math.floor(Math.random() * possible.length()));
+		return text;
+
+	}
+
+	public static String generateRandomContact() {
+
+		String text = "";
+		String possible = "1234567894561455548248554458815";
+
+		for (int i = 0; i < 10; i++)
+			text += possible.charAt((int) Math.floor(Math.random() * possible.length()));
+		return text;
+
+	}
+
+	public static String generateRandomContactForIndia() {
+
+		String text = "";
+		String possible = "1234567894561455548248554458815";
+
+		for (int i = 0; i < 8; i++)
+			text += possible.charAt((int) Math.floor(Math.random() * possible.length()));
+		return text;
+
+	}
 
 	public String getRandomNumber() {
 
@@ -116,4 +164,88 @@ public class CommonMethods {
 
 		return "6004" + pNumber;
 	}
+	
+	public static String getBackDate(int add1) {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy");
+		Calendar cal = Calendar.getInstance();
+		sdf.format(cal.getTime());
+		cal.add(Calendar.DAY_OF_MONTH, -add1);
+		String newDate = sdf.format(cal.getTime());
+		return newDate;
+	}
+
+	public static String getBackD(int add1) {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("E,MMM dd yyyy ");
+		Calendar cal = Calendar.getInstance();
+		sdf.format(cal.getTime());
+		cal.add(Calendar.DAY_OF_MONTH, -add1);
+		String newDate = sdf.format(cal.getTime());
+		return newDate;
+	}
+
+	public static String getstartDate(int add1) {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		Calendar cal = Calendar.getInstance();
+		sdf.format(cal.getTime());
+		cal.add(Calendar.DAY_OF_MONTH, -add1);
+		String newDate = sdf.format(cal.getTime());
+		return newDate;
+	}
+
+	public static String getBackOrgDate(int add1) {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy");
+		Calendar cal = Calendar.getInstance();
+		sdf.format(cal.getTime());
+		cal.add(Calendar.DAY_OF_MONTH, -add1);
+		String newDate = sdf.format(cal.getTime());
+		return newDate;
+	}
+	
+	 public static int getAge(int day, int month, int year) {
+		    //calculating age from dob
+		    Calendar dob = Calendar.getInstance();
+		    Calendar today = Calendar.getInstance();
+		    dob.set(year, month, day);
+		    int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+		    if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
+		        age--;
+		    }
+		    return age;
+		}
+	 
+	public static String getTime(int add1) {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm ");
+		Calendar cal = Calendar.getInstance();
+		sdf.format(cal.getTime());
+		cal.add(Calendar.DAY_OF_MONTH, +add1);
+		String newDate = sdf.format(cal.getTime());
+		return newDate;
+	}
+
+	public static String reduceTime(int hrs) {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm ");
+		Calendar cal = Calendar.getInstance();
+		sdf.format(cal.getTime());
+		cal.add(Calendar.HOUR, +hrs);
+		String newDate = sdf.format(cal.getTime());
+		return newDate;
+	}
+
+	public static String getTimeForReschedule(int hr) {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+		Calendar cal = Calendar.getInstance();
+		sdf.format(cal.getTime());
+		cal.add(Calendar.HOUR, +hr);
+		String newDate = sdf.format(cal.getTime());
+		return newDate;
+	}
+
+	
 }

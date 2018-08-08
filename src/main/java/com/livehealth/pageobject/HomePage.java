@@ -77,6 +77,51 @@ public class HomePage {
 		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), BillSettlementPage.class);
 
 	}
+	
+	public ReferralManagementPage navigateToReferralManagemetPage() throws Exception {
+
+		DriverFactory.getDriver().get(configProperties.getLivehealthUrl());
+		commonMethods.waitForPageToLoad();
+
+		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), ReferralManagementPage.class);
+
+	}
+	
+	public DoctorManagementPage navigateToDoctorManagementPage() throws Exception {
+
+		DriverFactory.getDriver().get(configProperties.getLivehealthUrl());
+		commonMethods.waitForPageToLoad();
+
+		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), DoctorManagementPage.class);
+
+	}
+	
+	public OrganizationManagementPage navigateToOrganizationManagementPage() throws Exception {
+
+		DriverFactory.getDriver().get(configProperties.getLivehealthUrl());
+		commonMethods.waitForPageToLoad();
+
+		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), OrganizationManagementPage.class);
+
+	}
+	
+	public ListManagementPage navigateToListManagementPage() throws Exception {
+
+		DriverFactory.getDriver().get(configProperties.getLivehealthUrl());
+		commonMethods.waitForPageToLoad();
+
+		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), ListManagementPage.class);
+
+	}
+	
+	public AdvanceCollectionPage navigateToAdvanceCollectionPage() throws Exception {
+
+		DriverFactory.getDriver().get(configProperties.getLivehealthUrl());
+		commonMethods.waitForPageToLoad();
+
+		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), AdvanceCollectionPage.class);
+
+	}
 
 
 	public String getPageTitle() throws Exception {
