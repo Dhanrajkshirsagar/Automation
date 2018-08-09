@@ -185,7 +185,7 @@ public class ReferralManagementTest extends AbstractTestNGSpringContextTests {
 	}
 
 	@Test(priority = 12, dataProvider = "ReferralDesignation", groups = { "referralManagement" })
-	public void verifyAddReferralWIttEachDesignation(String designation, String value) {
+	public void verifyAddReferralWithEachDesignation(String designation, String value) {
 		SoftAssert softAssert = new SoftAssert();
 		String referrlalDesignation;
 		try {
@@ -215,7 +215,6 @@ public class ReferralManagementTest extends AbstractTestNGSpringContextTests {
 	@Test(priority = 14, groups = { "referralManagement" })
 	public void verifyReAssignReferralPriceListToAlreadyAssignedReferral() {
 		try {
-
 			String refName = referralManagementPage.assignPriceList("auto", "ReAssign");
 			Assert.assertEquals(refName, "ReAssign Referral Price");
 
@@ -243,7 +242,6 @@ public class ReferralManagementTest extends AbstractTestNGSpringContextTests {
 	@Test(priority = 16, groups = { "referralManagement" })
 	public void verifyExportListLink() {
 		try {
-
 			referralManagementPage.ExportListLink("auto");
 
 		} catch (Exception e) {

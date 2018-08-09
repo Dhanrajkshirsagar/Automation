@@ -327,17 +327,15 @@ public class ReferralManagementPage {
 
 	@FindBy(id = "confirmBillMsgDiv")
 	private WebElement confirmBillMsgDiv;
-	
+
 	@FindBy(name = "daterangepicker_start")
 	private WebElement daterangepickerstart;
 
 	@FindBy(name = "daterangepicker_end")
 	private WebElement daterangepickerend;
-	
+
 	@FindBy(xpath = "//button[contains(text(),'Apply')]")
 	private WebElement Apply;
-	
-
 
 	@PostConstruct
 	public void loadDriver() throws Exception {
@@ -362,13 +360,9 @@ public class ReferralManagementPage {
 		SaveReferral.click();
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 		js.executeScript("arguments[0].scrollIntoView();", docDisplayName);
-		try {
-			String warning = errorDiv.getText();
-			return warning;
-		} catch (Exception e) {
-			System.out.println("addReferralValidation not shown");
-		}
-		return null;
+
+		String warning = errorDiv.getText();
+		return warning;
 	}
 
 	public String patientBill(String name, String amount, String test1, String test2) throws Exception {
@@ -675,14 +669,12 @@ public class ReferralManagementPage {
 		selectReferralForAssignList(refName);
 		CommonMethods.waitForElementToClickable(listDocButton);
 		selectPriceList(refPriceName);
-		try {
-			listDocButton.click();
-			Thread.sleep(1000);
-			selectReferralForAssignList(refName);
-			CommonMethods.waitForElementToVisible(warningerrorDiv);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+		listDocButton.click();
+		Thread.sleep(1000);
+		selectReferralForAssignList(refName);
+		CommonMethods.waitForElementToVisible(warningerrorDiv);
+
 		String priceListName = selectedListName.getText();
 		return priceListName;
 
@@ -770,7 +762,7 @@ public class ReferralManagementPage {
 	public ArrayList<Integer> calculateDue(String refName) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		selectReferralForBillSettle(refName);
-		
+		Thread.sleep(1000);
 		String startDay = CommonMethods.getstartDate(28);
 		String endDay = CommonMethods.getstartDate(2);
 		referralSettlementDateRange.click();
@@ -780,6 +772,7 @@ public class ReferralManagementPage {
 		daterangepickerend.sendKeys(endDay);
 		CommonMethods.waitForElementToClickable(Apply);
 		Apply.click();
+		Thread.sleep(500);
 		CommonMethods.waitForElementToClickable(submit);
 		List<WebElement> dueAmounts = DriverFactory.getDriver().findElements(By.className("list-group-item"));
 		int length = dueAmounts.size();
@@ -831,7 +824,6 @@ public class ReferralManagementPage {
 
 	public boolean settleAmount(String refName) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
-
 		selectReferralForBillSettle(refName);
 		CommonMethods.waitForElementToClickable(submit);
 		Thread.sleep(1000);
@@ -897,7 +889,7 @@ public class ReferralManagementPage {
 		ArrayList<Integer> amount = new ArrayList<>();
 		amount.add(settlementAmt);
 		amount.add(duductedAmount);
-
+	
 		return amount;
 
 	}
@@ -953,7 +945,7 @@ public class ReferralManagementPage {
 		CommonMethods.waitForElementToClickable(submit);
 		Thread.sleep(1000);
 		DriverFactory.getDriver().findElement(By.id("highlight0")).click();
-		int flag=0;
+		int flag = 0;
 		if (mode.equals("Cheque")) {
 			Select ele = new Select(paymentType);
 			ele.selectByVisibleText("Cheque");
@@ -988,7 +980,8 @@ public class ReferralManagementPage {
 		CommonMethods.waitForElementToVisible(successDiv);
 		String success = successDiv.getText();
 
-		if (success.contains("×\n" + "Close\n"+ "Success! Click on below links to print the receipts for successful bill settlements")) {
+		if (success.contains("×\n" + "Close\n"
+				+ "Success! Click on below links to print the receipts for successful bill settlements")) {
 			Assert.assertTrue(true);
 		}
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
@@ -1003,14 +996,15 @@ public class ReferralManagementPage {
 		CommonMethods.waitForElementToClickable(textInput);
 		textInput.click();
 		CommonMethods.waitForElementToClickable(savebillSetting);
-		List<WebElement> confirmMode = paymentTransactions.findElements(By.xpath("//td[contains(text(),'" + value + "')]"));
+		List<WebElement> confirmMode = paymentTransactions
+				.findElements(By.xpath("//td[contains(text(),'" + value + "')]"));
 
 		if (confirmMode.get(0).getText().equals(value)) {
 			flag++;
 		}
 		// DriverFactory.getDriver().close();
 		DriverFactory.getDriver().switchTo().window(beforehandle);
-		if(flag==1) {
+		if (flag == 1) {
 			return true;
 		}
 		return false;
@@ -1058,9 +1052,9 @@ public class ReferralManagementPage {
 		int length = billsList.size();
 
 		if (length > 4) {
-			return true; 
+			return true;
 		}
-		return false; 
+		return false;
 
 	}
 
@@ -1079,7 +1073,8 @@ public class ReferralManagementPage {
 		fileInputExcel.sendKeys("/Users/shekhar/Downloads/ReferralList .xlsx");
 		submitExcel.click();
 		Thread.sleep(1000);
-		List<WebElement> successLabel = DriverFactory.getDriver().findElements(By.xpath("//span[contains(text(),'Success')]"));
+		List<WebElement> successLabel = DriverFactory.getDriver()
+				.findElements(By.xpath("//span[contains(text(),'Success')]"));
 		int length = successLabel.size();
 		deleteBulkUploadedReferral(Doc1);
 		deleteBulkUploadedReferral(Doc2);

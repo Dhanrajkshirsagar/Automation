@@ -59,15 +59,12 @@ public class CommonMethods {
 		DriverFactory.getDriverWait().until(ExpectedConditions.visibilityOf(element));
 
 	}
-	
+
 	public static void waitForAllElementsToVisible(List<WebElement> elements) throws Exception {
 
 		DriverFactory.getDriverWait().until(ExpectedConditions.visibilityOfAllElements(elements));
 
 	}
-
-	
-
 
 	/**
 	 * @param filePath
@@ -100,7 +97,7 @@ public class CommonMethods {
 		return saltStr;
 
 	}
-	
+
 	public static String generateRandomName() {
 
 		String text = "";
@@ -164,7 +161,7 @@ public class CommonMethods {
 
 		return "6004" + pNumber;
 	}
-	
+
 	public static String getBackDate(int add1) {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy");
@@ -204,19 +201,19 @@ public class CommonMethods {
 		String newDate = sdf.format(cal.getTime());
 		return newDate;
 	}
-	
-	 public static int getAge(int day, int month, int year) {
-		    //calculating age from dob
-		    Calendar dob = Calendar.getInstance();
-		    Calendar today = Calendar.getInstance();
-		    dob.set(year, month, day);
-		    int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
-		    if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
-		        age--;
-		    }
-		    return age;
+
+	public static int getAge(int day, int month, int year) {
+		// calculating age from dob
+		Calendar dob = Calendar.getInstance();
+		Calendar today = Calendar.getInstance();
+		dob.set(year, month, day);
+		int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+		if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
+			age--;
 		}
-	 
+		return age;
+	}
+
 	public static String getTime(int add1) {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm ");
@@ -247,5 +244,4 @@ public class CommonMethods {
 		return newDate;
 	}
 
-	
 }
