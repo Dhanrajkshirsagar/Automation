@@ -509,14 +509,15 @@ public class OrganizationManagementPage {
 	public ArrayList<String> contactFieldValidation(String contact) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		addOrgTab.click();
-		String border = null;
-		String mesg = null;
-		Thread.sleep(300);
+		String border = null ;
+		String mesg = null ;
+		ArrayList<String> list = new ArrayList<>();
 		if (contact.equals("8275369428")) {
 			orgnContact.sendKeys(contact);
 			orgAlternateContact.click();
 			Thread.sleep(500);
 			border = orgnContact.getCssValue("border-color");
+			list.add(border);
 		}
 		if (contact.equals("78452")) {
 			orgnContact.sendKeys(contact);
@@ -524,10 +525,8 @@ public class OrganizationManagementPage {
 			CommonMethods.waitForElementToVisible(errormsg);
 			Thread.sleep(500);
 			mesg = errormsg.getText();
+			list.add(mesg);
 		}
-		ArrayList<String> list = new ArrayList<>();
-		list.add(border);
-		list.add(mesg);
 
 		return list;
 
@@ -567,6 +566,7 @@ public class OrganizationManagementPage {
 		orgnName.sendKeys(orgname);
 		String advance = null;
 		String credit = null;
+		ArrayList<String> list = new ArrayList<>();
 		if (payType.equals("Payment Type (Default: Walk-in)")) {
 			Select ele = new Select(orgPaymentType);
 			ele.selectByVisibleText("Payment Type (Default: Walk-in)");
@@ -590,25 +590,20 @@ public class OrganizationManagementPage {
 		CommonMethods.waitForElementToVisible(orgnName);
 		Thread.sleep(500);
 		String payTypeText = orgPaymentType.getAttribute("value");
-
+		list.add(payTypeText);
 		if (payType.equals("Prepaid")) {
 			advance = currentDue.getAttribute("value");
-
+			list.add(advance);
 		}
 
 		if (payType.equals("Postpaid")) {
 			credit = creditLimit.getAttribute("value");
-
+			list.add(credit);
 		}
-		ArrayList<String> list = new ArrayList<>();
-		list.add(payTypeText);
-		list.add(advance);
-		list.add(credit);
-
 		orgDeleteButton.click();
 		CommonMethods.waitForElementToClickable(orgDelete);
 		orgDelete.click();
-
+		System.out.println(list);
 		return list;
 
 	}
@@ -1096,7 +1091,7 @@ public class OrganizationManagementPage {
 		ele.click();
 		CommonMethods.waitForElementToClickable(Update);
 		Update.click();
-
+		Thread.sleep(500);
 		if (organizationTotalRev.isEnabled()) {
 			return false;
 		}
@@ -1113,9 +1108,9 @@ public class OrganizationManagementPage {
 		selectOrganizationForAssignList(orgname);
 		CommonMethods.waitForElementToClickable(listOrgButton);
 		if (errorDiv.isDisplayed()) {
-			return true;
+			return false;
 		}
-		return false;
+		return true;
 
 	}
 
@@ -1284,7 +1279,7 @@ public class OrganizationManagementPage {
 		Thread.sleep(1000);
 
 		String startDay = CommonMethods.getstartDate(28);
-		String endDay = CommonMethods.getstartDate(2);
+		String endDay = CommonMethods.getstartDate(4);
 		orgSettlementDateRange.click();
 		daterangepickerstart.clear();
 		daterangepickerstart.sendKeys(startDay);
@@ -1296,7 +1291,6 @@ public class OrganizationManagementPage {
 
 		List<WebElement> dueAmounts = DriverFactory.getDriver().findElements(By.className("list-group-item"));
 		int length = dueAmounts.size();
-
 		int sum = 0;
 
 		for (int i = 1; i < length; i++) {
@@ -1307,12 +1301,9 @@ public class OrganizationManagementPage {
 			for (int j = 0; j < pendingBillsDue.size(); j++) {
 				dues = pendingBillsDue.get(j).getText();
 			}
-
 			int total = Integer.parseInt(dues);
 			sum = sum + total;
-
 		}
-
 		String dueAmount = orgDueAmount.getText();
 		int finalDue = Integer.parseInt(dueAmount);
 		ArrayList<Integer> list = new ArrayList<>();

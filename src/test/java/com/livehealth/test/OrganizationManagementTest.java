@@ -87,8 +87,11 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		ArrayList<String> list;
 		try {
 			list = organizationManagementPage.contactFieldValidation(contact);
+			if(contact.equals("8275369428")) {
 			softAssert.assertEquals(list.get(0), "rgb(255, 0, 0)");
-			softAssert.assertEquals(list.get(1), "Invalid number");
+			}else {
+			softAssert.assertEquals(list.get(0), "Invalid number");
+			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -131,9 +134,18 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		ArrayList<String> list;
 		try {
 			list = organizationManagementPage.paymentType(payType, orgName);
-			Assert.assertEquals(list.get(0), value);
-			softAssert.assertEquals(list.get(1), "5000");
-			softAssert.assertEquals(list.get(2), "5000");
+			if(payType.equals("Payment Type (Default: Walk-in)")) {
+			       softAssert.assertEquals(list.get(0), value);
+			     
+			}else {
+			if(payType.equals("Prepaid")) {
+					softAssert.assertEquals(list.get(1), "5000");
+					softAssert.assertEquals(list.get(0), value);
+			}else {
+				   softAssert.assertEquals(list.get(1), "5000");
+				   softAssert.assertEquals(list.get(0), value);
+				}
+			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			softAssert.assertTrue(false, e.getMessage());
