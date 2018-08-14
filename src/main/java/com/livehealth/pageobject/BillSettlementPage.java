@@ -17,7 +17,9 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
@@ -209,6 +211,9 @@ public class BillSettlementPage {
 	@FindBy(xpath = "//*[@id=\"organizationAmntDivId\"]/div[2]/b")
 	private WebElement OrgAdvanceAmount;
 
+	@FindBy(xpath = "//*[@id=\"searchPatientBar\"]/div/div[1]/button")
+	private WebElement searchPatientBar;
+
 	@PostConstruct
 	public void loadDriver() throws Exception {
 		PageFactory.initElements(DriverFactory.getDriver(), this);
@@ -235,7 +240,9 @@ public class BillSettlementPage {
 	public String patientBill(String name, String amount, String test1, String test2) throws Exception {
 		billUrl.click();
 		searchPatient.sendKeys(name);
-		Thread.sleep(1300);
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("/html/body/section/div[3]/div[2]/div/div[1]/span/span")));
 		searchPatient.sendKeys(Keys.ARROW_DOWN);
 		searchPatient.sendKeys(Keys.ENTER);
 		Thread.sleep(500);
@@ -246,13 +253,13 @@ public class BillSettlementPage {
 		saveBill.click();
 		billId = confirmBillId.getText();
 		String success = confirmBillMsgDiv.getText();
-		Thread.sleep(1000);
+		Thread.sleep(500);
 		backToRegistration.click();
 		return success;
 
 	}
 
-	public void selectTests(String testName) throws InterruptedException {
+	public void selectTests(String testName) throws Exception {
 		searchInputforTests.sendKeys(testName);
 		Thread.sleep(500);
 		searchInputforTests.sendKeys(Keys.ARROW_DOWN);
@@ -320,24 +327,30 @@ public class BillSettlementPage {
 	}
 
 	public ArrayList<String> editBillLink(String patientName) throws Exception {
+
+		WebDriver driver = DriverFactory.getDriver();
 		selectPatient(patientName);
 		CommonMethods.waitForElementToVisible(billList);
 		List<WebElement> bills = billList.findElements(By.name("labBillId"));
 		String billId = bills.get(1).getText();
 
-		String winHandleBefore = DriverFactory.getDriver().getWindowHandle();
-		List<WebElement> link = DriverFactory.getDriver().findElements(By.xpath("//a[contains(text(),'Edit Bill')] "));
+		String originalHandle = driver.getWindowHandle();
+		List<WebElement> link = driver.findElements(By.xpath("//a[contains(text(),'Edit Bill')] "));
 		link.get(1).click();
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+
+		for (String handle : driver.getWindowHandles()) {
+			if (!handle.equals(originalHandle)) {
+				driver.switchTo().window(handle);
+			}
 		}
-		String Url = DriverFactory.getDriver().getCurrentUrl();
+		String Url = driver.getCurrentUrl();
 		ArrayList<String> list = new ArrayList<>();
 		list.add(billId);
 		list.add(Url);
-		DriverFactory.getDriver().switchTo().window(winHandleBefore);
-		return list;
+		driver.close();
+		driver.switchTo().window(originalHandle);
 
+		return list;
 	}
 
 	public boolean billSettlement(String duepatientName) throws Exception {
@@ -383,7 +396,7 @@ public class BillSettlementPage {
 	public void selectPatient(String duepatientName) throws InterruptedException {
 		BillSettlemetTab.click();
 		searchCreditUsers.sendKeys(duepatientName);
-		Thread.sleep(2000);
+		Thread.sleep(1500);
 		searchCreditUsers.sendKeys(Keys.ARROW_DOWN);
 		searchCreditUsers.sendKeys(Keys.ENTER);
 	}
@@ -418,30 +431,30 @@ public class BillSettlementPage {
 
 	public ArrayList<String> searchPatientUsingContactNumber(String patientConct) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
+		WebDriver driver = DriverFactory.getDriver();
 		selectPatient(patientConct);
 		Thread.sleep(1000);
 		String name = custName.getText();
 		String originalHandle = DriverFactory.getDriver().getWindowHandle();
-		System.out.println("1111" + originalHandle);
-		DriverFactory.getDriver().findElement(By.id("linkDiv")).click();
-		String url = null;
-		for (String handle : DriverFactory.getDriver().getWindowHandles()) {
+		driver.findElement(By.id("linkDiv")).click();
+
+		for (String handle : driver.getWindowHandles()) {
 			if (!handle.equals(originalHandle)) {
-				DriverFactory.getDriver().switchTo().window(handle);
-				url = DriverFactory.getDriver().getCurrentUrl();
-//				DriverFactory.getDriver().close();
+				driver.switchTo().window(handle);
 			}
 		}
+		String url=driver.getCurrentUrl();
 		ArrayList<String> list = new ArrayList<>();
 		list.add(name);
 		list.add(url);
-		
-		DriverFactory.getDriver().switchTo().window(originalHandle);
+		driver.close();
+		driver.switchTo().window(originalHandle);
 		return list;
 	}
 
 	public String paymentMode(String name, String mode, String value) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
+		WebDriver driver = DriverFactory.getDriver();
 		selectPatient(name);
 		CommonMethods.waitForElementToVisible(billList);
 		List<WebElement> bills = billList.findElements(By.tagName("li"));
@@ -478,22 +491,22 @@ public class BillSettlementPage {
 		}
 		Thread.sleep(1000);
 		submit.click();
-		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].scrollIntoView();", searchCreditUsers);
 		Thread.sleep(1000);
-		List<WebElement> link = DriverFactory.getDriver().findElements(By.xpath("//a[contains(text(),'Edit Bill')] "));
+		String beforehandle = driver.getWindowHandle();
+		List<WebElement> link = driver.findElements(By.xpath("//a[contains(text(),'Edit Bill')] "));
 		link.get(0).click();
-		String beforehandle = DriverFactory.getDriver().getWindowHandle();
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
 		Thread.sleep(1000);
-		DriverFactory.getDriver().findElement(By.id("textInput")).click();
+		driver.findElement(By.id("textInput")).click();
 		Thread.sleep(1000);
-		String billListPayMode = DriverFactory.getDriver()
-				.findElement(By.xpath("//td[contains(text(),'" + value + "')]")).getText();
-		// DriverFactory.getDriver().close();
-		DriverFactory.getDriver().switchTo().window(beforehandle);
+		String billListPayMode = driver.findElement(By.xpath("//td[contains(text(),'" + value + "')]")).getText();
+		driver.close();
+		driver.switchTo().window(beforehandle);
 		return billListPayMode;
 
 	}
@@ -510,7 +523,7 @@ public class BillSettlementPage {
 			return false;
 		}
 		return true;
-		
+
 	}
 
 	public String commenBillAction(String option, String url, int length) throws Exception {
@@ -518,42 +531,41 @@ public class BillSettlementPage {
 		BillSettlemetTab.click();
 		billPendingId.click();
 		Thread.sleep(2000);
+		SoftAssert softAssert = new SoftAssert();
+		WebDriver driver = DriverFactory.getDriver();
 		List<WebElement> opt = userBillsContainer.findElements(By.className("dropdown-toggle"));
 		opt.get(0).click();
-		String beforehandle = DriverFactory.getDriver().getWindowHandle();
+		String beforehandle = driver.getWindowHandle();
 		if (option.equals("Complete & Print Bill")) {
-			WebElement links = DriverFactory.getDriver()
-					.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
+			WebElement links = driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
 			links.click();
 			Thread.sleep(1000);
 			String success = msg.getText();
-			Assert.assertEquals(success, " ×\n" + "Success! Bill completed Successfully.");
+			softAssert.assertEquals(success, "×\n" + "Success! Bill completed Successfully.");
 		}
 
 		if (option.equals("Print Bill")) {
-			WebElement links = DriverFactory.getDriver()
-					.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
+			WebElement links = driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
 			links.click();
 		}
 
 		if (option.equals("Edit Bill")) {
-			WebElement links = DriverFactory.getDriver()
-					.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
+			WebElement links = driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
 			links.click();
 		}
 
 		if (option.equals("View Transactions")) {
-			WebElement links = DriverFactory.getDriver()
-					.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
+			WebElement links = driver.findElement(By.xpath("//a[contains(text(),'" + option + "')] "));
 			links.click();
 		}
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
-		String Url = DriverFactory.getDriver().getCurrentUrl();
+		String Url = driver.getCurrentUrl();
 		String actualUrl = Url.substring(0, length);
-		// DriverFactory.getDriver().close();
-		DriverFactory.getDriver().switchTo().window(beforehandle);
+		driver.close();
+		driver.switchTo().window(beforehandle);
+		softAssert.assertAll();
 		return actualUrl;
 	}
 
@@ -608,51 +620,48 @@ public class BillSettlementPage {
 		int length = link.size();
 
 		if (length >= 1) {
-			return false; 
+			return false;
 		}
-		return true; 
+		return true;
 	}
 
-	public void completedBillsActions(String option, String url, int length) throws Exception {
+	public String completedBillsActions(String option, String url, int length) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		BillSettlemetTab.click();
 		billPendingId.click();
 		Thread.sleep(1000);
 		completedBills.click();
 		Thread.sleep(1000);
+		WebDriver driver = DriverFactory.getDriver();
 		List<WebElement> opt = userBillsContainer.findElements(By.className("dropdown-toggle"));
 		opt.get(0).click();
-
+		String beforehandle = driver.getWindowHandle();
 		if (option.equals("Print Bill")) {
-			WebElement links = DriverFactory.getDriver()
-					.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+			WebElement links = driver.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
 			links.click();
 		}
 
 		if (option.equals("Edit Bill")) {
-			WebElement links = DriverFactory.getDriver()
-					.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+			WebElement links = driver.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
 			links.click();
 		}
 
 		if (option.equals("View Transactions")) {
-			WebElement links = DriverFactory.getDriver()
-					.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+			WebElement links = driver.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
 			links.click();
 		}
-		String beforehandle = DriverFactory.getDriver().getWindowHandle();
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
-		try {
-			String Url = DriverFactory.getDriver().getCurrentUrl();
-			String actualUrl = Url.substring(0, length);
-			Assert.assertEquals(actualUrl, url);
-			// TestBase.driver.close();
-			DriverFactory.getDriver().switchTo().window(beforehandle);
-		} catch (Exception e) {
-			System.out.println("completedBillsActions fails");
-		}
+
+		String Url = DriverFactory.getDriver().getCurrentUrl();
+		String actualUrl = Url.substring(0, length);
+		Assert.assertEquals(actualUrl, url);
+		driver.close();
+		driver.switchTo().window(beforehandle);
+		return actualUrl;
+
 	}
 
 	public boolean SearchByPatientName(String option, String name) throws Exception {
@@ -706,15 +715,15 @@ public class BillSettlementPage {
 		return false;
 	}
 
-	public void searchedBillsActions(String option, String url, int length, String name) throws Exception {
+	public String searchedBillsActions(String option, String url, int length, String name) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		BillSettlemetTab.click();
 		billPendingId.click();
 		Thread.sleep(1000);
 		searchBills.click();
-		refAndPatientoptions.click();
-		WebElement link = DriverFactory.getDriver()
-				.findElement(By.xpath("//a[contains(text(),'Search by Patient Name')] "));
+		searchPatientBar.click();
+		WebDriver driver = DriverFactory.getDriver();
+		WebElement link = driver.findElement(By.xpath("//a[contains(text(),'Search by Patient Name')] "));
 		link.click();
 		searchBillsforRefAndPatient.sendKeys(name);
 		Thread.sleep(1000);
@@ -723,33 +732,32 @@ public class BillSettlementPage {
 		Thread.sleep(1000);
 		List<WebElement> opt = userBillsContainer.findElements(By.className("dropdown-toggle"));
 		opt.get(0).click();
+		String beforehandle = driver.getWindowHandle();
 		if (option.equals("Print Bill")) {
-			WebElement links = DriverFactory.getDriver()
-					.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+			WebElement links = driver.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
 			links.click();
 		}
 
 		if (option.equals("Edit Bill")) {
-			WebElement links = DriverFactory.getDriver()
-					.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+			WebElement links = driver.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
 			links.click();
 		}
 
 		if (option.equals("View Transactions")) {
-			WebElement links = DriverFactory.getDriver()
-					.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
+			WebElement links = driver.findElement(By.xpath("//a[contains(text(),'" + option + "')]"));
 			links.click();
 		}
-		String beforehandle = DriverFactory.getDriver().getWindowHandle();
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
-			String Url = DriverFactory.getDriver().getCurrentUrl();
-			String actualUrl = Url.substring(0, length);
-			Assert.assertEquals(actualUrl, url);
-			// DriverFactory.getDriver().close();
-			DriverFactory.getDriver().switchTo().window(beforehandle);
-	
+		String Url = DriverFactory.getDriver().getCurrentUrl();
+		String actualUrl = Url.substring(0, length);
+		Assert.assertEquals(actualUrl, url);
+		driver.close();
+		driver.switchTo().window(beforehandle);
+		return actualUrl;
+
 	}
 
 	public boolean viewAllBillsList() throws Exception {
@@ -777,6 +785,8 @@ public class BillSettlementPage {
 
 	public String generateInvoice(String invType, String name) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
+		WebDriver driver = DriverFactory.getDriver();
+		SoftAssert softAssert = new SoftAssert();
 		BillSettlemetTab.click();
 		invoiceReportTab.click();
 		if (invType.equals("Organization")) {
@@ -798,18 +808,21 @@ public class BillSettlementPage {
 		searchInvoiceName.sendKeys(Keys.ARROW_DOWN);
 		searchInvoiceName.sendKeys(Keys.ENTER);
 		Thread.sleep(1000);
+		String beforehandle = driver.getWindowHandle();
 		GenerateInvoice.click();
 		Thread.sleep(1000);
 		String success = errorDiv.getText();
-		Assert.assertEquals(success,"×\n" + "Invoice has been generated successfully! Click here to print the invoice.");
-		String beforehandle = DriverFactory.getDriver().getWindowHandle();
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+		softAssert.assertEquals(success,
+				"×\n" + "Invoice has been generated successfully! Click here to print the invoice.");
+
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
 		String url = DriverFactory.getDriver().getCurrentUrl();
 		String actualUrl = url.substring(0, 46);
-//		DriverFactory.getDriver().close();
-		DriverFactory.getDriver().switchTo().window(beforehandle);
+		driver.close();
+		driver.switchTo().window(beforehandle);
+		softAssert.assertAll();
 		return actualUrl;
 
 	}
@@ -866,7 +879,6 @@ public class BillSettlementPage {
 			return true;
 		}
 		return false;
-	
 
 	}
 

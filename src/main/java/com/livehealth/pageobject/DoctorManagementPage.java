@@ -7,12 +7,15 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.asserts.*;
 import com.livehealth.base.DriverFactory;
@@ -819,17 +822,18 @@ public class DoctorManagementPage {
 
 	public String viewListLink(String refName) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
+		WebDriver driver=DriverFactory.getDriver();
 		DoctorRevenueManagementTab.click();
 		selectReferralForAssignList(refName);
 		CommonMethods.waitForElementToClickable(listLink);
-		listLink.click();
 		String beforehandle = DriverFactory.getDriver().getWindowHandle();
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+		listLink.click();
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
-		String currentUrl = DriverFactory.getDriver().getCurrentUrl();
-		// DriverFactory.getDriver().close();
-		DriverFactory.getDriver().switchTo().window(beforehandle);
+		String currentUrl = driver.getCurrentUrl();
+		driver.close();
+		driver.switchTo().window(beforehandle);
 		return currentUrl;
 
 	}
@@ -999,7 +1003,9 @@ public class DoctorManagementPage {
 
 		billUrl.click();
 		searchPatient.sendKeys(name);
-		Thread.sleep(1500);
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("/html/body/section/div[3]/div[2]/div/div[1]/span/span")));
 		searchPatient.sendKeys(Keys.ARROW_DOWN);
 		searchPatient.sendKeys(Keys.ENTER);
 		Thread.sleep(500);
@@ -1016,9 +1022,11 @@ public class DoctorManagementPage {
 
 	}
 
-	public void selectTests(String testName) throws InterruptedException {
+	public void selectTests(String testName) throws Exception {
 		searchInputforTests.sendKeys(testName);
-		Thread.sleep(500);
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span")));
 		searchInputforTests.sendKeys(Keys.ARROW_DOWN);
 		searchInputforTests.sendKeys(Keys.ENTER);
 		concession.sendKeys(Keys.ENTER);

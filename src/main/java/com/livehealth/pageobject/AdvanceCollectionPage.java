@@ -4,6 +4,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.logging.impl.Log4JLogger;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
@@ -128,19 +129,21 @@ public class AdvanceCollectionPage {
 
 	public void collectAdanceAndPrintReceipt(String name, String amount) throws Exception {
 		// advanceCollectionTab.click();
+		WebDriver driver=DriverFactory.getDriver();
 		searchPatient.clear();
 		selectPatient(name);
 		advanceAmount.sendKeys(amount);
+		String winHandleBefore = driver.getWindowHandle();
 		submitAndPrint.click();
-		String winHandleBefore = DriverFactory.getDriver().getWindowHandle();
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
 		String actualUrl = DriverFactory.getDriver().getCurrentUrl();
 		String afterSubmitUrl = actualUrl.substring(0, 53);
 		Assert.assertEquals(afterSubmitUrl, "https://beta.livehealth.solutions/printAdvanceReceipt");
-//		DriverFactory.getDriver().close();
-		DriverFactory.getDriver().switchTo().window(winHandleBefore);
+		driver.close();
+		driver.switchTo().window(winHandleBefore);
 	}
 
 }

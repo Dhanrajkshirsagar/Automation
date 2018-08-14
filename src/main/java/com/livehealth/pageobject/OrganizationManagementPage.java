@@ -15,7 +15,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 import com.livehealth.base.DriverFactory;
@@ -423,7 +425,9 @@ public class OrganizationManagementPage {
 	public String patientBill(String name, String amount, String test1, String test2) throws Exception {
 		billUrl.click();
 		searchPatient.sendKeys(name);
-		Thread.sleep(1300);
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("/html/body/section/div[3]/div[2]/div/div[1]/span/span")));
 		searchPatient.sendKeys(Keys.ARROW_DOWN);
 		searchPatient.sendKeys(Keys.ENTER);
 		Thread.sleep(500);
@@ -439,9 +443,11 @@ public class OrganizationManagementPage {
 
 	}
 
-	public void selectTests(String testName) throws InterruptedException {
+	public void selectTests(String testName) throws Exception {
 		searchInputforTests.sendKeys(testName);
-		Thread.sleep(500);
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span")));
 		searchInputforTests.sendKeys(Keys.ARROW_DOWN);
 		searchInputforTests.sendKeys(Keys.ENTER);
 		concession.sendKeys(Keys.ENTER);
@@ -509,8 +515,8 @@ public class OrganizationManagementPage {
 	public ArrayList<String> contactFieldValidation(String contact) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		addOrgTab.click();
-		String border = null ;
-		String mesg = null ;
+		String border = null;
+		String mesg = null;
 		ArrayList<String> list = new ArrayList<>();
 		if (contact.equals("8275369428")) {
 			orgnContact.sendKeys(contact);
@@ -603,7 +609,6 @@ public class OrganizationManagementPage {
 		orgDeleteButton.click();
 		CommonMethods.waitForElementToClickable(orgDelete);
 		orgDelete.click();
-		System.out.println(list);
 		return list;
 
 	}
@@ -726,27 +731,27 @@ public class OrganizationManagementPage {
 				Assert.assertTrue(true);
 			}
 		}
-			String name = CommonMethods.generateRandomName();
-			String subname = name.substring(0, 5);
-			newDirectFirstName.sendKeys(name);
-			newDirectRadiobutton.click();
-			newDirectSaveForm.click();
-			CommonMethods.waitForElementToVisible(userNm);
-			String currentUrl = DriverFactory.getDriver().getCurrentUrl();
-			String subURL = currentUrl.substring(0, 42);
-
-			Thread.sleep(500);
-			registerUrl.click();
-			newDirectFirstName.sendKeys(subname);
-			Thread.sleep(2000);
-			newDirectFirstName.sendKeys(Keys.ARROW_DOWN);
-			newDirectFirstName.sendKeys(Keys.ENTER);
-			newDirectSaveForm.click();
-			CommonMethods.waitForElementToVisible(newDirectErrorDiv);
-			String success = newDirectErrorDiv.getText();
-			list = new ArrayList<>();
-			list.add(subURL);
-			list.add(success);
+		String name = CommonMethods.generateRandomName();
+		String subname = name.substring(0, 5);
+		newDirectFirstName.sendKeys(name);
+		newDirectRadiobutton.click();
+		newDirectSaveForm.click();
+		CommonMethods.waitForElementToVisible(userNm);
+		String currentUrl = DriverFactory.getDriver().getCurrentUrl();
+		String subURL = currentUrl.substring(0, 42);
+		Thread.sleep(500);
+		registerUrl.click();
+		newDirectFirstName.sendKeys(subname);
+		Thread.sleep(2000);
+		newDirectFirstName.sendKeys(Keys.ARROW_DOWN);
+		newDirectFirstName.sendKeys(Keys.ENTER);
+		newDirectRadiobutton.click();
+		newDirectSaveForm.click();
+		CommonMethods.waitForElementToVisible(newDirectErrorDiv);
+		String success = newDirectErrorDiv.getText();
+		list = new ArrayList<>();
+		list.add(subURL);
+		list.add(success);
 
 		return list;
 
@@ -1045,18 +1050,19 @@ public class OrganizationManagementPage {
 	}
 
 	public String viewListLink(String orgname) throws Exception {
-		DriverFactory.getDriver().navigate().refresh();
-
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().refresh();
 		selectOrganizationForAssignList(orgname);
 		CommonMethods.waitForElementToClickable(listLink);
+		String beforehandle = driver.getWindowHandle();
 		listLink.click();
-		String beforehandle = DriverFactory.getDriver().getWindowHandle();
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
 		String currentUrl = DriverFactory.getDriver().getCurrentUrl();
-		// DriverFactory.getDriver().close();
-		DriverFactory.getDriver().switchTo().window(beforehandle);
+		driver.close();
+		driver.switchTo().window(beforehandle);
 		return currentUrl;
 
 	}
@@ -1168,31 +1174,28 @@ public class OrganizationManagementPage {
 	}
 
 	public String approveAdvanceOrgAmount() throws Exception {
-		DriverFactory.getDriver().get("https://beta.livehealth.solutions/organization/organizationAdvance/");
+		WebDriver driver = DriverFactory.getDriver();
+		driver.get("https://beta.livehealth.solutions/organization/organizationAdvance/");
 		Thread.sleep(1000);
 		String success;
-		List<WebElement> appoveList = DriverFactory.getDriver()
-				.findElements(By.xpath("//button[contains(text(),'Approve')]"));
+		List<WebElement> appoveList = driver.findElements(By.xpath("//button[contains(text(),'Approve')]"));
 		appoveList.get(0).click();
 		CommonMethods.waitForElementToVisible(trancErrorDiv);
 		success = trancErrorDiv.getText();
 
-		List<WebElement> Options = DriverFactory.getDriver().findElements(By.className("dropdown-toggle"));
+		List<WebElement> Options = driver.findElements(By.className("dropdown-toggle"));
 		Options.get(3).click();
-		List<WebElement> printlist = DriverFactory.getDriver()
-				.findElements(By.xpath("//a[contains(text(),'Print Receipt')]"));
+		List<WebElement> printlist = driver.findElements(By.xpath("//a[contains(text(),'Print Receipt')]"));
+		String beforehandle = driver.getWindowHandle();
 		printlist.get(0).click();
-
-		String beforehandle = DriverFactory.getDriver().getWindowHandle();
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
-		String actualUrl = DriverFactory.getDriver().getCurrentUrl();
+		String actualUrl = driver.getCurrentUrl();
 		String subActualUrl = actualUrl.substring(0, 62);
 		Assert.assertEquals(subActualUrl, "https://beta.livehealth.solutions/printLedgerReceipt/?orgTrnId");
-
-		// DriverFactory.getDriver().close();
-		DriverFactory.getDriver().switchTo().window(beforehandle);
+		driver.close();
+		driver.switchTo().window(beforehandle);
 
 		return success;
 
@@ -1331,21 +1334,21 @@ public class OrganizationManagementPage {
 	}
 
 	public String editBillLink(String orgname) throws Exception {
-		DriverFactory.getDriver().navigate().refresh();
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().refresh();
 		selectOrganizationForBillSettle(orgname);
 		Thread.sleep(1000);
-
-		List<WebElement> editBill = DriverFactory.getDriver()
-				.findElements(By.xpath("//a[contains(text(),'Edit Bill')]"));
+		String beforehandle = driver.getWindowHandle();
+		List<WebElement> editBill = driver.findElements(By.xpath("//a[contains(text(),'Edit Bill')]"));
 		editBill.get(0).click();
-		String beforehandle = DriverFactory.getDriver().getWindowHandle();
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
 		String url = DriverFactory.getDriver().getCurrentUrl();
 		String expectedUrl = url.substring(0, 44);
-		// DriverFactory.getDriver().close();
-		DriverFactory.getDriver().switchTo().window(beforehandle);
+		driver.close();
+		driver.switchTo().window(beforehandle);
 		return expectedUrl;
 
 	}
@@ -1426,11 +1429,12 @@ public class OrganizationManagementPage {
 	}
 
 	public boolean paymentType(String mode, String value, String orgname) throws Exception {
-		DriverFactory.getDriver().navigate().refresh();
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().refresh();
 		selectOrganizationForBillSettle(orgname);
 		CommonMethods.waitForElementToClickable(orgSubmit);
 		Thread.sleep(1000);
-		DriverFactory.getDriver().findElement(By.id("orgHighlight0")).click();
+		driver.findElement(By.id("orgHighlight0")).click();
 		int flag = 0;
 		if (mode.equals("Cheque")) {
 			Select ele = new Select(orgPaymentType);
@@ -1470,14 +1474,13 @@ public class OrganizationManagementPage {
 				+ "Success! Click on below links to print the receipts for successful bill settlements")) {
 			flag++;
 		}
-		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
+		String beforehandle = driver.getWindowHandle();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].scrollIntoView();", searchCreditOrganizations);
-		List<WebElement> editBill = DriverFactory.getDriver()
-				.findElements(By.xpath("//a[contains(text(),'Edit Bill')]"));
+		List<WebElement> editBill = driver.findElements(By.xpath("//a[contains(text(),'Edit Bill')]"));
 		editBill.get(0).click();
-		String beforehandle = DriverFactory.getDriver().getWindowHandle();
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
 
 		CommonMethods.waitForElementToClickable(textInput);
@@ -1488,8 +1491,8 @@ public class OrganizationManagementPage {
 		if (confirmMode.get(0).getText().equals(value)) {
 			flag++;
 		}
-		// DriverFactory.getDriver().close();
-		DriverFactory.getDriver().switchTo().window(beforehandle);
+		driver.close();
+		driver.switchTo().window(beforehandle);
 		if (flag == 2) {
 			return true;
 		}

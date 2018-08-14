@@ -33,5 +33,8 @@ public class Constants {
 	public static String ReferralSettlemet_URL = "https://beta.livehealth.solutions/referral/settlement/";
 	
 	public static String ReferralManagement_URL = "https://beta.livehealth.solutions/referralManagement/";
+	
+	public static String LOGOUT_URL = "https://beta.livehealth.solutions/logout";
+	
 
 }

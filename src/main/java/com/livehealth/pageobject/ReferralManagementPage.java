@@ -14,7 +14,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 import org.testng.Assert;
 import com.livehealth.base.DriverFactory;
@@ -368,7 +370,9 @@ public class ReferralManagementPage {
 	public String patientBill(String name, String amount, String test1, String test2) throws Exception {
 		billUrl.click();
 		searchPatient.sendKeys(name);
-		Thread.sleep(1300);
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("/html/body/section/div[3]/div[2]/div/div[1]/span/span")));
 		searchPatient.sendKeys(Keys.ARROW_DOWN);
 		searchPatient.sendKeys(Keys.ENTER);
 		Thread.sleep(500);
@@ -384,9 +388,11 @@ public class ReferralManagementPage {
 
 	}
 
-	public void selectTests(String testName) throws InterruptedException {
+	public void selectTests(String testName) throws Exception {
 		searchInputforTests.sendKeys(testName);
-		Thread.sleep(500);
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span")));
 		searchInputforTests.sendKeys(Keys.ARROW_DOWN);
 		searchInputforTests.sendKeys(Keys.ENTER);
 		concession.sendKeys(Keys.ENTER);
@@ -681,18 +687,19 @@ public class ReferralManagementPage {
 	}
 
 	public String viewListLink(String refName) throws Exception {
-		DriverFactory.getDriver().navigate().refresh();
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().refresh();
 		selectReferralForAssignList(refName);
 		CommonMethods.waitForElementToClickable(listLink);
-		String beforehandle = DriverFactory.getDriver().getWindowHandle();
+		String beforehandle = driver.getWindowHandle();
 		listLink.click();
 
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
 		String currentUrl = DriverFactory.getDriver().getCurrentUrl();
-		// DriverFactory.getDriver().close();
-		DriverFactory.getDriver().switchTo().window(beforehandle);
+		driver.close();
+		driver.switchTo().window(beforehandle);
 		return currentUrl;
 
 	}
@@ -800,22 +807,22 @@ public class ReferralManagementPage {
 	}
 
 	public String editBillLink(String refName) throws Exception {
-		DriverFactory.getDriver().navigate().refresh();
+		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().refresh();
 		selectReferralForBillSettle(refName);
 		Thread.sleep(1000);
 
-		java.util.List<WebElement> editBill = DriverFactory.getDriver()
-				.findElements(By.xpath("//a[contains(text(),'Edit Bill')]"));
+		java.util.List<WebElement> editBill = driver.findElements(By.xpath("//a[contains(text(),'Edit Bill')]"));
 		String beforehandle = DriverFactory.getDriver().getWindowHandle();
 		editBill.get(0).click();
 
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
-		String url = DriverFactory.getDriver().getCurrentUrl();
+		String url = driver.getCurrentUrl();
 		String expectedUrl = url.substring(0, 44);
-		// DriverFactory.getDriver().close();
-		DriverFactory.getDriver().switchTo().window(beforehandle);
+		driver.close();
+		driver.switchTo().window(beforehandle);
 		return expectedUrl;
 
 	}
@@ -889,7 +896,7 @@ public class ReferralManagementPage {
 		ArrayList<Integer> amount = new ArrayList<>();
 		amount.add(settlementAmt);
 		amount.add(duductedAmount);
-	
+
 		return amount;
 
 	}
@@ -940,11 +947,12 @@ public class ReferralManagementPage {
 	}
 
 	public boolean paymentType(String mode, String value, String refName) throws Exception {
-		DriverFactory.getDriver().navigate().refresh();
+		WebDriver driver=DriverFactory.getDriver();
+		driver.navigate().refresh();
 		selectReferralForBillSettle(refName);
 		CommonMethods.waitForElementToClickable(submit);
 		Thread.sleep(1000);
-		DriverFactory.getDriver().findElement(By.id("highlight0")).click();
+		driver.findElement(By.id("highlight0")).click();
 		int flag = 0;
 		if (mode.equals("Cheque")) {
 			Select ele = new Select(paymentType);
@@ -986,11 +994,11 @@ public class ReferralManagementPage {
 		}
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 		js.executeScript("arguments[0].scrollIntoView();", searchCreditReferrals);
-		String beforehandle = DriverFactory.getDriver().getWindowHandle();
+		String beforehandle = driver.getWindowHandle();
 		editBill.click();
 
-		for (String winHandle : DriverFactory.getDriver().getWindowHandles()) {
-			DriverFactory.getDriver().switchTo().window(winHandle);
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
 		}
 
 		CommonMethods.waitForElementToClickable(textInput);
@@ -1002,8 +1010,8 @@ public class ReferralManagementPage {
 		if (confirmMode.get(0).getText().equals(value)) {
 			flag++;
 		}
-		// DriverFactory.getDriver().close();
-		DriverFactory.getDriver().switchTo().window(beforehandle);
+		driver.close();
+		driver.switchTo().window(beforehandle);
 		if (flag == 1) {
 			return true;
 		}

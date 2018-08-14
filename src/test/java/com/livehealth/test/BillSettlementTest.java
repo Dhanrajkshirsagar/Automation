@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -15,7 +14,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-
 import com.livehealth.base.DriverFactory;
 import com.livehealth.config.ConfigProperties;
 import com.livehealth.config.Constants;
@@ -50,14 +48,14 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 
 	}
 
-	@Test(priority=1,dataProvider = "testsData", groups = { "BillSettlement" })
+	@Test(priority = 1, dataProvider = "testsData", groups = { "BillSettlement" })
 	public void verifyBill(String amount, String test1, String test2) {
 		SoftAssert softAssert = new SoftAssert();
 		String success;
 		try {
 			for (int i = 0; i < 3; i++) {
-				 success=billSettlementPage.patientBill("tushar", amount, test1, test2);
-				 softAssert.assertEquals(success, "×\n" +"Bill saved successfully.");
+				success = billSettlementPage.patientBill("tushar", amount, test1, test2);
+				softAssert.assertEquals(success, "×\n" + "Bill saved successfully.");
 			}
 
 		} catch (Exception e) {
@@ -67,14 +65,14 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		softAssert.assertAll();
 	}
 
-	@Test(priority=2,groups = { "BillSettlement" })
+	@Test(priority = 2, groups = { "BillSettlement" })
 	public void verifyBill() {
 		SoftAssert softAssert = new SoftAssert();
 		String success;
 		try {
 			for (int i = 0; i < 3; i++) {
-				success=billSettlementPage.patientBill("8275369427", "200", "CR", "li");
-				softAssert.assertEquals(success, "×\n" +"Bill saved successfully.");
+				success = billSettlementPage.patientBill("8275369427", "200", "CR", "li");
+				softAssert.assertEquals(success, "×\n" + "Bill saved successfully.");
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -83,7 +81,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		softAssert.assertAll();
 	}
 
-	@Test(priority=3,groups = { "BillSettlement" })
+	@Test(priority = 3, groups = { "BillSettlement" })
 	public void verifyBillSettlementPage() {
 
 		try {
@@ -96,11 +94,11 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 	}
 
 	// In this case we have to verify patient name,bill ids,--------//
-	@Test(priority=4,groups = { "BillSettlement" })
+	@Test(priority = 4, groups = { "BillSettlement" })
 	public void verifyBillSettlementAllDetails() {
-		boolean flag ;
+		boolean flag;
 		try {
-			flag=billSettlementPage.verifydetails("tushar");
+			flag = billSettlementPage.verifydetails("tushar");
 			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -108,7 +106,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority=5,groups = { "BillSettlement", "Test" })
+	@Test(priority = 5, groups = { "BillSettlement", "Test" })
 	public void verifySettlementBillLockLabel() {
 		String color;
 		try {
@@ -120,7 +118,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority=6,groups = { "BillSettlement" })
+	@Test(priority = 6, groups = { "BillSettlement" })
 	public void verifyBillSettlementPatientDueAmount() {
 		List<Integer> amount;
 		try {
@@ -133,7 +131,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority=7,groups = { "BillSettlement", "Test" })
+	@Test(priority = 7, groups = { "BillSettlement", "Test" })
 	public void verifyBillSettlementPatientEditBillLink() {
 		List<String> list;
 		try {
@@ -145,9 +143,9 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority=8,groups = { "BillSettlement" })
+	@Test(priority = 8, groups = { "BillSettlement" })
 	public void verifyBillSettlementPatientBillSettlement() {
-		boolean flag ;
+		boolean flag;
 		try {
 			flag = billSettlementPage.billSettlement("tushar");
 			Assert.assertTrue(flag);
@@ -157,11 +155,11 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority=9,groups = { "BillSettlement", "Test" })
+	@Test(priority = 9, groups = { "BillSettlement", "Test" })
 	public void verifyPatientHalfBillSettlement() {
-		boolean flag ;
+		boolean flag;
 		try {
-			flag=billSettlementPage.settleHalfAmount("tusha");
+			flag = billSettlementPage.settleHalfAmount("tusha");
 			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -169,22 +167,23 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority=10,groups = "BillSettlement")
+	@Test(priority = 10, groups = "BillSettlement")
 	public void verifyViewTransactionLinkUsingSearchPatientWithContactNumber() {
 		SoftAssert softAssert = new SoftAssert();
 		ArrayList<String> list;
 		try {
-			list=billSettlementPage.searchPatientUsingContactNumber("8275369427");
+			list = billSettlementPage.searchPatientUsingContactNumber("8275369427");
 			softAssert.assertEquals(list.get(0), "Mayur");
-			softAssert.assertEquals(list.get(1), "https://beta.livehealth.solutions/searchRegistration/#registration/bills/userName=2646");
-			} catch (Exception e) {
+			softAssert.assertEquals(list.get(1),
+					"https://beta.livehealth.solutions/searchRegistration/#registration/bills/userName=2646");
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			softAssert.assertTrue(false, e.getMessage());
 		}
 		softAssert.assertAll();
 	}
 
-	@Test(priority=11,dataProvider = "paymentModes", groups = "BillSettlement")
+	@Test(priority = 11, dataProvider = "paymentModes", groups = "BillSettlement")
 	public void verifyPatientBillSettlementWithAllPaymentMode(String payMode, String Value) {
 		SoftAssert softAssert = new SoftAssert();
 		String billListPayMode;
@@ -198,7 +197,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		softAssert.assertAll();
 	}
 
-	@Test(priority=12,groups = "BillSettlement")
+	@Test(priority = 12, groups = "BillSettlement")
 	public void verifyAllBillsPendingBillsTab() {
 		boolean flag;
 		try {
@@ -210,80 +209,98 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-//	@Test(priority=13,dataProvider = "PendingTabbillActions", groups = "BillSettlement")
-//	public void verifyPatientBillListActions(String option, String URLs, int length) {
-//		String actualUrl;
-//		try {
-//			actualUrl = billSettlementPage.commenBillAction(option, URLs, length);
-//			SoftAssert.assertEquals(actualUrl, URLs);
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
+	@Test(priority = 13, dataProvider = "PendingTabbillActions", groups = "BillSettlement")
+	public void verifyPatientBillListActions(String option, String URLs, int length) {
+		SoftAssert softAssert = new SoftAssert();
+		String actualUrl;
+		try {
+			actualUrl = billSettlementPage.commenBillAction(option, URLs, length);
+			softAssert.assertEquals(actualUrl, URLs);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			softAssert.assertTrue(false, e.getMessage());
+		}
+		softAssert.assertAll();
+	}
+
+	@Test(priority = 14, groups = "BillSettlement")
+	public void VerifyCompletedBillsTab() {
+		boolean flag;
+		try {
+			flag = billSettlementPage.completedBillsTab();
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
 	
-	 @Test(priority=14,groups="BillSettlement")
-     public void VerifyCompletedBillsTab() {
-		  boolean flag;
-   	  try {
-   		  flag= billSettlementPage.completedBillsTab();
-   		    Assert.assertTrue(flag);
-   	  }catch(Exception e) {
-				logger.error(e.getMessage());
-				Assert.assertTrue(false, e.getMessage());
-			}
+	@Test(priority = 15, dataProvider = "CompletedTabBillActions", groups = "BillSettlement")
+	public void verifyCompletedTabBillsActions(String option, String URLs, int length) {
+		SoftAssert softAssert = new SoftAssert();
+		String url;
+		try {
+			url = billSettlementPage.completedBillsActions(option, URLs, length);
+			softAssert.assertEquals(url, URLs);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			softAssert.assertTrue(false, e.getMessage());
 		}
-	
-	  @Test(priority=15,groups="BillSettlement")
-      public void verifyAllBillsPatientSearch() {
-		  boolean flag;
-    	  try {
-    		  flag= billSettlementPage.SearchByPatientName("Search by Patient Name", "mayur");
-    		    Assert.assertTrue(flag);
-    	  }catch(Exception e) {
-				logger.error(e.getMessage());
-				Assert.assertTrue(false, e.getMessage());
-			}
+		softAssert.assertAll();
+	}
+
+	@Test(priority = 16, groups = "BillSettlement")
+	public void verifyAllBillsPatientSearch() {
+		boolean flag;
+		try {
+			flag = billSettlementPage.SearchByPatientName("Search by Patient Name", "mayur");
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
 		}
-	  
-	  @Test(priority=16,groups="BillSettlement")
-      public void verifyAllBillsReferralsSearch() {
-		  boolean flag;
-    	  try {
-    		  flag=billSettlementPage.SearchByPatientName("Search by Referral Name", "auto");
-    		    Assert.assertTrue(flag);
-    	  }catch(Exception e) {
-				logger.error(e.getMessage());
-				Assert.assertTrue(false, e.getMessage());
-			}
+	}
+
+	@Test(priority = 17, groups = "BillSettlement")
+	public void verifyAllBillsReferralsSearch() {
+		boolean flag;
+		try {
+			flag = billSettlementPage.SearchByPatientName("Search by Referral Name", "auto");
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
 		}
-     
-//     @Test(priority=17,dataProvider="CompletedTabBillActions",groups="BillSettlement")
-//      public void verifySearchedPatientBillsActions(String option,String URLs,int length) {
-//    	  
-//    	  try {
-//    		  billSettlementPage.searchedBillsActions(option,URLs, length,"tusha");
-//    	        
-//    	  }catch(Exception e) {
-//				logger.error(e.getMessage());
-//				Assert.assertTrue(false, e.getMessage());
-//			}
-//		}
- 
-     @Test(priority=18,groups="BillSettlement")
-      public void verifySearchedPatientBillsActions() {
-    	 boolean flag;
-    	  try {
-    		  flag=billSettlementPage.viewAllBillsList();
-    		  Assert.assertTrue(flag);
-    	        
-    	  }catch(Exception e) {
-				logger.error(e.getMessage());
-				Assert.assertTrue(false, e.getMessage());
-			}
+	}
+
+	@Test(priority = 18, dataProvider = "CompletedTabBillActions", groups = "BillSettlement")
+	public void verifySearchedPatientBillsActions(String option, String URLs, int length) {
+		SoftAssert softAssert = new SoftAssert();
+		String url;
+		try {
+			url = billSettlementPage.searchedBillsActions(option, URLs, length, "tushar");
+			softAssert.assertEquals(url, URLs);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			softAssert.assertTrue(false, e.getMessage());
 		}
-     
+		softAssert.assertAll();
+	}
+
 	@Test(priority = 19, groups = "BillSettlement")
+	public void verifySearchedPatientBillsActions() {
+		boolean flag;
+		try {
+			flag = billSettlementPage.viewAllBillsList();
+			Assert.assertTrue(flag);
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	@Test(priority = 20, groups = "BillSettlement")
 	public void verifyPatientCompletedBillAction() {
 
 		try {
@@ -294,8 +311,8 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-     
-	@Test(priority = 20, dataProvider = "InvoiceTypesData", groups = "BillSettlement")
+
+	@Test(priority = 21, dataProvider = "InvoiceTypesData", groups = "BillSettlement")
 	public void verifySearchedPatientBillsActions(String invoiceTyoe, String name) {
 		SoftAssert softAssert = new SoftAssert();
 		String actualUrl;
@@ -310,11 +327,12 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		softAssert.assertAll();
 	}
 
-	@Test(priority = 21, groups = "BillSettlement")
+	@Test(priority = 22, groups = "BillSettlement")
 	public void verifyAddTestToExistingBill() {
 		String tittle;
 		try {
-			tittle = billSettlementPage.addTestToExistingBill("akkas","WBC:Total & Differential Counts Leucocytes Body ", "Calcium/Creatinine Ratio Urine Spot *", "500");
+			tittle = billSettlementPage.addTestToExistingBill("akkas",
+					"WBC:Total & Differential Counts Leucocytes Body ", "Calcium/Creatinine Ratio Urine Spot *", "500");
 			Assert.assertEquals(tittle, "Add Tests In Existing Bill");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -322,19 +340,20 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 
 	}
 
-	@Test(priority = 22, groups = "BillSettlement")
+	@Test(priority = 23, groups = "BillSettlement")
 	public void verifyAddTestToNewBillWithSameSampleId() {
 		boolean flag;
 		try {
-			flag = billSettlementPage.addTestToNewBillWithSameSampleId("akkas","WBC:Total & Differential Counts Leucocytes Body ", "Calcium/Creatinine Ratio Urine Spot *", "500");
-			 Assert.assertTrue(flag);
+			flag = billSettlementPage.addTestToNewBillWithSameSampleId("akkas",
+					"WBC:Total & Differential Counts Leucocytes Body ", "Calcium/Creatinine Ratio Urine Spot *", "500");
+			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
 
-	@Test(priority = 23, groups = "BillSettlement")
+	@Test(priority = 24, groups = "BillSettlement")
 	public void verifyAlreadyExistedTestAddInSameBill() {
 		SoftAssert softAssert = new SoftAssert();
 		ArrayList<String> list;
@@ -349,7 +368,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		softAssert.assertAll();
 	}
 
-	@Test(priority = 24, dataProvider = "patientData", groups = "BillSettlement")
+	@Test(priority = 25, dataProvider = "patientData", groups = "BillSettlement")
 	public void verifyStopBillWhenCreditExcedatedOrgFlag(String name) {
 
 		try {
@@ -361,7 +380,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 25, groups = "BillSettlement")
+	@Test(priority = 26, groups = "BillSettlement")
 	public void verifyStopBillWhenCreditExcedatedOrgFlag() {
 		ArrayList<Integer> orgAdvAmt;
 		try {
@@ -373,7 +392,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 26, dataProvider = "concessionData", groups = "BillSettlement")
+	@Test(priority = 27, dataProvider = "concessionData", groups = "BillSettlement")
 	public void verifyDiscountRestrictionOnOutsourceTestAndTestWiseDiscountAndDiscountInPercentage(String test) {
 
 		try {
@@ -385,7 +404,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 27, dataProvider = "paymentModes", groups = "BillSettlement")
+	@Test(priority = 28, dataProvider = "paymentModes", groups = "BillSettlement")
 	public void verifyAddTestToBillUsingDifferentPaymentMode(String mode, String value) {
 		SoftAssert softAssert = new SoftAssert();
 		String tittle;
@@ -399,7 +418,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		softAssert.assertAll();
 	}
 
-	@Test(priority = 28, dataProvider = "AccessionNoData", groups = "BillSettlement")
+	@Test(priority = 29, dataProvider = "AccessionNoData", groups = "BillSettlement")
 	public void verifySearchUsingAccessionNo(String accessionNo) {
 
 		boolean length;
@@ -411,7 +430,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	@DataProvider(name = "testsData")
 	public static Object[][] getTestsData() {
 
@@ -454,7 +473,6 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		};
 	}
 
-
 	@DataProvider(name = "AccessionNoData")
 	public static Object[][] getccessionNoData() {
 
@@ -474,7 +492,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 	@DataProvider(name = "InvoiceTypesData")
 	public static Object[][] getInvoiceTypesData() {
 
-		return new Object[][] { { "Organization", "auto" }, { "Referral", "au" }, { "Customer", "tusha" },
+		return new Object[][] { { "Organization", "auto" }, { "Referral", "auto" }, { "Customer", "tusha" },
 
 		};
 	}
@@ -488,10 +506,10 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		};
 	}
 
-	 @AfterClass(alwaysRun = true)
-	 public void tearDown() {
-	 DriverFactory.closeDriverObjects();
-	
-	 }
+	@AfterClass(alwaysRun = true)
+	public void tearDown() {
+		DriverFactory.closeDriverObjects();
+
+	}
 
 }
