@@ -198,8 +198,8 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 			list = userManagementPage.operationViewOnly(configProperties.getUsername(), configProperties.getPassword());
 			softAssert.assertEquals(list.get(0),
 					"×\n" + "You do not have privilege to edit report. If you want it, contact to your Admin.");
-			softAssert.assertEquals(list.get(1),	"×\n" + 
-					"You do not have privileges to dismiss report. If you want it, contact to your Admin.");
+			softAssert.assertEquals(list.get(1),
+					"×\n" + "You do not have privileges to dismiss report. If you want it, contact to your Admin.");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			softAssert.assertTrue(false, e.getMessage());
@@ -334,7 +334,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	@Test(priority = 21)
 	public void VerifyUserWithEditReportAccess() {
 		String status;
@@ -342,14 +342,13 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
 			status = userManagementPage.withEditReportAccess(configProperties.getUsername(),
 					configProperties.getPassword());
-			Assert.assertEquals(status,
-					"Pending Approval");
+			Assert.assertEquals(status, "Pending Approval");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	@Test(priority = 22)
 	public void VerifyUserWithOutEditReportAccess() {
 		String status;
@@ -358,116 +357,122 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 			status = userManagementPage.withOutEditReportAccess(configProperties.getUsername(),
 					configProperties.getPassword());
 			Assert.assertEquals(status,
-					"×\n" + 
-					"You do not have privilege to edit report. If you want it, contact to your Admin.");
+					"×\n" + "You do not have privilege to edit report. If you want it, contact to your Admin.");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	@Test(priority = 23)
 	public void VerifyUserWithShareReportAccess() {
 		String success;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			success=userManagementPage.withShareReportAccess(configProperties.getUsername(),configProperties.getPassword(), "123"+"4");
-			Assert.assertEquals(success, "×\n" + 
-					"Report has been shared successfully.");
+			success = userManagementPage.withShareReportAccess(configProperties.getUsername(),
+					configProperties.getPassword(), "123" + "4");
+			Assert.assertEquals(success, "×\n" + "Report has been shared successfully.");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	@Test(priority = 24)
 	public void VerifyUserWithoutShareReportAccess() {
 		String warning;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			warning=userManagementPage.withoutShareReportAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(warning, "×\n" + 
-					"You do not have privilege to share report. If you want it, contact to your Admin.");
+			warning = userManagementPage.withoutShareReportAccess(configProperties.getUsername(),
+					configProperties.getPassword());
+			Assert.assertEquals(warning,
+					"×\n" + "You do not have privilege to share report. If you want it, contact to your Admin.");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	@Test(priority = 25)
 	public void VerifyUserWithInventoryManagementAccess() {
 		String text;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text=userManagementPage.inventoryAccess(configProperties.getUsername(),configProperties.getPassword());
+			text = userManagementPage.inventoryAccess(configProperties.getUsername(), configProperties.getPassword());
 			Assert.assertEquals(text, "Stock Management");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	@Test(priority = 26)
 	public void VerifyUserWithoutInventoryManagementAccess() {
 		String text;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text=userManagementPage.notInventoryAccess(configProperties.getUsername(),configProperties.getPassword());
+			text = userManagementPage.notInventoryAccess(configProperties.getUsername(),
+					configProperties.getPassword());
 			Assert.assertEquals(text, "Inventory Management");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	@Test(priority = 27)
 	public void VerifyUserWithQualityControlAccess() {
 		String text;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text=userManagementPage.QualityControlAccess(configProperties.getUsername(),configProperties.getPassword());
+			text = userManagementPage.QualityControlAccess(configProperties.getUsername(),
+					configProperties.getPassword());
 			Assert.assertEquals(text, "Add Quality Control");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	@Test(priority = 28)
 	public void VerifyUserWithoutQualityControlAccess() {
 		String text;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text=userManagementPage.notQualityControlAccess(configProperties.getUsername(),configProperties.getPassword());
+			text = userManagementPage.notQualityControlAccess(configProperties.getUsername(),
+					configProperties.getPassword());
 			Assert.assertEquals(text, "Quality Control");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	@Test(priority = 29)
 	public void VerifyUserWithoutEditSignedReportAccess() {
 		String text;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text=userManagementPage.notEditSignedReportAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "×\n" + 
-					"Sorry, It seems you do not have permission to edit authorised reports! Please contact to Admin.");
+			text = userManagementPage.notEditSignedReportAccess(configProperties.getUsername(),
+					configProperties.getPassword());
+			Assert.assertEquals(text, "×\n"
+					+ "Sorry, It seems you do not have permission to edit authorised reports! Please contact to Admin.");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
+
 	@Test(priority = 30)
 	public void VerifyUserWithEditSubmittedReportAccess() {
 		String text;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text=userManagementPage.EditSubmittedReportAccess(configProperties.getUsername(),configProperties.getPassword());
+			text = userManagementPage.EditSubmittedReportAccess(configProperties.getUsername(),
+					configProperties.getPassword());
 			System.out.println(configProperties.getlabusername());
-			Assert.assertEquals(text, "×\n" + "Sorry, It seems you do not have permission to edit authorised reports! Please contact to Admin.");
+			Assert.assertEquals(text, "×\n"
+					+ "Sorry, It seems you do not have permission to edit authorised reports! Please contact to Admin.");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
