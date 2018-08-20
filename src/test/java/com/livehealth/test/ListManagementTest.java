@@ -12,12 +12,14 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-
 import com.livehealth.base.DriverFactory;
 import com.livehealth.config.ConfigProperties;
 import com.livehealth.pageobject.HomePage;
 import com.livehealth.pageobject.ListManagementPage;
 import com.livehealth.util.CommonMethods;
+
+
+
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ListManagementTest extends AbstractTestNGSpringContextTests {
@@ -172,11 +174,11 @@ public class ListManagementTest extends AbstractTestNGSpringContextTests {
 	@Test(priority = 11, dataProvider = "displayType", groups = { "ListManagement" })
 	public void verifyUpdateTestPriceAndAmountsFromOptionsForCategoryAndDepartmentWise(String type) {
 		SoftAssert softAssert = new SoftAssert();
-		ArrayList<Integer> list;
+		ArrayList<String> list;
 		try {
 			list = listManagementPage.updateTestAndAmountPrices(type, "Auto Organization Revenue", "301");
-			softAssert.assertEquals(list.get(0), 2);
-			softAssert.assertEquals(list.get(1), 301);
+			softAssert.assertEquals(list.get(0), "2");
+			softAssert.assertEquals(list.get(1), "301");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			softAssert.assertTrue(false, e.getMessage());
@@ -553,7 +555,6 @@ public class ListManagementTest extends AbstractTestNGSpringContextTests {
 
 	@Test(priority = 42, groups = { "ListManagement" })
 	public void verifyExportTemplateUsingTestSearchBox() {
-		SoftAssert softAssert = new SoftAssert();
 		boolean flag;
 		try {
 			ArrayList<String> TestList = new ArrayList<>();
@@ -561,26 +562,22 @@ public class ListManagementTest extends AbstractTestNGSpringContextTests {
 			TestList.add("Uric Acid");
 			TestList.add("Bicarbonate *");
 			flag = listManagementPage.exportTemplateUsingTestSearch(TestList);
-			softAssert.assertTrue(flag);
+			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			softAssert.assertTrue(false, e.getMessage());
 		}
-		softAssert.assertAll();
+
 	}
 
 	@Test(priority = 43, groups = { "ListManagement" })
 	public void verifyExportTemplateUsingCategoryFilter() {
-		SoftAssert softAssert = new SoftAssert();
 		boolean flag;
 		try {
 			flag = listManagementPage.exportUsingCategory("Biochemistry", "Clinical Pathology");
-			softAssert.assertTrue(flag);
+			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			softAssert.assertTrue(false, e.getMessage());
 		}
-		softAssert.assertAll();
 	}
 
 	@Test(priority = 44, groups = { "ListManagement" })

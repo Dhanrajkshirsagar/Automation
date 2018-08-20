@@ -542,7 +542,7 @@ public class ListManagementPage {
 
 	}
 
-	public ArrayList<Integer> updateTestAndAmountPrices(String type, String listName, String price) throws Exception {
+	public ArrayList<String> updateTestAndAmountPrices(String type, String listName, String price) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		ListAndGroupManagement.click();
 		searchListName(listName);
@@ -584,13 +584,14 @@ public class ListManagementPage {
 				flag++;
 			}
 		}
+		String flag1=Integer.toString(flag);
 		categoryInput0.clear();
 		categoryPrice0.sendKeys(price);
 		update0.click();
 		List<WebElement> testNameList = collapseViewTests.findElements(By.tagName("input"));
-		int testPrice = Integer.parseInt(testNameList.get(1).getAttribute("value"));
-		ArrayList<Integer> list = new ArrayList<>();
-		list.add(flag);
+		String testPrice = testNameList.get(1).getAttribute("value");
+		ArrayList<String> list = new ArrayList<>();
+		list.add(flag1);
 		list.add(testPrice);
 		return list;
 

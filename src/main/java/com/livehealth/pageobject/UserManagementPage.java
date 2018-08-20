@@ -313,11 +313,18 @@ public class UserManagementPage {
 	@FindBy(id = "submitReport")
 	private WebElement submitReport;
 	
-	@FindBy(id = "historyUserSearch")
-	private WebElement historyUserSearch;
+	@FindBy(id = "historyTestList")
+	private WebElement historyTestList;
 	
 	@FindBy(id = "historyli")
 	private WebElement historyli;
+	
+	@FindBy(xpath = "//a[contains(text(),'Edit this test')]")
+	private WebElement Editthistest;
+	
+	@FindBy(id = "historySuccessDiv")
+	private WebElement historySuccessDiv;
+
 
 	@PostConstruct
 	public void loadDriver() throws Exception {
@@ -1310,9 +1317,9 @@ public class UserManagementPage {
 		Thread.sleep(200);
 		return successDiv.getText();
 	}
-
+	public String report;
 	public String EditSubmittedReportAccess(String userName, String password) throws Exception {
-		// signIn(userName, password);
+		signIn(userName, password);
 		selectLabUser();
 		accordion2.click();
 
@@ -1335,15 +1342,54 @@ public class UserManagementPage {
 		}
 		CommonMethods.waitForElementToClickable(submitReport);
 		submitReport.click();
+		DriverFactory.getDriver().navigate().refresh();
+		CommonMethods.waitForElementToClickable(historyli);
 		historyli.click();
 		CommonMethods.waitForElementToVisible(userWaitingListCard);
-		historyUserSearch.sendKeys("Dojwei");
-		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("/html[1]/body[1]/section[1]/div[6]/div[1]/div[4]/div[2]/div[1]/span[1]/input[2]")));
-		historyUserSearch.sendKeys(Keys.ARROW_DOWN);
-		historyUserSearch.sendKeys(Keys.ENTER);
-		return successDiv.getText();
+		patientList.get(0).click();
+		CommonMethods.waitForElementToVisible(historyTestList);
+		List<WebElement> reportNames=historyTestList.findElements(By.tagName("b"));
+		report=reportNames.get(1).getText();
+		waitingListLabOptionList.get(0).click();
+		Editthistest.click();
+		CommonMethods.waitForElementToVisible(historySuccessDiv);
+		return historySuccessDiv.getText();
+	}
+	
+	public boolean EditSubmittedReportNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion2.click();
+
+		if (selectAllOperationEditFlags.isSelected()) {
+			selectAllOperationEditFlags.click();
+		}
+ 		if (editTestFlag.isSelected()) {
+			editTestFlag.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		clickOnPatientReport();
+		List<WebElement> reportList = userWaitingListCard.findElements(By.xpath("//button[text()=\"Submit\"]"));
+		for (int i = 0; i < reportList.size(); i++) {
+			if (reportList.get(i).getText().equals("Submit")) {
+				reportList.get(i).click();
+				break;
+			}
+		}
+		CommonMethods.waitForElementToClickable(submitReport);
+		submitReport.click();
+		DriverFactory.getDriver().navigate().refresh();
+		CommonMethods.waitForElementToClickable(historyli);
+		historyli.click();
+		CommonMethods.waitForElementToVisible(userWaitingListCard);
+		patientList.get(0).click();
+		CommonMethods.waitForElementToVisible(historyTestList);
+		if(waitingListLabOptionList.size()>0) {
+			return false;
+		}
+		return true;
 	}
 
 }
