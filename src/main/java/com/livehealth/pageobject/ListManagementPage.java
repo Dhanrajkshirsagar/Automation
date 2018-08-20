@@ -365,7 +365,6 @@ public class ListManagementPage {
 		CommonMethods.waitForElementToVisible(commission);
 		commission.clear();
 		commission.sendKeys(discount);
-		int flag = 0;
 		Thread.sleep(500);
 
 		Select ele = new Select(commissionType);

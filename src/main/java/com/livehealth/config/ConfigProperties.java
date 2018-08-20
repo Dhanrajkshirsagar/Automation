@@ -12,6 +12,8 @@ public class ConfigProperties {
 	private String username;
 
 	private String password;
+	
+	private String labusername;
 
 	public String getUsername() {
 		return username;
@@ -31,6 +33,10 @@ public class ConfigProperties {
 
 	public String getLivehealthUrl() {
 		return livehealthUrl;
+	}
+	
+	public String getlabusername() {
+		return labusername;
 	}
 
 	public void setLivehealthUrl(String livehealthUrl) {

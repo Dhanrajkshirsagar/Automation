@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
+
+import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -235,27 +237,87 @@ public class UserManagementPage {
 
 	@FindBy(id = "redoErr")
 	private WebElement redoErr;
-	
+
 	@FindBy(id = "OperationUpdateReportInfo")
 	private WebElement OperationUpdateReportInfo;
-	
+
 	@FindBy(xpath = "//a[contains(text(),'Update report info')]")
 	private WebElement Updatereportinfo;
-	
+
 	@FindBy(id = "updateLabAge")
 	private WebElement updateLabAge;
-	
+
 	@FindBy(id = "labReportPassword")
 	private WebElement labReportPassword;
-	
+
 	@FindBy(id = "modalUpdateReportBtn")
 	private WebElement modalUpdateReportBtn;
-	
+
 	@FindBy(id = "userUpdateErrorDiv")
 	private WebElement userUpdateErrorDiv;
-	
+
 	@FindBy(xpath = "//button[contains(text(),'Close')]")
 	private WebElement Close;
+
+	@FindBy(id = "OperationEditReport")
+	private WebElement OperationEditReport;
+
+	@FindBy(className = "reportViewStatusLabel")
+	private WebElement reportViewStatusLabel;
+
+	@FindBy(id = "OperationSharedReportAccess")
+	private WebElement OperationSharedReportAccess;
+
+	@FindBy(id = "quickDefaultDocPass")
+	private WebElement quickDefaultDocPass;
+
+	@FindBy(id = "quickSubmitBtn")
+	private WebElement quickSubmitBtn;
+
+	@FindBy(xpath = "//a[contains(text(),'Share Report')]")
+	private WebElement ShareReport;
+
+	@FindBy(id = "quickDoctorDefault")
+	private WebElement quickDoctorDefault;
+
+	@FindBy(id = "share_Btn")
+	private WebElement share_Btn;
+
+	@FindBy(id = "centerSharingId")
+	private WebElement centerSharingId;
+
+	@FindBy(id = "userInventoryManagement")
+	private WebElement userInventoryManagement;
+
+	@FindBy(xpath = "//a[contains(text(),'Inventory Management')]")
+	private WebElement InventoryManagement;
+
+	@FindBy(xpath = "//span[contains(text(),'Inventory Management')]")
+	private WebElement LockedInventoryManagement;
+
+	@FindBy(id = "QualityControlManagement")
+	private WebElement QualityControlManagement;
+
+	@FindBy(xpath = "//a[contains(text(),'Quality Control')]")
+	private WebElement QualityControl;
+
+	@FindBy(xpath = "//span[contains(text(),'Quality Control')]")
+	private WebElement lockQualityControl;
+
+	@FindBy(id = "editSignedReport")
+	private WebElement editSignedReport;
+
+	@FindBy(id = "editTestFlag")
+	private WebElement editTestFlag;
+	
+	@FindBy(id = "submitReport")
+	private WebElement submitReport;
+	
+	@FindBy(id = "historyUserSearch")
+	private WebElement historyUserSearch;
+	
+	@FindBy(id = "historyli")
+	private WebElement historyli;
 
 	@PostConstruct
 	public void loadDriver() throws Exception {
@@ -344,7 +406,7 @@ public class UserManagementPage {
 		LogOut.click();
 	}
 
-	public ArrayList<String> registrationAccess(String userName,String password) throws Exception {
+	public ArrayList<String> registrationAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		ClickRegistration.click();
@@ -385,7 +447,8 @@ public class UserManagementPage {
 		return list;
 	}
 
-	public ArrayList<String> NotRegAndUpdateAccess(String userName,String password,String updatename) throws Exception {
+	public ArrayList<String> NotRegAndUpdateAccess(String userName, String password, String updatename)
+			throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		ClickRegistration.click();
@@ -426,7 +489,7 @@ public class UserManagementPage {
 
 	}
 
-	public boolean registratioAllAccess(String userName,String password) throws Exception {
+	public boolean registratioAllAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		ClickRegistration.click();
@@ -475,9 +538,10 @@ public class UserManagementPage {
 		return false;
 	}
 
-	public void patientBills(String paidAmount, String patinetName, String test1, String test2, String test3)throws Exception {
+	public void patientBills(String paidAmount, String patinetName, String test1, String test2, String test3)
+			throws Exception {
 		DriverFactory.getDriver().get(Constants.Billing_URL);
-		WebDriver driver=DriverFactory.getDriver();
+		WebDriver driver = DriverFactory.getDriver();
 		selectPatient(patinetName);
 		CommonMethods.waitForElementToClickable(searchInputforTests);
 		selectTest(test1);
@@ -494,7 +558,7 @@ public class UserManagementPage {
 		saveBill.click();
 		CommonMethods.waitForElementToClickable(printAllSampleId);
 		Thread.sleep(500);
-		String parentWindow=driver.getWindowHandle();
+		String parentWindow = driver.getWindowHandle();
 		printAllSampleId.click();
 		Thread.sleep(1000);
 		for (String winHandle : driver.getWindowHandles()) {
@@ -504,7 +568,7 @@ public class UserManagementPage {
 		driver.switchTo().window(parentWindow);
 		Thread.sleep(500);
 		billUrl.click();
-	
+
 	}
 
 	public ArrayList<String> BothFlagBillTestPriceAndConcessionEditable(String patinetName, String testPrice,
@@ -530,7 +594,8 @@ public class UserManagementPage {
 		return list;
 	}
 
-	public boolean billTestPriceEditable(String userName,String password,String patinetName, String testPrice) throws Exception {
+	public boolean billTestPriceEditable(String userName, String password, String patinetName, String testPrice)
+			throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		ClickRegistration.click();
@@ -564,7 +629,8 @@ public class UserManagementPage {
 
 	}
 
-	public boolean billTestConcessionEditable(String userName,String password,String patinetName, String discount) throws Exception {
+	public boolean billTestConcessionEditable(String userName, String password, String patinetName, String discount)
+			throws Exception {
 
 		signIn(userName, password);
 		selectLabUser();
@@ -597,7 +663,7 @@ public class UserManagementPage {
 
 	}
 
-	public boolean removeAllRegistrationAcess(String userName,String password) throws Exception {
+	public boolean removeAllRegistrationAcess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		ClickRegistration.click();
@@ -643,7 +709,7 @@ public class UserManagementPage {
 		return true;
 	}
 
-	public boolean OperationAllAccess(String userName,String password) throws Exception {
+	public boolean OperationAllAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		accordion2.click();
@@ -679,11 +745,11 @@ public class UserManagementPage {
 
 		if (flag == 5) {
 			return true;
-		} 
+		}
 		return false;
 	}
 
-	public ArrayList<String> operationViewOnly(String userName,String password) throws Exception {
+	public ArrayList<String> operationViewOnly(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		accordion2.click();
@@ -702,7 +768,7 @@ public class UserManagementPage {
 		quickSaveBtn.click();
 		CommonMethods.waitForElementToVisible(successDiv);
 		String success = successDiv.getText();
-		
+
 		Thread.sleep(500);
 		waitingListLabOptionList.get(0).click();
 		dismiss.click();
@@ -711,14 +777,14 @@ public class UserManagementPage {
 		confirmedBillRemoval.click();
 		CommonMethods.waitForElementToVisible(dismissMsg);
 		String warning = dismissMsg.getText();
-		
-		ArrayList<String>list=new ArrayList<>();
+
+		ArrayList<String> list = new ArrayList<>();
 		list.add(success);
 		list.add(warning);
 		return list;
 	}
 
-	public boolean hideDueAmountReports(String userName,String password) throws Exception {
+	public boolean hideDueAmountReports(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		accordion2.click();
@@ -735,7 +801,7 @@ public class UserManagementPage {
 		if (label.size() > 0) {
 			return false;
 		}
-		return true; 
+		return true;
 
 	}
 
@@ -747,8 +813,10 @@ public class UserManagementPage {
 		CommonMethods.waitForElementToVisible(userWaitingListCard);
 		patientList.get(0).click();
 	}
+
 	public static String testName;
-	public String clearReportAccess(String userName,String password) throws Exception {
+
+	public String clearReportAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		accordion2.click();
@@ -778,7 +846,7 @@ public class UserManagementPage {
 		return success;
 	}
 
-	public String ClearReportNotAccess(String userName,String password) throws Exception {
+	public String ClearReportNotAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		accordion2.click();
@@ -807,8 +875,10 @@ public class UserManagementPage {
 		return success;
 
 	}
+
 	public static String test;
-	public String dissMissReportAccess(String userName,String password) throws Exception {
+
+	public String dissMissReportAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		accordion2.click();
@@ -837,7 +907,7 @@ public class UserManagementPage {
 		return success;
 	}
 
-	public String withoutDismissReportAccess(String userName,String password) throws Exception {
+	public String withoutDismissReportAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		accordion2.click();
@@ -865,7 +935,7 @@ public class UserManagementPage {
 
 	}
 
-	public boolean RedrawAndRedoReportAccess(String userName,String password) throws Exception {
+	public boolean RedrawAndRedoReportAccess(String userName, String password) throws Exception {
 
 		signIn(userName, password);
 		selectLabUser();
@@ -900,7 +970,7 @@ public class UserManagementPage {
 		int afterSize = redoList.size();
 		if (beforesize <= afterSize) {
 			return true;
-		} 
+		}
 		DriverFactory.getDriver().findElement(By.id("ReloadPatientWaitingList")).click();
 		return false;
 	}
@@ -921,11 +991,11 @@ public class UserManagementPage {
 		if (beforRedrawSize <= afterSize) {
 			return true;
 		}
-		return false; 
-		
+		return false;
+
 	}
 
-	public String redoAndRedrawNotAccess(String userName,String password) throws Exception {
+	public String redoAndRedrawNotAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		accordion2.click();
@@ -950,8 +1020,8 @@ public class UserManagementPage {
 		String warning = redoErr.getText();
 		return warning;
 	}
-	
-	public String updateReportInfoAcess(String userName,String password) throws Exception {
+
+	public String updateReportInfoAcess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		accordion2.click();
@@ -977,11 +1047,11 @@ public class UserManagementPage {
 		Thread.sleep(1000);
 		waitingListLabOptionList.get(0).click();
 		Updatereportinfo.click();
-		String age=updateLabAge.getAttribute("value");
+		String age = updateLabAge.getAttribute("value");
 		return age;
 	}
-	
-	public String withoutUpdateReportInfoAcess(String userName,String password) throws Exception {
+
+	public String withoutUpdateReportInfoAcess(String userName, String password) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		signIn(userName, password);
 		selectLabUser();
@@ -1006,8 +1076,274 @@ public class UserManagementPage {
 		labReportPassword.sendKeys(password);
 		modalUpdateReportBtn.click();
 		CommonMethods.waitForElementToVisible(userUpdateErrorDiv);
-		String warning=userUpdateErrorDiv.getText();
+		String warning = userUpdateErrorDiv.getText();
 		return warning;
+	}
+
+	public String withEditReportAccess(String userName, String password) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		signIn(userName, password);
+		selectLabUser();
+		accordion2.click();
+
+		if (OperationViewOnly.isSelected()) {
+			OperationViewOnly.click();
+		}
+
+		if (!OperationEditReport.isSelected()) {
+			OperationEditReport.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		clickOnPatientReport();
+		List<WebElement> patientList = container.findElements(By.className("userWaitingListCard"));
+		patientList.get(3).click();
+		CommonMethods.waitForElementToClickable(quickSaveBtn);
+		quickSaveBtn.click();
+		Thread.sleep(1000);
+		patientList = container.findElements(By.className("userWaitingListCard"));
+		patientList.get(3).click();
+		CommonMethods.waitForElementToClickable(quickSaveBtn);
+		quickSaveBtn.click();
+		String status = reportViewStatusLabel.getText();
+		return status;
+	}
+
+	public String withOutEditReportAccess(String userName, String password) throws Exception {
+		DriverFactory.getDriver().navigate().refresh();
+		signIn(userName, password);
+		selectLabUser();
+		accordion2.click();
+
+		if (OperationViewOnly.isSelected()) {
+			OperationViewOnly.click();
+		}
+
+		if (OperationEditReport.isSelected()) {
+			OperationEditReport.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		clickOnPatientReport();
+		List<WebElement> patientList = container.findElements(By.className("userWaitingListCard"));
+		patientList.get(3).click();
+		CommonMethods.waitForElementToClickable(quickSaveBtn);
+		quickSaveBtn.click();
+		Thread.sleep(500);
+		CommonMethods.waitForElementToVisible(successDiv);
+		String status = successDiv.getText();
+		return status;
+	}
+
+	public String withShareReportAccess(String userName, String password, String passkey) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion2.click();
+
+		if (OperationViewOnly.isSelected()) {
+			OperationViewOnly.click();
+		}
+		if (!OperationEditReport.isSelected()) {
+			OperationEditReport.click();
+		}
+		if (!OperationSharedReportAccess.isSelected()) {
+			OperationSharedReportAccess.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		clickOnPatientReport();
+		List<WebElement> patientList = container.findElements(By.className("userWaitingListCard"));
+		patientList.get(3).click();
+		CommonMethods.waitForElementToClickable(quickSaveBtn);
+
+		Select ele = new Select(quickDoctorDefault);
+		ele.selectByVisibleText("dhanraj");
+		quickDefaultDocPass.sendKeys(passkey);
+		Thread.sleep(100);
+		quickSubmitBtn.click();
+		Thread.sleep(1000);
+		waitingListLabOptionList.get(3).click();
+		ShareReport.click();
+		CommonMethods.waitForElementToClickable(share_Btn);
+		Select shareCentre = new Select(centerSharingId);
+		shareCentre.selectByVisibleText("Selenium Automation (Livehealth)");
+		share_Btn.click();
+		CommonMethods.waitForElementToVisible(successDiv);
+		Thread.sleep(300);
+		return successDiv.getText();
+
+	}
+
+	public String withoutShareReportAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion2.click();
+
+		if (OperationViewOnly.isSelected()) {
+			OperationViewOnly.click();
+		}
+		if (OperationSharedReportAccess.isSelected()) {
+			OperationSharedReportAccess.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		clickOnPatientReport();
+		Thread.sleep(500);
+		waitingListLabOptionList.get(3).click();
+		ShareReport.click();
+		CommonMethods.waitForElementToClickable(share_Btn);
+		Select shareCentre = new Select(centerSharingId);
+		shareCentre.selectByVisibleText("Selenium Automation (Livehealth)");
+		share_Btn.click();
+		CommonMethods.waitForElementToVisible(successDiv);
+		Thread.sleep(300);
+		return successDiv.getText();
+	}
+
+	public String inventoryAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion2.click();
+
+		if (selectAllOperationEditFlags.isSelected()) {
+			selectAllOperationEditFlags.click();
+		}
+		if (!userInventoryManagement.isSelected()) {
+			userInventoryManagement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().get(Constants.WAITING_LIST_URL);
+		Thread.sleep(500);
+		InventoryManagement.click();
+		WebElement confirmText = DriverFactory.getDriver()
+				.findElement(By.xpath("//*[@id=\"inStockInventoryDiv\"]/div[1]/h4"));
+		return confirmText.getText();
+	}
+
+	public String notInventoryAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion2.click();
+
+		if (selectAllOperationEditFlags.isSelected()) {
+			selectAllOperationEditFlags.click();
+		}
+		if (userInventoryManagement.isSelected()) {
+			userInventoryManagement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().get(Constants.WAITING_LIST_URL);
+		Thread.sleep(500);
+		LockedInventoryManagement.click();
+		WebElement confirmText = DriverFactory.getDriver().findElement(By.className("text-center"));
+		return confirmText.getText();
+	}
+
+	public String QualityControlAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion2.click();
+
+		if (selectAllOperationEditFlags.isSelected()) {
+			selectAllOperationEditFlags.click();
+		}
+		if (!QualityControlManagement.isSelected()) {
+			QualityControlManagement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().get(Constants.WAITING_LIST_URL);
+		Thread.sleep(500);
+		QualityControl.click();
+		WebElement confirmText = DriverFactory.getDriver()
+				.findElement(By.xpath("//*[@id=\"addQCValueParentDiv\"]/h4/b"));
+		return confirmText.getText();
+	}
+
+	public String notQualityControlAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion2.click();
+
+		if (selectAllOperationEditFlags.isSelected()) {
+			selectAllOperationEditFlags.click();
+		}
+		if (QualityControlManagement.isSelected()) {
+			QualityControlManagement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().get(Constants.WAITING_LIST_URL);
+		Thread.sleep(500);
+		lockQualityControl.click();
+		WebElement confirmText = DriverFactory.getDriver().findElement(By.className("text-center"));
+		return confirmText.getText();
+	}
+
+	public String notEditSignedReportAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion2.click();
+
+		if (selectAllOperationEditFlags.isSelected()) {
+			selectAllOperationEditFlags.click();
+		}
+		if (editSignedReport.isSelected()) {
+			editSignedReport.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		clickOnPatientReport();
+		List<WebElement> patientList = container.findElements(By.className("userWaitingListCard"));
+		patientList.get(3).click();
+		Thread.sleep(200);
+		return successDiv.getText();
+	}
+
+	public String EditSubmittedReportAccess(String userName, String password) throws Exception {
+		// signIn(userName, password);
+		selectLabUser();
+		accordion2.click();
+
+		if (selectAllOperationEditFlags.isSelected()) {
+			selectAllOperationEditFlags.click();
+		}
+ 		if (!editTestFlag.isSelected()) {
+			editTestFlag.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		clickOnPatientReport();
+		List<WebElement> reportList = userWaitingListCard.findElements(By.xpath("//button[text()=\"Submit\"]"));
+		for (int i = 0; i < reportList.size(); i++) {
+			if (reportList.get(i).getText().equals("Submit")) {
+				reportList.get(i).click();
+				break;
+			}
+		}
+		CommonMethods.waitForElementToClickable(submitReport);
+		submitReport.click();
+		historyli.click();
+		CommonMethods.waitForElementToVisible(userWaitingListCard);
+		historyUserSearch.sendKeys("Dojwei");
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("/html[1]/body[1]/section[1]/div[6]/div[1]/div[4]/div[2]/div[1]/span[1]/input[2]")));
+		historyUserSearch.sendKeys(Keys.ARROW_DOWN);
+		historyUserSearch.sendKeys(Keys.ENTER);
+		return successDiv.getText();
 	}
 
 }
