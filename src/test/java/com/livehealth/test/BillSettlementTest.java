@@ -37,7 +37,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	ConfigProperties configProperties;
 
-	@BeforeClass(groups = { "BillSettlement", "Test" })
+	@BeforeClass(groups = { "BillSettlement"})
 	public void launchSite() {
 		try {
 			billSettlementPage = pageLaunch.navigateToBillSettlementPage();
@@ -106,7 +106,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 5, groups = { "BillSettlement", "Test" })
+	@Test(priority = 5, groups = { "BillSettlement"})
 	public void verifySettlementBillLockLabel() {
 		String color;
 		try {
@@ -131,7 +131,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 7, groups = { "BillSettlement", "Test" })
+	@Test(priority = 7, groups = { "BillSettlement"})
 	public void verifyBillSettlementPatientEditBillLink() {
 		List<String> list;
 		try {
@@ -155,7 +155,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 9, groups = { "BillSettlement", "Test" })
+	@Test(priority = 9, groups = { "BillSettlement" })
 	public void verifyPatientHalfBillSettlement() {
 		boolean flag;
 		try {

@@ -104,7 +104,7 @@ public class AppointmenetTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 6)
+	@Test(priority = 6,groups = { "Appointment" })
 	public void verifyBookNewAppointmentWithDateOfBirth() {
 		String sucess;
 		 try {

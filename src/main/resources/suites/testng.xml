@@ -11,11 +11,14 @@
 	<test name="Test" group-by-instances="true">
 
 		<classes>
-			<class name="com.livehealth.test.RegisterTest" />
+		<!-- 	<class name="com.livehealth.test.RegisterTest" />
 			<class name="com.livehealth.test.BillingTest" />
 			<class name="com.livehealth.test.BillUpdateTest" />
-			<class name="com.livehealth.test.AccessionTest" />
-			<class name="com.livehealth.test.BillSettlementTest" />
+			<class name="com.livehealth.test.AccessionTest" />  -->
+			<class name="com.livehealth.test.ReferralManagementTest" />
+			<class name="com.livehealth.test.DoctorManagementTest" />
+			<class name="com.livehealth.test.OrganizationManagementTest" />
+			<class name="com.livehealth.test.ListManagementTest" />
 
 		</classes>
 
