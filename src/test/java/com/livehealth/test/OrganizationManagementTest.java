@@ -52,7 +52,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 2, groups = { "OrgManagement" })
+	@Test(priority = 30, groups = { "OrgManagement" })
 	public void verifyAddOrganizationValidation() {
 		try {
 			String waring = organizationManagementPage.addOrganisationValidation();
@@ -64,7 +64,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 3, groups = { "OrgManagement" })
+	@Test(priority = 31, groups = { "OrgManagement" })
 	public void verifyAddOrganizationWithAllDetails() {
 		SoftAssert softAssert = new SoftAssert();
 		ArrayList<String> list;
@@ -81,7 +81,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 4, dataProvider = "OrgContact", groups = { "OrgManagement" })
+	@Test(priority = 32, dataProvider = "OrgContact", groups = { "OrgManagement" })
 	public void verifyAddOrganizationContactValidation(String contact) {
 		SoftAssert softAssert = new SoftAssert();
 		ArrayList<String> list;
