@@ -100,7 +100,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 5, groups = { "OrgManagement" })
+	@Test(priority = 33, groups = { "OrgManagement" })
 	public void verifyaddOrganizationWithAlreadyExistedEmail() {
 		try {
 			String emailborder = organizationManagementPage.alreadyExistedEmail("dhanraj.kshirsagar@livehealth.in");
@@ -113,7 +113,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 6, groups = { "OrgManagement" })
+	@Test(priority =34, groups = { "OrgManagement" })
 	public void verifyaddOrganizationWithAlreadyExistedOrganizationAndUserName() {
 
 		try {
@@ -128,7 +128,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 7, dataProvider = "OrgPaymentType", groups = { "OrgManagement" })
+	@Test(priority = 35, dataProvider = "OrgPaymentType", groups = { "OrgManagement" })
 	public void verifyaddOrganizationWithDifferentPaymentTypes(String payType, String orgName, String value) {
 		SoftAssert softAssert = new SoftAssert();
 		ArrayList<String> list;
@@ -154,7 +154,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 8, dataProvider = "OrgNames", groups = { "OrgManagement" })
+	@Test(priority = 36, dataProvider = "OrgNames", groups = { "OrgManagement" })
 	public void verifyAddOrgnizationWithDifferentCCTypesAndAlsoAccessControlOfThem(String orgName) {
 		try {
 
@@ -167,7 +167,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 9, groups = { "OrgManagement" })
+	@Test(priority = 37, groups = { "OrgManagement" })
 	public void verifyNonBillingCCAccessControl() {
 		boolean flag;
 		try {
@@ -182,7 +182,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 10, groups = { "OrgManagement" })
+	@Test(priority = 38, groups = { "OrgManagement" })
 	public void verifyBillingCCAccessControl() {
 		try {
 			organizationManagementPage.signIn("livep-billing", "Billing@1234");
@@ -194,7 +194,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 11, groups = { "OrgManagement" })
+	@Test(priority = 39, groups = { "OrgManagement" })
 	public void verifyBillingCCPatientRegistrationAndUpdateAccessControl() {
 		SoftAssert softAssert = new SoftAssert();
 		ArrayList<String> list;
@@ -210,7 +210,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 12, groups = { "OrgManagement" })
+	@Test(priority = 40, groups = { "OrgManagement" })
 	public void verifyUpdateOrganizationDetails() {
 		SoftAssert softAssert = new SoftAssert();
 		ArrayList<String> list;
@@ -232,7 +232,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 13, groups = { "OrgManagement" })
+	@Test(priority = 41, groups = { "OrgManagement" })
 	public void verifyDeleteOrganization() {
 		boolean flag;
 		try {
@@ -245,7 +245,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 14, groups = { "OrgManagement" })
+	@Test(priority = 42, groups = { "OrgManagement" })
 	public void verifyDeleteAndTransferOrganization() {
 		boolean flag;
 		try {
@@ -258,7 +258,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 15, groups = { "OrgManagement" })
+	@Test(priority = 43, groups = { "OrgManagement" })
 	public void verifyAddOrganizationforThirdPartyAPIIntegration() {
 		boolean flag;
 		try {
@@ -271,7 +271,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 16, groups = { "OrgManagement" })
+	@Test(priority = 44, groups = { "OrgManagement" })
 	public void verifyUpdateThirdPartyAPIIntegrationAccessForSelectedOrganization() {
 		boolean flag;
 		try {
@@ -286,7 +286,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	// --------In this we have to check validation on ledger organization amount and
 	// verifying added advance and ledger Balance amounts
-	@Test(priority = 17, groups = { "OrgManagement" })
+	@Test(priority = 45, groups = { "OrgManagement" })
 	public void verifyManageLedgerForPrepaidOrganizationPaymentType() {
 		SoftAssert softAssert = new SoftAssert();
 		ArrayList<String> list;
@@ -301,7 +301,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		softAssert.assertAll();
 	}
 
-	@Test(priority = 18, groups = { "OrgManagement" })
+	@Test(priority = 46, groups = { "OrgManagement" })
 	public void verifyManageLedgerForPostPaidOrganizationPaymentType() {
 		try {
 			String credit = organizationManagementPage.manageLedgerForPostPaid("PostpaidLedger Organization", "5000");
@@ -313,7 +313,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 19, groups = { "OrgManagement" })
+	@Test(priority = 47, groups = { "OrgManagement" })
 	public void verifyAssignOrganizationRevenueList() {
 		try {
 
@@ -326,7 +326,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 20, groups = { "OrgManagement" })
+	@Test(priority = 48, groups = { "OrgManagement" })
 	public void verifyReAssignOrganizationRevenueListForAlreadyAssignedList() {
 		try {
 
@@ -339,7 +339,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 21, groups = { "OrgManagement" })
+	@Test(priority = 49, groups = { "OrgManagement" })
 	public void verifyOrganizationRevenueViewListLink() {
 		try {
 
@@ -352,7 +352,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 22, groups = { "OrgManagement" })
+	@Test(priority = 50, groups = { "OrgManagement" })
 	public void verifyOrganizationRevenueExportLink() {
 		try {
 			organizationManagementPage.ExportListLink("auto");
@@ -364,7 +364,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 23, groups = { "OrgManagement" })
+	@Test(priority = 51, groups = { "OrgManagement" })
 	public void verifyUpdateAllOrganizationRevenue() {
 		boolean flag;
 		try {
@@ -377,7 +377,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 24, groups = { "OrgManagement" })
+	@Test(priority = 52, groups = { "OrgManagement" })
 	public void verifyRemoveAssignedList() {
 		boolean flag;
 		try {
@@ -390,7 +390,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 25, groups = { "OrgManagement" })
+	@Test(priority = 53, groups = { "OrgManagement" })
 	public void verifyEnableOrganization() {
 		try {
 			String actualName = organizationManagementPage.enableOrganization("DIRECT");
@@ -402,7 +402,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 26, groups = { "OrgManagement" })
+	@Test(priority = 54, groups = { "OrgManagement" })
 	public void verifyLoginCC() throws Exception {
 		try {
 
@@ -414,7 +414,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		}
 	}
 
-	@Test(priority = 27, groups = { "OrgManagement" })
+	@Test(priority = 55, groups = { "OrgManagement" })
 	public void verifyAddCreditforCheckOrganisationLedger() {
 		try {
 
@@ -426,7 +426,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		}
 	}
 
-	@Test(priority = 28, groups = { "OrgManagement" })
+	@Test(priority = 56, groups = { "OrgManagement" })
 	public void verifyOrganisationLedgerApproveAdvance() {
 		try {
 
@@ -438,7 +438,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		}
 	}
 
-	@Test(priority = 29, groups = { "OrgManagement" })
+	@Test(priority = 57, groups = { "OrgManagement" })
 	public void verifyOrganisationLedgerRejectAdvance() {
 		try {
 
@@ -451,7 +451,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 	}
 
 
-	@Test(priority = 30, groups = { "OrgManagement" })
+	@Test(priority = 58, groups = { "OrgManagement" })
 	public void verifyCalculatedOrganizationSettlementDueAmount() {
 		ArrayList<Integer> list;
 		try {
@@ -463,7 +463,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		}
 	}
 
-	@Test(priority = 31, dataProvider = "testsData", groups = { "OrgManagement" })
+	@Test(priority = 59, dataProvider = "testsData", groups = { "OrgManagement" })
 	public void verifyPatientBills(String amount, String test1, String test2) {
 		try {
 			DriverFactory.getDriver().navigate().to(Constants.Billing_URL);
@@ -479,7 +479,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 
 	}
 
-	@Test(priority = 32, groups = { "OrgManagement" })
+	@Test(priority = 60, groups = { "OrgManagement" })
 	public void verifyOrganizationSettlementRecalculateDueAmountLink() {
 		try {
 
@@ -491,7 +491,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		}
 	}
 
-	@Test(priority = 33, groups = { "OrgManagement" })
+	@Test(priority = 61, groups = { "OrgManagement" })
 	public void verifyOrganizationSettlementEditBillLink() {
 		try {
 			String actual = organizationManagementPage.editBillLink("auto");
@@ -502,7 +502,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		}
 	}
 
-	@Test(priority = 34, groups = { "OrgManagement" })
+	@Test(priority = 62, groups = { "OrgManagement" })
 	public void verifyOrganizationSettlementSubmitButton() {
 		boolean flag;
 		try {
@@ -514,7 +514,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		}
 	}
 
-	@Test(priority = 35, groups = { "OrgManagement" })
+	@Test(priority = 63, groups = { "OrgManagement" })
 	public void verifyBackDatedOrganizationSettlement() {
 		boolean flag;
 		try {
@@ -526,7 +526,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		}
 	}
 
-	@Test(priority = 36, dataProvider = "paymentModes", groups = { "OrgManagement" })
+	@Test(priority = 64, dataProvider = "paymentModes", groups = { "OrgManagement" })
 	public void verifyOrganizationSettlementWithSelectedPaymentMode(String mode, String value) {
 		boolean flag;
 		try {
@@ -538,7 +538,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		}
 	}
 
-	@Test(priority = 37, groups = { "OrgManagement" })
+	@Test(priority = 65, groups = { "OrgManagement" })
 	public void verifyOrganizationSettlementWithSelectAllBills() {
 		boolean flag;
 		try {
@@ -550,7 +550,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		}
 	}
 
-	@Test(priority = 38, groups = { "OrgManagement" })
+	@Test(priority = 66, groups = { "OrgManagement" })
 	public void verifyBulkUploadOrganizationListUpload() {
 		SoftAssert softAssert = new SoftAssert();
 		try {
@@ -563,7 +563,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		softAssert.assertAll();
 	}
 
-	@Test(priority = 39, groups = { "OrgManagement" })
+	@Test(priority = 67, groups = { "OrgManagement" })
 	public void verifyBulkUploadOrganizationWithInvalidFileInput() {
 		SoftAssert softAssert = new SoftAssert();
 		try {
@@ -577,7 +577,7 @@ public class OrganizationManagementTest extends AbstractTestNGSpringContextTests
 		softAssert.assertAll();
 	}
 
-	@Test(priority = 40, groups = { "OrgManagement" })
+	@Test(priority = 68, groups = { "OrgManagement" })
 	public void verifyExportExcelTemplateForOrganizationUpload() {
 		try {
 			organizationManagementPage.exportExcelTemplate();
