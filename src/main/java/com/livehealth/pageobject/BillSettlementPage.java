@@ -700,7 +700,6 @@ public class BillSettlementPage {
 		searchBillsforRefAndPatient.sendKeys(name);
 		Thread.sleep(1000);
 		searchBillsforRefAndPatient.sendKeys(Keys.ARROW_DOWN);
-		searchBillsforRefAndPatient.sendKeys(Keys.DOWN);
 		searchBillsforRefAndPatient.sendKeys(Keys.ENTER);
 		Thread.sleep(1000);
 		List<WebElement> list = DriverFactory.getDriver()

@@ -445,7 +445,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 	public static Object[][] getPaymentModes() {
 
 		return new Object[][] { { "Cheque", "CHEQUE" }, { "Credit", "CREDIT" }, { "Credit Card", "CREDIT CARD" },
-				// { "Debit Card","DEBIT CARD"},
+				 { "Debit Card","DEBIT CARD"},
 				// { "Free","FREE"},
 				// { "Other","OTHER"},
 
