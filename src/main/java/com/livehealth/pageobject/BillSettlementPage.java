@@ -245,7 +245,7 @@ public class BillSettlementPage {
 				.visibilityOfElementLocated(By.xpath("/html/body/section/div[3]/div[2]/div/div[1]/span/span")));
 		searchPatient.sendKeys(Keys.ARROW_DOWN);
 		searchPatient.sendKeys(Keys.ENTER);
-		Thread.sleep(500);
+		CommonMethods.waitForElementToVisible(searchInputforTests);
 		selectTests(test1);
 		selectTests(test2);
 		AdvanceAmount.clear();
@@ -261,7 +261,9 @@ public class BillSettlementPage {
 
 	public void selectTests(String testName) throws Exception {
 		searchInputforTests.sendKeys(testName);
-		Thread.sleep(500);
+		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span")));
 		searchInputforTests.sendKeys(Keys.ARROW_DOWN);
 		searchInputforTests.sendKeys(Keys.ENTER);
 		concession.sendKeys(Keys.ENTER);
