@@ -261,9 +261,7 @@ public class BillSettlementPage {
 
 	public void selectTests(String testName) throws Exception {
 		searchInputforTests.sendKeys(testName);
-		WebDriverWait wait = new WebDriverWait(DriverFactory.getDriver(), 10);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("/html/body/section/div[3]/div[4]/div[1]/div[7]/div[1]/div[1]/span/span")));
+		Thread.sleep(500);
 		searchInputforTests.sendKeys(Keys.ARROW_DOWN);
 		searchInputforTests.sendKeys(Keys.ENTER);
 		concession.sendKeys(Keys.ENTER);
