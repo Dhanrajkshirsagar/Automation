@@ -19,6 +19,10 @@
 			<class name="com.livehealth.test.DoctorManagementTest" />
 			<class name="com.livehealth.test.OrganizationManagementTest" />
 			<class name="com.livehealth.test.ListManagementTest" />
+			<class name="com.livehealth.test.BillSettlementTest" />
+			<class name="com.livehealth.test.AppointmenetTest" />
+			<class name="com.livehealth.test.AdanceCollectionTest" />
+			
 
 		</classes>
 

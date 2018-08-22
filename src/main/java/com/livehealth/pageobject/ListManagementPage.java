@@ -1179,19 +1179,14 @@ public class ListManagementPage {
 		int count = Integer.parseInt(arr[arr.length - 1]);
 		if (count >= 1) {
 			SoftAssert.assertTrue(true);
-		} else {
-			SoftAssert.assertFalse(true);
-		}
+		} 
 		DriverFactory.getDriver().findElement(By.id("refPriceListFlag")).click();
 		String countWithRefList = listCount.getText();
 		String[] arr1 = countWithRefList.split("\\s");
 		int count1 = Integer.parseInt(arr1[arr1.length - 1]);
 		if (count1 >= count) {
 			SoftAssert.assertTrue(true);
-		} else {
-			SoftAssert.assertFalse(true);
-		}
-
+		} 
 		DriverFactory.getDriver().findElement(By.id("orgRevListFlag")).click();
 		String orgRevList = listCount.getText();
 		String[] arr2 = orgRevList.split("\\s");
