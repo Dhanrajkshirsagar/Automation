@@ -1,6 +1,10 @@
 package com.livehealth.pageobject;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -710,10 +714,10 @@ public class ReferralManagementPage {
 		CommonMethods.waitForElementToClickable(listLink);
 		exportListLink.click();
 		Thread.sleep(1000);
-		String filePath = "/Users/shekhar/Downloads";
+		String filePath = "C:/Users/Administrator/Downloads/";
 		Assert.assertTrue(isFileDownloaded("filePath", "Referral price list.xls"),
 				"Failed to download Expected document");
-		File file = new File("/Users/shekhar/Downloads/Referral price list.xls");
+		File file = new File("C:/Users/Administrator/Downloads/Referral price list.xls");
 		file.delete();
 
 	}
@@ -1065,20 +1069,23 @@ public class ReferralManagementPage {
 		return false;
 
 	}
-
+	
 	public boolean bulkUploadReferrals(String Doc1, String Doc2) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		uploadExcelOption.click();
-		Thread.sleep(2000);
-		fileInputExcel.sendKeys("/Users/shekhar/Downloads/ReferralList.xls");
+		CommonMethods.waitForElementToClickable(fileInputExcel);
+		String path=System.getProperty("user.dir");
+		String invalidFile = path + File.separator + "/src/main/resources/Files/ReferralList.xls";
+		fileInputExcel.sendKeys(invalidFile);
 		CommonMethods.waitForElementToVisible(excelSuccessDiv);
 		String warning = excelSuccessDiv.getText();
 		SoftAssert.assertEquals(warning, "×\n"
 				+ "Error! Invalid template format. Please upload Excel file using sample template we have provided.");
 		SoftAssert.assertAll();
 		DriverFactory.getDriver().navigate().refresh();
-		Thread.sleep(2000);
-		fileInputExcel.sendKeys("/Users/shekhar/Downloads/ReferralList .xlsx");
+		CommonMethods.waitForElementToClickable(fileInputExcel);
+		String validFile = path + File.separator + "/src/main/resources/Files/ReferralList .xlsx";
+		fileInputExcel.sendKeys(validFile);
 		submitExcel.click();
 		Thread.sleep(1000);
 		List<WebElement> successLabel = DriverFactory.getDriver()
@@ -1114,9 +1121,9 @@ public class ReferralManagementPage {
 		CommonMethods.waitForElementToClickable(excelTemplate);
 		excelTemplate.click();
 		Thread.sleep(1000);
-		String filePath = "/Users/shekhar/Downloads";
+		String filePath = "C:/Users/Administrator/Downloads/";
 		Assert.assertTrue(isFileDownloaded("filePath", "ReferralList (7).xls"), "Failed to download Expected document");
-		File file = new File("/Users/shekhar/Downloads/ReferralList (7).xls");
+		File file = new File("C:/Users/Administrator/Downloads/ReferralList (7).xls");
 		file.delete();
 
 	}

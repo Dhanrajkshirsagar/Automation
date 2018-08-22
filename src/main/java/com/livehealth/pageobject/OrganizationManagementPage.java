@@ -1073,9 +1073,9 @@ public class OrganizationManagementPage {
 		CommonMethods.waitForElementToClickable(listLink);
 		exportListLink.click();
 		Thread.sleep(1000);
-		String filePath = "/Users/shekhar/Downloads";
+		String filePath = "C:/Users/Administrator/Downloads/";
 		Assert.assertTrue(isFileDownloaded("filePath", "ReAssignOrgList.xls"), "Failed to download Expected document");
-		File file = new File("/Users/shekhar/Downloads/ReAssignOrgList.xls");
+		File file = new File("C:/Users/Administrator/Downloads/ReAssignOrgList.xls");
 		file.delete();
 
 	}
@@ -1529,16 +1529,19 @@ public class OrganizationManagementPage {
 
 		DriverFactory.getDriver().navigate().refresh();
 		BulOrganizationUploadTab.click();
-		Thread.sleep(2000);
-		fileInputOrgExcel.sendKeys("/Users/shekhar/Downloads/OrganizationsList.xls");
+		CommonMethods.waitForElementToClickable(fileInputOrgExcel);
+		String path=System.getProperty("user.dir");
+		String invalidFile = path + File.separator + "/src/main/resources/Files/OrganizationsList.xls";
+		fileInputOrgExcel.sendKeys(invalidFile);
 		CommonMethods.waitForElementToVisible(excelSuccessDiv);
 		String warning = excelSuccessDiv.getText();
 		SoftAssert.assertEquals(warning, "×\n"
 				+ "rrrrError! Invalid template format. Please upload Excel file using sample template we have provided or file is empty.");
 
 		DriverFactory.getDriver().navigate().refresh();
-		Thread.sleep(2000);
-		fileInputOrgExcel.sendKeys("/Users/shekhar/Downloads/OrganizationsList.xlsx");
+		CommonMethods.waitForElementToClickable(fileInputOrgExcel);
+		String validFile = path + File.separator + "/src/main/resources/Files/OrganizationsList.xlsx";
+		fileInputOrgExcel.sendKeys(validFile);
 
 		CommonMethods.waitForElementToClickable(submitExcel);
 		submitExcel.click();
@@ -1554,7 +1557,7 @@ public class OrganizationManagementPage {
 		DriverFactory.getDriver().navigate().refresh();
 		BulOrganizationUploadTab.click();
 		Thread.sleep(2000);
-		fileInputOrgExcel.sendKeys("/Users/shekhar/Downloads/Chinay.pdf");
+		fileInputOrgExcel.sendKeys("../resources/Files/consoleText.txt");
 		CommonMethods.waitForElementToVisible(excelSuccessDiv);
 		String warning = excelSuccessDiv.getText();
 
@@ -1586,10 +1589,10 @@ public class OrganizationManagementPage {
 		CommonMethods.waitForElementToClickable(excelTemplate);
 		excelTemplate.click();
 		Thread.sleep(1000);
-		String filePath = "/Users/shekhar/Downloads";
+		String filePath = "C:/Users/Administrator/Downloads";
 		Assert.assertTrue(isFileDownloaded("filePath", "OrganizationsList (1).xls"),
 				"Failed to download Expected document");
-		File file = new File("/Users/shekhar/Downloads/OrganizationsList (1).xls");
+		File file = new File("C:/Users/Administrator/Downloads/OrganizationsList (1).xls");
 		file.delete();
 
 	}

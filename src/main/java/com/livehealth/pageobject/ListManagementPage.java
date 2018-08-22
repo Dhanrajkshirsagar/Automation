@@ -836,10 +836,10 @@ public class ListManagementPage {
 		CommonMethods.waitForElementToClickable(exportList1);
 		exportList1.click();
 		Thread.sleep(1000);
-		String filePath = "/Users/shekhar/Downloads";
+		String filePath = "C:/Users/Administrator/Downloads";
 		Assert.assertTrue(isFileDownloaded("filePath", "Auto Test Discount.xls"),
 				"Failed to download Expected document");
-		File file = new File("/Users/shekhar/Downloads/Auto Test Discount.xls");
+		File file = new File("C:/Users/Administrator/Downloads/Auto Test Discount.xls");
 		file.delete();
 		editListLink.click();
 		CommonMethods.waitForElementToClickable(addListBtn);
@@ -928,9 +928,9 @@ public class ListManagementPage {
 
 	public void exportedListCheck() throws InterruptedException {
 		Thread.sleep(1000);
-		String filePath = "/Users/shekhar/Downloads";
+		String filePath = "C:/Users/Administrator/Downloads";
 		Assert.assertTrue(isFileDownloaded("filePath", "listManagement.xls"), "Failed to download Expected document");
-		File file = new File("/Users/shekhar/Downloads/listManagement.xls");
+		File file = new File("C:/Users/Administrator/Downloads/listManagement.xls");
 		file.delete();
 	}
 
@@ -1032,7 +1032,7 @@ public class ListManagementPage {
 		listUploadExcelName.sendKeys(Keys.ARROW_DOWN);
 		listUploadExcelName.sendKeys(Keys.ENTER);
 
-		listInputExcel.sendKeys("/Users/shekhar/Dhanraj/listManagement.xls");
+		listInputExcel.sendKeys("../resources/Files/listManagement.xls");
 		CommonMethods.waitForElementToClickable(submitListExcel);
 		submitListExcel.click();
 		Thread.sleep(1000);
