@@ -1031,8 +1031,9 @@ public class ListManagementPage {
 		Thread.sleep(1000);
 		listUploadExcelName.sendKeys(Keys.ARROW_DOWN);
 		listUploadExcelName.sendKeys(Keys.ENTER);
-
-		listInputExcel.sendKeys("../resources/Files/listManagement.xls");
+		String path=System.getProperty("user.dir");
+		String validFile = path + File.separator + "/src/main/resources/Files/listManagement.xls";
+		listInputExcel.sendKeys(validFile);
 		CommonMethods.waitForElementToClickable(submitListExcel);
 		submitListExcel.click();
 		Thread.sleep(1000);
