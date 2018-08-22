@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
+
+import org.apache.commons.logging.impl.Log4JLogger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -162,10 +164,31 @@ public class AppointmentPage {
 
 	@FindBy(id = "newDirectDesignation")
 	private static WebElement newDirectDesignation;
-	
+
 	@FindBy(xpath = "//*[@id=\"rescheduleAppointmentModal\"]/div[1]/div/div[2]/div[17]/div/button[1]")
 	private static WebElement CloseModal;
-	
+
+	@FindBy(xpath = "//*[@id=\"nav-sidebar\"]/div[3]/ul/li[5]/a")
+	private WebElement advanceCollectionTab;
+
+	@FindBy(id = "searchPatient")
+	private WebElement searchPatient;
+
+	@FindBy(xpath = "/html/body/section/div[2]/h4")
+	private WebElement pagetittle;
+
+	@FindBy(id = "submit")
+	private WebElement submit;
+
+	@FindBy(id = "advanceAmount")
+	private WebElement advanceAmount;
+
+	@FindBy(id = "advanceGiven")
+	private WebElement advanceGiven;
+
+	@FindBy(id = "print")
+	private WebElement submitAndPrint;
+
 	@PostConstruct
 	public void loadDriver() throws Exception {
 		PageFactory.initElements(DriverFactory.getDriver(), this);
@@ -567,7 +590,7 @@ public class AppointmentPage {
 		CommonMethods.waitForElementToClickable(bookAppointmentBtn);
 		bookAppointmentBtn.click();
 		String error = errorDiv.getText();
-		String Designation = null ;
+		String Designation = null;
 		if (error.equals("×\n" + "Server Error !")) {
 			Assert.assertFalse(true);
 		} else {
@@ -636,6 +659,85 @@ public class AppointmentPage {
 		calAge = age.getAttribute("value");
 		closeModal.click();
 
+	}
+
+	public String verifyAdvanceCollectionPage() {
+		advanceCollectionTab.click();
+		return pagetittle.getText();
+	}
+
+	public void selectPatient(String name) throws InterruptedException {
+		searchPatient.sendKeys(name);
+		Thread.sleep(2000);
+		searchPatient.sendKeys(Keys.ARROW_DOWN);
+		searchPatient.sendKeys(Keys.ENTER);
+
+	}
+
+	public String checkValidation(String name) throws InterruptedException {
+		// advanceCollectionTab.click();
+		String colour = null;
+		if (submit.isEnabled()) {
+			Assert.assertFalse(true);
+		} else {
+			selectPatient(name);
+			if (submit.isEnabled()) {
+				SoftAssert.assertFalse(false);
+				submit.click();
+				Thread.sleep(1000);
+				colour = advanceAmount.getCssValue("border-bottom-color");
+			}
+		}
+		return colour;
+
+	}
+
+	public void collectAdvance(String mobNo, String amount) throws InterruptedException {
+		advanceCollectionTab.click();
+		searchPatient.clear();
+		if (mobNo.equals("827536")) {
+			selectPatient(mobNo);
+		}
+		if (mobNo.equals("774050")) {
+			selectPatient(mobNo);
+		}
+		if (mobNo.equals("441559")) {
+			selectPatient(mobNo);
+		}
+
+		String actualadvance = advanceGiven.getText();
+		int expectedAdv = Integer.parseInt(actualadvance);
+		int finalAdv = expectedAdv + Integer.parseInt(amount);
+		String advAmount = Integer.toString(finalAdv);
+		searchPatient.clear();
+		selectPatient(mobNo);
+		advanceAmount.sendKeys(amount);
+		submit.click();
+		searchPatient.clear();
+		selectPatient(mobNo);
+		String actualAdvAmt = advanceGiven.getText();
+		SoftAssert.assertEquals(actualAdvAmt, advAmount);
+		SoftAssert.assertAll();
+
+	}
+
+	public void collectAdanceAndPrintReceipt(String name, String amount) throws Exception {
+		// advanceCollectionTab.click();
+		WebDriver driver = DriverFactory.getDriver();
+		searchPatient.clear();
+		selectPatient(name);
+		advanceAmount.sendKeys(amount);
+		String winHandleBefore = driver.getWindowHandle();
+		submitAndPrint.click();
+
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
+		}
+		String actualUrl = DriverFactory.getDriver().getCurrentUrl();
+		String afterSubmitUrl = actualUrl.substring(0, 53);
+		Assert.assertEquals(afterSubmitUrl, "https://beta.livehealth.solutions/printAdvanceReceipt");
+		driver.close();
+		driver.switchTo().window(winHandleBefore);
 	}
 
 }

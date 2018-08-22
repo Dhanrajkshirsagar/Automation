@@ -226,6 +226,53 @@ public class AppointmenetTest extends AbstractTestNGSpringContextTests {
 		softAssert.assertAll();
 	}
 	
+	@Test(priority = 16, groups = "Appointment")
+	public void verifyAdvanceCollectionPage() {
+		String actual;
+		try {
+			 actual = appointmentPage.verifyAdvanceCollectionPage();
+			Assert.assertEquals(actual, "Advance Collection");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+	}
+
+	@Test(priority = 17, groups = "Appointment")
+	public void verifyValidationOfAdvanceCollection() {
+		String colour;
+		try {
+			colour=appointmentPage.checkValidation("dhan");
+			Assert.assertEquals(colour, "rgba(255, 0, 0, 1)");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+	}
+
+	@Test(priority = 18, dataProvider = "adavanceCollection", groups = "Appointment")
+	public void verifyAdvanceCollectionSubmitButton(String mobno, String amount) {
+
+		try {
+			appointmentPage.collectAdvance(mobno, amount);
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+	}
+
+	@Test(priority = 19, groups = "Appointment")
+	public void verifyAdvanceCollectionSubmitAndPrintReceiptButton() {
+
+		try {
+			appointmentPage.collectAdanceAndPrintReceipt("b", "100");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+	}
+	
 	
 		@DataProvider(name="patientTypes") 
 		public static Object[][] getPatientTypedataForAppointment(){
@@ -275,6 +322,14 @@ public class AppointmenetTest extends AbstractTestNGSpringContextTests {
 						};
 
 			}
+		
+		@DataProvider(name = "adavanceCollection")
+		public static Object[][] getadavanceCollection() {
+
+			return new Object[][] { { "827536", "500" }, { "774050", "300" }, { "441559", "200" },
+
+			};
+		}
 		
 		@AfterClass(alwaysRun = true)
 		public void tearDown() {
