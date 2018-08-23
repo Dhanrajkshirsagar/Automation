@@ -38,5 +38,7 @@ public class Constants {
 	
 	public static String HISTORY_URL = "https://beta.livehealth.solutions/waitingList/#history";
 	
+	public static String DoctorManagement_URL = "https://beta.livehealth.solutions/doctorManagement/";
+	
 
 }

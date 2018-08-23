@@ -682,10 +682,10 @@ public class ListManagementTest extends AbstractTestNGSpringContextTests {
 
 	@Test(priority = 52, groups = { "ListManagement" })
 	public void verifyAllListCheckBox() {
-
+		boolean flag;
 		try {
-			listManagementPage.listCount();
-
+			flag=listManagementPage.listCount();
+			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());

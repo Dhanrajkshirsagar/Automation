@@ -1170,7 +1170,7 @@ public class ListManagementPage {
 		copyTestListNameTypeahead.sendKeys(Keys.ENTER);
 	}
 
-	public void listCount() throws Exception {
+	public boolean listCount() throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		DriverFactory.getDriver().get("https://beta.livehealth.solutions/addTestsToList/");
 		DriverFactory.getDriver().findElement(By.id("docRevListFlag")).click();
@@ -1178,25 +1178,26 @@ public class ListManagementPage {
 		String[] arr = countWithDocRev.split("\\s");
 		int count = Integer.parseInt(arr[arr.length - 1]);
 		if (count >= 1) {
-			SoftAssert.assertTrue(true);
+			return true;
 		} 
-		DriverFactory.getDriver().findElement(By.id("refPriceListFlag")).click();
-		String countWithRefList = listCount.getText();
-		String[] arr1 = countWithRefList.split("\\s");
-		int count1 = Integer.parseInt(arr1[arr1.length - 1]);
-		if (count1 >= count) {
-			SoftAssert.assertTrue(true);
-		} 
-		DriverFactory.getDriver().findElement(By.id("orgRevListFlag")).click();
-		String orgRevList = listCount.getText();
-		String[] arr2 = orgRevList.split("\\s");
-		int count2 = Integer.parseInt(arr2[arr2.length - 1]);
-		if (count2 >= count1) {
-			SoftAssert.assertTrue(true);
-		} else {
-			SoftAssert.assertFalse(true);
-		}
-		SoftAssert.assertAll();
+//		DriverFactory.getDriver().findElement(By.id("refPriceListFlag")).click();
+//		String countWithRefList = listCount.getText();
+//		String[] arr1 = countWithRefList.split("\\s");
+//		int count1 = Integer.parseInt(arr1[arr1.length - 1]);
+//		if (count1 >= count) {
+//			SoftAssert.assertTrue(true);
+//		} 
+//		DriverFactory.getDriver().findElement(By.id("orgRevListFlag")).click();
+//		String orgRevList = listCount.getText();
+//		String[] arr2 = orgRevList.split("\\s");
+//		int count2 = Integer.parseInt(arr2[arr2.length - 1]);
+//		if (count2 >= count1) {
+//			SoftAssert.assertTrue(true);
+//		} else {
+//			SoftAssert.assertFalse(true);
+//		}
+//		SoftAssert.assertAll();
+		return false;
 
 	}
 

@@ -309,23 +309,130 @@ public class UserManagementPage {
 
 	@FindBy(id = "editTestFlag")
 	private WebElement editTestFlag;
-	
+
 	@FindBy(id = "submitReport")
 	private WebElement submitReport;
-	
+
 	@FindBy(id = "historyTestList")
 	private WebElement historyTestList;
-	
+
 	@FindBy(id = "historyli")
 	private WebElement historyli;
-	
+
 	@FindBy(xpath = "//a[contains(text(),'Edit this test')]")
 	private WebElement Editthistest;
-	
+
 	@FindBy(id = "historySuccessDiv")
 	private WebElement historySuccessDiv;
 
+	@FindBy(id = "accordion3")
+	private WebElement accordion3;
 
+	@FindBy(id = "selectAllAdminEditFlags")
+	private WebElement selectAllAdminEditFlags;
+
+	@FindBy(id = "userReferralManagement")
+	private WebElement userReferralManagement;
+
+	@FindBy(xpath = "//*[@id=\"refBillingListDiv\"]/h4")
+	private WebElement refBillingListDiv;
+
+	@FindBy(id = "docName")
+	private WebElement docName;
+
+	@FindBy(xpath = "//*[@id=\"referralUploadDiv\"]/div[1]/h4/b")
+	private WebElement referralUploadDiv;
+
+	@FindBy(xpath = "//a[contains(text(),'Add / Edit Referral')]")
+	private WebElement AddEditReferral;
+
+	@FindBy(xpath = "//a[contains(text(),'Upload Excel')]")
+	private WebElement UploadExcel;
+
+	@FindBy(id = "userDeleteReferral")
+	private WebElement userDeleteReferral;
+
+	@FindBy(id = "doctorName")
+	private WebElement doctorName;
+
+	@FindBy(id = "uploadButton")
+	private WebElement uploadButton;
+
+	@FindBy(id = "editReferralTab")
+	private WebElement editReferralTab;
+
+	@FindBy(id = "referralEditList")
+	private WebElement referralEditList;
+
+	@FindBy(id = "deleteRefButton")
+	private WebElement deleteRefButton;
+
+	@FindBy(id = "referralLists")
+	private WebElement referralLists;
+
+	@FindBy(id = "deletebtn")
+	private WebElement deletebtn;
+
+	@FindBy(id = "errorDiv")
+	private WebElement errorDiv;
+
+	@FindBy(id = "userRefferalSettlement")
+	private WebElement userRefferalSettlement;
+
+	@FindBy(xpath = "//a[contains(text(),'Doctor Management')]")
+	private WebElement DoctorManagement;
+
+	@FindBy(className = "text-center")
+	private WebElement textcenter;
+
+	@FindBy(xpath = "//*[@id=\"doctorManagementDiv\"]/div[1]/h4/b")
+	private WebElement doctorManagementDiv;
+
+	@FindBy(id = "userUpdateAllRevenue")
+	private WebElement userUpdateAllRevenue;
+
+	@FindBy(xpath = "//*[@id=\"addDoctorDiv\"]/div[3]/div[1]/h4")
+	private WebElement addDoctorDiv;
+
+	@FindBy(xpath = "//a[contains(text(),'Add / Edit Doctor')]")
+	private WebElement AddEditDoctor;
+
+	@FindBy(id = "userDoctorManagement")
+	private WebElement userDoctorManagement;
+
+	@FindBy(className = "textManage")
+	private WebElement LockedDoctorManagement;
+
+	@FindBy(id = "addCity")
+	private WebElement addCity;
+
+	@FindBy(id = "departmentList")
+	private WebElement departmentList;
+
+	@FindBy(id = "editTestTab")
+	private WebElement editTestTab;
+
+	@FindBy(id = "doctorList")
+	private WebElement doctorList;
+
+	@FindBy(id = "doctorContact")
+	private WebElement doctorContact;
+
+	@FindBy(id = "userDeleteDoctor")
+	private WebElement userDeleteDoctor;
+
+	@FindBy(xpath = "//button[contains(text(),'Delete')]")
+	private WebElement deleteDoc;
+
+	@FindBy(xpath = "//a[contains(text(),'Doctor Revenue Tracker')]")
+	private WebElement DoctorRevenueTracker;
+	
+	@FindBy(xpath = "//*[@id=\"doctorRevenueDiv\"]/div[1]/h4/b")
+	private WebElement doctorRevenueDiv;
+	
+	@FindBy(id = "userDoctorRevenueTracker")
+	private WebElement userDoctorRevenueTracker;
+	
 	@PostConstruct
 	public void loadDriver() throws Exception {
 		PageFactory.initElements(DriverFactory.getDriver(), this);
@@ -1317,7 +1424,9 @@ public class UserManagementPage {
 		Thread.sleep(200);
 		return successDiv.getText();
 	}
+
 	public String report;
+
 	public String EditSubmittedReportAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
@@ -1326,7 +1435,7 @@ public class UserManagementPage {
 		if (selectAllOperationEditFlags.isSelected()) {
 			selectAllOperationEditFlags.click();
 		}
- 		if (!editTestFlag.isSelected()) {
+		if (!editTestFlag.isSelected()) {
 			editTestFlag.click();
 		}
 		editShowUser.click();
@@ -1348,14 +1457,14 @@ public class UserManagementPage {
 		CommonMethods.waitForElementToVisible(userWaitingListCard);
 		patientList.get(0).click();
 		CommonMethods.waitForElementToVisible(historyTestList);
-		List<WebElement> reportNames=historyTestList.findElements(By.tagName("b"));
-		report=reportNames.get(1).getText();
+		List<WebElement> reportNames = historyTestList.findElements(By.tagName("b"));
+		report = reportNames.get(1).getText();
 		waitingListLabOptionList.get(0).click();
 		Editthistest.click();
 		CommonMethods.waitForElementToVisible(historySuccessDiv);
 		return historySuccessDiv.getText();
 	}
-	
+
 	public boolean EditSubmittedReportNotAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
@@ -1364,7 +1473,7 @@ public class UserManagementPage {
 		if (selectAllOperationEditFlags.isSelected()) {
 			selectAllOperationEditFlags.click();
 		}
- 		if (editTestFlag.isSelected()) {
+		if (editTestFlag.isSelected()) {
 			editTestFlag.click();
 		}
 		editShowUser.click();
@@ -1386,12 +1495,340 @@ public class UserManagementPage {
 		CommonMethods.waitForElementToVisible(userWaitingListCard);
 		patientList.get(0).click();
 		CommonMethods.waitForElementToVisible(historyTestList);
-		if(waitingListLabOptionList.size()>0) {
+		if (waitingListLabOptionList.size() > 0) {
 			return false;
 		}
 		return true;
 	}
-	
 
+	public List<String> referralManagementAccessFlag(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+
+		if (!userReferralManagement.isSelected()) {
+			userReferralManagement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		String billingList = refBillingListDiv.getText();
+		AddEditReferral.click();
+		CommonMethods.waitForElementToVisible(docName);
+		String addEdit = docName.getText();
+		UploadExcel.click();
+		CommonMethods.waitForElementToVisible(referralUploadDiv);
+		String uploadExcel = referralUploadDiv.getText();
+		ArrayList<String> list = new ArrayList<>();
+		list.add(billingList);
+		list.add(addEdit);
+		list.add(uploadExcel);
+
+		return list;
+	}
+
+	public boolean withoutReferralManagementAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+
+		if (userReferralManagement.isSelected()) {
+			userReferralManagement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Add / Edit Referral")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean deleteReferralFlag(String userName, String password, String refName) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+
+		if (!userDeleteReferral.isSelected()) {
+			userDeleteReferral.click();
+		}
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		AddEditReferral.click();
+		doctorName.sendKeys(refName);
+		CommonMethods.waitForElementToClickable(uploadButton);
+		uploadButton.click();
+		DriverFactory.getDriver().navigate().refresh();
+		editReferralTab.click();
+		selectReferralName(refName);
+		CommonMethods.waitForElementToClickable(deleteRefButton);
+		deleteRefButton.click();
+		CommonMethods.waitForElementToClickable(deletebtn);
+		deletebtn.click();
+		Thread.sleep(500);
+		String warning = errorDiv.getText();
+		int length = warning.length();
+		if (length > 1) {
+			return false;
+		}
+		return true;
+	}
+
+	public void selectReferralName(String refName) throws InterruptedException {
+		referralEditList.sendKeys(refName);
+		Thread.sleep(1000);
+		referralEditList.sendKeys(Keys.ARROW_DOWN);
+		referralEditList.sendKeys(Keys.ENTER);
+	}
+
+	public String NotdeleteReferralAccess(String userName, String password, String refName) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userDeleteReferral.isSelected()) {
+			userDeleteReferral.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		AddEditReferral.click();
+		DriverFactory.getDriver().navigate().refresh();
+		editReferralTab.click();
+		selectReferralName(refName);
+		CommonMethods.waitForElementToClickable(deleteRefButton);
+		deleteRefButton.click();
+		CommonMethods.waitForElementToClickable(deletebtn);
+		deletebtn.click();
+		CommonMethods.waitForElementToVisible(errorDiv);
+		String warning = errorDiv.getText();
+		System.out.println(warning);
+		return warning;
+	}
+
+	public boolean ReferralSettlementAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Referral Settlements")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean ReferralSettlementNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userRefferalSettlement.isSelected()) {
+			userRefferalSettlement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Referral Settlements")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public String updateAllRevenueAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DoctorManagement.click();
+		String text = doctorManagementDiv.getText();
+		return text;
+
+	}
+
+	public String updateAllRevenueNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userUpdateAllRevenue.isSelected()) {
+			userUpdateAllRevenue.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DoctorManagement.click();
+		String text = textcenter.getText();
+		return text;
+
+	}
+
+	public String doctorManagementAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DoctorManagement.click();
+		AddEditDoctor.click();
+		String text = addDoctorDiv.getText();
+		return text;
+
+	}
+
+	public String doctorManagementnotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userDoctorManagement.isSelected()) {
+			userDoctorManagement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		LockedDoctorManagement.click();
+		LockedDoctorManagement.click();
+		String Url = DriverFactory.getDriver().getCurrentUrl();
+		return Url;
+
+	}
+
+	public boolean deleteDoctorAccess(String userName, String password, String docName) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DoctorManagement.click();
+		AddEditDoctor.click();
+		doctorName.sendKeys(docName);
+		doctorContact.sendKeys("7845120200");
+		addCity.clear();
+		addCity.sendKeys("Pune");
+		departmentList.sendKeys("PATHOLOGY");
+		Thread.sleep(300);
+		departmentList.sendKeys(Keys.ARROW_DOWN);
+		departmentList.sendKeys(Keys.ENTER);
+		uploadButton.click();
+		DriverFactory.getDriver().navigate().refresh();
+		editTestTab.click();
+		CommonMethods.waitForElementToClickable(doctorList);
+		Select ele = new Select(doctorList);
+		ele.selectByVisibleText(docName);
+		CommonMethods.waitForElementToClickable(deleteDoc);
+		deleteDoc.click();
+		Thread.sleep(500);
+		String warning = errorDiv.getText();
+		int length = warning.length();
+		if (length > 1) {
+			return false;
+		}
+		return true;
+	}
+
+	public String deleteDoctorNotAccess(String userName, String password, String docName) throws Exception {
+		 signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (userDeleteDoctor.isSelected()) {
+			userDeleteDoctor.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DoctorManagement.click();
+		AddEditDoctor.click();
+		CommonMethods.waitForElementToClickable(editTestTab);
+		editTestTab.click();
+		CommonMethods.waitForElementToClickable(doctorList);
+		Select ele = new Select(doctorList);
+		ele.selectByVisibleText(docName);
+		CommonMethods.waitForElementToClickable(deleteDoc);
+		deleteDoc.click();
+		CommonMethods.waitForElementToVisible(errorDiv);
+		String warning = errorDiv.getText();
+		return warning;
+	}
+
+	public String doctorRevenueTrackerAccess(String userName, String password) throws Exception {
+//		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DoctorManagement.click();
+		DoctorRevenueTracker.click();
+		String text = doctorRevenueDiv.getText();
+		return text;
+
+	}
+	
+	public String doctorRevenueTrackerNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+
+		if (userDoctorRevenueTracker.isSelected()) {
+			userDoctorRevenueTracker.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DoctorManagement.click();
+		LockedDoctorManagement.click();
+		String Url = DriverFactory.getDriver().getCurrentUrl();
+		return Url;
+
+	}
 
 }

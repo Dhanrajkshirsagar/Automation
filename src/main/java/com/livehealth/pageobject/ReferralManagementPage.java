@@ -448,15 +448,11 @@ public class ReferralManagementPage {
 		addPincode.sendKeys("102030");
 		doctorUsername.sendKeys("dhanraj");
 		doctorPassword.sendKeys("Dhanraj@123");
-		try {
-			SaveReferral.click();
-			DriverFactory.getDriver().navigate().refresh();
-			CommonMethods.waitForElementToClickable(editReferralTab);
-			selectReferral("Dhanra");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
+		SaveReferral.click();
+		DriverFactory.getDriver().navigate().refresh();
+		CommonMethods.waitForElementToClickable(editReferralTab);
+		selectReferral("Dhanra");
 		String referrlalName = doctorName.getAttribute("value");
 
 		return referrlalName;
@@ -951,7 +947,7 @@ public class ReferralManagementPage {
 	}
 
 	public boolean paymentType(String mode, String value, String refName) throws Exception {
-		WebDriver driver=DriverFactory.getDriver();
+		WebDriver driver = DriverFactory.getDriver();
 		driver.navigate().refresh();
 		selectReferralForBillSettle(refName);
 		CommonMethods.waitForElementToClickable(submit);
@@ -1069,12 +1065,12 @@ public class ReferralManagementPage {
 		return false;
 
 	}
-	
+
 	public boolean bulkUploadReferrals(String Doc1, String Doc2) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		uploadExcelOption.click();
 		CommonMethods.waitForElementToClickable(fileInputExcel);
-		String path=System.getProperty("user.dir");
+		String path = System.getProperty("user.dir");
 		String invalidFile = path + File.separator + "/src/main/resources/Files/ReferralList.xls";
 		fileInputExcel.sendKeys(invalidFile);
 		CommonMethods.waitForElementToVisible(excelSuccessDiv);

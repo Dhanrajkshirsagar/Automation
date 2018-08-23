@@ -98,7 +98,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 	public void verifyBillSettlementAllDetails() {
 		boolean flag;
 		try {
-			flag = billSettlementPage.verifydetails("tushar");
+			flag = billSettlementPage.verifydetails("Mayur");
 			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -265,7 +265,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 	public void verifyAllBillsReferralsSearch() {
 		boolean flag;
 		try {
-			flag = billSettlementPage.SearchByPatientName("Search by Referral Name", "auto");
+			flag = billSettlementPage.SearchByReferralName("Search by Referral Name", "auto");
 			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());

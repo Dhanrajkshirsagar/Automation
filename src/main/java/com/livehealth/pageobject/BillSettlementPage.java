@@ -1,19 +1,15 @@
 package com.livehealth.pageobject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 import javax.annotation.PostConstruct;
-
+import com.livehealth.model.BillData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
@@ -26,8 +22,6 @@ import org.testng.asserts.SoftAssert;
 import com.livehealth.base.DriverFactory;
 import com.livehealth.config.Constants;
 import com.livehealth.util.CommonMethods;
-
-import ch.qos.logback.core.net.SyslogOutputStream;
 
 @Component
 public class BillSettlementPage {
@@ -123,6 +117,9 @@ public class BillSettlementPage {
 
 	@FindBy(id = "userBillsContainer")
 	private WebElement userBillsContainer;
+	
+	@FindAll({ @FindBy(id = "userBillsContainer") })
+	public List<WebElement> userBillsContainerList;
 
 	@FindBy(xpath = " //*[@id=\"userAmntDivId\"]/div[2]/b")
 	public static WebElement patientDue;
@@ -213,13 +210,17 @@ public class BillSettlementPage {
 
 	@FindBy(xpath = "//*[@id=\"searchPatientBar\"]/div/div[1]/button")
 	private WebElement searchPatientBar;
+	
+	@FindAll({ @FindBy(id = "billList") })
+	public List<WebElement> billlist;
+
 
 	@PostConstruct
 	public void loadDriver() throws Exception {
 		PageFactory.initElements(DriverFactory.getDriver(), this);
 
 	}
-
+	BillData bill = new BillData();
 	public void signIn(String userName, String password) throws Exception {
 
 		WebDriver driver = DriverFactory.getDriver();
@@ -251,7 +252,8 @@ public class BillSettlementPage {
 		AdvanceAmount.clear();
 		AdvanceAmount.sendKeys(amount);
 		saveBill.click();
-		billId = confirmBillId.getText();
+		String billId=confirmBillId.getText();
+		bill.setBillId(billId);
 		String success = confirmBillMsgDiv.getText();
 		Thread.sleep(500);
 		backToRegistration.click();
@@ -283,15 +285,16 @@ public class BillSettlementPage {
 		BillSettlemetTab.click();
 		selectPatient(duepatientName);
 		String name = custName.getText();
-		Assert.assertEquals(name, "Tushar");
-		Thread.sleep(3000);
-		java.util.List<WebElement> bills = billList.findElements(By.name("labBillId"));
+		Assert.assertEquals(name, "Mayur");
+		CommonMethods.waitForAllElementsToVisible(billlist);
+		Thread.sleep(1000);
+		List<WebElement> bills = billList.findElements(By.name("labBillId"));
 		int length = bills.size();
-
 		for (int i = 0; i < length; i++) {
 			String billslist = bills.get(i).getText();
-
-			if (billslist.contains(billId)) {
+			System.out.println(billslist);
+			System.out.println(bill.getBillId());
+			if (billslist.contains(bill.getBillId())) {
 				return true;
 			}
 		}
@@ -302,7 +305,7 @@ public class BillSettlementPage {
 	public List<Integer> calculateDue(String duepatientName) throws Exception {
 		selectPatient(duepatientName);
 		CommonMethods.waitForElementToVisible(billList);
-		java.util.List<WebElement> dueAmounts = billList.findElements(By.name("dueId"));
+		List<WebElement> dueAmounts = billList.findElements(By.name("dueId"));
 		int length = dueAmounts.size();
 		int sum = 0;
 
@@ -677,7 +680,7 @@ public class BillSettlementPage {
 		Thread.sleep(1000);
 		searchBillsforRefAndPatient.sendKeys(Keys.ARROW_DOWN);
 		searchBillsforRefAndPatient.sendKeys(Keys.ENTER);
-
+		CommonMethods.waitForAllElementsToVisible(userBillsContainerList);
 		List<WebElement> links = userBillsContainer.findElements(By.tagName("p"));
 		for (int i = 0; i < links.size(); i++) {
 			if (links.get(i).getText().contains("Name : Mayur (M - 3 months)")) {
@@ -699,15 +702,16 @@ public class BillSettlementPage {
 		link.click();
 		searchBillsforRefAndPatient.sendKeys(name);
 		Thread.sleep(1000);
+		searchBillsforRefAndPatient.sendKeys(Keys.DOWN);
 		searchBillsforRefAndPatient.sendKeys(Keys.ARROW_DOWN);
 		searchBillsforRefAndPatient.sendKeys(Keys.ENTER);
 		Thread.sleep(1000);
 		List<WebElement> list = DriverFactory.getDriver()
-				.findElements(By.xpath("//label[contains(text(),'Referral - " + option + "')]"));
+				.findElements(By.xpath("//label[contains(text(),'Referral - Dr. autoReferral')]"));
 
 		for (int i = 0; i < list.size(); i++) {
 			String actualText = list.get(i).getText();
-			if (actualText.equals("Referral - autoReferral")) {
+			if (actualText.equals("Referral - Dr. autoReferral")) {
 				return true;
 			}
 		}
@@ -957,13 +961,14 @@ public class BillSettlementPage {
 	public void discountRestrictionOnOutsourceTest(String test, String name, String discount) throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		selectPatientForAddTestToBill(name);
+		SoftAssert softAssert=new SoftAssert();
 		Thread.sleep(1000);
 		List<WebElement> bills = DriverFactory.getDriver().findElements(By.name("lab"));
 		if (test.equals("Mumps Virus IgM Antibody")) {
 			bills.get(0).click();
 			getDiscount(test, discount);
 			String warningMegs = errorDiv.getText();
-			Assert.assertEquals(warningMegs, "×\n" + "Error!Consession cannot be allowed for outsource test.");
+			softAssert.assertEquals(warningMegs, "×\n" + "Error!Consession cannot be allowed for outsource test.");
 
 		}
 
@@ -973,7 +978,7 @@ public class BillSettlementPage {
 
 			int caltotal = Integer.parseInt(testPrice) - Integer.parseInt(discount);
 			int payableAmt = Integer.parseInt(totalAmount.getText());
-			Assert.assertEquals(payableAmt, caltotal);
+			softAssert.assertEquals(payableAmt, caltotal);
 			saveExistingBill.click();
 			CommonMethods.waitForElementToClickable(confirmedBillUpdate);
 			confirmedBillUpdate.click();
@@ -988,10 +993,11 @@ public class BillSettlementPage {
 			int num = (int) (Integer.parseInt(testPrice) * Integer.parseInt(discount) / 100);
 			int caltotal = Integer.parseInt(testPrice) - num;
 			int payableAmt = Integer.parseInt(totalAmount.getText());
-			Assert.assertEquals(payableAmt, caltotal);
+			softAssert.assertEquals(payableAmt, caltotal);
 			saveExistingBill.click();
 			CommonMethods.waitForElementToClickable(confirmedBillUpdate);
 			confirmedBillUpdate.click();
+			softAssert.assertAll();
 		}
 
 	}
