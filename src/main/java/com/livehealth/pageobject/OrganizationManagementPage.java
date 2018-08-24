@@ -1556,8 +1556,10 @@ public class OrganizationManagementPage {
 	public String invalidFileInput() throws Exception {
 		DriverFactory.getDriver().navigate().refresh();
 		BulOrganizationUploadTab.click();
-		Thread.sleep(2000);
-		fileInputOrgExcel.sendKeys("../resources/Files/consoleText.txt");
+		String path=System.getProperty("user.dir");
+		String invalidFile = path + File.separator + "/src/main/resources/Files/consoleText.txt";
+		CommonMethods.waitForElementToClickable(fileInputOrgExcel);
+		fileInputOrgExcel.sendKeys(invalidFile);
 		CommonMethods.waitForElementToVisible(excelSuccessDiv);
 		String warning = excelSuccessDiv.getText();
 

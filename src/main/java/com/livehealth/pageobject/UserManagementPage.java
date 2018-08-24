@@ -433,6 +433,119 @@ public class UserManagementPage {
 	@FindBy(id = "userDoctorRevenueTracker")
 	private WebElement userDoctorRevenueTracker;
 	
+	@FindBy(xpath = "//a[contains(text(),'Organization Management')]")
+	private WebElement OrganizationManagement;
+	
+	@FindBy(xpath = "//span[contains(text(),'Organization Management')]")
+	private WebElement LockOrganizationManagement;
+	
+	@FindBy(id = "userOrganizationManagement")
+	private WebElement userOrganizationManagement;
+	
+	@FindBy(id = "userDeleteOrganization")
+	private WebElement userDeleteOrganization;
+	
+	@FindBy(xpath = "//*[@id=\"nav-sidebar\"]/div[3]/ul/li[3]/ul/li[2]/a")
+	private WebElement addEditOrg;
+	
+	@FindBy(id = "orgnName")
+	private WebElement orgnName;
+	
+	@FindBy(id = "orgDeleteButton")
+	private WebElement orgDeleteButton;
+
+	@FindBy(id = "orgDelete")
+	private WebElement orgDelete;
+	
+	@FindBy(id = "orgUploadButton")
+	private WebElement orgUploadButton;
+	
+	@FindBy(id = "editOrgTab")
+	private WebElement editOrgTab;
+	
+	@FindBy(id = "userPermissionError")
+	private WebElement userPermissionError;
+	
+	@FindBy(id = "orgEditList")
+	private WebElement orgEditList;
+	
+	@FindBy(id = "userOrganizationSettlement")
+	private WebElement userOrganizationSettlement;
+	
+	@FindBy(xpath = "//*[@id=\"contentTypehead\"]/div/div[3]/div[1]/h4")
+	private WebElement contentTypehead;
+	
+	@FindBy(id = "userOutsourceManagement")
+	private WebElement userOutsourceManagement;
+	
+	@FindBy(xpath = "//a[contains(text(),'Outsourcing Management')]")
+	private WebElement OutsourcingManagement;
+	
+	@FindBy(xpath = "//*[@id=\"nav-sidebar\"]/div[3]/ul/li[4]/a/span[1]")
+	private WebElement lockedOutsourcingManagement;
+	
+	@FindBy(id = "userListManagement")
+	private WebElement userListManagement;
+	
+	@FindBy(id = "userListDelete")
+	private WebElement userListDelete;
+
+	@FindBy(xpath = "//a[contains(text(),'List & Group Management')]")
+	private WebElement ListGroupManagement;
+	
+	@FindBy(id = "deleteList")
+	private WebElement deleteList;
+	
+	@FindBy(id = "btnDeleteList")
+	private WebElement btnDeleteList;
+	
+	@FindBy(id = "addListLink")
+	private WebElement addListLink;
+	
+	@FindBy(id = "addListName")
+	private WebElement addListName;
+	
+	@FindBy(id = "addListBtn")
+	private WebElement addListBtn;
+	
+	@FindBy(id = "listName")
+	private WebElement listNamee;
+	
+	@FindBy(xpath = "//a[contains(text(),'Profile & Report Management')]")
+	private WebElement ProfileReportManagement;
+	
+	@FindBy(id = "userReportManagement")
+	private WebElement userReportManagement;
+	
+	@FindBy(id = "userAddEditProfile")
+	private WebElement userAddEditProfile;
+	
+	@FindBy(id = "userAddEditReport")
+	private WebElement userAddEditReport;
+	
+	@FindBy(id = "userBillSettings")
+	private WebElement userBillSettings;
+	
+	@FindBy(id = "userReportSettings")
+	private WebElement userReportSettings;
+	
+	@FindBy(id = "userCancelTests")
+	private WebElement userCancelTests;
+	
+	@FindBy(id = "userDepartmentManagement")
+	private WebElement userDepartmentManagement;
+	
+	@FindBy(xpath = "//*[@id=\"contentTypehead\"]/div/div[1]/h4/b")
+	private WebElement DepartmentManagementText;
+	
+	@FindBy(xpath = "//a[contains(text(),'Department Management')]")
+	private WebElement DepartmentManagement;
+	
+	@FindBy(xpath = "//*[@id=\"nav-sidebar\"]/div[3]/ul/li[7]/a")
+	private WebElement LockDepartmentManagement;
+	
+	
+	
 	@PostConstruct
 	public void loadDriver() throws Exception {
 		PageFactory.initElements(DriverFactory.getDriver(), this);
@@ -1797,7 +1910,7 @@ public class UserManagementPage {
 	}
 
 	public String doctorRevenueTrackerAccess(String userName, String password) throws Exception {
-//		signIn(userName, password);
+		signIn(userName, password);
 		selectLabUser();
 		accordion3.click();
 		if (!selectAllAdminEditFlags.isSelected()) {
@@ -1829,6 +1942,587 @@ public class UserManagementPage {
 		String Url = DriverFactory.getDriver().getCurrentUrl();
 		return Url;
 
+	}
+	
+	public boolean organizationManagementAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		OrganizationManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Add / Edit Organization")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean organizationManagementNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userOrganizationManagement.isSelected()) {
+			userOrganizationManagement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		LockOrganizationManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Add / Edit Organization")) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean deleteOrganizationAccess(String userName, String password, String orgName) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		OrganizationManagement.click();
+		CommonMethods.waitForElementToClickable(addEditOrg);
+		addEditOrg.click();
+		CommonMethods.waitForElementToClickable(orgnName);
+		orgnName.sendKeys(orgName);
+		CommonMethods.waitForElementToClickable(orgUploadButton);
+		orgUploadButton.click();
+		editOrgTab.click();
+		selectOrgName(orgName);
+		CommonMethods.waitForElementToClickable(orgDeleteButton);
+		orgDeleteButton.click();
+		CommonMethods.waitForElementToClickable(orgDelete);
+		orgDelete.click();
+		Thread.sleep(500);
+		String warning = userPermissionError.getText();
+		if(warning.length()>1) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean deleteOrganizationNotAccess(String userName, String password, String orgName) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userDeleteOrganization.isSelected()) {
+			userDeleteOrganization.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		OrganizationManagement.click();
+		CommonMethods.waitForElementToClickable(addEditOrg);
+		addEditOrg.click();
+		CommonMethods.waitForElementToClickable(orgnName);
+		editOrgTab.click();
+		selectOrgName(orgName);
+		CommonMethods.waitForElementToClickable(orgDeleteButton);
+		orgDeleteButton.click();
+		CommonMethods.waitForElementToClickable(orgDelete);
+		orgDelete.click();
+		CommonMethods.waitForElementToVisible(userPermissionError);
+		String warning = userPermissionError.getText();
+		if(warning.length()>5) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void selectOrgName(String refName) throws InterruptedException {
+		orgEditList.sendKeys(refName);
+		Thread.sleep(1000);
+		orgEditList.sendKeys(Keys.ARROW_DOWN);
+		orgEditList.sendKeys(Keys.ENTER);
+	}
+	
+	public boolean organizationSettlemetAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		OrganizationManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Organization Settlements")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean organizationSettlemetNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userOrganizationSettlement.isSelected()) {
+			userOrganizationSettlement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		OrganizationManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Organization Settlements")) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public String OutsourceMangementAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		OutsourcingManagement.click();
+		String text=contentTypehead.getText();
+		return text;
+	}
+	
+	public String OutsourceMangementNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userOutsourceManagement.isSelected()) {
+			userOutsourceManagement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		lockedOutsourcingManagement.click();
+		String text=textcenter.getText();
+		return text;
+	}
+	
+	public boolean listMangementAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("List & Group Management")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean listMangementNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userListManagement.isSelected()) {
+			userListManagement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("List & Group Management")) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean deleteListAccess(String userName, String password,String listName) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		ListGroupManagement.click();
+		CommonMethods.waitForElementToClickable(addListLink);
+		addListLink.click();
+		CommonMethods.waitForElementToClickable(addListBtn);
+		addListName.sendKeys(listName);
+		addListBtn.click();
+		Thread.sleep(500);
+		selectListName(listName);
+		CommonMethods.waitForElementToClickable(deleteList);
+		deleteList.click();
+		CommonMethods.waitForElementToClickable(btnDeleteList);
+		btnDeleteList.click();
+		Thread.sleep(300);
+		String warning = userPermissionError.getText();
+		if(warning.length()>1) {
+			return false;
+		}
+		return true;	
+	}
+	
+	public void selectListName(String listName ) throws InterruptedException {
+		listNamee.sendKeys(listName);
+		Thread.sleep(500);
+		listNamee.sendKeys(Keys.ARROW_DOWN);
+		listNamee.sendKeys(Keys.ENTER);
+	}
+	
+	public String deleteListNotAccess(String userName, String password,String listName) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userListDelete.isSelected()) {
+			userListDelete.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		ListGroupManagement.click();
+		selectListName(listName);
+		CommonMethods.waitForElementToClickable(deleteList);
+		deleteList.click();
+		CommonMethods.waitForElementToClickable(btnDeleteList);
+		btnDeleteList.click();
+		CommonMethods.waitForElementToVisible(userPermissionError);
+		String warning = userPermissionError.getText();
+		return warning;
+	}
+	
+	public boolean reportMangementAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Profile & Report Management")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean reportMangementNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userReportManagement.isSelected()) {
+			userReportManagement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Profile & Report Management")) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean addEditProfileAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		ProfileReportManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Add / Edit Profile")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean addEditProfileNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userAddEditProfile.isSelected()) {
+			userAddEditProfile.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		ProfileReportManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Add / Edit Profile")) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean addEditReportAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		ProfileReportManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Add / Edit Report")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean addEditReportNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userAddEditReport.isSelected()) {
+			userAddEditReport.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		ProfileReportManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Add / Edit Report")) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean billSettingAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		ProfileReportManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Bill Settings")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean billSettingNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userBillSettings.isSelected()) {
+			userBillSettings.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		ProfileReportManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Bill Settings")) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean reportSettingAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		ProfileReportManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Report Settings")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean reportSettingNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userReportSettings.isSelected()) {
+			userReportSettings.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		ProfileReportManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Report Settings")) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean cancelTestsAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		ProfileReportManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Cancelled Tests")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean cancelTestsNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userCancelTests.isSelected()) {
+			userCancelTests.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		ProfileReportManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Cancelled Tests")) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public String departmentManagementAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DepartmentManagement.click();
+		String text=DepartmentManagementText.getText();
+		return text;
+	}
+	
+	public String departmentManagementNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion3.click();
+		if (!selectAllAdminEditFlags.isSelected()) {
+			selectAllAdminEditFlags.click();
+		}
+		if (userDepartmentManagement.isSelected()) {
+			userDepartmentManagement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		LockDepartmentManagement.click();
+		String text=textcenter.getText();
+		return text;
 	}
 
 }
