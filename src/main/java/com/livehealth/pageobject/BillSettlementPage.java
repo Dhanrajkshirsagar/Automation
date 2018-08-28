@@ -42,8 +42,8 @@ public class BillSettlementPage {
 
 	@FindBy(id = "searchCreditUsers")
 	private WebElement searchCreditUsers;
-
-	@FindBy(xpath = "//*[@id=\"nav-sidebar\"]/div[3]/ul/li[6]/a")
+	
+	@FindBy(xpath = "//a[contains(text(),'Bill Settlements')]")
 	private WebElement BillSettlemetTab;
 
 	@FindBy(id = "searchByAccessionNo")
@@ -159,8 +159,8 @@ public class BillSettlementPage {
 
 	@FindBy(xpath = "//*[@id=\"invoiceDiv\"]/div[7]/div/button")
 	private WebElement GenerateInvoice;
-
-	@FindBy(xpath = "//*[@id=\"nav-sidebar\"]/div[3]/ul/li[6]/ul/li[2]/a")
+	
+	@FindBy(xpath = "//a[contains(text(),'Add Tests To Bill')]")
 	private WebElement addTestToBill;
 
 	@FindBy(id = "searchPatientBill")

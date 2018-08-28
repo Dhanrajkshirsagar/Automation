@@ -21,7 +21,6 @@
 			<class name="com.livehealth.test.ListManagementTest" />
 			<class name="com.livehealth.test.BillSettlementTest" />
 			<class name="com.livehealth.test.AppointmenetTest" />
-			<class name="com.livehealth.test.AdanceCollectionTest" />
 			
 
 		</classes>
