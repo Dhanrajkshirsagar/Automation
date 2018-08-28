@@ -711,9 +711,9 @@ public class ReferralManagementPage {
 		exportListLink.click();
 		Thread.sleep(1000);
 		String filePath = "C:/Users/Administrator/Downloads/";
-		Assert.assertTrue(isFileDownloaded("filePath", "Referral price list.xls"),
+		Assert.assertTrue(isFileDownloaded("filePath", "ReAssign Referral Price.xls"),
 				"Failed to download Expected document");
-		File file = new File("C:/Users/Administrator/Downloads/Referral price list.xls");
+		File file = new File("C:/Users/Administrator/Downloads/ReAssign Referral Price.xls");
 		file.delete();
 
 	}
@@ -1118,8 +1118,8 @@ public class ReferralManagementPage {
 		excelTemplate.click();
 		Thread.sleep(1000);
 		String filePath = "C:/Users/Administrator/Downloads/";
-		Assert.assertTrue(isFileDownloaded("filePath", "ReferralList (7).xls"), "Failed to download Expected document");
-		File file = new File("C:/Users/Administrator/Downloads/ReferralList (7).xls");
+		Assert.assertTrue(isFileDownloaded("filePath", "ReferralList.xls"), "Failed to download Expected document");
+		File file = new File("C:/Users/Administrator/Downloads/ReferralList.xls");
 		file.delete();
 
 	}

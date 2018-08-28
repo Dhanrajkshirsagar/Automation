@@ -642,10 +642,72 @@ public class UserManagementPage {
 
 	@FindBy(id = "userCampaignManagement")
 	private WebElement userCampaignManagement;
-	
+
 	@FindBy(xpath = "//*[@id=\"hoverDropdown\"]/a")
 	private WebElement hoverDropdown;
 
+	@FindBy(id = "accordion4")
+	private WebElement accordion4;
+
+	@FindBy(id = "selectAllFiananceEditFlags")
+	private WebElement selectAllFiananceEditFlags;
+
+	@FindBy(xpath = "//a[contains(text(),'Finance Dashboard')]")
+	private WebElement FinanceDashboard;
+
+	@FindBy(xpath = "//*[@id=\"nav-sidebar\"]/div[3]/ul/li[1]/a/span[1]")
+	private WebElement LockFinanceDashboard;
+
+	@FindBy(xpath = "//*[@id=\"financeDashboardDiv\"]/div/div[1]/div[1]/h4/b")
+	private WebElement financeDashboardDiv;
+
+	@FindBy(id = "userFinanaceDashboard")
+	private WebElement userFinanaceDashboard;
+
+	@FindBy(id = "userFinanceExport")
+	private WebElement userFinanceExport;
+
+	@FindBy(id = "userBillList")
+	private WebElement userBillList;
+
+	@FindBy(id = "userFinanceAnalytics")
+	private WebElement userFinanceAnalytics;
+
+	@FindBy(id = "userFinanceDepartmentAnalytics")
+	private WebElement userFinanceDepartmentAnalytics;
+
+	@FindBy(id = "userFinanceOutsourceAnalytics")
+	private WebElement userFinanceOutsourceAnalytics;
+
+	@FindBy(id = "userFinanceMarketingAnalytics")
+	private WebElement userFinanceMarketingAnalytics;
+
+	@FindBy(id = "userFinanceTestAnalytics")
+	private WebElement userFinanceTestAnalytics;
+
+	@FindBy(id = "userFinanceMISReports")
+	private WebElement userFinanceMISReports;
+
+	@FindBy(id = "userTATAnalysis")
+	private WebElement userTATAnalysis;
+	
+	@FindBy(xpath = "//a[contains(text(),'Finance Analytics')]")
+	private WebElement FinanceAnalytics;
+
+	@FindBy(id = "userAnalyticsFlag")
+	private WebElement userAnalyticsFlag;
+
+	@FindBy(id = "userInvoiceMgtAccess")
+	private WebElement userInvoiceMgtAccess;
+	
+	@FindBy(xpath = "//*[@id=\"nav-sidebar\"]/div[3]/ul/li[12]/a")
+	private WebElement TATAnalysis;
+	
+	@FindBy(xpath = "//*[@id=\"nav-sidebar\"]/div[3]/ul/li[12]/a/span[1]")
+	private WebElement LockTATAnalysis;
+	
+	@FindBy(id = "overallAnalytic")
+	private WebElement overallAnalytic;
 	@PostConstruct
 	public void loadDriver() throws Exception {
 		PageFactory.initElements(DriverFactory.getDriver(), this);
@@ -2667,7 +2729,7 @@ public class UserManagementPage {
 	}
 
 	public boolean deleteMarketingMemberAccess(String userName, String password, String Name) throws Exception {
-		 signIn(userName, password);
+		signIn(userName, password);
 		selectLabUser();
 		accordion3.click();
 		if (!selectAllAdminEditFlags.isSelected()) {
@@ -2951,9 +3013,6 @@ public class UserManagementPage {
 		signIn(userName, password);
 		selectLabUser();
 		accordion3.click();
-		if (!selectAllAdminEditFlags.isSelected()) {
-			selectAllAdminEditFlags.click();
-		}
 		if (userLabUserManagement.isSelected()) {
 			userLabUserManagement.click();
 		}
@@ -2969,9 +3028,6 @@ public class UserManagementPage {
 		signIn(userName, password);
 		selectLabUser();
 		accordion3.click();
-		if (!selectAllAdminEditFlags.isSelected()) {
-			selectAllAdminEditFlags.click();
-		}
 		if (userDeleteLabUser.isSelected()) {
 			userDeleteLabUser.click();
 		}
@@ -3012,9 +3068,6 @@ public class UserManagementPage {
 		signIn(userName, password);
 		selectLabUser();
 		accordion3.click();
-		if (!selectAllAdminEditFlags.isSelected()) {
-			selectAllAdminEditFlags.click();
-		}
 		if (userUpdateUsersPassword.isSelected()) {
 			userUpdateUsersPassword.click();
 		}
@@ -3050,9 +3103,6 @@ public class UserManagementPage {
 		signIn(userName, password);
 		selectLabUser();
 		accordion3.click();
-		if (!selectAllAdminEditFlags.isSelected()) {
-			selectAllAdminEditFlags.click();
-		}
 		if (userActivityLog.isSelected()) {
 			userActivityLog.click();
 		}
@@ -3083,9 +3133,6 @@ public class UserManagementPage {
 		signIn(userName, password);
 		selectLabUser();
 		accordion3.click();
-		if (!selectAllAdminEditFlags.isSelected()) {
-			selectAllAdminEditFlags.click();
-		}
 		if (userSmsManagement.isSelected()) {
 			userSmsManagement.click();
 		}
@@ -3121,9 +3168,6 @@ public class UserManagementPage {
 		signIn(userName, password);
 		selectLabUser();
 		accordion3.click();
-		if (!selectAllAdminEditFlags.isSelected()) {
-			selectAllAdminEditFlags.click();
-		}
 		if (userCampaignManagement.isSelected()) {
 			userCampaignManagement.click();
 		}
@@ -3134,6 +3178,502 @@ public class UserManagementPage {
 		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getText().equals("Livehealth Reach")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public String financeDashboardAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (!userFinanaceDashboard.isSelected()) {
+			userFinanaceDashboard.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		CommonMethods.waitForElementToClickable(FinanceDashboard);
+		String text = financeDashboardDiv.getText();
+		return text;
+	}
+
+	public String financeDashboardNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (userFinanaceDashboard.isSelected()) {
+			userFinanaceDashboard.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		CommonMethods.waitForElementToClickable(LockFinanceDashboard);
+		LockFinanceDashboard.click();
+		String text = textcenter.getText();
+		return text;
+	}
+
+	public boolean userFinanceExportAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (!userFinanceExport.isSelected()) {
+			userFinanceExport.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Export")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean userFinanceExportNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (userFinanceExport.isSelected()) {
+			userFinanceExport.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Export")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean userBillListAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (!userBillList.isSelected()) {
+			userBillList.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Bills List")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean userBillListNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (userBillList.isSelected()) {
+			userBillList.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Bills List")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean userFinanceAnalyticsAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (!userFinanceAnalytics.isSelected()) {
+			userFinanceAnalytics.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Finance Analytics")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean userFinanceAnalyticsNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (userFinanceAnalytics.isSelected()) {
+			userFinanceAnalytics.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Finance Analytics")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean userFinanceDepartmentAnalyticsAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (!userFinanceDepartmentAnalytics.isSelected()) {
+			userFinanceDepartmentAnalytics.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Departmentwise Analytics")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean userFinanceDepartmentAnalyticsNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (userFinanceDepartmentAnalytics.isSelected()) {
+			userFinanceDepartmentAnalytics.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Departmentwise Analytics")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean userFinanceOutsourceAnalyticsAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (!userFinanceOutsourceAnalytics.isSelected()) {
+			userFinanceOutsourceAnalytics.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Outsource Analytics")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean userFinanceOutsourceAnalyticsNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (userFinanceOutsourceAnalytics.isSelected()) {
+			userFinanceOutsourceAnalytics.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Outsource Analytics")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean userFinanceMarketingAnalyticsAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (!userFinanceMarketingAnalytics.isSelected()) {
+			userFinanceMarketingAnalytics.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Marketing Analytics")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean userFinanceMarketingAnalyticsNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (userFinanceMarketingAnalytics.isSelected()) {
+			userFinanceMarketingAnalytics.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Marketing Analytics")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean userFinanceTestAnalyticsAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (!userFinanceTestAnalytics.isSelected()) {
+			userFinanceTestAnalytics.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Test Analytics")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean userFinanceTestAnalyticsNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (userFinanceTestAnalytics.isSelected()) {
+			userFinanceTestAnalytics.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Test Analytics")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean userFinanceMISReportsAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (!userFinanceMISReports.isSelected()) {
+			userFinanceMISReports.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("MIS Reports")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean userFinanceMISReportsNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (userFinanceMISReports.isSelected()) {
+			userFinanceMISReports.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("MIS Reports")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public String userTATAnalysisAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		WebDriver driver = DriverFactory.getDriver();
+		selectLabUser();
+		accordion4.click();
+		if (!selectAllFiananceEditFlags.isSelected()) {
+			selectAllFiananceEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		String beforehandle = driver.getWindowHandle();
+		TATAnalysis.click();
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
+		}
+		CommonMethods.waitForElementToClickable(overallAnalytic);
+		String text=overallAnalytic.getText();
+		driver.close();
+		driver.switchTo().window(beforehandle);
+		return text;
+	}
+
+	public String userTATAnalysisNotAccess(String userName, String password) throws Exception {
+		WebDriver driver = DriverFactory.getDriver();
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (userTATAnalysis.isSelected()) {
+			userTATAnalysis.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		String beforehandle = driver.getWindowHandle();
+		LockTATAnalysis.click();
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
+		}
+		String text=textcenter.getText();
+		driver.close();
+		driver.switchTo().window(beforehandle);
+		return text;
+	}
+
+	public String userAnalyticsFlagAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		WebDriver driver = DriverFactory.getDriver();
+		selectLabUser();
+		accordion4.click();
+		if (!selectAllFiananceEditFlags.isSelected()) {
+			selectAllFiananceEditFlags.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		String beforehandle = driver.getWindowHandle();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Finance Analytics")) {
+				list.get(i).click();
+			}
+		}
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
+		}
+		String url=DriverFactory.getDriver().getCurrentUrl();
+		driver.close();
+		driver.switchTo().window(beforehandle);
+		return url;
+	}
+
+	public String userAnalyticsFlagNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		WebDriver driver = DriverFactory.getDriver();
+		selectLabUser();
+		accordion4.click();
+		if (userAnalyticsFlag.isSelected()) {
+			userAnalyticsFlag.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		String beforehandle = driver.getWindowHandle();
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Finance Analytics")) {
+				list.get(i).click();
+			}
+		}
+		for (String winHandle : driver.getWindowHandles()) {
+			driver.switchTo().window(winHandle);
+		}
+		String url=DriverFactory.getDriver().getCurrentUrl();
+		driver.close();
+		driver.switchTo().window(beforehandle);
+		return url;
+	}
+	
+	public boolean userInvoiceMgtAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (!userInvoiceMgtAccess.isSelected()) {
+			userInvoiceMgtAccess.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Invoicing")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean userInvoiceMgtNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion4.click();
+		if (userInvoiceMgtAccess.isSelected()) {
+			userInvoiceMgtAccess.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Invoicing")) {
 				return false;
 			}
 		}

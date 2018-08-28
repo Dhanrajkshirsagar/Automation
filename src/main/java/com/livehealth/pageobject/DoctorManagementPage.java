@@ -844,10 +844,10 @@ public class DoctorManagementPage {
 		CommonMethods.waitForElementToClickable(listLink);
 		exportListLink.click();
 		Thread.sleep(1000);
-		String filePath = "/Users/shekhar/Downloads";
+		String filePath = "C:/Users/Administrator/Downloads";
 		Assert.assertTrue(isFileDownloaded("filePath", "ReAssign Doctor RevList.xls"),
 				"Failed to download Expected document");
-		File file = new File("/Users/shekhar/Downloads/ReAssign Doctor RevList.xls");
+		File file = new File("C:/Users/Administrator/Downloads/ReAssign Doctor RevList.xls");
 		file.delete();
 
 	}

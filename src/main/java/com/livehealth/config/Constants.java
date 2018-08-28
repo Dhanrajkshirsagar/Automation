@@ -40,5 +40,7 @@ public class Constants {
 	
 	public static String DoctorManagement_URL = "https://beta.livehealth.solutions/doctorManagement/";
 	
+	public static String Finance_URL = "https://beta.livehealth.solutions/financeDashboard/";
+	
 
 }

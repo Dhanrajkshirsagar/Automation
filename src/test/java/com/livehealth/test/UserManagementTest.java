@@ -490,817 +490,1130 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 //		}
 //	}
 //	//----------------TestCases on Admin Access control----------------------
-	
-	@Test(priority = 33)
-	public void VerifyUserWithReferralManagementAcces() {
-		SoftAssert softAssert=new SoftAssert();
-		List<String> list;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			list = userManagementPage.referralManagementAccessFlag(configProperties.getUsername(),configProperties.getPassword());
-			softAssert.assertEquals(list.get(0), "Referral Billing List");
-			softAssert.assertEquals(list.get(1), "Referral Name");
-			softAssert.assertEquals(list.get(2), "Referral Upload Excel");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			softAssert.assertTrue(false, e.getMessage());
-		}
-		softAssert.assertAll();
-	}
-	@Test(priority = 34)
-	public void VerifyUserWithoutReferralManagementAcess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.withoutReferralManagementAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 35)
-	public void VerifyUserWithDeleteReferralAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.deleteReferralFlag(configProperties.getUsername(),configProperties.getPassword(), "Delete Access");
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 36)
-	public void VerifyUserWithoutDeleteReferralAccess() {
-		String warning;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			warning = userManagementPage.NotdeleteReferralAccess(configProperties.getUsername(),configProperties.getPassword(), "Delete Not Access");
-			Assert.assertEquals(warning, "×\n" + 
-					"Sorry! You do not have privilege to delete a doctor. If you want it, contact to your Admin.");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 37)
-	public void VerifyUserWithReferralSetlementAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.ReferralSettlementAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 38)
-	public void VerifyUserWithOutReferralSetlementAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.ReferralSettlementNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 39)
-	public void VerifyUserWithUpdateAllRevenueAccess() {
+//	
+//	@Test()
+//	public void VerifyUserWithReferralManagementAcces() {
+//		SoftAssert softAssert=new SoftAssert();
+//		List<String> list;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			list = userManagementPage.referralManagementAccessFlag(configProperties.getUsername(),configProperties.getPassword());
+//			softAssert.assertEquals(list.get(0), "Referral Billing List");
+//			softAssert.assertEquals(list.get(1), "Referral Name");
+//			softAssert.assertEquals(list.get(2), "Referral Upload Excel");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			softAssert.assertTrue(false, e.getMessage());
+//		}
+//		softAssert.assertAll();
+//	}
+//	@Test()
+//	public void VerifyUserWithoutReferralManagementAcess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.withoutReferralManagementAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithDeleteReferralAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.deleteReferralFlag(configProperties.getUsername(),configProperties.getPassword(), "Delete Access");
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutDeleteReferralAccess() {
+//		String warning;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			warning = userManagementPage.NotdeleteReferralAccess(configProperties.getUsername(),configProperties.getPassword(), "Delete Not Access");
+//			Assert.assertEquals(warning, "×\n" + 
+//					"Sorry! You do not have privilege to delete a doctor. If you want it, contact to your Admin.");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithReferralSetlementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.ReferralSettlementAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithOutReferralSetlementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.ReferralSettlementNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithUpdateAllRevenueAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.updateAllRevenueAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "Doctor Revenue Management");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithOutUpdateAllRevenueAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.updateAllRevenueNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "Doctor Management");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithDoctorManagementAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.doctorManagementAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "Doctor Name");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutDoctorManagementAccess() {
+//		String URL;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			URL = userManagementPage.doctorManagementnotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(URL, Constants.DoctorManagement_URL);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithDeleteDoctorAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.deleteDoctorAccess(configProperties.getUsername(),configProperties.getPassword(), "delete doc");
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutDeleteDoctorAccess() {
+//		String warning;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			warning = userManagementPage.deleteDoctorNotAccess(configProperties.getUsername(),configProperties.getPassword(), "Delete not access");
+//			Assert.assertEquals(warning, "×\n" + 
+//					"Sorry! You do not have privilege to delete a doctor. If you want it, contact to your Admin.");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithDoctorRevenueTrackerAccess() {
+//		String warning;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			warning = userManagementPage.doctorRevenueTrackerAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(warning, "Doctor Revenue Tracker");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutDoctorRevenueTrackerAccess() {
+//		String URL;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			URL = userManagementPage.doctorRevenueTrackerNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(URL,Constants.DoctorManagement_URL);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserOrganizationManagementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.organizationManagementAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutOrganizationManagementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.organizationManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithDeleteOrganizationAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.deleteOrganizationAccess(configProperties.getUsername(),configProperties.getPassword(), "Delete Access");
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutOrganizationDeleteAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.deleteOrganizationNotAccess(configProperties.getUsername(),configProperties.getPassword(),"Delete Not Access");
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithOrganizationSettlementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.organizationSettlemetAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutOrganizationSettlementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.organizationSettlemetNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithOutsourceMangementAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.OutsourceMangementAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "Outsource Centre");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutOutsourceMangementAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.OutsourceMangementNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "Outsourcing Management");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithListManagementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.listMangementAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	
+//	@Test()
+//	public void VerifyUserWithoutListManagementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.listMangementNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithDeleteListAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.deleteListAccess(configProperties.getUsername(),configProperties.getPassword(), "List delete Access");
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutDeleteListAccess() {
+//		String warning;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			warning = userManagementPage.deleteListNotAccess(configProperties.getUsername(),configProperties.getPassword(), "List Access");
+//			Assert.assertEquals(warning, "×\n" + 
+//					"Sorry! You do not have permission to delete a list. If you want it, contact to your Admin.");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithReportManagementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.reportMangementAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutReportManagementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.reportMangementNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithAddEditProfileAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.addEditProfileAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutAddEditProfileNotAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.addEditProfileNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithAddEditReportAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.addEditReportAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutAddEditReportAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.addEditReportNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithBillSettingAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.billSettingAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutBillSettingAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.billSettingNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	
+//	@Test()
+//	public void VerifyUserWithReportSettingAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.reportSettingAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutReportSettingAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.reportSettingNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithCancelTestsAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.cancelTestsAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutCancelTestsAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.cancelTestsNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithDepartmentManagementAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.departmentManagementAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "New Department");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutDepartmentManagementAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.departmentManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "Department Management");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithMarketingManagementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.marketingManagementAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutMarketingManagementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.marketingManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithDeleteMarketingMemberAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.deleteMarketingMemberAccess(configProperties.getUsername(),configProperties.getPassword(), "mayur");
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutDeleteMarketingMemberAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.deleteMarketingMemberNotAccess(configProperties.getUsername(),configProperties.getPassword(), "akash");
+//			Assert.assertEquals(text, "×\n" + 
+//					"Sorry! You do not have privilege to delete a marketing member. If you want it, contact to your Admin.");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithCentreManagementAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.centreManagementAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "Lab Name :");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutCentreManagementAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.centreManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "Center Management");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithResourcesAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.resourcesAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutResourcesAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.resourcesNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithPackagesAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.packagesAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutPackagesAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.packagesNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	
+//	@Test()
+//	public void VerifyUserWithPromotionsAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.userPromotions(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutPromotionsAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.userPromotionsNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithFeedbackAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.userFeedbackAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutFeedbackAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.userFeedbackNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithUserManagementAccess() {
+//		String Url;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			Url = userManagementPage.userManagementAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(Url, "https://beta.livehealth.solutions/addEditUser/");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutUserManagementAccess() {
+//		String Url;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			Url = userManagementPage.userManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(Url, "https://beta.livehealth.solutions/referralManagement/");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutDeleteUserNotAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.deleteUserNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "×\n" + 
+//					"Sorry! You do not have permission to delete a user. If you want it, contact to your Admin.");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithActivityLogsAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.ActivityLogsAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "Track activity related to login users.");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutActivityLogsAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.ActivityLogsNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "Activity Log");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithSmsManagementNotAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.smsManagementAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "Name");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutSmsManagementNotAccess() {
+//		String text;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			text = userManagementPage.smsManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertEquals(text, "SMS Management");
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithCampaignManagementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.CampaignManagementAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+//	@Test()
+//	public void VerifyUserWithoutCampaignManagementAccess() {
+//		boolean flag;
+//		try {
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			flag = userManagementPage.CampaignManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
+//			Assert.assertTrue(flag);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//			Assert.assertTrue(false, e.getMessage());
+//		}
+//	}
+//	
+////------------------TestCases on Finance Access control--------------------------
+	@Test()
+	public void VerifyUserWithFinanceDashboardAccess() {
 		String text;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.updateAllRevenueAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "Doctor Revenue Management");
+			text = userManagementPage.financeDashboardAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertEquals(text, "Finance Dashboard - Graph View");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
 	
-	@Test(priority = 40)
-	public void VerifyUserWithOutUpdateAllRevenueAccess() {
+	@Test()
+	public void VerifyUserWithoutFinanceDashboardAccess() {
 		String text;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.updateAllRevenueNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "Doctor Management");
+			text = userManagementPage.financeDashboardNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertEquals(text, "Finance Dashboard");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
 	
-	@Test(priority = 41)
-	public void VerifyUserWithDoctorManagementAccess() {
+	@Test()
+	public void VerifyUserWithFinanceExportAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceExportAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithoutFinanceExportAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceExportNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithBillListAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userBillListAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithoutBillListAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userBillListNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithFinanceAnalyticsAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceAnalyticsAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithoutFinanceAnalyticsAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceAnalyticsNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithFinanceDepartmentAnalyticsAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceDepartmentAnalyticsAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithoutFinanceDepartmentAnalyticsAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceDepartmentAnalyticsNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithFinanceOutsourceAnalyticsAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceOutsourceAnalyticsAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithoutFinanceOutsourceAnalyticsAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceOutsourceAnalyticsNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithFinanceMarketingAnalyticsAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceMarketingAnalyticsAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithoutFinanceMarketingAnalyticsAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceMarketingAnalyticsNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithFinanceTestAnalyticsAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceTestAnalyticsAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithoutFinanceTestAnalyticsAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceTestAnalyticsNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithFinanceMISReportsAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceMISReportsAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithoutFinanceMISReportsAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.userFinanceMISReportsNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test()
+	public void VerifyUserWithTATAnalysisAccess() {
 		String text;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.doctorManagementAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "Doctor Name");
+			text = userManagementPage.userTATAnalysisAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertEquals(text, "Overall");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
 	
-	@Test(priority = 42)
-	public void VerifyUserWithoutDoctorManagementAccess() {
-		String URL;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			URL = userManagementPage.doctorManagementnotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(URL, Constants.DoctorManagement_URL);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 43)
-	public void VerifyUserWithDeleteDoctorAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.deleteDoctorAccess(configProperties.getUsername(),configProperties.getPassword(), "delete doc");
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 44)
-	public void VerifyUserWithoutDeleteDoctorAccess() {
-		String warning;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			warning = userManagementPage.deleteDoctorNotAccess(configProperties.getUsername(),configProperties.getPassword(), "Delete not access");
-			Assert.assertEquals(warning, "×\n" + 
-					"Sorry! You do not have privilege to delete a doctor. If you want it, contact to your Admin.");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 45)
-	public void VerifyUserWithDoctorRevenueTrackerAccess() {
-		String warning;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			warning = userManagementPage.doctorRevenueTrackerAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(warning, "Doctor Revenue Tracker");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 46)
-	public void VerifyUserWithoutDoctorRevenueTrackerAccess() {
-		String URL;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			URL = userManagementPage.doctorRevenueTrackerNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(URL,Constants.DoctorManagement_URL);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 47)
-	public void VerifyUserOrganizationManagementAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.organizationManagementAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 48)
-	public void VerifyUserWithoutOrganizationManagementAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.organizationManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 49)
-	public void VerifyUserWithDeleteOrganizationAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.deleteOrganizationAccess(configProperties.getUsername(),configProperties.getPassword(), "Delete Access");
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 50)
-	public void VerifyUserWithoutOrganizationDeleteAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.deleteOrganizationNotAccess(configProperties.getUsername(),configProperties.getPassword(),"Delete Not Access");
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 51)
-	public void VerifyUserWithOrganizationSettlementAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.organizationSettlemetAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 52)
-	public void VerifyUserWithoutOrganizationSettlementAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.organizationSettlemetNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 53)
-	public void VerifyUserWithOutsourceMangementAccess() {
-		String text;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.OutsourceMangementAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "Outsource Centre");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 54)
-	public void VerifyUserWithoutOutsourceMangementAccess() {
-		String text;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.OutsourceMangementNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "Outsourcing Management");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 55)
-	public void VerifyUserWithListManagementAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.listMangementAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	
-	@Test(priority = 56)
-	public void VerifyUserWithoutListManagementAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.listMangementNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 57)
-	public void VerifyUserWithDeleteListAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.deleteListAccess(configProperties.getUsername(),configProperties.getPassword(), "List delete Access");
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 58)
-	public void VerifyUserWithoutDeleteListAccess() {
-		String warning;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			warning = userManagementPage.deleteListNotAccess(configProperties.getUsername(),configProperties.getPassword(), "List Access");
-			Assert.assertEquals(warning, "×\n" + 
-					"Sorry! You do not have permission to delete a list. If you want it, contact to your Admin.");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 58)
-	public void VerifyUserWithReportManagementAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.reportMangementAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 59)
-	public void VerifyUserWithoutReportManagementAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.reportMangementNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 59)
-	public void VerifyUserWithAddEditProfileAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.addEditProfileAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 60)
-	public void VerifyUserWithoutAddEditProfileNotAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.addEditProfileNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 61)
-	public void VerifyUserWithAddEditReportAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.addEditReportAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 62)
-	public void VerifyUserWithoutAddEditReportAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.addEditReportNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 63)
-	public void VerifyUserWithBillSettingAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.billSettingAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 64)
-	public void VerifyUserWithoutBillSettingAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.billSettingNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	
-	@Test(priority = 65)
-	public void VerifyUserWithReportSettingAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.reportSettingAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 65)
-	public void VerifyUserWithoutReportSettingAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.reportSettingNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 66)
-	public void VerifyUserWithCancelTestsAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.cancelTestsAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 67)
-	public void VerifyUserWithoutCancelTestsAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.cancelTestsNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 68)
-	public void VerifyUserWithDepartmentManagementAccess() {
-		String text;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.departmentManagementAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "New Department");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 69)
-	public void VerifyUserWithoutDepartmentManagementAccess() {
-		String text;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.departmentManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "Department Management");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 70)
-	public void VerifyUserWithMarketingManagementAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.marketingManagementAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 71)
-	public void VerifyUserWithoutMarketingManagementAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.marketingManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 72)
-	public void VerifyUserWithDeleteMarketingMemberAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.deleteMarketingMemberAccess(configProperties.getUsername(),configProperties.getPassword(), "mayur");
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 73)
-	public void VerifyUserWithoutDeleteMarketingMemberAccess() {
-		String text;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.deleteMarketingMemberNotAccess(configProperties.getUsername(),configProperties.getPassword(), "akash");
-			Assert.assertEquals(text, "×\n" + 
-					"Sorry! You do not have privilege to delete a marketing member. If you want it, contact to your Admin.");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 74)
-	public void VerifyUserWithCentreManagementAccess() {
-		String text;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.centreManagementAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "Lab Name :");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 75)
-	public void VerifyUserWithoutCentreManagementAccess() {
-		String text;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.centreManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "Center Management");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 76)
-	public void VerifyUserWithResourcesAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.resourcesAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 77)
-	public void VerifyUserWithoutResourcesAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.resourcesNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 78)
-	public void VerifyUserWithPackagesAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.packagesAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 79)
-	public void VerifyUserWithoutPackagesAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.packagesNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	
-	@Test(priority = 80)
-	public void VerifyUserWithPromotionsAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.userPromotions(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 81)
-	public void VerifyUserWithoutPromotionsAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.userPromotionsNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 82)
-	public void VerifyUserWithFeedbackAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.userFeedbackAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 83)
-	public void VerifyUserWithoutFeedbackAccess() {
-		boolean flag;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.userFeedbackNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertTrue(flag);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 84)
-	public void VerifyUserWithUserManagementAccess() {
+	@Test()
+	public void VerifyUserWithoutTATAnalysisAccess() {
 		String Url;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			Url = userManagementPage.userManagementAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(Url, "https://beta.livehealth.solutions/addEditUser/");
+			Url = userManagementPage.userTATAnalysisNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertEquals(Url, "Turn Around Time (TAT) Analysis");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
 	
-	@Test(priority = 85)
-	public void VerifyUserWithoutUserManagementAccess() {
-		String Url;
+	@Test()
+	public void VerifyUserWithAnalyticsFlagAccess() {
+		String url;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			Url = userManagementPage.userManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(Url, "https://beta.livehealth.solutions/referralManagement/");
+			url = userManagementPage.userAnalyticsFlagAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertEquals(url, "https://beta.livehealth.solutions/Finance/");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
 	
-	@Test(priority = 85)
-	public void VerifyUserWithoutDeleteUserNotAccess() {
-		String text;
+	@Test()
+	public void VerifyUserWithoutAnalyticsFlagAccess() {
+		String url;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.deleteUserNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "×\n" + 
-					"Sorry! You do not have permission to delete a user. If you want it, contact to your Admin.");
+			url = userManagementPage.userAnalyticsFlagNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertEquals(url, "https://beta.livehealth.solutions/referralManagement/");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
 	
-	@Test(priority = 86)
-	public void VerifyUserWithActivityLogsAccess() {
-		String text;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.ActivityLogsAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "Track activity related to login users.");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 87)
-	public void VerifyUserWithoutActivityLogsAccess() {
-		String text;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.ActivityLogsNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "Activity Log");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 88)
-	public void VerifyUserWithSmsManagementNotAccess() {
-		String text;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.smsManagementAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "Name");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 89)
-	public void VerifyUserWithoutSmsManagementNotAccess() {
-		String text;
-		try {
-			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.smsManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(text, "SMS Management");
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			Assert.assertTrue(false, e.getMessage());
-		}
-	}
-	
-	@Test(priority = 90)
-	public void VerifyUserWithCampaignManagementAccess() {
+	@Test()
+	public void VerifyUserWithInvoiceMgtAccess() {
 		boolean flag;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.CampaignManagementAccess(configProperties.getUsername(),configProperties.getPassword());
+			flag = userManagementPage.userInvoiceMgtAccess(configProperties.getUsername(),configProperties.getPassword());
 			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -1308,21 +1621,18 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 	
-	@Test(priority = 91)
-	public void VerifyUserWithoutCampaignManagementAccess() {
+	@Test()
+	public void VerifyUserWithoutInvoiceMgtAccess() {
 		boolean flag;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.CampaignManagementNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			flag = userManagementPage.userInvoiceMgtNotAccess(configProperties.getUsername(),configProperties.getPassword());
 			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-
-
 
 	@DataProvider(name = "billsData")
 	public static Object[][] getbillsData() {
