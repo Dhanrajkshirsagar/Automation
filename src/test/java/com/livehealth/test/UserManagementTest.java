@@ -35,7 +35,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	ConfigProperties configProperties;
 
-	@BeforeClass()
+	@BeforeClass(groups = { "AccessControl"})
 	public void launchSite() {
 		try {
 			userManagementPage = pageLaunch.navigateToUserManagementPage();
