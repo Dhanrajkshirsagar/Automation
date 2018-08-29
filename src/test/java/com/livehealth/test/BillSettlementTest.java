@@ -159,7 +159,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 	public void verifyPatientHalfBillSettlement() {
 		boolean flag;
 		try {
-			flag = billSettlementPage.settleHalfAmount("tusha");
+			flag = billSettlementPage.settleHalfAmount("tushar");
 			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());

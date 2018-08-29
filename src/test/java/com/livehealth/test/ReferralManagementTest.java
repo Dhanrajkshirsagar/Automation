@@ -451,10 +451,10 @@ public class ReferralManagementTest extends AbstractTestNGSpringContextTests {
 		};
 	}
 	
-//	@AfterClass(alwaysRun = true)
-//	public void tearDown() {
-//		DriverFactory.closeDriverObjects();
-//
-//	}
+	@AfterClass(alwaysRun = true)
+	public void tearDown() {
+		DriverFactory.closeDriverObjects();
+
+	}
 
 }

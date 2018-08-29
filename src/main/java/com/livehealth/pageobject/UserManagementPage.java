@@ -643,9 +643,6 @@ public class UserManagementPage {
 	@FindBy(id = "userCampaignManagement")
 	private WebElement userCampaignManagement;
 
-	@FindBy(xpath = "//*[@id=\"hoverDropdown\"]/a")
-	private WebElement hoverDropdown;
-
 	@FindBy(id = "accordion4")
 	private WebElement accordion4;
 
@@ -690,7 +687,7 @@ public class UserManagementPage {
 
 	@FindBy(id = "userTATAnalysis")
 	private WebElement userTATAnalysis;
-	
+
 	@FindBy(xpath = "//a[contains(text(),'Finance Analytics')]")
 	private WebElement FinanceAnalytics;
 
@@ -699,15 +696,16 @@ public class UserManagementPage {
 
 	@FindBy(id = "userInvoiceMgtAccess")
 	private WebElement userInvoiceMgtAccess;
-	
+
 	@FindBy(xpath = "//*[@id=\"nav-sidebar\"]/div[3]/ul/li[12]/a")
 	private WebElement TATAnalysis;
-	
-	@FindBy(xpath = "//*[@id=\"nav-sidebar\"]/div[3]/ul/li[12]/a/span[1]")
-	private WebElement LockTATAnalysis;
-	
+
+	@FindBy(xpath = "//*[@id=\"nav-sidebar\"]/div[3]/ul/li[12]/a")
+	public WebElement LockTATAnalysis;
+
 	@FindBy(id = "overallAnalytic")
 	private WebElement overallAnalytic;
+
 	@PostConstruct
 	public void loadDriver() throws Exception {
 		PageFactory.initElements(DriverFactory.getDriver(), this);
@@ -780,7 +778,7 @@ public class UserManagementPage {
 
 	public void selectLabUser() throws Exception {
 		userManagementTab.click();
-		Thread.sleep(500);
+		CommonMethods.waitForElementToVisible(editUserName);
 		Select ele = new Select(editUserName);
 		ele.selectByVisibleText("livep-dhan");
 		CommonMethods.waitForElementToClickable(editAllowedDiscount);
@@ -937,13 +935,7 @@ public class UserManagementPage {
 		selectTest(test2);
 		selectTest(test3);
 		AdvanceAmount.clear();
-		if (paidAmount.equals("400")) {
-			AdvanceAmount.sendKeys(paidAmount);
-		}
-
-		if (paidAmount.equals("1070")) {
-			AdvanceAmount.sendKeys(paidAmount);
-		}
+		AdvanceAmount.sendKeys(paidAmount);
 		saveBill.click();
 		CommonMethods.waitForElementToClickable(printAllSampleId);
 		Thread.sleep(500);
@@ -3088,8 +3080,8 @@ public class UserManagementPage {
 		signIn(userName, password);
 		selectLabUser();
 		accordion3.click();
-		if (!selectAllAdminEditFlags.isSelected()) {
-			selectAllAdminEditFlags.click();
+		if (!userActivityLog.isSelected()) {
+			userActivityLog.click();
 		}
 		editShowUser.click();
 		labUserLogout();
@@ -3109,7 +3101,13 @@ public class UserManagementPage {
 		editShowUser.click();
 		labUserLogout();
 		signIn("livep-dhan", "Password@123");
-		LockActivityLog.click();
+		List<WebElement> list = navsidebar.findElements(By.className("locked-sidebar-menu"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getAttribute("innerText").contains("Activity Log")) {
+				list.get(i).click();
+				break;
+			}
+		}
 		String text = textcenter.getText();
 		return text;
 	}
@@ -3118,8 +3116,8 @@ public class UserManagementPage {
 		signIn(userName, password);
 		selectLabUser();
 		accordion3.click();
-		if (!selectAllAdminEditFlags.isSelected()) {
-			selectAllAdminEditFlags.click();
+		if (!userSmsManagement.isSelected()) {
+			userSmsManagement.click();
 		}
 		editShowUser.click();
 		labUserLogout();
@@ -3139,13 +3137,19 @@ public class UserManagementPage {
 		editShowUser.click();
 		labUserLogout();
 		signIn("livep-dhan", "Password@123");
-		LockSMSManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.className("locked-sidebar-menu"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getAttribute("innerText").contains("SMS Management")) {
+				list.get(i).click();
+				break;
+			}
+		}
 		String text = textcenter.getText();
 		return text;
 	}
 
 	public boolean CampaignManagementAccess(String userName, String password) throws Exception {
-		signIn(userName, password);
+		// signIn(userName, password);
 		selectLabUser();
 		accordion3.click();
 		if (!selectAllAdminEditFlags.isSelected()) {
@@ -3154,7 +3158,7 @@ public class UserManagementPage {
 		editShowUser.click();
 		labUserLogout();
 		signIn("livep-dhan", "Password@123");
-		hoverDropdown.click();
+		adminHover.click();
 		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getText().equals("Livehealth Reach")) {
@@ -3174,7 +3178,7 @@ public class UserManagementPage {
 		editShowUser.click();
 		labUserLogout();
 		signIn("livep-dhan", "Password@123");
-		hoverDropdown.click();
+		adminHover.click();
 		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getText().equals("Livehealth Reach")) {
@@ -3542,6 +3546,7 @@ public class UserManagementPage {
 		WebDriver driver = DriverFactory.getDriver();
 		selectLabUser();
 		accordion4.click();
+		CommonMethods.waitForElementToClickable(selectAllFiananceEditFlags);
 		if (!selectAllFiananceEditFlags.isSelected()) {
 			selectAllFiananceEditFlags.click();
 		}
@@ -3555,7 +3560,7 @@ public class UserManagementPage {
 			driver.switchTo().window(winHandle);
 		}
 		CommonMethods.waitForElementToClickable(overallAnalytic);
-		String text=overallAnalytic.getText();
+		String text = overallAnalytic.getText();
 		driver.close();
 		driver.switchTo().window(beforehandle);
 		return text;
@@ -3574,11 +3579,18 @@ public class UserManagementPage {
 		signIn("livep-dhan", "Password@123");
 		DriverFactory.getDriver().navigate().to(Constants.Finance_URL);
 		String beforehandle = driver.getWindowHandle();
-		LockTATAnalysis.click();
+		Thread.sleep(1000);
+		List<WebElement> list = navsidebar.findElements(By.className("textManage"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getAttribute("innerText").contains("TAT Analysis")) {
+				list.get(i).click();
+				break;
+			}
+		}
 		for (String winHandle : driver.getWindowHandles()) {
 			driver.switchTo().window(winHandle);
 		}
-		String text=textcenter.getText();
+		String text = textcenter.getText();
 		driver.close();
 		driver.switchTo().window(beforehandle);
 		return text;
@@ -3606,7 +3618,7 @@ public class UserManagementPage {
 		for (String winHandle : driver.getWindowHandles()) {
 			driver.switchTo().window(winHandle);
 		}
-		String url=DriverFactory.getDriver().getCurrentUrl();
+		String url = DriverFactory.getDriver().getCurrentUrl();
 		driver.close();
 		driver.switchTo().window(beforehandle);
 		return url;
@@ -3634,12 +3646,12 @@ public class UserManagementPage {
 		for (String winHandle : driver.getWindowHandles()) {
 			driver.switchTo().window(winHandle);
 		}
-		String url=DriverFactory.getDriver().getCurrentUrl();
+		String url = DriverFactory.getDriver().getCurrentUrl();
 		driver.close();
 		driver.switchTo().window(beforehandle);
 		return url;
 	}
-	
+
 	public boolean userInvoiceMgtAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();

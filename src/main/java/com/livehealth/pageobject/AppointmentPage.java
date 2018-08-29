@@ -168,9 +168,9 @@ public class AppointmentPage {
 	@FindBy(xpath = "//*[@id=\"rescheduleAppointmentModal\"]/div[1]/div/div[2]/div[17]/div/button[1]")
 	private static WebElement CloseModal;
 
-	@FindBy(xpath = "//*[@id=\"nav-sidebar\"]/div[3]/ul/li[5]/a")
+	@FindBy(xpath = "//a[contains(text(),'Advance Collection')]")
 	private WebElement advanceCollectionTab;
-
+	
 	@FindBy(id = "searchPatient")
 	private WebElement searchPatient;
 
