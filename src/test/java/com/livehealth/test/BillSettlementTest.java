@@ -98,7 +98,7 @@ public class BillSettlementTest extends AbstractTestNGSpringContextTests {
 	public void verifyBillSettlementAllDetails() {
 		boolean flag;
 		try {
-			flag = billSettlementPage.verifydetails("Mayur");
+			flag = billSettlementPage.verifydetails("8275369427");
 			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
