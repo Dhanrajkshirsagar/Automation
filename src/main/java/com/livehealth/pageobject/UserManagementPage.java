@@ -181,6 +181,9 @@ public class UserManagementPage {
 	@FindAll({ @FindBy(className = "userWaitingListCard") })
 	public List<WebElement> patientList;
 
+	@FindAll({ @FindBy(className = "optionsLink") })
+	public List<WebElement> optionsLink;
+
 	@FindAll({ @FindBy(className = "waitingListLabOptionList") })
 	public List<WebElement> waitingListLabOptionList;
 
@@ -316,8 +319,11 @@ public class UserManagementPage {
 	@FindBy(id = "historyTestList")
 	private WebElement historyTestList;
 
-	@FindBy(id = "historyli")
-	private WebElement historyli;
+	@FindAll({ @FindBy(id = "userContainer") })
+	public List<WebElement> userContainer;
+
+	@FindBy(xpath = "//a[contains(text(),'Archives')]")
+	private WebElement Archives;
 
 	@FindBy(xpath = "//a[contains(text(),'Edit this test')]")
 	private WebElement Editthistest;
@@ -706,6 +712,75 @@ public class UserManagementPage {
 	@FindBy(id = "overallAnalytic")
 	private WebElement overallAnalytic;
 
+	@FindBy(id = "allLink")
+	private WebElement allLink;
+
+	@FindBy(id = "reviewerManagement")
+	private WebElement reviewerManagement;
+
+	@FindBy(id = "userWaiting1")
+	private WebElement userWaiting1;
+
+	@FindBy(id = "isReviewRead")
+	private WebElement isReviewRead;
+
+	@FindBy(id = "accordion6")
+	private WebElement accordion6;
+
+	@FindBy(id = "deleteSample")
+	private WebElement deleteSample;
+
+	@FindBy(id = "accessionSetting")
+	private WebElement accessionSetting;
+
+	@FindBy(id = "createBatch")
+	private WebElement createBatch;
+
+	@FindBy(id = "receiveBatch")
+	private WebElement receiveBatch;
+
+	@FindBy(xpath = "//a[contains(text(),'Accession Settings')]")
+	private WebElement AccessionSettings;
+
+	@FindBy(xpath = "//button[contains(text(),'Add/Edit Accession Type')]")
+	private WebElement addEditSample;
+
+	@FindBy(id = "addSampleBtn")
+	private WebElement addSampleBtn;
+
+	@FindBy(id = "sampleTypeName")
+	private WebElement sampleTypeName;
+
+	@FindBy(id = "typeOfSample")
+	private WebElement typeOfSample;
+
+	@FindBy(id = "sampleNameTypeadhead")
+	private WebElement sampleNameTypeadhead;
+
+	@FindBy(id = "sampleDeleteBtn")
+	private WebElement sampleDeleteBtn;
+
+	@FindBy(how = How.XPATH, using = "//input[@value='Yes'][@id='addSampleBtn']")
+	private WebElement delete;
+
+	@FindBy(id = "createBatchBtn")
+	private WebElement createBatchBtn;
+
+	@FindBy(id = "pendingSampleList")
+	private WebElement pendingSampleList;
+
+	@FindBy(id = "accBatchCreateBtn")
+	private WebElement accBatchCreateBtn;
+
+	@FindBy(id = "pendingBatchPill")
+	private WebElement pendingBatchPill;
+
+	@FindBy(xpath = "//button[contains(text(),'View & Receive')]")
+	private WebElement ViewReceive;
+
+	@FindBy(id = "accessBatchBtn")
+	private WebElement accessBatchBtn;
+
 	@PostConstruct
 	public void loadDriver() throws Exception {
 		PageFactory.initElements(DriverFactory.getDriver(), this);
@@ -937,18 +1012,23 @@ public class UserManagementPage {
 		AdvanceAmount.clear();
 		AdvanceAmount.sendKeys(paidAmount);
 		saveBill.click();
-		CommonMethods.waitForElementToClickable(printAllSampleId);
-		Thread.sleep(500);
-		String parentWindow = driver.getWindowHandle();
-		printAllSampleId.click();
-		Thread.sleep(1000);
-		for (String winHandle : driver.getWindowHandles()) {
-			driver.switchTo().window(winHandle);
+		if (patinetName.equals("Dojwei")) {
+			CommonMethods.waitForElementToClickable(printAllSampleId);
+			Thread.sleep(500);
+			String parentWindow = driver.getWindowHandle();
+			printAllSampleId.click();
+			Thread.sleep(1000);
+			for (String winHandle : driver.getWindowHandles()) {
+				driver.switchTo().window(winHandle);
+			}
+			driver.close();
+			driver.switchTo().window(parentWindow);
+			Thread.sleep(500);
+			billUrl.click();
+		} else {
+			Thread.sleep(500);
+			billUrl.click();
 		}
-		driver.close();
-		driver.switchTo().window(parentWindow);
-		Thread.sleep(500);
-		billUrl.click();
 
 	}
 
@@ -1283,7 +1363,7 @@ public class UserManagementPage {
 		CommonMethods.waitForElementToClickable(confirmedBillRemoval);
 		dismissComments.sendKeys("dissmissed");
 		confirmedBillRemoval.click();
-		Thread.sleep(500);
+		CommonMethods.waitForElementToVisible(successDiv);
 		String success = successDiv.getText();
 		return success;
 	}
@@ -1694,7 +1774,7 @@ public class UserManagementPage {
 
 	public String report;
 
-	public String EditSubmittedReportAccess(String userName, String password) throws Exception {
+	public boolean EditSubmittedReportAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		accordion2.click();
@@ -1719,17 +1799,19 @@ public class UserManagementPage {
 		CommonMethods.waitForElementToClickable(submitReport);
 		submitReport.click();
 		DriverFactory.getDriver().navigate().refresh();
-		CommonMethods.waitForElementToClickable(historyli);
-		historyli.click();
-		CommonMethods.waitForElementToVisible(userWaitingListCard);
-		patientList.get(0).click();
-		CommonMethods.waitForElementToVisible(historyTestList);
-		List<WebElement> reportNames = historyTestList.findElements(By.tagName("b"));
-		report = reportNames.get(1).getText();
-		waitingListLabOptionList.get(0).click();
+		CommonMethods.waitForElementToClickable(Archives);
+		Archives.click();
+		CommonMethods.waitForAllElementsToVisible(userContainer);
+		userContainer.get(0).click();
+		Thread.sleep(500);
+		int beforeLength = optionsLink.size();
+		optionsLink.get(0).click();
 		Editthistest.click();
-		CommonMethods.waitForElementToVisible(historySuccessDiv);
-		return historySuccessDiv.getText();
+		int afterLength = optionsLink.size();
+		if (beforeLength >= afterLength) {
+			return true;
+		}
+		return false;
 	}
 
 	public boolean EditSubmittedReportNotAccess(String userName, String password) throws Exception {
@@ -1757,12 +1839,12 @@ public class UserManagementPage {
 		CommonMethods.waitForElementToClickable(submitReport);
 		submitReport.click();
 		DriverFactory.getDriver().navigate().refresh();
-		CommonMethods.waitForElementToClickable(historyli);
-		historyli.click();
-		CommonMethods.waitForElementToVisible(userWaitingListCard);
-		patientList.get(0).click();
-		CommonMethods.waitForElementToVisible(historyTestList);
-		if (waitingListLabOptionList.size() > 0) {
+		CommonMethods.waitForElementToClickable(Archives);
+		Archives.click();
+		CommonMethods.waitForAllElementsToVisible(userContainer);
+		userContainer.get(0).click();
+		Thread.sleep(500);
+		if (optionsLink.size() > 0) {
 			return false;
 		}
 		return true;
@@ -2809,7 +2891,13 @@ public class UserManagementPage {
 		editShowUser.click();
 		labUserLogout();
 		signIn("livep-dhan", "Password@123");
-		LockedCenterManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.className("textManage"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getAttribute("innerText").contains("Center Management")) {
+				list.get(i).click();
+				break;
+			}
+		}
 		String warning = textcenter.getText();
 		return warning;
 	}
@@ -3011,7 +3099,13 @@ public class UserManagementPage {
 		editShowUser.click();
 		labUserLogout();
 		signIn("livep-dhan", "Password@123");
-		LockUserManagement.click();
+		List<WebElement> list = navsidebar.findElements(By.className("textManage"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getAttribute("innerText").contains("User Management")) {
+				list.get(i).click();
+				break;
+			}
+		}
 		String URL = DriverFactory.getDriver().getCurrentUrl();
 		return URL;
 	}
@@ -3020,6 +3114,9 @@ public class UserManagementPage {
 		signIn(userName, password);
 		selectLabUser();
 		accordion3.click();
+		if (!userLabUserManagement.isSelected()) {
+			userLabUserManagement.click();
+		}
 		if (userDeleteLabUser.isSelected()) {
 			userDeleteLabUser.click();
 		}
@@ -3149,7 +3246,7 @@ public class UserManagementPage {
 	}
 
 	public boolean CampaignManagementAccess(String userName, String password) throws Exception {
-		// signIn(userName, password);
+		signIn(userName, password);
 		selectLabUser();
 		accordion3.click();
 		if (!selectAllAdminEditFlags.isSelected()) {
@@ -3690,6 +3787,211 @@ public class UserManagementPage {
 			}
 		}
 		return true;
+	}
+
+	public boolean reviwerAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+
+		if (!reviewerManagement.isSelected()) {
+			reviewerManagement.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Reviewer_URL);
+		CommonMethods.waitForElementToClickable(allLink);
+		allLink.click();
+		CommonMethods.waitForElementToClickable(userWaiting1);
+		userWaiting1.click();
+		List<WebElement> list = DriverFactory.getDriver().findElements(By.className("optionsLink"));
+		if (list.size() > 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean reviwerOnlyReadAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+
+		if (!reviewerManagement.isSelected()) {
+			reviewerManagement.click();
+		}
+		if (!isReviewRead.isSelected()) {
+			isReviewRead.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.Reviewer_URL);
+		CommonMethods.waitForElementToClickable(allLink);
+		allLink.click();
+		CommonMethods.waitForElementToClickable(userWaiting1);
+		userWaiting1.click();
+		List<WebElement> list = DriverFactory.getDriver().findElements(By.className("optionsLink"));
+		if (list.size() <= 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean accessionSettingsAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion6.click();
+		if (!deleteSample.isSelected()) {
+			deleteSample.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Accession Settings")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean accessionSettingsNotAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion6.click();
+		if (deleteSample.isSelected()) {
+			deleteSample.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getText().equals("Accession Settings")) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean deleteSampleAccess(String userName, String password, String sampleName) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion6.click();
+		if (!deleteSample.isSelected()) {
+			deleteSample.click();
+		}
+		if (!accessionSetting.isSelected()) {
+			accessionSetting.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		AccessionSettings.click();
+		CommonMethods.waitForElementToClickable(addEditSample);
+		addEditSample.click();
+		CommonMethods.waitForElementToClickable(addSampleBtn);
+		sampleTypeName.sendKeys(sampleName);
+		typeOfSample.sendKeys("solid");
+		addSampleBtn.click();
+		Thread.sleep(500);
+		selectSampleType(sampleName);
+		CommonMethods.waitForElementToVisible(sampleDeleteBtn);
+		CommonMethods.waitForElementToClickable(sampleDeleteBtn);
+		sampleDeleteBtn.click();
+		CommonMethods.waitForElementToVisible(delete);
+		delete.click();
+		Thread.sleep(300);
+		String text = userPermissionError.getText();
+		if (text.length() > 3) {
+			return false;
+		}
+		return true;
+
+	}
+
+	private void selectSampleType(String sampleName) throws InterruptedException {
+		sampleNameTypeadhead.sendKeys(sampleName);
+		Thread.sleep(300);
+		sampleNameTypeadhead.sendKeys(Keys.ARROW_DOWN);
+		sampleNameTypeadhead.sendKeys(Keys.ENTER);
+	}
+
+	public String deleteSampleNotAccess(String userName, String password, String sampleName) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion6.click();
+		if (!deleteSample.isSelected()) {
+			deleteSample.click();
+		}
+		if (accessionSetting.isSelected()) {
+			accessionSetting.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		AccessionSettings.click();
+		selectSampleType(sampleName);
+		CommonMethods.waitForElementToClickable(sampleDeleteBtn);
+		sampleDeleteBtn.click();
+		CommonMethods.waitForElementToClickable(delete);
+		delete.click();
+		CommonMethods.waitForElementToVisible(userPermissionError);
+		String text = userPermissionError.getText();
+		return text;
+
+	}
+
+	public String createBatchAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion6.click();
+		if (!createBatch.isSelected()) {
+			createBatch.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		CommonMethods.waitForElementToClickable(createBatchBtn);
+		createBatchBtn.click();
+		CommonMethods.waitForElementToVisible(userWaitingListCard);
+		List<WebElement> sampleList = pendingSampleList.findElements(By.className("userWaitingListCard"));
+		sampleList.get(0).click();
+		sampleList.get(1).click();
+		sampleList.get(2).click();
+		createBatchBtn.click();
+		CommonMethods.waitForElementToClickable(accBatchCreateBtn);
+		accBatchCreateBtn.click();
+		String text = userPermissionError.getText();
+		return text;
+
+	}
+
+	public String receiveBatchAccess(String userName, String password) throws Exception {
+		signIn(userName, password);
+		selectLabUser();
+		accordion6.click();
+		if (!createBatch.isSelected()) {
+			createBatch.click();
+		}
+		editShowUser.click();
+		labUserLogout();
+		signIn("livep-dhan", "Password@123");
+		DriverFactory.getDriver().navigate().to(Constants.ACCESSION_URL);
+		CommonMethods.waitForElementToClickable(pendingBatchPill);
+		pendingBatchPill.click();
+		CommonMethods.waitForElementToClickable(ViewReceive);
+		ViewReceive.click();
+		CommonMethods.waitForElementToClickable(accessBatchBtn);
+		accessBatchBtn.click();
+		String text = userPermissionError.getText();
+		return text;
+
 	}
 
 }
