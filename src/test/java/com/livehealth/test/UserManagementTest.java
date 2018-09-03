@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -395,7 +396,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 	}
 
 	@Test(priority = 26, groups = { "AccessControl" })
-	public void VerifyUserWithInventoryManagementAccess() {
+	public void VerifyUserWithOperationInventoryManagementAccess() {
 		String text;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
@@ -408,7 +409,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 	}
 
 	@Test(priority = 27, groups = { "AccessControl" })
-	public void VerifyUserWithoutInventoryManagementAccess() {
+	public void VerifyUserWithoutOperationInventoryManagementAccess() {
 		String text;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
@@ -1800,22 +1801,22 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-//	@Test(priority = 124, dataProvider = "billsData", groups = { "AccessControl" })
-//	public void verifyPatientBill(String amount) throws Exception {
-//		try {
-//			userManagementPage.patientBills(amount, "Aidhet", "HSV-1&2 (Herpes Simplex Virus-1&2)", "Protein Ascitic",
-//					"Albumin Serum");
-//		} catch (Exception e) {
-//			logger.error(e.getMessage());
-//			Assert.assertTrue(false, e.getMessage());
-//		}
-//	}
-//
+	@Test(priority = 124, dataProvider = "billsData", groups = { "AccessControl" })
+	public void verifyPatientBill(String amount) throws Exception {
+		try {
+			userManagementPage.patientBills(amount, "Aidhet", "HSV-1&2 (Herpes Simplex Virus-1&2)", "Protein Ascitic",
+					"Albumin Serum");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
 //	@Test(priority = 125, groups = { "AccessControl" })
 //	public void VerifyUserWithCreateSampleBatchAccess() {
 //		String text;
 //		try {
-//			// DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			 DriverFactory.getDriver().get(Constants.LOGOUT_URL);
 //			text = userManagementPage.createBatchAccess(configProperties.getUsername(), configProperties.getPassword());
 //			Assert.assertEquals(text, "");
 //		} catch (Exception e) {
@@ -1837,6 +1838,172 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 //			Assert.assertTrue(false, e.getMessage());
 //		}
 //	}
+	
+	@Test(priority = 127, groups = { "AccessControl" })
+	public void VerifyUserWithHRManagementAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.HRManagementAccess(configProperties.getUsername(),
+					configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test(priority = 128, groups = { "AccessControl" })
+	public void VerifyUserWithoutHRManagementAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.HRManagementNotAccess(configProperties.getUsername(),
+					configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test(priority = 129, groups = { "AccessControl" })
+	public void VerifyUserWithInventoryManagementAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.InventoryManagementAccess(configProperties.getUsername(),
+					configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test(priority = 130, groups = { "AccessControl" })
+	public void VerifyUserWithoutInventoryManagementAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.InventoryNotAccess(configProperties.getUsername(),
+					configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test(priority = 131, groups = { "AccessControl" })
+	public void VerifyUserWithWarehouseManagementAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.warehouseManagementAccess(configProperties.getUsername(),
+					configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test(priority = 132, groups = { "AccessControl" })
+	public void VerifyUserWithoutWarehouseManagementAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.warehouseManagementNotAccess(configProperties.getUsername(),
+					configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test(priority = 133, groups = { "AccessControl" })
+	public void VerifyUserWithSelectedDepartmentAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.departmentAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test(priority = 134, groups = { "AccessControl" })
+	public void VerifyUserWithoutSelectedDepartmentAccess() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.departmentNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test(priority = 135, groups = { "AccessControl" })
+	public void VerifyUserWithDefaultDepartmentSelected() {
+		String text;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			text = userManagementPage.defaultDepartmentSelected(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertEquals(text, "PATHOLOGY");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test(priority = 136, groups = { "AccessControl" })
+	public void VerifyUserWithDefaultDepartmentUnSelected() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.notDefaultDepartmentSelected(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test(priority = 137, groups = { "AccessControl" })
+	public void VerifyAddNewUser() {
+		String success;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			success = userManagementPage.addUser(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertEquals(success, "×\n" + 
+					"Lab user has been added successfully.");
+			} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	@Test(priority = 138, groups = { "AccessControl" })
+	public void VerifyDeleteUser() {
+		boolean flag;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			flag = userManagementPage.deleteLabUser(configProperties.getUsername(),configProperties.getPassword());
+			Assert.assertTrue(flag);
+			} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+	
+	
+
 
 	@DataProvider(name = "billsData")
 	public static Object[][] getbillsData() {
@@ -1844,5 +2011,11 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		return new Object[][] { { "400" }, { "1070" }
 
 		};
+	}
+	
+	@AfterClass(alwaysRun = true)
+	public void tearDown() {
+		DriverFactory.closeDriverObjects();
+
 	}
 }
