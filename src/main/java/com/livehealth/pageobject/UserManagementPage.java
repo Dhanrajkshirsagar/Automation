@@ -781,49 +781,49 @@ public class UserManagementPage {
 
 	@FindBy(id = "accessBatchBtn")
 	private WebElement accessBatchBtn;
-	
+
 	@FindBy(id = "hrManagement")
 	private WebElement hrManagement;
-	
+
 	@FindBy(id = "inventoryManagement")
 	private WebElement inventoryManagement;
-	
+
 	@FindBy(id = "wareHouseUser")
 	private WebElement wareHouseUser;
-	
+
 	@FindBy(id = "department44")
 	private WebElement department44;
-	
+
 	@FindBy(id = "hoverDropdown")
 	private WebElement hoverDropdown;
-	
+
 	@FindBy(id = "SelectedDeptOption")
 	private WebElement SelectedDeptOption;
-	
+
 	@FindBy(id = "editUserDiv")
 	private WebElement editUserDiv;
-	
+
 	@FindBy(id = "addFullName")
 	private WebElement addFullName;
-	
+
 	@FindBy(id = "addUserName")
 	private WebElement addUserName;
-	
+
 	@FindBy(id = "addPassword")
 	private WebElement addPassword;
-	
+
 	@FindBy(id = "addUserDefaultURL")
 	private WebElement addUserDefaultURL;
-	
+
 	@FindBy(id = "addStaff")
 	private WebElement addStaff;
-	
+
 	@FindBy(id = "addUserSuccessMsg")
 	private WebElement addUserSuccessMsg;
-	
+
 	@FindAll({ @FindBy(name = "adddepartmentId") })
 	public List<WebElement> adddepartmentList;
-	
+
 	@PostConstruct
 	public void loadDriver() throws Exception {
 		PageFactory.initElements(DriverFactory.getDriver(), this);
@@ -1382,7 +1382,7 @@ public class UserManagementPage {
 
 	public static String test;
 
-	public String dissMissReportAccess(String userName, String password) throws Exception {
+	public boolean dissMissReportAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		accordion2.click();
@@ -1406,9 +1406,12 @@ public class UserManagementPage {
 		CommonMethods.waitForElementToClickable(confirmedBillRemoval);
 		dismissComments.sendKeys("dissmissed");
 		confirmedBillRemoval.click();
-		CommonMethods.waitForElementToVisible(successDiv);
-		String success = successDiv.getText();
-		return success;
+		Thread.sleep(300);
+		String success = dismissMsg.getText();
+		if(success.length()>1) {
+			return false;
+		}
+		return true;
 	}
 
 	public String withoutDismissReportAccess(String userName, String password) throws Exception {
@@ -1525,7 +1528,7 @@ public class UserManagementPage {
 		return warning;
 	}
 
-	public String updateReportInfoAcess(String userName, String password) throws Exception {
+	public boolean updateReportInfoAcess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
 		accordion2.click();
@@ -1548,11 +1551,12 @@ public class UserManagementPage {
 		updateLabAge.sendKeys("20");
 		labReportPassword.sendKeys(password);
 		modalUpdateReportBtn.click();
-		Thread.sleep(1000);
-		waitingListLabOptionList.get(0).click();
-		Updatereportinfo.click();
-		String age = updateLabAge.getAttribute("value");
-		return age;
+		Thread.sleep(300);
+		String warning = userUpdateErrorDiv.getText();
+		if(warning.length()>2) {
+			return false;
+		}
+		return true;
 	}
 
 	public String withoutUpdateReportInfoAcess(String userName, String password) throws Exception {
@@ -1602,7 +1606,7 @@ public class UserManagementPage {
 		signIn("livep-dhan", "Password@123");
 		clickOnPatientReport();
 		List<WebElement> patientList = container.findElements(By.className("userWaitingListCard"));
-		patientList.get(3).click();
+		patientList.get(4).click();
 		CommonMethods.waitForElementToClickable(quickSaveBtn);
 		quickSaveBtn.click();
 		Thread.sleep(1000);
@@ -3833,7 +3837,7 @@ public class UserManagementPage {
 	}
 
 	public boolean reviwerAccess(String userName, String password) throws Exception {
-		signIn(userName, password);
+	//	signIn(userName, password);
 		selectLabUser();
 		CommonMethods.waitForElementToVisible(reviewerManagement);
 		if (!reviewerManagement.isSelected()) {
@@ -4036,7 +4040,7 @@ public class UserManagementPage {
 		return text;
 
 	}
-	
+
 	public boolean HRManagementAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
@@ -4074,7 +4078,7 @@ public class UserManagementPage {
 		}
 		return true;
 	}
-	
+
 	public boolean InventoryManagementAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
@@ -4112,7 +4116,7 @@ public class UserManagementPage {
 		}
 		return true;
 	}
-	
+
 	public boolean warehouseManagementAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
@@ -4156,7 +4160,7 @@ public class UserManagementPage {
 		}
 		return true;
 	}
-	
+
 	public boolean departmentAccess(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
@@ -4194,46 +4198,45 @@ public class UserManagementPage {
 		}
 		return true;
 	}
-	
-	
+
 	public String defaultDepartmentSelected(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
-		Select ele=new Select(SelectedDeptOption);
+		Select ele = new Select(SelectedDeptOption);
 		ele.selectByVisibleText("PATHOLOGY");
 		editShowUser.click();
 		labUserLogout();
 		signIn("livep-dhan", "Password@123");
-		String departmentName=hoverDropdown.getText();
+		String departmentName = hoverDropdown.getText();
 		return departmentName;
 	}
 
 	public boolean notDefaultDepartmentSelected(String userName, String password) throws Exception {
 		signIn(userName, password);
 		selectLabUser();
-		Select ele=new Select(SelectedDeptOption);
+		Select ele = new Select(SelectedDeptOption);
 		ele.selectByVisibleText("Select Default Department");
 		editShowUser.click();
 		labUserLogout();
 		signIn("livep-dhan", "Password@123");
-		String departmentName=hoverDropdown.getText();
-		if(departmentName.equals("PATHOLOGY")){
+		String departmentName = hoverDropdown.getText();
+		if (departmentName.equals("PATHOLOGY")) {
 			return false;
 		}
 		return true;
 	}
-	   
+
 	public String addUser(String userName, String password) throws Exception {
 		signIn(userName, password);
-		WebDriver driver=DriverFactory.getDriver();
+		WebDriver driver = DriverFactory.getDriver();
 		userManagementTab.click();
-		List<WebElement> tabNameList=editUserDiv.findElements(By.tagName("button"));
+		List<WebElement> tabNameList = editUserDiv.findElements(By.tagName("button"));
 		CommonMethods.waitForElementToClickable(tabNameList.get(1));
 		tabNameList.get(1).click();
 		addFullName.sendKeys("Tester");
 		addUserName.sendKeys("tester");
 		addPassword.sendKeys("Test@1234");
-		Select ele=new Select(addUserDefaultURL);
+		Select ele = new Select(addUserDefaultURL);
 		ele.selectByVisibleText("Registration");
 		addStaff.click();
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -4244,10 +4247,10 @@ public class UserManagementPage {
 		CommonMethods.waitForElementToClickable(addUserSubmit);
 		addUserSubmit.click();
 		CommonMethods.waitForElementToVisible(addUserSuccessMsg);
-		String success=addUserSuccessMsg.getText();
+		String success = addUserSuccessMsg.getText();
 		return success;
 	}
-	
+
 	public boolean deleteLabUser(String userName, String password) throws Exception {
 		signIn(userName, password);
 		userManagementTab.click();
@@ -4258,15 +4261,13 @@ public class UserManagementPage {
 		CommonMethods.waitForElementToClickable(deleteLabUser);
 		deleteLabUser.click();
 		DriverFactory.getDriver().navigate().refresh();
-		List<WebElement> userList=editUserName.findElements(By.tagName("option"));
-		for(int i=0;i<userList.size();i++) {
-			if(userList.get(i).getText().equals("livep-tester")) {
+		List<WebElement> userList = editUserName.findElements(By.tagName("option"));
+		for (int i = 0; i < userList.size(); i++) {
+			if (userList.get(i).getText().equals("livep-tester")) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
-	
 
 }

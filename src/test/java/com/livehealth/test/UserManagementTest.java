@@ -255,12 +255,12 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 
 	@Test(priority = 16, groups = { "AccessControl" })
 	public void VerifyUserWithDissmissReportAccess() {
-		String success;
+		boolean flag;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			success = userManagementPage.dissMissReportAccess(configProperties.getUsername(),
+			flag = userManagementPage.dissMissReportAccess(configProperties.getUsername(),
 					configProperties.getPassword());
-			Assert.assertEquals(success, "×\n" + UserManagementPage.test + " report has been removed successfully.");
+			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
@@ -268,6 +268,20 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 	}
 
 	@Test(priority = 17, groups = { "AccessControl" })
+	public void VerifyUserWithoutDissmissReportAccess() {
+		String success;
+		try {
+			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+			success = userManagementPage.withoutDismissReportAccess(configProperties.getUsername(),
+					configProperties.getPassword());
+			Assert.assertEquals(success, "");
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			Assert.assertTrue(false, e.getMessage());
+		}
+	}
+
+	@Test(priority = 18, groups = { "AccessControl" })
 	public void VerifyUserWithRedoAccess() throws Exception {
 		boolean flag;
 		try {
@@ -281,7 +295,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 18, groups = { "AccessControl" })
+	@Test(priority = 19, groups = { "AccessControl" })
 	public void VerifyUserWithRedrawAccess() {
 		boolean flag;
 		try {
@@ -293,7 +307,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 19, groups = { "AccessControl" })
+	@Test(priority = 20, groups = { "AccessControl" })
 	public void VerifyUserWithoutRedrawAndRedoAccess() {
 		String warning;
 		try {
@@ -308,21 +322,21 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 20, groups = { "AccessControl" })
+	@Test(priority = 21, groups = { "AccessControl" })
 	public void VerifyUserWithUpdateReportInfoAccess() {
-		String age;
+		boolean flag;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			age = userManagementPage.updateReportInfoAcess(configProperties.getUsername(),
+			flag = userManagementPage.updateReportInfoAcess(configProperties.getUsername(),
 					configProperties.getPassword());
-			Assert.assertEquals(age, "20");
+			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
 
-	@Test(priority = 21, groups = { "AccessControl" })
+	@Test(priority = 22, groups = { "AccessControl" })
 	public void VerifyUserWithoutUpdateReportInfoAccess() {
 		String warning;
 		try {
@@ -337,7 +351,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 22, groups = { "AccessControl" })
+	@Test(priority = 23, groups = { "AccessControl" })
 	public void VerifyUserWithEditReportAccess() {
 		String status;
 		try {
@@ -351,7 +365,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 23, groups = { "AccessControl" })
+	@Test(priority = 24, groups = { "AccessControl" })
 	public void VerifyUserWithoutEditReportAccess() {
 		String status;
 		try {
@@ -366,7 +380,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 24, groups = { "AccessControl" })
+	@Test(priority = 25, groups = { "AccessControl" })
 	public void VerifyUserWithShareReportAccess() {
 		String success;
 		try {
@@ -380,7 +394,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 25, groups = { "AccessControl" })
+	@Test(priority = 26, groups = { "AccessControl" })
 	public void VerifyUserWithoutShareReportAccess() {
 		String warning;
 		try {
@@ -395,7 +409,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 26, groups = { "AccessControl" })
+	@Test(priority = 27, groups = { "AccessControl" })
 	public void VerifyUserWithOperationInventoryManagementAccess() {
 		String text;
 		try {
@@ -408,7 +422,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 27, groups = { "AccessControl" })
+	@Test(priority = 28, groups = { "AccessControl" })
 	public void VerifyUserWithoutOperationInventoryManagementAccess() {
 		String text;
 		try {
@@ -422,7 +436,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 28, groups = { "AccessControl" })
+	@Test(priority = 29, groups = { "AccessControl" })
 	public void VerifyUserWithQualityControlAccess() {
 		String text;
 		try {
@@ -436,7 +450,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 29, groups = { "AccessControl" })
+	@Test(priority = 30, groups = { "AccessControl" })
 	public void VerifyUserWithoutQualityControlAccess() {
 		String text;
 		try {
@@ -450,7 +464,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 30, groups = { "AccessControl" })
+	@Test(priority = 31, groups = { "AccessControl" })
 	public void VerifyUserWithoutEditSignedReportAccess() {
 		String text;
 		try {
@@ -465,7 +479,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 31, groups = { "AccessControl" })
+	@Test(priority = 32, groups = { "AccessControl" })
 	public void VerifyUserWithEditSubmittedReportAccess() {
 		boolean flag;
 		try {
@@ -479,7 +493,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 32, groups = { "AccessControl" })
+	@Test(priority = 33, groups = { "AccessControl" })
 	public void VerifyUserWithoutEditSubmittedReportAccess() {
 		boolean flag;
 		try {
@@ -494,7 +508,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 	}
 	// ----------------TestCases on Admin Access control----------------------
 
-	@Test(priority = 33, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 34, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithReferralManagementAcces() {
 		SoftAssert softAssert = new SoftAssert();
 		List<String> list;
@@ -512,7 +526,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		softAssert.assertAll();
 	}
 
-	@Test(priority = 34, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 35, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutReferralManagementAcess() {
 		boolean flag;
 		try {
@@ -526,7 +540,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 35, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 36, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithDeleteReferralAccess() {
 		boolean flag;
 		try {
@@ -540,7 +554,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 36, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 37, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutDeleteReferralAccess() {
 		String warning;
 		try {
@@ -555,7 +569,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 37, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 38, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithReferralSetlementAccess() {
 		boolean flag;
 		try {
@@ -569,7 +583,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 38, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 39, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithOutReferralSetlementAccess() {
 		boolean flag;
 		try {
@@ -583,7 +597,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 39, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 40, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithUpdateAllRevenueAccess() {
 		String text;
 		try {
@@ -597,7 +611,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 40, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 41, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithOutUpdateAllRevenueAccess() {
 		String text;
 		try {
@@ -611,7 +625,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 41, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 42, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithDoctorManagementAccess() {
 		String text;
 		try {
@@ -625,7 +639,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 42, groups = { "AccessControl" })
+	@Test(priority = 43, groups = { "AccessControl" })
 	public void VerifyUserWithoutDoctorManagementAccess() {
 		String URL;
 		try {
@@ -639,7 +653,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 43, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 44, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithDeleteDoctorAccess() {
 		boolean flag;
 		try {
@@ -653,7 +667,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 44, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 45, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutDeleteDoctorAccess() {
 		String warning;
 		try {
@@ -668,7 +682,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 45, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 46, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithDoctorRevenueTrackerAccess() {
 		String warning;
 		try {
@@ -682,7 +696,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 46, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 47, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutDoctorRevenueTrackerAccess() {
 		String URL;
 		try {
@@ -696,7 +710,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 47, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 48, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserOrganizationManagementAccess() {
 		boolean flag;
 		try {
@@ -710,7 +724,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 48, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 49, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutOrganizationManagementAccess() {
 		boolean flag;
 		try {
@@ -724,7 +738,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 49, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 50, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithDeleteOrganizationAccess() {
 		boolean flag;
 		try {
@@ -738,7 +752,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 50, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 51, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutOrganizationDeleteAccess() {
 		boolean flag;
 		try {
@@ -752,7 +766,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 51, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 52, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithOrganizationSettlementAccess() {
 		boolean flag;
 		try {
@@ -766,7 +780,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 50, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 53, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutOrganizationSettlementAccess() {
 		boolean flag;
 		try {
@@ -780,7 +794,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 51, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 54, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithOutsourceMangementAccess() {
 		String text;
 		try {
@@ -794,7 +808,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 52, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 55, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutOutsourceMangementAccess() {
 		String text;
 		try {
@@ -808,7 +822,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 53, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 56, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithListManagementAccess() {
 		boolean flag;
 		try {
@@ -822,7 +836,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 54, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 57, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutListManagementAccess() {
 		boolean flag;
 		try {
@@ -836,7 +850,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 55, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 58, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithDeleteListAccess() {
 		boolean flag;
 		try {
@@ -850,7 +864,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 56, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 59, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutDeleteListAccess() {
 		String warning;
 		try {
@@ -865,7 +879,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 57, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 60, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithReportManagementAccess() {
 		boolean flag;
 		try {
@@ -879,7 +893,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 58, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 61, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutReportManagementAccess() {
 		boolean flag;
 		try {
@@ -893,7 +907,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 59, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 62, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithAddEditProfileAccess() {
 		boolean flag;
 		try {
@@ -907,7 +921,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 60, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 63, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutAddEditProfileNotAccess() {
 		boolean flag;
 		try {
@@ -921,7 +935,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 61, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 64, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithAddEditReportAccess() {
 		boolean flag;
 		try {
@@ -935,7 +949,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 62, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 65, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutAddEditReportAccess() {
 		boolean flag;
 		try {
@@ -949,7 +963,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 63, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 66, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithBillSettingAccess() {
 		boolean flag;
 		try {
@@ -962,7 +976,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 64, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 67, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutBillSettingAccess() {
 		boolean flag;
 		try {
@@ -976,7 +990,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 65, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 68, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithReportSettingAccess() {
 		boolean flag;
 		try {
@@ -990,7 +1004,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 66, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 69, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutReportSettingAccess() {
 		boolean flag;
 		try {
@@ -1004,7 +1018,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 67, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 70, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithCancelTestsAccess() {
 		boolean flag;
 		try {
@@ -1017,7 +1031,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 68, groups = { "AccessControl" })
+	@Test(priority = 71, groups = { "AccessControl" })
 	public void VerifyUserWithoutCancelTestsAccess() {
 		boolean flag;
 		try {
@@ -1031,7 +1045,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 69, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 72, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithDepartmentManagementAccess() {
 		String text;
 		try {
@@ -1045,7 +1059,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 70, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 73, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutDepartmentManagementAccess() {
 		String text;
 		try {
@@ -1059,7 +1073,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 71, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 74, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithMarketingManagementAccess() {
 		boolean flag;
 		try {
@@ -1073,7 +1087,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 72, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 75, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutMarketingManagementAccess() {
 		boolean flag;
 		try {
@@ -1087,7 +1101,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 73, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 76, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithDeleteMarketingMemberAccess() {
 		boolean flag;
 		try {
@@ -1101,7 +1115,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 74, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 77, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutDeleteMarketingMemberAccess() {
 		String text;
 		try {
@@ -1116,7 +1130,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 75, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 78, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithCentreManagementAccess() {
 		String text;
 		try {
@@ -1130,7 +1144,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 76, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 79, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutCentreManagementAccess() {
 		String text;
 		try {
@@ -1144,7 +1158,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 77, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 80, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithResourcesAccess() {
 		boolean flag;
 		try {
@@ -1157,7 +1171,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 78, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 81, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutResourcesAccess() {
 		boolean flag;
 		try {
@@ -1171,7 +1185,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 79, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 82, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithPackagesAccess() {
 		boolean flag;
 		try {
@@ -1184,7 +1198,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 80, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 83, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutPackagesAccess() {
 		boolean flag;
 		try {
@@ -1197,7 +1211,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 81, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 84, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithPromotionsAccess() {
 		boolean flag;
 		try {
@@ -1210,7 +1224,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 82, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 85, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutPromotionsAccess() {
 		boolean flag;
 		try {
@@ -1224,7 +1238,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 83, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 86, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithFeedbackAccess() {
 		boolean flag;
 		try {
@@ -1238,7 +1252,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 84, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 87, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutFeedbackAccess() {
 		boolean flag;
 		try {
@@ -1252,7 +1266,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 85, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 88, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithUserManagementAccess() {
 		String Url;
 		try {
@@ -1266,7 +1280,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 86, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 89, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutUserManagementAccess() {
 		String Url;
 		try {
@@ -1280,7 +1294,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 87, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 90, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutDeleteUserAccess() {
 		String text;
 		try {
@@ -1295,7 +1309,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 88, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 91, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithActivityLogsAccess() {
 		String text;
 		try {
@@ -1309,7 +1323,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 89, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 92, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutActivityLogsAccess() {
 		String text;
 		try {
@@ -1323,7 +1337,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 90, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 93, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithSmsManagementAccess() {
 		String text;
 		try {
@@ -1337,7 +1351,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 91, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 94, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithoutSmsManagementAccess() {
 		String text;
 		try {
@@ -1351,7 +1365,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 92, groups = { "AccessControl", "AdminAccess" })
+	@Test(priority = 95, groups = { "AccessControl", "AdminAccess" })
 	public void VerifyUserWithCampaignManagementAccess() {
 		boolean flag;
 		try {
@@ -1365,7 +1379,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 93, groups = { "AccessControl", "AdminAccess", "AdminAccess" })
+	@Test(priority = 96, groups = { "AccessControl", "AdminAccess", "AdminAccess" })
 	public void VerifyUserWithoutCampaignManagementAccess() {
 		boolean flag;
 		try {
@@ -1381,7 +1395,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 
 	// ------------------TestCases on Finance Access
 	// control--------------------------
-	@Test(priority = 94, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 97, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithFinanceDashboardAccess() {
 		String text;
 		try {
@@ -1395,7 +1409,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 95, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 98, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithoutFinanceDashboardAccess() {
 		String text;
 		try {
@@ -1409,7 +1423,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 96, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 99, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithFinanceExportAccess() {
 		boolean flag;
 		try {
@@ -1423,7 +1437,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 97, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 100, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithoutFinanceExportAccess() {
 		boolean flag;
 		try {
@@ -1437,7 +1451,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 98, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 101, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithBillListAccess() {
 		boolean flag;
 		try {
@@ -1451,7 +1465,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 99, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 102, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithoutBillListAccess() {
 		boolean flag;
 		try {
@@ -1465,7 +1479,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 100, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 103, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithFinanceAnalyticsAccess() {
 		boolean flag;
 		try {
@@ -1479,7 +1493,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 101, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 104, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithoutFinanceAnalyticsAccess() {
 		boolean flag;
 		try {
@@ -1493,7 +1507,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 102, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 105, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithFinanceDepartmentAnalyticsAccess() {
 		boolean flag;
 		try {
@@ -1507,7 +1521,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 103, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 106, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithoutFinanceDepartmentAnalyticsAccess() {
 		boolean flag;
 		try {
@@ -1521,7 +1535,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 104, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 107, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithFinanceOutsourceAnalyticsAccess() {
 		boolean flag;
 		try {
@@ -1535,7 +1549,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 105, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 108, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithoutFinanceOutsourceAnalyticsAccess() {
 		boolean flag;
 		try {
@@ -1549,7 +1563,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 106, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 109, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithFinanceMarketingAnalyticsAccess() {
 		boolean flag;
 		try {
@@ -1563,7 +1577,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 107, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 110, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithoutFinanceMarketingAnalyticsAccess() {
 		boolean flag;
 		try {
@@ -1577,7 +1591,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 108, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 111, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithFinanceTestAnalyticsAccess() {
 		boolean flag;
 		try {
@@ -1591,7 +1605,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 109, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 112, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithoutFinanceTestAnalyticsAccess() {
 		boolean flag;
 		try {
@@ -1605,7 +1619,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 110)
+	@Test(priority = 113)
 	public void VerifyUserWithFinanceMISReportsAccess() {
 		boolean flag;
 		try {
@@ -1633,7 +1647,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 112, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 114, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithTATAnalysisAccess() {
 		String text;
 		try {
@@ -1647,7 +1661,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 113, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 115, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithoutTATAnalysisAccess() {
 		String Url;
 		try {
@@ -1661,7 +1675,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 114, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 116, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithAnalyticsFlagAccess() {
 		String url;
 		try {
@@ -1675,7 +1689,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 115, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 117, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithoutAnalyticsFlagAccess() {
 		String url;
 		try {
@@ -1689,7 +1703,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 116, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 118, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithInvoiceMgtAccess() {
 		boolean flag;
 		try {
@@ -1703,7 +1717,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 117, groups = { "AccessControl", "FinanceAccess" })
+	@Test(priority = 119, groups = { "AccessControl", "FinanceAccess" })
 	public void VerifyUserWithoutInvoiceMgtAccess() {
 		boolean flag;
 		try {
@@ -1717,7 +1731,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 118, groups = { "AccessControl" })
+	@Test(priority = 120, groups = { "AccessControl" })
 	public void VerifyUserWithRevewierReadWriteAccess() {
 		boolean flag;
 		try {
@@ -1730,8 +1744,8 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 119, groups = { "AccessControl" })
-	public void VerifyUserWithOnlyReadAccess() {
+	@Test(priority = 121, groups = { "AccessControl" })
+	public void VerifyUserWithReviewerOnlyReadAccess() {
 		boolean flag;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
@@ -1744,7 +1758,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 120, groups = { "AccessControl" })
+	@Test(priority = 122, groups = { "AccessControl" })
 	public void VerifyUserWithAccessionSettingsAccess() {
 		boolean flag;
 		try {
@@ -1758,7 +1772,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 121, groups = { "AccessControl" })
+	@Test(priority = 123, groups = { "AccessControl" })
 	public void VerifyUserWithoutAccessionSettingsAccess() {
 		boolean flag;
 		try {
@@ -1772,7 +1786,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 122, groups = { "AccessControl" })
+	@Test(priority = 124, groups = { "AccessControl" })
 	public void VerifyUserWithDeleteSampleAccess() {
 		boolean flag;
 		try {
@@ -1786,7 +1800,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 123, groups = { "AccessControl" })
+	@Test(priority = 125, groups = { "AccessControl" })
 	public void VerifyUserWithoutDeleteSampleAccess() {
 		String text;
 		try {
@@ -1801,7 +1815,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-	@Test(priority = 124, dataProvider = "billsData", groups = { "AccessControl" })
+	@Test(priority = 126, dataProvider = "billsData", groups = { "AccessControl" })
 	public void verifyPatientBill(String amount) throws Exception {
 		try {
 			userManagementPage.patientBills(amount, "Aidhet", "HSV-1&2 (Herpes Simplex Virus-1&2)", "Protein Ascitic",
@@ -1812,11 +1826,11 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 
-//	@Test(priority = 125, groups = { "AccessControl" })
+//	@Test(priority = 127, groups = { "AccessControl" })
 //	public void VerifyUserWithCreateSampleBatchAccess() {
 //		String text;
 //		try {
-//			 DriverFactory.getDriver().get(Constants.LOGOUT_URL);
+//			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
 //			text = userManagementPage.createBatchAccess(configProperties.getUsername(), configProperties.getPassword());
 //			Assert.assertEquals(text, "");
 //		} catch (Exception e) {
@@ -1825,7 +1839,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 //		}
 //	}
 //
-//	@Test(priority = 126, groups = { "AccessControl" })
+//	@Test(priority = 128, groups = { "AccessControl" })
 //	public void VerifyUserWithReceiveSampleBatchAccess() {
 //		String text;
 //		try {
@@ -1838,8 +1852,8 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 //			Assert.assertTrue(false, e.getMessage());
 //		}
 //	}
-	
-	@Test(priority = 127, groups = { "AccessControl" })
+
+	@Test(priority = 129, groups = { "AccessControl" })
 	public void VerifyUserWithHRManagementAccess() {
 		boolean flag;
 		try {
@@ -1852,8 +1866,8 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	@Test(priority = 128, groups = { "AccessControl" })
+
+	@Test(priority = 130, groups = { "AccessControl" })
 	public void VerifyUserWithoutHRManagementAccess() {
 		boolean flag;
 		try {
@@ -1866,8 +1880,8 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	@Test(priority = 129, groups = { "AccessControl" })
+
+	@Test(priority = 131, groups = { "AccessControl" })
 	public void VerifyUserWithInventoryManagementAccess() {
 		boolean flag;
 		try {
@@ -1880,8 +1894,8 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	@Test(priority = 130, groups = { "AccessControl" })
+
+	@Test(priority = 132, groups = { "AccessControl" })
 	public void VerifyUserWithoutInventoryManagementAccess() {
 		boolean flag;
 		try {
@@ -1894,8 +1908,8 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	@Test(priority = 131, groups = { "AccessControl" })
+
+	@Test(priority = 133, groups = { "AccessControl" })
 	public void VerifyUserWithWarehouseManagementAccess() {
 		boolean flag;
 		try {
@@ -1908,8 +1922,8 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	@Test(priority = 132, groups = { "AccessControl" })
+
+	@Test(priority = 134, groups = { "AccessControl" })
 	public void VerifyUserWithoutWarehouseManagementAccess() {
 		boolean flag;
 		try {
@@ -1922,88 +1936,87 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	@Test(priority = 133, groups = { "AccessControl" })
+
+	@Test(priority = 135, groups = { "AccessControl" })
 	public void VerifyUserWithSelectedDepartmentAccess() {
 		boolean flag;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.departmentAccess(configProperties.getUsername(),configProperties.getPassword());
+			flag = userManagementPage.departmentAccess(configProperties.getUsername(), configProperties.getPassword());
 			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	@Test(priority = 134, groups = { "AccessControl" })
+
+	@Test(priority = 136, groups = { "AccessControl" })
 	public void VerifyUserWithoutSelectedDepartmentAccess() {
 		boolean flag;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.departmentNotAccess(configProperties.getUsername(),configProperties.getPassword());
+			flag = userManagementPage.departmentNotAccess(configProperties.getUsername(),
+					configProperties.getPassword());
 			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	@Test(priority = 135, groups = { "AccessControl" })
+
+	@Test(priority = 137, groups = { "AccessControl" })
 	public void VerifyUserWithDefaultDepartmentSelected() {
 		String text;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			text = userManagementPage.defaultDepartmentSelected(configProperties.getUsername(),configProperties.getPassword());
+			text = userManagementPage.defaultDepartmentSelected(configProperties.getUsername(),
+					configProperties.getPassword());
 			Assert.assertEquals(text, "PATHOLOGY");
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	@Test(priority = 136, groups = { "AccessControl" })
+
+	@Test(priority = 138, groups = { "AccessControl" })
 	public void VerifyUserWithDefaultDepartmentUnSelected() {
 		boolean flag;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.notDefaultDepartmentSelected(configProperties.getUsername(),configProperties.getPassword());
+			flag = userManagementPage.notDefaultDepartmentSelected(configProperties.getUsername(),
+					configProperties.getPassword());
 			Assert.assertTrue(flag);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	@Test(priority = 137, groups = { "AccessControl" })
+
+	@Test(priority = 139, groups = { "AccessControl" })
 	public void VerifyAddNewUser() {
 		String success;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			success = userManagementPage.addUser(configProperties.getUsername(),configProperties.getPassword());
-			Assert.assertEquals(success, "×\n" + 
-					"Lab user has been added successfully.");
-			} catch (Exception e) {
+			success = userManagementPage.addUser(configProperties.getUsername(), configProperties.getPassword());
+			Assert.assertEquals(success, "×\n" + "Lab user has been added successfully.");
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	@Test(priority = 138, groups = { "AccessControl" })
+
+	@Test(priority = 140, groups = { "AccessControl" })
 	public void VerifyDeleteUser() {
 		boolean flag;
 		try {
 			DriverFactory.getDriver().get(Constants.LOGOUT_URL);
-			flag = userManagementPage.deleteLabUser(configProperties.getUsername(),configProperties.getPassword());
+			flag = userManagementPage.deleteLabUser(configProperties.getUsername(), configProperties.getPassword());
 			Assert.assertTrue(flag);
-			} catch (Exception e) {
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			Assert.assertTrue(false, e.getMessage());
 		}
 	}
-	
-	
-
 
 	@DataProvider(name = "billsData")
 	public static Object[][] getbillsData() {
@@ -2012,7 +2025,7 @@ public class UserManagementTest extends AbstractTestNGSpringContextTests {
 
 		};
 	}
-	
+
 	@AfterClass(alwaysRun = true)
 	public void tearDown() {
 		DriverFactory.closeDriverObjects();
