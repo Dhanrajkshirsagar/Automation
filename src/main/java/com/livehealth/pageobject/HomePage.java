@@ -140,6 +140,15 @@ public class HomePage {
 		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), UserManagementPage.class);
 
 	}
+	
+	public HomeCollectionPage navigateToHomeCollectionPage() throws Exception {
+
+		DriverFactory.getDriver().get(configProperties.getLivehealthUrl());
+		commonMethods.waitForPageToLoad();
+
+		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), HomeCollectionPage.class);
+
+	}
 
 	
 

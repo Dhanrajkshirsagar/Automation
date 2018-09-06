@@ -35,6 +35,8 @@ public class BillData {
 	private String outSouceList;
 
 	private String organizationPriceList;
+	
+	private String sampleType;
 
 	public String getOrganizationPriceList() {
 		return organizationPriceList;
@@ -174,6 +176,14 @@ public class BillData {
 
 	public void setConcession(String concession) {
 		this.concession = concession;
+	}
+	
+	public String getSampleType() {
+		return concession;
+	}
+
+	public void setSampleType(String sampleType) {
+		this.sampleType = sampleType;
 	}
 
 	@Override

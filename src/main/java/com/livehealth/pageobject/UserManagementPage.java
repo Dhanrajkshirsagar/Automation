@@ -1549,7 +1549,7 @@ public class UserManagementPage {
 		CommonMethods.waitForElementToClickable(updateLabAge);
 		updateLabAge.clear();
 		updateLabAge.sendKeys("20");
-		labReportPassword.sendKeys(password);
+		labReportPassword.sendKeys("Password@"+"123");
 		modalUpdateReportBtn.click();
 		Thread.sleep(300);
 		String warning = userUpdateErrorDiv.getText();
@@ -1611,7 +1611,7 @@ public class UserManagementPage {
 		quickSaveBtn.click();
 		Thread.sleep(1000);
 		patientList = container.findElements(By.className("userWaitingListCard"));
-		patientList.get(3).click();
+		patientList.get(4).click();
 		CommonMethods.waitForElementToClickable(quickSaveBtn);
 		quickSaveBtn.click();
 		String status = reportViewStatusLabel.getText();
@@ -3837,7 +3837,7 @@ public class UserManagementPage {
 	}
 
 	public boolean reviwerAccess(String userName, String password) throws Exception {
-	//	signIn(userName, password);
+		signIn(userName, password);
 		selectLabUser();
 		CommonMethods.waitForElementToVisible(reviewerManagement);
 		if (!reviewerManagement.isSelected()) {
@@ -4171,8 +4171,9 @@ public class UserManagementPage {
 		labUserLogout();
 		signIn("livep-dhan", "Password@123");
 		hoverDropdown.click();
-		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		List<WebElement> list = hoverDropdown.findElements(By.tagName("a"));
 		for (int i = 0; i < list.size(); i++) {
+			System.out.println(list.get(i).getText());
 			if (list.get(i).getText().equals("HAEMATOLOGY")) {
 				return true;
 			}
@@ -4190,7 +4191,7 @@ public class UserManagementPage {
 		labUserLogout();
 		signIn("livep-dhan", "Password@123");
 		hoverDropdown.click();
-		List<WebElement> list = navsidebar.findElements(By.tagName("a"));
+		List<WebElement> list = hoverDropdown.findElements(By.tagName("a"));
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getText().equals("HAEMATOLOGY")) {
 				return false;
