@@ -414,7 +414,6 @@ public class OrganizationManagementPage {
 
 	public void signIn(String userName, String password) throws Exception {
 
-		WebDriver driver = DriverFactory.getDriver();
 		userNameField.sendKeys(userName);
 		passwordField.sendKeys(password);
 		signIn.click();

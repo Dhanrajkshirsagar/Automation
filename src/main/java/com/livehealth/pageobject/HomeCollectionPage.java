@@ -3,7 +3,6 @@ package com.livehealth.pageobject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -408,10 +407,10 @@ public class HomeCollectionPage {
 		option.click();
 		CommonMethods.waitForElementToVisible(clickToReschedule);
 		clickToReschedule.click();
-		String StartTime = CommonMethods.getTimeForReschedule(2);
+		String StartTime = CommonMethods.getTimeForReschedule(3);
 		CommonMethods.waitForElementToVisible(datetimepickerTime1);
 		datetimepickerTime1.click();
-		String EndTime = CommonMethods.getTimeForReschedule(3);
+		String EndTime = CommonMethods.getTimeForReschedule(4);
 		Thread.sleep(500);
 		WebElement TimeBox1 = datetimepickerTime1;
 		TimeBox1.sendKeys(Keys.TAB);
@@ -423,7 +422,6 @@ public class HomeCollectionPage {
 		TimeBox2.clear();
 		TimeBox2.sendKeys(EndTime);
 		Confirm.click();
-		Thread.sleep(100);
 		String success = hcRescheduleErrorMsg.getText();
 		if (success.equals("Please try again later.")) {
 			return false;
@@ -433,6 +431,7 @@ public class HomeCollectionPage {
 
 	public String proceedToBill(String test1, String test2, String advance) throws Exception {
 		WebDriver driver = DriverFactory.getDriver();
+		driver.navigate().refresh();
 		Thread.sleep(2000);
 		List<WebElement> proceedToBill = userContainer
 				.findElements(By.xpath("//button[text()=\"Proceed to billing\"]"));
@@ -551,11 +550,11 @@ public class HomeCollectionPage {
 		patientAddress.sendKeys(Keys.DOWN);
 		patientAddress.sendKeys(Keys.ENTER);
 		availableFromTime.click();
-		String startTime = CommonMethods.reduceTime(2);
+		String startTime = CommonMethods.reduceTime(3);
 		Thread.sleep(500);
 		JavascriptExecutor js = (JavascriptExecutor) DriverFactory.getDriver();
 		js.executeScript("document.getElementById('availableFromTime').value = arguments[0];", startTime);
-		String TillTime = CommonMethods.reduceTime(3);
+		String TillTime = CommonMethods.reduceTime(4);
 		Thread.sleep(500);
 		JavascriptExecutor js1 = (JavascriptExecutor) DriverFactory.getDriver();
 		js1.executeScript("document.getElementById('availableTillTime').value = arguments[0];", TillTime);
@@ -608,14 +607,6 @@ public class HomeCollectionPage {
 		list.add(date);
 		list.add(dateText);
 		return list;
-
-	}
-
-	public void rescheduleUnassignedHC() throws Exception {
-		// HcTab.click();
-		Thread.sleep(3000);
-		unassigned.click();
-		rescheduleHcFromPendingTab();
 
 	}
 
@@ -705,7 +696,6 @@ public class HomeCollectionPage {
 		TimeBox2.clear();
 		TimeBox2.sendKeys(EndTime);
 		Confirm.click();
-		Thread.sleep(100);
 		String success = hcRescheduleErrorMsg.getText();
 		if (success.equals("Please try again later.")) {
 			return false;
@@ -715,6 +705,7 @@ public class HomeCollectionPage {
 
 	public List<String> assignCollectingPerson(String collectionPerson) throws Exception {
 		// HcTab.click();
+		DriverFactory.getDriver().navigate().refresh();
 		Thread.sleep(2000);
 		unassigned.click();
 		assign.click();
@@ -752,7 +743,8 @@ public class HomeCollectionPage {
 	int beforelength;
 
 	public void getCancelHCList() throws Exception {
-		HcTab.click();
+//		HcTab.click();
+		DriverFactory.getDriver().navigate().refresh();
 		Thread.sleep(2000);
 		unassigned.click();
 		beforelength = HCList.size();
