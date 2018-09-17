@@ -49,4 +49,5 @@ public class Constants {
 	public static String Add_User_URL = "https://beta.livehealth.solutions/addEditUser/#addUser";
 	
 	public static String HomeCollection_URL = "https://beta.livehealth.solutions/homeCollection/";
+	
 }

@@ -4,6 +4,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 import org.openqa.selenium.JavascriptExecutor;
@@ -203,7 +205,6 @@ public class CommonMethods {
 	}
 
 	public static int getAge(int day, int month, int year) {
-		// calculating age from dob
 		Calendar dob = Calendar.getInstance();
 		Calendar today = Calendar.getInstance();
 		dob.set(year, month, day);
@@ -243,5 +244,17 @@ public class CommonMethods {
 		String newDate = sdf.format(cal.getTime());
 		return newDate;
 	}
+	
+	public static String getBackDatee(int add1) {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm a");
+		Calendar cal = Calendar.getInstance();
+		sdf.format(cal.getTime());
+		cal.add(Calendar.DATE, -add1);
+		String newDate = sdf.format(cal.getTime());
+		return newDate;
+	}
+	
+	
 
 }

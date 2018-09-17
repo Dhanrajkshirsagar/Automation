@@ -149,6 +149,15 @@ public class HomePage {
 		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), HomeCollectionPage.class);
 
 	}
+	
+	public CCBatchManagementPage navigateToCCBatchManagementPage() throws Exception {
+
+		DriverFactory.getDriver().get(configProperties.getLivehealthUrl());
+		commonMethods.waitForPageToLoad();
+
+		return PageFactory.initElements(DriverFactory.getWindowDriver("Livehealth"), CCBatchManagementPage.class);
+
+	}
 
 	
 

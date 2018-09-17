@@ -1590,7 +1590,6 @@ public class OrganizationManagementPage {
 		CommonMethods.waitForElementToClickable(excelTemplate);
 		excelTemplate.click();
 		Thread.sleep(1000);
-		String filePath = "C:/Users/Administrator/Downloads";
 		Assert.assertTrue(isFileDownloaded("filePath", "OrganizationsList (1).xls"),
 				"Failed to download Expected document");
 		File file = new File("C:/Users/Administrator/Downloads/OrganizationsList (1).xls");

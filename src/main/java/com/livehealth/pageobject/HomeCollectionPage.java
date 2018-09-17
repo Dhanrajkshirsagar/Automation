@@ -17,14 +17,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.asserts.SoftAssert;
-
 import com.livehealth.base.DriverFactory;
 import com.livehealth.config.Constants;
 import com.livehealth.util.CommonMethods;
 
 public class HomeCollectionPage {
-	SoftAssert SoftAssert = new SoftAssert();
+	
 	public static String expectedName;
 	public static String expectedContact;
 	public static String billSampleType1;
@@ -597,7 +595,7 @@ public class HomeCollectionPage {
 		List<WebElement> HcList = hcListContainer.findElements(By.className("userContainer"));
 		int length = HcList.size();
 		if (length > 4) {
-			SoftAssert.assertTrue(true, "this week showing data properly");
+			Assert.assertTrue(true);
 		}
 		String date = DriverFactory.getDriver().findElement(By.id("dateDiv0")).getText();
 		java.util.Date now = new java.util.Date();
@@ -803,12 +801,11 @@ public class HomeCollectionPage {
 		} else {
 			Thread.sleep(2000);
 			String colour = pending.getCssValue("background-color");
-			SoftAssert.assertEquals(colour, "rgba(91, 192, 222, 1)");
+			Assert.assertEquals(colour, "rgba(91, 192, 222, 1)");
 			ongiong.click();
 			List<WebElement> ongoingList = hcListContainer.findElements(By.className("label-position"));
 			Thread.sleep(2000);
 			ongoingPersonName = ongoingList.get(1).getText();
-
 		}
 		return ongoingPersonName;
 
